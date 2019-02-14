@@ -42,7 +42,8 @@ module.exports = function (grunt) {
       },
       prod: {
         files: [
-          { expand: true, src: ['src/index.html', 'src/favicon.ico', 'src/styles.css'], dest: 'dist/src/', filter: 'isFile', flatten: true }
+          { expand: true, src: ['src/index.html', 'src/favicon.ico', 'src/styles.css'], dest: 'dist/src/', filter: 'isFile', flatten: true },
+          { expand: true, src: ['node_modules/core-js/client/shim.min.js', 'node_modules/zone.js/dist/zone.js'], dest: 'dist/src/', filter: 'isFile', flatten: true}
         ]
       },
       aot_script: {
@@ -95,7 +96,7 @@ module.exports = function (grunt) {
     },
     concat: {
       js: {
-        src: ['node_modules/zone.js/dist/zone.min.js', 'node_modules/reflect-metadata/Reflect.js', 'node_modules/systemjs/dist/system.src.js', 'dist/src/libs/js/analytics.bundle.min.js', 'dist/src/libs/js/mt.bundle.min.js', 'aot/dist/src/build.js'],
+        src: ['node_modules/reflect-metadata/Reflect.js', 'node_modules/systemjs/dist/system.src.js', 'dist/src/libs/js/analytics.bundle.min.js', 'dist/src/libs/js/mt.bundle.min.js', 'aot/dist/src/build.js'],
         dest: 'dist/src/bundle.js'
       },
       css: {
@@ -140,6 +141,14 @@ module.exports = function (grunt) {
             {
               pattern: /<!-- AOT-TREESHAKE-BUNDLE-CSS -->/g,
               replacement: '<link href=\'zip/bundle.min.css\' rel=\'stylesheet\'>'
+            },
+            {
+              pattern: /<!-- PROD-SHIM-MIN-JS -->/g,
+              replacement: '<script type=\'text/javascript\' src=\'shim.min.js\'></script>'
+            },
+            {
+              pattern: /<!-- PROD-ZONE-JS -->/g,
+              replacement: '<script type=\'text/javascript\' src=\'zone.js\'></script>' 
             }
           ]
         }
