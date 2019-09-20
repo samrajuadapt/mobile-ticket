@@ -55,16 +55,26 @@ export class AuthGuard implements CanActivate {
         );
     }
 
-    checkOpenHours(resolve){
-         if(!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+    checkOpenHours(resolve) {
+         if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
                                     this.router.navigate(['open_hours']);
                                     resolve(false);
                                     return true;
-        }else{
+        } else {
             return false;
         }
     }
-    
+
+    checkCreateTicketOption(resolve) {
+        let createStatus = this.config.getConfig('create_new_ticket');
+        if (createStatus === 'enable') {
+          return false;
+        } else {
+            this.router.navigate(['no_support']);
+            resolve(false);
+            return true;
+        }
+    }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
         return new Promise((resolve, reject) => {
@@ -74,34 +84,31 @@ export class AuthGuard implements CanActivate {
             let visitId = route.queryParams['visit'];
             let checksum = route.queryParams['checksum'];
 
-            
             if (this.isNoSuchBranch && url.startsWith('/no_branch')) {
                 this.isNoSuchBranch = false;
                 resolve(true);
-            }
-            else if( url.startsWith('/open_hours')){
+            } else if ( url.startsWith('/open_hours')) {
                 resolve(true);
-            }
-            else if (this.isNoSuchVisit && url.startsWith('/no_visit')) {
+            } else if (this.isNoSuchVisit && url.startsWith('/no_visit')) {
                 this.isNoSuchVisit = false;
                 resolve(true);
-            }
-            else if (url.startsWith('/branches/') || url.endsWith('/branches') || url.endsWith('/branches;redirect=true')) {
-                
+            } else if (url.startsWith('/branches/') || url.endsWith('/branches') || url.endsWith('/branches;redirect=true')) {
                 /**
                  * for qr-code format: http://XXXX/branches/{branchId}
                  * Redirect user to services page for specific branchId
                  */
                 if (this.isNoSuchVisitDirectToBranch) {
-                    if(this.checkOpenHours(resolve)){
+                    if (this.checkOpenHours(resolve)) {
+                        return;
+                    }
+                    if (this.checkCreateTicketOption(resolve)) {
                         return;
                     }
                     this.isNoSuchVisitDirectToBranch = false;
                      MobileTicketAPI.setBranchSelection(this.directedBranch);
                                 this.router.navigate(['services']);
                                 resolve(false);
-                }
-                else if (route.url.length === 2 && route.url[1].path) {
+                } else if (route.url.length === 2 && route.url[1].path) {
                     let id = route.url[1].path;
                     this.branchService.getBranchById(+id, (branchEntity: BranchEntity, isError: boolean) => {
                         if (!isError) {
@@ -116,9 +123,11 @@ export class AuthGuard implements CanActivate {
                                     });
                                 });
 
-                            }
-                            else {
-                                if(this.checkOpenHours(resolve)){
+                            } else {
+                                if (this.checkOpenHours(resolve)) {
+                                    return;
+                                }
+                                if (this.checkCreateTicketOption(resolve)) {
                                     return;
                                 }
                                 MobileTicketAPI.setBranchSelection(branchEntity);
@@ -126,9 +135,8 @@ export class AuthGuard implements CanActivate {
                                 resolve(false);
                             }
 
-                        }
-                        else {
-                            if(this.checkOpenHours(resolve)){
+                        } else {
+                            if (this.checkOpenHours(resolve)) {
                                 return;
                             }
                             let e = 'error';
@@ -160,17 +168,18 @@ export class AuthGuard implements CanActivate {
 
                                     });
                                 });
-                            }
-                            else {
-                                if(this.checkOpenHours(resolve)){
+                            } else {
+                                if (this.checkOpenHours(resolve)) {
+                                    return;
+                                }
+                                if (this.checkCreateTicketOption(resolve)) {
                                     return;
                                 }
                                 this.createTicket(branchEntity, sEntity, resolve);
                             }
 
-                        }
-                        else {
-                            if(this.checkOpenHours(resolve)){
+                        }else {
+                            if (this.checkOpenHours(resolve)) {
                                 return;
                             }
                             let e = 'error';
@@ -179,64 +188,62 @@ export class AuthGuard implements CanActivate {
                             resolve(false);
                         }
                     });
-                }
-                else if (route.url.length >= 3 && route.url[2].path !== ('services')) {
+                } else if (route.url.length >= 3 && route.url[2].path !== ('services')) {
                     this.isNoSuchVisit = true;
                     this.router.navigate(['no_visit']);
                     resolve(false);
-                }
-                else if (route.url.length === 3 && route.url[2].path === ('services')) {
+                } else if (route.url.length === 3 && route.url[2].path === ('services')) {
                     this.isNoSuchVisit = true;
                     this.router.navigate(['no_visit']);
                     resolve(false);
-                }
-                else if (visitInfo) {
+                } else if (visitInfo) {
                     this.router.navigate(['ticket']);
                     resolve(false);
-
                 } else {
+                    if (this.checkCreateTicketOption(resolve)) {
+                        return;
+                    }
                     resolve(true);
                 }
 
 
-            }
-            else if (url.startsWith('/services')) {
+            } else if (url.startsWith('/services')) {
                 if ((visitInfo && visitInfo !== null)) {
                     this.router.navigate(['ticket']);
                     resolve(false);
-                }
-                else if ((this.prevUrl.startsWith('/branches') ||
+                } else if ((this.prevUrl.startsWith('/branches') ||
                     this.prevUrl === '/')) {
-                    if(!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+                    if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
                         this.router.navigate(['open_hours']);
                         resolve(false);
-                    }else{
+                    } else {
+                        if (this.checkCreateTicketOption(resolve)) {
+                            return;
+                        }
                         resolve(true);
                     }
-                }
-                else if (this.prevUrl.startsWith('/ticket') &&
+                } else if (this.prevUrl.startsWith('/ticket') &&
                     (!visitInfo || visitInfo === null)) {
-                    if(!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+                    if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
                         this.router.navigate(['open_hours']);
                         resolve(false);
-                    }else{
+                    } else {
+                        if (this.checkCreateTicketOption(resolve)) {
+                            return;
+                        }
                         resolve(true);
                     }
                 }
-            }
-
-            else if ((url.startsWith('/ticket') && ((branchId && visitId && checksum) ||
-                ((visitInfo !== null && visitInfo) && visitInfo.branchId && visitInfo.visitId && visitInfo.checksum)))) {               
+            } else if ((url.startsWith('/ticket') && ((branchId && visitId && checksum) ||
+                ((visitInfo !== null && visitInfo) && visitInfo.branchId && visitInfo.visitId && visitInfo.checksum)))) {
                     resolve(true);
-            }
-            else if (visitInfo) {
+            } else if (visitInfo) {
                 MobileTicketAPI.getVisitStatus(
                     (visitObj: any) => {
-                        if (visitObj.status === "CALLED" || visitObj.visitPosition !== null) {
+                        if (visitObj.status === 'CALLED' || visitObj.visitPosition !== null) {
                             this.router.navigate(['ticket']);
                             resolve(true);
-                        }
-                        else {
+                        } else {
                             this.router.navigate(['/branches']);
                             resolve(false);
                         }
@@ -246,8 +253,7 @@ export class AuthGuard implements CanActivate {
                         resolve(false);
                     }
                 );
-            }
-            else {
+            } else {
                 this.router.navigate(['/branches']);
                 resolve(false);
             }

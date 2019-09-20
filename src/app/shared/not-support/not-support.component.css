@@ -1,0 +1,15 @@
+.details {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-top: 2em !important;
+  }
+
+.info-header{
+  font-size: 18px;
+}
+
+.info-text{
+  margin-top: 1em;
+  font-size: 19px;
+}

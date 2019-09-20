@@ -5,6 +5,7 @@ import { Util } from '../../util/util';
 import { PlatformLocation } from '@angular/common';
 import { ConfirmDialogService } from "../../shared/confirm-dialog/confirm-dialog.service";
 import { AlertDialogService } from "../../shared/alert-dialog/alert-dialog.service";
+import { Config } from '../../config/config';
 
 declare var MobileTicketAPI: any;
 
@@ -25,7 +26,9 @@ export class VisitCancelComponent {
   public visitCancelled: boolean = false;
   public visitCancelledViaBtn: boolean = false;
 
-  constructor(location: PlatformLocation, public router: Router, private translate: TranslateService, private confirmDialogService: ConfirmDialogService, private alertDialogService: AlertDialogService) {
+  constructor(location: PlatformLocation, private config: Config,
+     public router: Router, private translate: TranslateService,
+     private confirmDialogService: ConfirmDialogService, private alertDialogService: AlertDialogService) {
     this.translate.get('ticketInfo.btnTitleLeaveLine').subscribe((res: string) => {
       this.btnTitleLeaveLine = res;
     });
@@ -85,7 +88,7 @@ export class VisitCancelComponent {
     this.confirmDialogService.activate(this.confirmMsg).then(res => {
       if (res === true) {
         // Confirm Success Callback
-        console.log("User clicked ok");
+        console.log('User clicked ok');
         this.visitCancelled = true;
         this.visitCancelledViaBtn = true;
         MobileTicketAPI.cancelVisit(
@@ -94,7 +97,8 @@ export class VisitCancelComponent {
               MobileTicketAPI.deleteAllCookies();
             }
             MobileTicketAPI.resetAllVars();
-            this.router.navigate(['branches']);
+            // 168477572 : Always route to thank you page
+            // this.router.navigate(['branches']);
           },
           (xhr, status, errorMsg) => {
             if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "11000") {
@@ -103,10 +107,9 @@ export class VisitCancelComponent {
               });
             }
           });
-      }
-      else {
+      } else {
         // Confirm fail Callback
-        console.log("User clicked cancel");
+        console.log('User clicked cancel');
         this.visitCancelledViaBtn = false;
         this.visitCancelled = false;
       }
@@ -115,24 +118,31 @@ export class VisitCancelComponent {
 
   }
 
-
   getButtonTitle(): string {
     return (this.isTicketEndedOrDeleted ? this.btnTitleNewTicket : this.btnTitleLeaveLine);
   }
 
   showButton(): boolean {
-    return (!this.isTicketEndedOrDeleted ? true : (this.isUrlAccessedTicket) ? false : true);
+    return (!this.isTicketEndedOrDeleted ? true : (this.isUrlAccessedTicket) ? false : (this.getNewTicketAvailability()));
   }
 
   getNewTicket() {
     this.router.navigate(['branches']);
   }
 
+  getNewTicketAvailability() {
+    let createStatus = this.config.getConfig('create_new_ticket');
+    if (createStatus === 'enable') {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   onButtonClick() {
     if (!this.isTicketEndedOrDeleted) {
       this.cancelVisit();
-    }
-    else {
+    } else {
       this.getNewTicket();
     }
   }

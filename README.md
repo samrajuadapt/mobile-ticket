@@ -209,7 +209,6 @@ project directory
         "value":"10",
         "description": "The time duration (in minutes) which the app will stay in services screen without creating a ticket"
     },
-    ,
     "branch_open_hours":{
         "value" : [     
            { "translation_key":"open_hours.week_day2", "from":"8:00", "to": "18:00" ,"description":"monday", "display_from":"8:00", 	"display_to": "18:00", "show":"true" } ,
@@ -221,6 +220,10 @@ project directory
            { "translation_key":"open_hours.week_day1", "from":"8:00", "to": "18:00" ,"description":"sunday", "display_from":"8:00", 	"display_to": "18:00", "show":"true" } 
         ],
         "description": "Open hours of all branches in general"
+    },
+    "create_new_ticket": {
+        "value": "enable",
+        "description": "Enable or disable access to the Get new ticket button in the Thank you page, 'on=enable', 'off=disable' for visits created using the Mobile Ticket UI."
     }
 }
 ```
