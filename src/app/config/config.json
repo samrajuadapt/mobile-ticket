@@ -41,6 +41,6 @@
     },
     "create_new_ticket": {
         "value": "enable",
-        "description": "Enable or disable access to the Get new ticket button in the Thank you page, 'on=enable', 'off=disable' for visits created using the Mobile Ticket UI."
+        "description": "Enable or disable access to create visits using the Mobile Ticket UI, 'on=enable', 'off=disable'"
     }
 }
