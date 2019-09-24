@@ -203,7 +203,7 @@ project directory
     },
     "service_fetch_interval":{
         "value":"15",
-        "description": "The interval (in seconds) at which service information is refreshed periodically"
+        "description": "The interval (in seconds) at which service information is refreshed periodically, this setting is only used if the setting Show number of waiting customers are enabled"
     },
      "service_screen_timeout":{
         "value":"10",
@@ -224,6 +224,10 @@ project directory
     "create_new_ticket": {
         "value": "enable",
         "description": "Enable or disable access to the Get new ticket button in the Thank you page, 'on=enable', 'off=disable' for visits created using the Mobile Ticket UI."
+    },
+    "show_number_of_waiting_customers": {
+        "value": "enable",
+        "description": " If this setting is enabled the number of waiting customers will appear in the service list, if disabled only service names are listed."
     }
 }
 ```

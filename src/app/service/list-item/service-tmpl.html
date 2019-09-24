@@ -28,12 +28,11 @@
       <div class="flex-child long-and-truncated-with-child-corrected service_name">
         <span>{{ name }}</span>
       </div>
-      <span class="waiting-text">&nbsp;</span>
-      <div class="flex-child short-and-fixed">
+      <span *ngIf="customersWaiting" class="waiting-text">&nbsp;</span>
+      <div *ngIf="customersWaiting" class="flex-child short-and-fixed">
         <!--<span class="customer-waiting"
           *ngIf="customersWaiting"> {{ "(" + customersWaiting + ' ' + ('service.waiting' | translate) + ")" }}  </span>-->
-        <span class="customer-waiting"
-              *ngIf="customersWaiting">
+        <span class="customer-waiting">
 
         ({{customersWaiting}}
 

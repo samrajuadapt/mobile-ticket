@@ -40,7 +40,6 @@ export class ServicesComponent implements AfterViewInit {
       } else {
         this.onServicesReceived(serviceList, serviceService);
         this.onListLoaded();
-        
       }
     });
   }
