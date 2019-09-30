@@ -80,8 +80,7 @@ export class TicketInfoService {
       (branchList: any) => {
         if (this.isBranchFound(branchList, branchId)) {
           onBranchResponse(true);
-        }
-        else {
+        } else {
           onBranchResponse(false);
         }
       },
