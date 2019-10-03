@@ -2843,7 +2843,7 @@ var MobileTicketAPI = (function () {
         $.ajax({
           method: 'DELETE',
           dataType: "json",
-          url: MOBILE_TICKET + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + visit.visitId + "?checksum=" + visit.checksum,
+          url: MOBILE_TICKET + "/" + MYVISIT + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + visit.visitId + "?checksum=" + visit.checksum,
           success: function () {
             onSuccess();
           },
