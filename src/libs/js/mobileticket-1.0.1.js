@@ -2560,6 +2560,9 @@ var MobileTicketAPI = (function () {
   var currentvisitEvent = undefined;
   var currentVisitStatus = undefined;
 
+  var visitFromQR = false;
+  var VISIT_EVENT_NAME = "visitFromQR";
+
   var MOBILE_TICKET = "/MobileTicket";
   var GEO = "/geo";
   var SERVICES = "services";
@@ -2690,8 +2693,64 @@ var MobileTicketAPI = (function () {
     MobileTicketAPI.currentVisitStatus = {};
   }
 
+  function getParameterFromUrl( name, url ) {  
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( url );
+    return results == null ? null : results[1];
+  }
+
+  function checkIfUrlFromQR(){  
+
+    visitFromQR = true;
+    
+    var branchId = "";
+    var visitId = "";
+
+    var branchPattern = /[?&]branch=/;
+    var visitPattern = /[?&]visit=/;
+    var checksumPattern = /[?&]checksum=/;
+    var urlPattern = /MyVisit\/CurrentStatus/;
+
+    var URL = window.location;
+    var searchParams = window.location.search;
+
+    //var URL = "http://localhost:4200/MobileTicket/MyVisit/CurrentStatus?branch=5&visit=297&checksum=720035390";
+    //var searchParams = "http://localhost:4200/MobileTicket/MyVisit/CurrentStatus?branch=5&visit=297&checksum=720035390";    
+    
+
+    if(!branchPattern.test(searchParams)){
+      visitFromQR = false;      
+    }else{
+      branchId = getParameterFromUrl('branch', URL);
+    }
+
+    if(!visitPattern.test(searchParams)){
+      visitFromQR = false;
+    }else{
+      visitId = getParameterFromUrl('visit', URL);    
+    }
+
+    if(!checksumPattern.test(searchParams)){
+      visitFromQR = false;
+    }
+
+    if(!urlPattern.test(URL)){
+      visitFromQR = false;
+    }
+
+    if(visitFromQR){    
+      var eventData = {};
+      eventData.param = "QR";    
+      var eventName = VISIT_EVENT_NAME;
+      MobileTicketAPI.sendCustomStatEvent(branchId, visitId, eventName, eventData);
+    }
+  }
+
   return {
     init: function () {
+      checkIfUrlFromQR();
       //remove due to expire time
       // eraseCookie("branch");
       // eraseCookie("service");
@@ -2806,6 +2865,29 @@ var MobileTicketAPI = (function () {
       }
     },
 
+    sendCustomStatEvent: function(branchId, visitId, eventName, eventData){
+      try {                
+        var SEND_CUSTOM_EVENT_REST_API = MOBILE_TICKET + "/" + BRANCHES + "/" + branchId + "/" + VISITS + "/" + visitId + "/" + EVENTS + "/" + eventName;
+        
+        $.ajax({
+          type: "POST",
+          dataType: "json",
+          contentType: 'application/json',
+          data: JSON.stringify(eventData),
+          url: SEND_CUSTOM_EVENT_REST_API,
+          success: function (data) {
+            
+          },
+          error: function (xhr, status, errorMsg) {            
+            onError(xhr, status, errorMsg);
+          }
+
+        });
+
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
 
     getVisitStatus: function (onSuccess, onError) {
       try {
