@@ -2561,7 +2561,8 @@ var MobileTicketAPI = (function () {
   var currentVisitStatus = undefined;
 
   var visitFromQR = false;
-  var VISIT_EVENT_NAME = "visitFromQR";
+  //var VISIT_EVENT_NAME = "visitFromQR";
+  var VISIT_EVENT_NAME = "OPEN_MT_VISIT";
 
   var MOBILE_TICKET = "/MobileTicket";
   var GEO = "/geo";
@@ -2711,7 +2712,8 @@ var MobileTicketAPI = (function () {
     var branchPattern = /[?&]branch=/;
     var visitPattern = /[?&]visit=/;
     var checksumPattern = /[?&]checksum=/;
-    var urlPattern = /MyVisit\/CurrentStatus/;
+    //var urlPattern = /MyVisit\/CurrentStatus/;
+    var urlPattern = /ticket/;
 
     var URL = window.location;
     var searchParams = window.location.search;
@@ -2742,7 +2744,8 @@ var MobileTicketAPI = (function () {
 
     if(visitFromQR){    
       var eventData = {};
-      eventData.param = "QR";    
+      //eventData.param = "QR";    
+      eventData.param = "MT_VISIT";
       var eventName = VISIT_EVENT_NAME;
       MobileTicketAPI.sendCustomStatEvent(branchId, visitId, eventName, eventData);
     }
