@@ -27,6 +27,8 @@ var sslPort = '4443';
 var supportSSL = false;
 var validAPIGWCert = "1";
 var APIGWHasSSL = true;
+var isEmbedIFRAME = false;
+var HPKP_token = "";
 
 var google_analytics = 'https://www.google-analytics.com';
 var bootstarp_cdn = 'https://maxcdn.bootstrapcdn.com';
@@ -113,7 +115,8 @@ sslPort = configuration.local_webserver_ssl_port.value;
 supportSSL = (configuration.support_ssl.value.trim() === 'true')?true:false;
 validAPIGWCert = (configuration.gateway_certificate_is_valid.value.trim()=== 'true')?"1":"0";
 APIGWHasSSL = (configuration.gateway_has_certificate.value.trim()=== 'true')?true:false;
-
+isEmbedIFRAME = (configuration.embed_iFrame.value.trim() === 'true')?true:false;
+HPKP_token = configuration.HPKP_token.value.trim();
 
 //this will bypass certificate errors in node to API gateway encrypted channel, if set to '1'
 //if '0' communication will be blocked. So production this should be set to '0'
@@ -127,56 +130,101 @@ if (supportSSL) {
 	credentials = { key: privateKey, cert: certificate };
 }
 
-app.use(express.static(__dirname + '/src'));
+var options = {
+	setHeaders: function (res, path, stat) {
+		res = handleHeaders(res);
+	}
+}
+
+app.use(express.static(__dirname + '/src', options));
 
 
 // Redirect no_branch requests to index.html
 app.get('/no_support$', function (req, res) {
-  res.sendFile(path.join(__dirname + '/src', 'index.html'));
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect no_branch requests to index.html
 app.get('/no_branch$', function (req, res) {
-  res.sendFile(path.join(__dirname + '/src', 'index.html'));
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect no_visit requests to index.html
 app.get('/no_visit$', function (req, res) {
-  res.sendFile(path.join(__dirname + '/src', 'index.html'));
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect all requests that start with branches and end, to index.html
 app.get('/branches*', function (req, res) {
-  res.sendFile(path.join(__dirname + '/src', 'index.html'));
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect all requests that start with services and end, to index.html
 app.get('/services$', function (req, res) {
-  res.sendFile(path.join(__dirname + '/src', 'index.html'));
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect all requests that start with ticket info and end, to index.html
 app.get('/ticket$', function (req, res) {
-  res.sendFile(path.join(__dirname + '/src', 'index.html'));
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect all requests that start with branches and end, to index.html
 app.get('/open_hours$', function (req, res) {
-  res.sendFile(path.join(__dirname + '/src', 'index.html'));
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Proxy mobile example to API gateway
 var apiProxy = proxy(host, {									// ip and port off apigateway
-	forwardPath: function (req, res) {
+	proxyReqPathResolver: function (req) {
 		return require('url').parse(req.originalUrl).path;
 	},
-	decorateRequest: function (req) {
-		req.headers['auth-token'] = authToken		// api_token for mobile user
-		req.headers['Content-Type'] = 'application/json'
-		return req;
+	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+	
+			if (HPKP_token.length > 0) {
+				headers['Public-Key-Pins'] = "pin-sha256=\"" + HPKP_token + "\"; max-age=5184000; includeSubDomains;";
+			}
+		}
+		return headers;
 	},
 	https: APIGWHasSSL
 });
+
+var handleHeaders = function (res) {
+	if (isEmbedIFRAME === false) {
+		res.set('X-Frame-Options', "DENY");
+	} else {
+		res.removeHeader('X-Frame-Options');
+	}
+
+	if (supportSSL) {
+		res.set('Strict-Transport-Security', "max-age=31536000; includeSubDomains");
+
+		if (HPKP_token.length > 0) {
+			res.set('Public-Key-Pins', "pin-sha256=\"" + HPKP_token + "\"; max-age=5184000; includeSubDomains;");
+		}
+	}
+	return res;
+}
 
 app.use("/geo/branches/*", apiProxy);
 app.use("/MobileTicket/branches/*", apiProxy);

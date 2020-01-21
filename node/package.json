@@ -6,9 +6,9 @@
   "dependencies": {
     "body-parser": "1.17.2",
     "compression": "1.6.2",
-    "express": "4.15.3",
-    "express-http-proxy": "0.10.1",
-    "express-static-gzip": "0.2.3",
+    "express": "4.17.1",
+    "express-http-proxy": "1.6.0",
+    "express-static-gzip": "2.0.6",
     "helmet": "3.6.1"
   },
   "devDependencies": {},
