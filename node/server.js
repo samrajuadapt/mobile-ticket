@@ -12,8 +12,6 @@ var app = express();
 var helmet = require('helmet');
 var hidePoweredBy = require('hide-powered-by');
 var csp = require('helmet-csp');
-var hpkp = require('hpkp');
-var hsts = require('hsts');
 var nocache = require('nocache');
 var nosniff = require('dont-sniff-mimetype');
 var frameguard = require('frameguard');
@@ -28,7 +26,6 @@ var supportSSL = false;
 var validAPIGWCert = "1";
 var APIGWHasSSL = true;
 var isEmbedIFRAME = false;
-var HPKP_token = "";
 
 var google_analytics = 'https://www.google-analytics.com';
 var bootstarp_cdn = 'https://maxcdn.bootstrapcdn.com';
@@ -116,7 +113,6 @@ supportSSL = (configuration.support_ssl.value.trim() === 'true')?true:false;
 validAPIGWCert = (configuration.gateway_certificate_is_valid.value.trim()=== 'true')?"1":"0";
 APIGWHasSSL = (configuration.gateway_has_certificate.value.trim()=== 'true')?true:false;
 isEmbedIFRAME = (configuration.embed_iFrame.value.trim() === 'true')?true:false;
-HPKP_token = configuration.HPKP_token.value.trim();
 
 //this will bypass certificate errors in node to API gateway encrypted channel, if set to '1'
 //if '0' communication will be blocked. So production this should be set to '0'
@@ -199,10 +195,6 @@ var apiProxy = proxy(host, {									// ip and port off apigateway
 	
 		if (supportSSL) {
 			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
-	
-			if (HPKP_token.length > 0) {
-				headers['Public-Key-Pins'] = "pin-sha256=\"" + HPKP_token + "\"; max-age=5184000; includeSubDomains;";
-			}
 		}
 		return headers;
 	},
@@ -218,10 +210,6 @@ var handleHeaders = function (res) {
 
 	if (supportSSL) {
 		res.set('Strict-Transport-Security', "max-age=31536000; includeSubDomains");
-
-		if (HPKP_token.length > 0) {
-			res.set('Public-Key-Pins', "pin-sha256=\"" + HPKP_token + "\"; max-age=5184000; includeSubDomains;");
-		}
 	}
 	return res;
 }

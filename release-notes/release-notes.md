@@ -39,6 +39,34 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
+<h2>Version 20</h2>
+
+**Date:2020-01-27**
+ 
+**Build number:20** 
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **169836431** | **Vulnerability: Click jacking - enable/disable MT in iframe** Increase security level in the application using security headers |
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **xxx** | **Bug header** Solution text |
+
+<h3>Known issues</h3>
+
+| **Id/Jira** | **Description** |
+| --- | --- |
+| **xxx** | **Bug header** Bug text |
+
+<h3>Upgrade Instructions</h3>
+
+----------
+
 <h2>Version 19</h2>
 
 **Date:**

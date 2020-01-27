@@ -27,12 +27,8 @@
         "value": "true",
         "description": "Flag indicating the configured SSL certificate in the API gateway is a valid. This setting is active only if 'gateway_has_certificate' is true. This must be set to 'false' if API gateway is configured with a self signed certificate "
     },
-    "HPKP_token": {
-        "value": "",
-        "description": "Add pin-sha256(Base64 encoded Subject Public Key Information (SPKI) fingerprint) value for set HTTP Public Key Pinning"
-    },
     "embed_iFrame": {
         "value": "false",
-        "description": "Enable or disable X-FRAME-OPTIONS in http header to block iframe"
+        "description": "Flag indicating the enable or disable X-FRAME-OPTIONS in http header to block iframe"
     }
 }
