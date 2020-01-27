@@ -125,6 +125,8 @@ If the API gateway is configured to use HTTPS the setting "gateway_has_certifica
 If the certificate configured in API gateway has certificate errors or if it is a self signed certificate and still need the REST API calls to work with no issue, the setting "gateway_certificate_is_valid"
 should be set to false. Having "gateway_certificate_is_valid" set to true will validate the certificate and REST calls will be failed if the certificate is not valid.
 
+If the setting "embed_iFrame" set to true, application can embed in iFrame. For the securtiy purpose this setting set as false and can't embed in iFrame.
+
 NOTE: WE DO NOT ENCOURAGE USING SELF SIGNED CERTIFICATES OR CERTIFICATES WITH ERRORS TO BE USED IN PRODUCTION ENVIRONMENT. THEREFORE WE RECOMMENT TO KEEP BOTH "gateway_has_certificate" and
 "gateway_certificate_is_valid" SETTINGS TO SET TO true IN PRODUCTION ENVIRONMENT. 
 
@@ -164,6 +166,10 @@ project directory
     "gateway_certificate_is_valid": {
         "value": "true",
         "description": "Flag indicating the configured SSL certificate in the API gateway is a valid. This setting is active only if 'gateway_has_certificate' is true. This must be set to 'false' if API gateway is configured with a self signed certificate "
+    },
+    "embed_iFrame": {
+        "value": "false",
+        "description": "Flag indicating the enable or disable X-FRAME-OPTIONS in http header to block iframe"
     }
 }
 ```
