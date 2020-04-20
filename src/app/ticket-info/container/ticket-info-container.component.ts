@@ -184,8 +184,9 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       this.prevVisitState = visitStatus.status;
       var currentEvent = MobileTicketAPI.getCurrentVisitStatus();
       var firstName = currentEvent.firstName;
+	  var lastName = currentEvent.lastName;
       var servicePoint = currentEvent.servicePointName;
-      this.updateVisitCallMsg(firstName, servicePoint);
+      this.updateVisitCallMsg(firstName, servicePoint, lastName);
       this.isVisitCall = true;
       if (this.isSoundPlay === false) {
         this.playNotificationSound();
@@ -261,10 +262,11 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateVisitCallMsg(firstName: string, servicePointName: string) {
+  updateVisitCallMsg(firstName: string, servicePointName: string, lastName: string,) {
     if (firstName !== null && firstName !== '' && servicePointName !== '') {
       this.visitCallMsgOne = this.title1;
-      this.visitCallMsg = firstName + ' ' + this.title2;
+      this.visitCallMsg = this.title2.replace('{firstName}', firstName );
+	  this.visitCallMsg = this.visitCallMsg.replace('{lastName}', lastName );
       this.visitCallMsgThree = servicePointName;
       if (this.ticketNumberComponent && !this.isTicketFlashed) {
         this.isTicketFlashed = true;

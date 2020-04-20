@@ -25,7 +25,7 @@
     "btnTitleLeaveLine": "Leave the line",
     "defaultTitle": "Mobile Ticket",
     "titleYourTurn": "It's your turn!",
-    "ticketReady": "is ready to serve you at",
+    "ticketReady": "{firstName} is ready to serve you at",
     "titleInLine": "position",
     "btnTitleNewTicket": "Get new ticket",
     "ticketRemovedHeading": "Your ticket has been removed",
