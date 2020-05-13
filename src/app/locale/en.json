@@ -76,5 +76,22 @@
       "week_day6" : "Saturday",
       "week_day7" : "Sunday",
       "closed" : "Closed"
+   },
+   "appointment" : {
+     "subHeadingOne" : "Welcome to Qmatic!",
+     "subHeadingTwo" : "Your appointment",
+     "branch" : "Branch:",
+     "service" : "Service:",
+     "time" : "Time:",
+     "date" : "Date:",
+     "tooEearly" : "You arrived too early for your appointment. You can only ",
+     "arriveBtnText" : "Arrive",
+     "error" : {
+       "date" : "Your appointment is booked for another day. Please come back on the date of your appointment.",
+       "status" : "Your appointment has already been arrived.",
+       "early" : "You are too early for your appointment. Please return later.",
+       "late" : "You are too late for your appointment. Please book a new appointment.",
+       "notFound" : "Your appointment cannot be found."
+      }
    }
 }

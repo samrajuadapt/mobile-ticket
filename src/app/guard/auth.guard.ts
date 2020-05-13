@@ -6,6 +6,7 @@ import { Util } from '../util/util';
 import { ServiceEntity } from '../entities/service.entity';
 import { BranchService } from '../branch/branch.service';
 import { BranchEntity } from '../entities/branch.entity';
+import { AppointmentEntity } from '../entities/appointment.entity';
 import { AlertDialogService } from '../shared/alert-dialog/alert-dialog.service';
 import { Config } from '../config/config';
 import {BranchOpenHoursValidator} from '../util/branch-open-hours-validator'
@@ -23,6 +24,7 @@ export class AuthGuard implements CanActivate {
     private isNoSuchVisitDirectToBranch = false;
     private branchId = 0;
     private directedBranch:BranchEntity = null;
+    private aEntity: AppointmentEntity = null;
 
     constructor(private router: Router, private activatedRoute: ActivatedRoute, private branchSrvc: BranchService,
         private alertDialogService: AlertDialogService, private translate: TranslateService, private config : Config) {
@@ -83,6 +85,7 @@ export class AuthGuard implements CanActivate {
             let branchId = route.queryParams['branch'];
             let visitId = route.queryParams['visit'];
             let checksum = route.queryParams['checksum'];
+            let appointmentId = route.queryParams['appId'];
 
             if (this.isNoSuchBranch && url.startsWith('/no_branch')) {
                 this.isNoSuchBranch = false;
@@ -253,6 +256,32 @@ export class AuthGuard implements CanActivate {
                         resolve(false);
                     }
                 );
+            } else if (url.startsWith('/appointment')) {   
+                this.aEntity = new AppointmentEntity();
+                MobileTicketAPI.findAppointment(appointmentId, (response) => {         
+                    this.aEntity.publicId = appointmentId;
+                    this.aEntity.branchName = response.branch.name;
+                    this.aEntity.qpId = response.qpId;
+                    MobileTicketAPI.findCentralAppointment(response.qpId,
+                        (response2) => {
+                        this.aEntity.serviceId = response2.services[0].id;
+                        this.aEntity.serviceName = response2.services[0].name;
+                        this.aEntity.branchId = response2.branchId;                        
+                        this.aEntity.status = response2.status;
+                        this.aEntity.startTime = response2.startTime;
+                        this.aEntity.endTime = response2.endTime;                        
+                        MobileTicketAPI.setAppointment(this.aEntity);  
+                        resolve(true);
+                    }, 
+                    (xhr, status, errorMessage) => {
+                        resolve(true);
+                    });                                     
+                },
+                (xhr, status, errorMessage) => {
+                    this.aEntity.status = "NOTFOUND";
+                    MobileTicketAPI.setAppointment(this.aEntity); 
+                    resolve(true);
+                });            
             } else {
                 this.router.navigate(['/branches']);
                 resolve(false);

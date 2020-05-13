@@ -9,18 +9,22 @@ import { VisitCancelLeavelineGuard } from './ticket-info/visit-cancel/visit-canc
 import { BranchNotfoundComponent } from './branch/branch-notfound/branch-notfound.component';
 import { NotSupportComponent } from './shared/not-support/not-support.component';
 import {BranchOpenHoursComponent} from './shared/branch-open-hours/branch-open-hours.component'
+import {AppointmentComponent} from './appointment/appointment.component'
 
 import { AuthGuard } from './guard/index';
 
 export const router: Routes = [
+    
     { path: 'open_hours', component: BranchOpenHoursComponent, canActivate: [AuthGuard] },
+    { path: 'appointment', component: AppointmentComponent, canActivate: [AuthGuard] },
     { path: 'branches', component: BranchesContainerComponent, canActivate: [AuthGuard] },
     { path: 'services', component: ServicesContainerComponent, canActivate: [AuthGuard] },
     { path: 'no_visit', component: VisitNotfoundComponent, canActivate: [AuthGuard] },
     { path: 'no_support', component: NotSupportComponent },
     { path: 'no_branch', component: BranchNotfoundComponent, canActivate: [AuthGuard] },
-    { path: 'ticket', component: TicketInfoContainerComponent, canActivate: [AuthGuard], canDeactivate: [VisitCancelLeavelineGuard]},
+    { path: 'ticket', component: TicketInfoContainerComponent, canActivate: [AuthGuard], canDeactivate: [VisitCancelLeavelineGuard]},    
     { path: '**', component: TicketInfoContainerComponent, canActivate: [AuthGuard] }
+    
 ];
 
 @NgModule(
@@ -36,4 +40,4 @@ export const router: Routes = [
 )
 
 export class QmRouterModule { }
-export const RoutingComponents = [BranchesContainerComponent, ServicesContainerComponent, TicketInfoContainerComponent];
+export const RoutingComponents = [BranchesContainerComponent, ServicesContainerComponent, TicketInfoContainerComponent, AppointmentComponent];

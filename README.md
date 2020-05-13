@@ -51,12 +51,38 @@ on setting up auth-token for the production environment.
   });
 ```
 
+## Orchestra configuration
+For the Appointment Arrival feature it is needed that the Mobile user gets access to the Appointment and entrypoint connector.
+To do this you need to create a role which contains the modules Appointment and Connector Entrypoint.
+
+Then create a user with the name mobile and the same password as for the mobile user under System Administration > Paramaters.
+Give this user access to all branches and the newly created Role.
+
+
 ## Proxy to Backend
 
 Mobile Ticket solution is intended to work with QMATIC API Gateway service, which provides anonymous access to Orchestra REST API. The Mobile Ticket solution
 is required to be hosted separately and all the REST API calls are proxied to avoid cross domain access violations. 
 The current implementation is intended to be hosted on node.js and proxying is provided via express-http-proxy (https://www.npmjs.com/package/express-http-proxy).
 
+#### Configuring ApiGateway for Development Environment
+
+For development one needs to add the following four routes to the application.yml
+
+```yml
+    my_appointment:
+        path: /MobileTicket/MyAppointment/find/*
+        url: ${orchestra.central.url}/calendar-backend/api/v1/appointments/publicid
+    central_appointment:        
+        path: /MobileTicket/MyAppointment/findCentral/*
+        url: ${orchestra.central.url}/qsystem/rest/appointment/appointments
+    visit_app_entrypoint:
+       path: /MobileTicket/MyAppointment/entrypoint/**
+       url: ${orchestra.central.url}/qsystem/rest/entrypoint
+    arrive_appointment:
+       path: /MobileTicket/MyAppointment/arrive/**
+       url: ${orchestra.central.url}/qsystem/rest/entrypoint
+```
 #### Configuring the Proxy for Development Environment
 
 Edit proxy-config.json and set target to the IP and port of the QMATIC API Gateway service

@@ -1,0 +1,101 @@
+
+
+.fadeIn {
+  visibility: visible !important;
+}
+
+.fadeOut {
+  visibility: hidden !important;
+}
+
+.v-center {
+  vertical-align: middle;
+  display: table-cell;
+}
+
+.inside-margin {
+  height: 0;
+}
+
+
+.appointment-container {
+  width: auto;
+  margin: 0 350px 20px;
+  height: 70%;
+  background-color:#FCFCFD;
+  border-radius: 3px;
+  color: black;
+  font-size: 17px;  
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: relative;
+  background-color: #E7E9ED;
+  
+  border-radius: 5px;
+  justify-content: center;
+  padding: 20px;  
+}
+
+.appointment-row{
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.appointment-label {
+  font-family: Roboto-Regular; 
+  text-align: right;
+}
+.appointment-data {
+  font-family: Roboto-Light; 
+  text-align:left;
+}
+
+.flex-parent {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  align-items: center;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: calc(88vw + 8px - 100px) !important;
+  max-width: 256px;
+}
+
+.errorMessage {
+  text-align: center;
+  margin: 20px;
+}
+
+.qm-footer{
+  margin-top: 10px;
+}
+
+@media only screen and (max-width: 768px) {
+  .appointment-container {
+    width: auto;
+    margin: 0 200px 20px;
+  }
+  .appointment-container.row {
+    margin-bottom: 20px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .appointment-container {
+    margin: 0 70px;
+    padding: 10px;
+  }
+  .appointment-label{
+    text-align: left;
+  }
+  .appointment-row{    
+    margin-bottom: 5px;
+  }
+}

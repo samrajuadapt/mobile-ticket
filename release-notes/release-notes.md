@@ -30,6 +30,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **xxx** | **Bug header** Solution text |
 
 <h3>Known issues</h3>
+
 | **Id/Jira** | **Description** |
 | --- | --- |
 | **xxx** | **Bug header** Bug text |
@@ -38,6 +39,20 @@ This document describes the new features, bug corrections, known issues and reco
 
 ----------
 -->
+
+<h2>Version 21</h2>
+
+**Date:2020-05-18**
+ 
+**Build number:21**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-137** | **New feature to load appointments through a URL and arrive** |
+
+----------
 
 <h2>Version 20</h2>
 
@@ -50,20 +65,6 @@ This document describes the new features, bug corrections, known issues and reco
 | **Id** | **Release notes** |
 | --- | --- |
 | **GP-2624** | **Agent name to be shown when called is now optional** Done from en.json. For example {firstName} is ready to serve you at |
-
-<h3>Bug fixes</h3>
-
-| **Id** | **Release notes** |
-| --- | --- |
-| **xxx** | **Bug header** Solution text |
-
-<h3>Known issues</h3>
-
-| **Id/Jira** | **Description** |
-| --- | --- |
-| **xxx** | **Bug header** Bug text |
-
-<h3>Upgrade Instructions</h3>
 
 ----------
 
@@ -78,20 +79,6 @@ This document describes the new features, bug corrections, known issues and reco
 | **Id** | **Release notes** |
 | --- | --- |
 | **169836431** | **Vulnerability: Click jacking - enable/disable MT in iframe** Increase security level in the application using security headers |
-
-<h3>Bug fixes</h3>
-
-| **Id** | **Release notes** |
-| --- | --- |
-| **xxx** | **Bug header** Solution text |
-
-<h3>Known issues</h3>
-
-| **Id/Jira** | **Description** |
-| --- | --- |
-| **xxx** | **Bug header** Bug text |
-
-<h3>Upgrade Instructions</h3>
 
 ----------
 
@@ -130,4 +117,4 @@ The information in this document is subject to change without prior notice and d
 This manual is copyrighted and all rights are reserved.
 Qmatic and Qmatic Orchestra are registered trademarks or trademarks of Q-MATIC AB.
 Reproduction of any part of this manual, in any form, is not allowed, unless written permission is given by Q‑MATIC AB.
-COPYRIGHT &copy; Q-MATIC AB, 2019.
+COPYRIGHT &copy; Q-MATIC AB, 2020.

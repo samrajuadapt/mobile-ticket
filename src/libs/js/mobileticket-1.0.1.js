@@ -2571,6 +2571,11 @@ var MobileTicketAPI = (function () {
   var TICKET = "ticket";
   var ISSUE = "issue";
   var MYVISIT = "MyVisit";
+  var MYAPPOINTMENT = "MyAppointment";
+  var MY_CENTRAL_APPOINTMENT = "MyCentralAppointment";
+  var ENTRYPOINT = "Entrypoint";
+  var FIND = "find";
+  var ARRIVE = "arrive";
   var POSITION = "Position";
   var QUEUES = "queues";
   var QUEUE = "queue";
@@ -2587,7 +2592,7 @@ var MobileTicketAPI = (function () {
   $.ajaxSetup({
     beforeSend: function (xhr) {
       xhr.setRequestHeader("Accept", "application/json");
-      xhr.setRequestHeader("auth-token", "d0516eee-a32d-11e5-bf7f-feff819cdc9f"); //Change the api token with your one
+      xhr.setRequestHeader("auth-token", "d0516eee-a32d-11e5-bf7f-feff819cdc9f"); //Change the api token with your one      
     }
   });
 
@@ -2648,6 +2653,7 @@ var MobileTicketAPI = (function () {
     MobileTicketAPI.currentvisitEvent = undefined;
     MobileTicketAPI.currentVisitStatus = undefined;
     MobileTicketAPI.visitInformation = undefined;
+    MobileTicketAPI.appointment = undefined;
   }
 
   function eraseCookie(name) {
@@ -2941,6 +2947,92 @@ var MobileTicketAPI = (function () {
         onError(null, null, e.message);
       }
     },
+    findAppointment: function(appointmentId, onSuccess, onError) {
+      try {
+        var APP_REST_API = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/" +FIND + "/" +  appointmentId;
+         $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: APP_REST_API,
+          success: function (data) {            
+            if (data != undefined) {              
+              onSuccess(data.appointment);
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            onError(xhr, status, errorMsg);
+          }
+        });
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
+    findCentralAppointment: function(qpId, onSuccess, onError) {
+      var CENTR_REST_API = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/findCentral/" + qpId
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: CENTR_REST_API,
+        success: function (data) {                  
+          if (data != undefined) {                                  
+            onSuccess(data);
+          }
+        },
+        error: function (xhr, status, errorMsg) {
+          onError(xhr, status, errorMsg);
+        }
+      });    
+    },
+    findEntrypointId: function(branchId, onSuccess, onError) {
+      var CENTR_REST_API = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/entrypoint/" + BRANCHES + "/" + branchId + "/entryPoints/deviceTypes/SW_VISITAPP";
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: CENTR_REST_API,
+        success: function (data) {                  
+          if (data != undefined) {                                  
+            onSuccess(data);
+          }
+        },
+        error: function (xhr, status, errorMsg) {
+          onError(xhr, status, errorMsg);
+        }
+      });    
+    },
+    arriveAppointment: function(branchId, entryPointId, appointmentId, onSuccess, onError) {
+      var ARRIVE_REST_API = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/" + ARRIVE +"/" + BRANCHES + "/" + branchId + "/entryPoints/" + entryPointId + "/" + VISITS;     
+      eventData = {};
+      eventData.appointmentId = appointmentId;
+      $.ajax({
+        type: "POST",
+        dataType: "json",
+        contentType: 'application/json',
+        data: JSON.stringify(eventData),
+        url: ARRIVE_REST_API,     
+        error: function (xhr, status, errorMsg) {
+          onError(xhr, status, errorMsg);
+        }
+      })
+      .done(function (data) {
+        if (data != undefined) {
+
+          //MobileTicketAPI.visitInformation = data;
+          MobileTicketAPI.visitInformation = {};
+          // Adding some additional fields because the return values here are different from the 
+          // response of the mobile ticket api when creating a ticket
+          MobileTicketAPI.visitInformation.branchId = branchId;
+          MobileTicketAPI.visitInformation.visitId = data.id;
+          MobileTicketAPI.visitInformation.ticketNumber = data.ticketId;
+          MobileTicketAPI.visitInformation.queueId = data.parameterMap.startQueueOrigId;
+          MobileTicketAPI.visitInformation.serviceId = data.currentVisitService.serviceId;
+          MobileTicketAPI.visitInformation.serviceName = data.currentVisitService.serviceExternalName;
+          MobileTicketAPI.visitInformation.clientId = "XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX"
+          MobileTicketAPI.visitInformation.checksum = data.checksum;
+          setCookies();
+          onSuccess(data);
+        }
+      });   
+    },
     setVisit: function (branchId, queueId, visitId, checksum) {
       MobileTicketAPI.visitId = visitId;
       MobileTicketAPI.queueId = queueId;
@@ -2984,6 +3076,12 @@ var MobileTicketAPI = (function () {
     },
     resetAllVars: function () {
       resetAllVars();
+    }, 
+    getAppointment: function () {
+      return this.appointment;
+    },
+    setAppointment: function (appointment){
+      this.appointment = appointment;
     }
   }
 })();

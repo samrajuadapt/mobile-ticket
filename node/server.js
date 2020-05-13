@@ -176,9 +176,16 @@ app.get('/open_hours$', function (req, res) {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
+// Redirect all requests that start with appointment and end, to index.html
+app.get('/appointment$', function (req, res) {
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
+});
 
 // Proxy mobile example to API gateway
-var apiProxy = proxy(host, {									// ip and port off apigateway
+var apiProxy = proxy(host, {
+	// ip and port off apigateway
+
 	proxyReqPathResolver: function (req) {
 		return require('url').parse(req.originalUrl).path;
 	},
@@ -201,6 +208,145 @@ var apiProxy = proxy(host, {									// ip and port off apigateway
 	https: APIGWHasSSL
 });
 
+var apiFindProxy = proxy(host, {	// ip and port off apigateway
+	proxyReqPathResolver: function (req) {
+		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/find/","/rest/calendar-backend/api/v1/appointments/publicid/");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL,
+	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
+		data = JSON.parse(proxyResData.toString('utf8'));
+		newData = {};
+		newData.appointment = {};
+		if (data.appointment !== undefined) {
+			newData.appointment.qpId = data.appointment.qpId
+			newData.appointment.branch = data.appointment.branch;
+			newData.appointment.start = data.appointment.start;
+			newData.appointment.services = data.appointment.services;
+		}
+		return JSON.stringify(newData);
+	}
+});
+
+var apiFindCentralProxy = proxy(host, {	// ip and port off apigateway
+	proxyReqPathResolver: function (req) {
+		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/findCentral/","/rest/appointment/appointments/");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL,
+	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
+		data = JSON.parse(proxyResData.toString('utf8'));
+		newData = {};
+		if (data !== undefined) {
+			newData.services = data.services;
+			newData.status = data.status
+			newData.branchId = data.branchId;
+			newData.startTime = data.startTime;
+			newData.endTime = data.endTime;
+			
+		}
+		return JSON.stringify(newData);
+	}
+});
+
+var apiEntryPointProxy = proxy(host, {
+	// ip and port off apigateway
+
+	proxyReqPathResolver: function (req) {
+		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/entrypoint/branches/","/rest/entrypoint/branches/");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL
+});
+
+var apiArriveProxy = proxy(host, {
+	// ip and port off apigateway
+
+	proxyReqPathResolver: function (req) {
+		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/arrive/branches/","/rest/entrypoint/branches/");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL,
+	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
+		data = JSON.parse(proxyResData.toString('utf8'));
+		newData = {};
+		newData.parameterMap = {};
+		if (data !== undefined) {
+			newData.id = data.id;
+			newData.ticketId = data.ticketId;
+			newData.currentVisitService = data.currentVisitService;
+			newData.checksum = data.checksum;
+			newData.parameterMap.startQueueOrigId = data.parameterMap.startQueueOrigId;
+			newData.parameterMap.branchName = data.parameterMap.branchName;
+		}
+		return JSON.stringify(newData);
+	}
+});
+
 var handleHeaders = function (res) {
 	if (isEmbedIFRAME === false) {
 		res.set('X-Frame-Options', "DENY");
@@ -216,6 +362,10 @@ var handleHeaders = function (res) {
 
 app.use("/geo/branches/*", apiProxy);
 app.use("/MobileTicket/branches/*", apiProxy);
+app.use("/MobileTicket/MyAppointment/find/*", apiFindProxy);
+app.use("/MobileTicket/MyAppointment/findCentral/*", apiFindCentralProxy);
+app.use("/MobileTicket/MyAppointment/entrypoint/*", apiEntryPointProxy);
+app.use("/MobileTicket/MyAppointment/arrive/*", apiArriveProxy);
 app.use("/MobileTicket/services/*", apiProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
 
@@ -227,8 +377,7 @@ if (supportSSL) {
 
 		console.log("Mobile Ticket app listening at https://%s:%s over SSL", listenAddress, listenPort);
 	});
-}
-else{
+} else{
 	var server = app.listen(port, function () {  										// port the mobileTicket will listen to.
 	var listenAddress = server.address().address;
 	var listenPort = server.address().port;
