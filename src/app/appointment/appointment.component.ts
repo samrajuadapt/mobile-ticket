@@ -83,7 +83,7 @@ export class AppointmentComponent implements OnInit {
 
   private isAppointmentInvalid(): boolean{
     let now = new Date();
-    let appStart = new Date(this.app.startTime);
+    let appStart = new Date(this.app.startTime.replace('T', ' ').replace(/-/g, '/'));
 
     this.app.startTimeFormatted = this.formatTime(appStart);
     this.app.date = this.formatDate(appStart);

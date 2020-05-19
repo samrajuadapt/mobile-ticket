@@ -260,6 +260,26 @@ project directory
     "show_number_of_waiting_customers": {
         "value": "enable",
         "description": " If this setting is enabled the number of waiting customers will appear in the service list, if disabled only service names are listed."
+    },
+    "appointment_late" : {
+        "value":30,
+        "description": " How long is the customer allowed to arrive for his appointment (in minutes)"       
+    },
+    "appointment_early" : {
+        "value":180,
+        "description": " How early is the customer allowed to arrive for his appointment (in minutes)"        
+    },
+    "allowServiceTicketIfAppLate" : {
+        "value":true,
+        "description": "Go to the ticket page if the customer is allowed to take a ticket. Otherwise he will be asked to create a new appointment."
+    },
+    "timeFormat" : {
+        "value": "HH:mm",
+        "description": "Time format for showing the appointment time. Allowed settings  are HH:mm, hh:mm, hh:mm a, h:mm, h:mm a"
+    },
+    "dateFormat" : {
+        "value":"DD/MM/YYYY",
+        "description": "Date format for showing the appointment date. Allowed placeholders are DD MM YY YYYY"
     }
 }
 ```

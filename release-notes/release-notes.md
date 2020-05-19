@@ -52,6 +52,14 @@ This document describes the new features, bug corrections, known issues and reco
 | --- | --- |
 | **MOB-137** | **New feature to load appointments through a URL and arrive** |
 
+<h3>Upgrade instructions</h3> 
+
+- New configurations related to appointment arrival needs to be entered in src/config/config.json. You can find the new entries in README.md.
+- When configuring "Appointment Confirmation" notification type, below message format should be used.
+  ```html
+  http://[MOBILE_TICKET_SERVER]/appointment?appId=[publicId]
+  ```
+
 ----------
 
 <h2>Version 20</h2>
