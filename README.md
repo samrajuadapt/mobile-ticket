@@ -18,6 +18,7 @@ This is a web application that has been developed using Angular4 and the develop
 - [Mobileticket.js library](#mobileticketjs-library)
 - [Creating a Build](#creating-a-build)
 - [Branding & Customization](#branding--customization)
+- [Notifications](#notifications)
 
 ## Installation
 BEFORE YOU INSTALL: please read the [prerequisites](#prerequisites)
@@ -723,3 +724,12 @@ Note:
 * If you are specifying styles in this stylesheet, it will override the default styles.
 * If you want to add a new logo or background image, make sure to include the images in the src/app/resources folder and refer it from the theme-styles sheet as shown in the above table.
 * If you do not want to customize your application, remove this file from the build. In this case, the application will load with the default styles.
+
+## Notifications
+Two notification types can be configured to be used with Mobile Ticket. It allowes to track the visits in queue and also allows to load and arrive appointments through a URL sent via notifications.
+
+### Visit Create
+"Visit Create" notification type can be configured to send a link to mobile ticket which allows to track the visit. To configure "Visit Create" notification type, ``` Mobile Ticket URL ``` parameter which adds ``` {{mobileFullURL}} ``` should be used as the message in Notification Admin and Mobile Ticket Base URL should be set as ``` http://[MOBILE_TICKET_SERVER]/ticket ``` in parameters under System Administration.
+
+### Appointment Confirmation
+"Appointment Confirmation" notification type can be configured to send a link to mobile ticket which allows to load and arrive appointments. ``` http://[MOBILE_TICKET_SERVER]/appointment?appId={{appointmentPublicId}} ``` should be used as the message in Notification Admin.
