@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BranchEntity } from 'app/entities/branch.entity';
-import { ServiceEntity } from 'app/entities/service.entity';
+import { BranchEntity } from '../entities/branch.entity';
+import { ServiceEntity } from '../entities/service.entity';
 declare var MobileTicketAPI: any;
 
 @Component({
@@ -11,6 +11,7 @@ declare var MobileTicketAPI: any;
 export class CustomerDataComponent implements OnInit {
   public selectedBranch: BranchEntity;
   public selectedService: ServiceEntity;
+  private _showNetWorkError = false;
 
   constructor() { }
 
@@ -20,9 +21,16 @@ export class CustomerDataComponent implements OnInit {
   }
   getSelectedBranch() {
     this.selectedBranch = MobileTicketAPI.getSelectedBranch();
-  
+
   }
   getSelectedServices() {
     this.selectedService = MobileTicketAPI.getSelectedService();
   }
+  get showNetWorkError(): boolean {
+    return this._showNetWorkError;
+  }
+  showHideNetworkError(event) {
+    this._showNetWorkError = event;
+  }
+
 }

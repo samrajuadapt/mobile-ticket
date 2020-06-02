@@ -64,14 +64,14 @@
         "description": "Date format for showing the appointment date. Allowed placeholders are DD MM YY YYYY"
     },
     "customer_data" : {
-        "value": "disable",
+        "value": "enable",
         "description": "Enable or disable customer access to enter customoer phone number using mobile ticket UI, 'on = enbale', 'off = disable'"
     },
-    "privacy_enable" : {
+    "privacy_policy" : {
         "value": "enable",
         "description": "Enable or disable privacy policy when sending phone number, 'on = enbale', 'off = disable'"
     },
-    "privacy_link" : {
+    "privacy_policy_link" : {
         "value": "",
         "description": "Whether to get privacy policy information from property file or send to a link. If value is not null users will send to that link"
     },

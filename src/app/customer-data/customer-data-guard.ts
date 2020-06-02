@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { ServiceEntity } from 'app/entities/service.entity';
-import { BranchEntity } from 'app/entities/branch.entity';
+import { ServiceEntity } from '../entities/service.entity';
+import { BranchEntity } from '../entities/branch.entity';
 
 declare var MobileTicketAPI: any;
 @Injectable()
@@ -18,7 +18,7 @@ export class CustomerDataGuard implements CanActivate {
     this.selectedService = MobileTicketAPI.getSelectedService();
   }
   constructor(private router: Router) {
-    
+
   }
 
   canActivate(

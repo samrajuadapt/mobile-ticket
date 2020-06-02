@@ -1,13 +1,13 @@
 <div>
-  <div class="text-center table-child-heading-2" [hidden]="!showNetWorkError">
-    <span class="center-text sub-heading-text-2 service-limit-label custom text-color">
+  <div class="text-center table-child-heading-2">
+    <span class="center-text sub-heading-text-2 service-limit-label custom text-color"  [hidden]="!showNetWorkError">
       <app-network-message></app-network-message>
     </span>
   </div>
 
-  <div>
+  <div [hidden]="showNetWorkError">
     <div class="row">
-      <app-cutomer-phone></app-cutomer-phone>
+      <app-cutomer-phone (showNetorkErrorEvent)="showHideNetworkError($event)"></app-cutomer-phone>
     </div>
     <div class="row selected-branch">
       <div class="selected-branch-title custom text-color"> {{'customer_info.selectedBranch' | translate}}</div>

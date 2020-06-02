@@ -49,7 +49,8 @@ import {AppointmentComponent} from "./appointment/appointment.component";
 import {CutomerPhoneComponent} from "./customer-data/cutomer-phone/cutomer-phone.component";
 import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
 import {CustomerDataComponent} from "./customer-data/customer-data.component";
-import { CustomerDataGuard } from "./customer-data/customer-data-guard"
+import { CustomerDataGuard } from "./customer-data/customer-data-guard";
+
 
 
 declare var MobileTicketAPI:any;

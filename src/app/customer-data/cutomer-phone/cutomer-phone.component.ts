@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { TicketEntity } from '../../entities/ticket.entity';
 import { Router } from '@angular/router';
 import { Util } from '../../util/util';
 import { TranslateService } from 'ng2-translate';
-import { RetryService } from 'app/shared/retry.service';
-import { AlertDialogService } from 'app/shared/alert-dialog/alert-dialog.service';
+import { RetryService } from '../../shared/retry.service';
+import { AlertDialogService } from '../../shared/alert-dialog/alert-dialog.service';
 import { Config } from '../../config/config';
 
 enum phoneSectionStates {
@@ -31,6 +31,9 @@ export class CutomerPhoneComponent implements OnInit {
   public documentDir: string;
   public countryCode: string;
 
+  @Output()
+  showNetorkErrorEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
+  
   constructor(
     public router: Router,
     private translate: TranslateService,
@@ -60,7 +63,7 @@ export class CutomerPhoneComponent implements OnInit {
   
   // Press continue button for phone number
   phoneNumContinue() {
-    var isPrivacyEnable = this.config.getConfig('privacy_enable');
+    var isPrivacyEnable = this.config.getConfig('privacy_policy');
     if (this.phoneNumber.match(/^\(?\+?\d?[-\s()0-9]{6,}$/) && this.phoneNumber !== this.countryCode) {
       let isPrivacyAgreed = localStorage.getItem('privacy_agreed');
       MobileTicketAPI.setPhoneNumber(this.phoneNumber);
@@ -140,9 +143,10 @@ export class CutomerPhoneComponent implements OnInit {
   }
   showHideNetworkError(value: boolean) {
     this._showNetWorkError = value;
+    this.showNetorkErrorEvent.emit(this._showNetWorkError);
   }
   privacyLinkButtonPressed() {
-    var isLink = this.config.getConfig('privacy_link');
+    var isLink = this.config.getConfig('privacy_policy_link');
     if (isLink !== '') {
       window.open(isLink, "_blank");
     } else {
