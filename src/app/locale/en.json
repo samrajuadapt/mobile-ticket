@@ -93,5 +93,25 @@
        "late" : "You are too late for your appointment. Please book a new appointment.",
        "notFound" : "Your appointment cannot be found."
       }
-   }
+   },
+   "customer_info" : {
+    "phoneNumber" : "Phone number",
+    "editPhoneNumber" : "Edit phone number",
+    "phoneNumberError" : "Please enter vaild phone number",
+    "vistInfoTitle" : "VISIT INFORMATION YOU GET",
+    "smsOnTime" : "SMS when it's time",
+    "avoidTicketLoss" : "Ticket on SMS to avoid loss",
+    "agreeDescription" : "By sending information, you agree to the ",
+    "privacyPolicy" : "privacy policy",
+    "understood" : "Understood",
+    "canDeleteInfo" : "You can delete your information.",
+    "btnDelete" : "DELETE",
+    "btnCancel" : "CANCEL",
+    "selectedBranch": "Selected branch",
+    "selectedService": "Selected services"
+  },
+  "pricacy_policy" : { 
+    "title" : "Privacy policy",
+    "description" : "Policy statements serve to protect an organization from misunderstandings that might lead to unauthorized behavior or lawsuits. Each policy statement should include its purpose, terminology definitions, the statement itself and the steps to implement it. Policy statements serve to protect an organization from misunderstandings that might lead to unauthorized behavior or lawsuits. Each policy statement should include its purpose, terminology definitions, the statement itself and the steps to implement it. Policy statements serve to protect an organization from misunderstandings that might lead to unauthorized behavior or lawsuits. Each policy statement should include its purpose, terminology definitions, the statement itself and the steps to implement it. definitions, the statement itself and the steps to implement it. Policy statements serve to protect an organization from misunderstandings that might lead to unauthorized behavior or lawsuits. Each policy statement should include its purpose, terminology definitions, the statement itself and the steps to implement it. Policy statements serve to protect an organization from misunderstandings that might lead to unauthorized behavior or lawsuits. Each policy statement should include its purpose, terminology definitions, the statement itself and the steps to implement it."
+  }
 }

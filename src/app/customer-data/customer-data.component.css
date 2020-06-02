@@ -1,0 +1,22 @@
+.selected-branch{
+    text-align: center;
+    color: white;
+}
+.selected-branch-title {
+    margin: 30px 0 0 10px;
+    font-size: 16px;
+}
+.selected-branch-name {
+    font-size: 24px;
+}
+.selected-service {
+    text-align: center;
+    color: white;
+}
+.selected-service-title {
+    margin: 30px 0 0 10px;
+    font-size: 16px;
+}
+.selected-service-name {
+    font-size: 24px;
+}

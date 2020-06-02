@@ -2552,6 +2552,7 @@ var MobileTicketAPI = (function () {
   var visitInformation = {};
   var branches = [];
   var services = [];
+  var enteredPhoneNum = '';
 
   var visitId = undefined;
   var queueId = undefined;
@@ -2570,6 +2571,7 @@ var MobileTicketAPI = (function () {
   var BRANCHES = "branches";
   var TICKET = "ticket";
   var ISSUE = "issue";
+  var PARAMS = 'params';
   var MYVISIT = "MyVisit";
   var MYAPPOINTMENT = "MyAppointment";
   var MY_CENTRAL_APPOINTMENT = "MyCentralAppointment";
@@ -2662,6 +2664,13 @@ var MobileTicketAPI = (function () {
 
   function getSelectedBranch() {
     return (MobileTicketAPI.selectedBranch == undefined) ? JSON.parse(readCookie("branch")) : MobileTicketAPI.selectedBranch;
+  }
+  function removePhoneNumber() {
+    MobileTicketAPI.enteredPhoneNum = '';
+  }
+
+  function getEnteredPhoneNum() {
+    return MobileTicketAPI.enteredPhoneNum;
   }
 
   function getSelectedService() {
@@ -2853,10 +2862,21 @@ var MobileTicketAPI = (function () {
       try {
         var branch = getSelectedBranch();
         var service = getSelectedService();
+        var enteredPhoneNum = getEnteredPhoneNum();
+        var jsonData = {};
         var CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + ISSUE;
+        if (enteredPhoneNum && enteredPhoneNum.length > 0) {
+          jsonData.parameters = {};
+          jsonData = { "parameters": {phoneNumber: enteredPhoneNum, primaryCustomerPhoneNumber: enteredPhoneNum}};
+          removePhoneNumber('');
+          CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + PARAMS + "/" + ISSUE+"?delay=0";
+        }
+
         $.ajax({
           type: "POST",
           dataType: "json",
+          data : JSON.stringify(jsonData),
+          contentType: 'application/json',
           url: CREATE_TICKET_REST_API,
           error: function (xhr, status, errorMsg) {
             onError(xhr, status, errorMsg);
@@ -3052,6 +3072,12 @@ var MobileTicketAPI = (function () {
     },
     setServiceSelection: function (service) {
       MobileTicketAPI.selectedService = service;
+    },
+    setPhoneNumber: function (phone) {
+      MobileTicketAPI.enteredPhoneNum = phone;
+    },
+    getEnteredPhoneNum: function () {
+      return getEnteredPhoneNum();
     },
     getSelectedBranch: function () {
       return getSelectedBranch();

@@ -91,7 +91,7 @@ export class ServicesContainerComponent implements OnInit {
     }
 
     private takeTicket(): void {       
-
+        let customerData = this.config.getConfig('customer_data');      
         if (!this.isTakeTicketClickedOnce) {
             if (MobileTicketAPI.getCurrentVisit()) {
                 this.serviceService.stopBranchRedirectionCountDown();
@@ -112,6 +112,9 @@ export class ServicesContainerComponent implements OnInit {
                             clientId = '';
                         }
                     });
+                    if ( customerData === 'enable') {
+                        this.router.navigate(['customer_data']);
+                    } else {
 
                     MobileTicketAPI.createVisit(
                         (visitInfo) => {
@@ -154,6 +157,7 @@ export class ServicesContainerComponent implements OnInit {
                             }
                         }
                     );
+                }
                 }
             }
         }

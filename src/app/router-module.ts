@@ -8,10 +8,13 @@ import { VisitNotfoundComponent } from './ticket-info/visit-notfound/visit-notfo
 import { VisitCancelLeavelineGuard } from './ticket-info/visit-cancel/visit-cancel.leaveline.guard';
 import { BranchNotfoundComponent } from './branch/branch-notfound/branch-notfound.component';
 import { NotSupportComponent } from './shared/not-support/not-support.component';
-import {BranchOpenHoursComponent} from './shared/branch-open-hours/branch-open-hours.component'
-import {AppointmentComponent} from './appointment/appointment.component'
+import {BranchOpenHoursComponent} from './shared/branch-open-hours/branch-open-hours.component';
+import {AppointmentComponent} from './appointment/appointment.component';
+import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
 
 import { AuthGuard } from './guard/index';
+import { CustomerDataComponent } from './customer-data/customer-data.component';
+import { CustomerDataGuard } from './customer-data/customer-data-guard';
 
 export const router: Routes = [
     
@@ -20,6 +23,8 @@ export const router: Routes = [
     { path: 'branches', component: BranchesContainerComponent, canActivate: [AuthGuard] },
     { path: 'services', component: ServicesContainerComponent, canActivate: [AuthGuard] },
     { path: 'no_visit', component: VisitNotfoundComponent, canActivate: [AuthGuard] },
+    { path: 'privacy_policy', component: PrivacyPolicyComponent },
+    { path: 'customer_data', component: CustomerDataComponent, canActivate: [CustomerDataGuard] },
     { path: 'no_support', component: NotSupportComponent },
     { path: 'no_branch', component: BranchNotfoundComponent, canActivate: [AuthGuard] },
     { path: 'ticket', component: TicketInfoContainerComponent, canActivate: [AuthGuard], canDeactivate: [VisitCancelLeavelineGuard]},    

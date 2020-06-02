@@ -46,6 +46,10 @@ import {AlertDialogService} from "./shared/alert-dialog/alert-dialog.service";
 import {BranchOpenHoursComponent} from "./shared/branch-open-hours/branch-open-hours.component";
 import {OpenHourItemComponent} from "./shared/branch-open-hours/item/open-hour-item.component";
 import {AppointmentComponent} from "./appointment/appointment.component";
+import {CutomerPhoneComponent} from "./customer-data/cutomer-phone/cutomer-phone.component";
+import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
+import {CustomerDataComponent} from "./customer-data/customer-data.component";
+import { CustomerDataGuard } from "./customer-data/customer-data-guard"
 
 
 declare var MobileTicketAPI:any;
@@ -57,7 +61,7 @@ declare var MobileTicketAPI:any;
     RootComponent, RoutingComponents, FrameLayoutComponent, TicketComponent, NotSupportComponent,
     QueueComponent, VisitCancelComponent, QueueItemComponent, SortPipe,
     ConnectivityMessageComponent, VisitNotfoundComponent, BranchNotfoundComponent, ConfirmDialogComponent, AlertDialogComponent,
-    BranchOpenHoursComponent, OpenHourItemComponent, AppointmentComponent
+    BranchOpenHoursComponent, OpenHourItemComponent, AppointmentComponent, CutomerPhoneComponent,PrivacyPolicyComponent, CustomerDataComponent
   ],
   imports: [
     BrowserModule,
@@ -71,7 +75,7 @@ declare var MobileTicketAPI:any;
     })
   ],
   providers: [BranchService, ServiceService, TicketInfoService, AuthGuard, ConfirmDialogService, AlertDialogService,
-    VisitCancelLeavelineGuard, RetryService, Locale, LocationService, SortPipe,
+    VisitCancelLeavelineGuard, RetryService, Locale, LocationService, SortPipe, CustomerDataGuard,
     Config,
     {provide: APP_INITIALIZER, useFactory: configuration, deps: [Config], multi: true}
   ],
