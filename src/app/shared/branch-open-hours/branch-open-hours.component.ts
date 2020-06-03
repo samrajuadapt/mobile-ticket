@@ -37,10 +37,12 @@ export class BranchOpenHoursComponent {
         }
 
         if (element.display_from === '' || element.display_to === '') {
-          this.openHours.push({
-            'day': 'open_hours.closed',
-            'fromAndTo': closed
-          })
+          this.translate.get('open_hours.closed').subscribe((res: string) => {
+            this.openHours.push({
+              'day': element.translation_key,
+              'fromAndTo': res
+            })
+          });
         } else {
           this.openHours.push({
             'day': element.translation_key,
