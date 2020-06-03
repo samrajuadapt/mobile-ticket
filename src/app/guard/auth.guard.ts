@@ -185,18 +185,33 @@ export class AuthGuard implements CanActivate {
                                 if (isCustomerDataEnabled === 'enable') {
                                     MobileTicketAPI.setBranchSelection(branchEntity);
 
-                                    // this.serviceService.getServiceById(sEntity.id, (serviceEntity: ServiceEntity, isError: boolean) => {
-                                    //     if (!isError) {
-                                            MobileTicketAPI.setServiceSelection(sEntity);
-                                            this.router.navigate(['customer_data']);
-                                            resolve(false);
-                                    //     } else {
-                                    //         this.isNoSuchVisit = true;
-                                    //         this.router.navigate(['no_visit']);
-                                    //         resolve(false);
-                                    //     }
-                                    // })
 
+
+                                    this.serviceService.getServices((serviceList: Array<ServiceEntity>, error: boolean) => {
+                                        if (error) {
+                                            this.isNoSuchVisit = true;
+                                            this.router.navigate(['no_visit']);
+                                            resolve(false);
+                                        } else {
+                                            var serviceFound = false;
+                                            serviceList.forEach((service) => {
+                                                if (service.id === sEntity.id) {
+                                                    serviceFound = true;
+                                                    sEntity.name = service.name;
+                                                    return;
+                                                }
+                                            });
+                                            if (!serviceFound) {
+                                                this.isNoSuchVisit = true;
+                                                this.router.navigate(['no_visit']);
+                                                resolve(false);
+                                            } else {
+                                                MobileTicketAPI.setServiceSelection(sEntity);
+                                                this.router.navigate(['customer_data']);
+                                                resolve(false);
+                                            }
+                                        }
+                                    });
                                 } else {
                                     this.createTicket(branchEntity, sEntity, resolve);
                                 }
@@ -309,8 +324,9 @@ export class AuthGuard implements CanActivate {
                 if ((visitInfo && visitInfo !== null)) {
                     this.router.navigate(['ticket']);
                     resolve(false);
-                } else if ((this.prevUrl.startsWith('/services') ||
-                    this.prevUrl === '/') || (this.prevUrl.startsWith('/branches'))) {
+                } else if (this.prevUrl.startsWith('/services') ||
+                    this.prevUrl === '/' || this.prevUrl.startsWith('/branches') || this.prevUrl.startsWith('/privacy_policy')
+                    || this.prevUrl.startsWith('/customer_data')) {
                     if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
                         this.router.navigate(['open_hours']);
                         resolve(false);

@@ -78,7 +78,7 @@ app.use(csp({
 	styleSrc: ["'self'", "'unsafe-inline'",bootstarp_cdn],
 	fontSrc: ["'self'", 'data:',bootstarp_cdn],
 	imgSrc: ["'self'", 'data:', google_analytics],
-	sandbox: ['allow-forms', 'allow-scripts', 'allow-same-origin'],
+	sandbox: ['allow-forms', 'allow-scripts', 'allow-same-origin', 'allow-popups'],
 	reportUri: '/report-violation',
 	objectSrc: ["'none'"]
 	},
@@ -181,6 +181,19 @@ app.get('/appointment$', function (req, res) {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
+
+// Redirect all requests that start with customer data and end, to index.html
+app.get('/customer_data$', function (req, res) {
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
+});
+
+// Redirect all requests that start with privacy policy and end, to index.html
+app.get('/privacy_policy$', function (req, res) {
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
+});
+
 
 // Proxy mobile example to API gateway
 var apiProxy = proxy(host, {

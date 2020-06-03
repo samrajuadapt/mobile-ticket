@@ -158,7 +158,7 @@ export class CutomerPhoneComponent implements OnInit {
   privacyLinkButtonPressed() {
     var isLink = this.config.getConfig('privacy_policy_link');
     if (isLink !== '') {
-      window.open(isLink, "_blank");
+        window.open(isLink, "_blank", '');
     } else {
       this.router.navigate(['privacy_policy']);
     }

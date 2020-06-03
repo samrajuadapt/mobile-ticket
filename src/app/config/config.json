@@ -64,12 +64,12 @@
         "description": "Date format for showing the appointment date. Allowed placeholders are DD MM YY YYYY"
     },
     "customer_data" : {
-        "value": "enable",
-        "description": "Enable or disable customer access to enter customer phone number using mobile ticket UI, 'on = enble', 'off = disable'"
+        "value": "disable",
+        "description": "Enable or disable customer access to enter customer phone number using mobile ticket UI, 'on = enable', 'off = disable'"
     },
     "privacy_policy" : {
         "value": "enable",
-        "description": "Enable or disable privacy policy when sending phone number, 'on = enble', 'off = disable'"
+        "description": "Enable or disable privacy policy when sending phone number, 'on = enable', 'off = disable'"
     },
     "privacy_policy_link" : {
         "value": "",
