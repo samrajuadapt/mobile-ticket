@@ -108,7 +108,10 @@
     "btnDelete" : "DELETE",
     "btnCancel" : "CANCEL",
     "selectedBranch": "Selected branch",
-    "selectedService": "Selected services"
+    "selectedService": "Selected services",
+    "skipAndGetInLine": "Skip & get in line",
+    "phone_placeholder": "+46 (012) 123 45 67"
+
   },
   "pricacy_policy" : { 
     "title" : "Privacy policy",

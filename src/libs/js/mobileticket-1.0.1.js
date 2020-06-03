@@ -2594,7 +2594,7 @@ var MobileTicketAPI = (function () {
   $.ajaxSetup({
     beforeSend: function (xhr) {
       xhr.setRequestHeader("Accept", "application/json");
-      xhr.setRequestHeader("auth-token", "d0516eee-a32d-11e5-bf7f-feff819cdc9f"); //Change the api token with your one      
+      xhr.setRequestHeader("auth-token", "1234"); //Change the api token with your one      
     }
   });
 
@@ -2820,6 +2820,26 @@ var MobileTicketAPI = (function () {
     getBranchInfoById: function (id, onSuccess, onError) {
       try {
         var SERVICES_REST_API = MOBILE_TICKET + "/" + BRANCHES + "/" + id;
+         $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: SERVICES_REST_API,
+          success: function (data) {
+            if (data != undefined) {
+              onSuccess(data);
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            onError(xhr, status, errorMsg);
+          }
+        });
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
+    getServiceInfoById: function (id, onSuccess, onError) {
+      try {
+        var SERVICES_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + id;
          $.ajax({
           type: "GET",
           dataType: "json",

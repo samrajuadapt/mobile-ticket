@@ -9,7 +9,8 @@ import { BranchEntity } from '../entities/branch.entity';
 import { AppointmentEntity } from '../entities/appointment.entity';
 import { AlertDialogService } from '../shared/alert-dialog/alert-dialog.service';
 import { Config } from '../config/config';
-import {BranchOpenHoursValidator} from '../util/branch-open-hours-validator'
+import { BranchOpenHoursValidator } from '../util/branch-open-hours-validator'
+import { ServiceService } from '../service/service.service';
 
 declare var MobileTicketAPI: any;
 declare var ga: Function;
@@ -19,16 +20,18 @@ export class AuthGuard implements CanActivate {
 
     private prevUrl: string = '/';
     private branchService: BranchService;
+    private serviceService: ServiceService
     private isNoSuchBranch = false;
     private isNoSuchVisit = false;
     private isNoSuchVisitDirectToBranch = false;
     private branchId = 0;
-    private directedBranch:BranchEntity = null;
+    private directedBranch: BranchEntity = null;
     private aEntity: AppointmentEntity = null;
 
-    constructor(private router: Router, private activatedRoute: ActivatedRoute, private branchSrvc: BranchService,
-        private alertDialogService: AlertDialogService, private translate: TranslateService, private config : Config) {
+    constructor(private router: Router, private activatedRoute: ActivatedRoute, private branchSrvc: BranchService, private serviceSrvc: ServiceService,
+        private alertDialogService: AlertDialogService, private translate: TranslateService, private config: Config) {
         this.branchService = branchSrvc;
+        this.serviceService = serviceSrvc;
     }
 
     createTicket(bEntity: BranchEntity, sEntity: ServiceEntity, resolve) {
@@ -58,10 +61,10 @@ export class AuthGuard implements CanActivate {
     }
 
     checkOpenHours(resolve) {
-         if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
-                                    this.router.navigate(['open_hours']);
-                                    resolve(false);
-                                    return true;
+        if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+            this.router.navigate(['open_hours']);
+            resolve(false);
+            return true;
         } else {
             return false;
         }
@@ -70,7 +73,7 @@ export class AuthGuard implements CanActivate {
     checkCreateTicketOption(resolve) {
         let createStatus = this.config.getConfig('create_new_ticket');
         if (createStatus === 'enable') {
-          return false;
+            return false;
         } else {
             this.router.navigate(['no_support']);
             resolve(false);
@@ -90,7 +93,7 @@ export class AuthGuard implements CanActivate {
             if (this.isNoSuchBranch && url.startsWith('/no_branch')) {
                 this.isNoSuchBranch = false;
                 resolve(true);
-            } else if ( url.startsWith('/open_hours')) {
+            } else if (url.startsWith('/open_hours')) {
                 resolve(true);
             } else if (this.isNoSuchVisit && url.startsWith('/no_visit')) {
                 this.isNoSuchVisit = false;
@@ -108,9 +111,9 @@ export class AuthGuard implements CanActivate {
                         return;
                     }
                     this.isNoSuchVisitDirectToBranch = false;
-                     MobileTicketAPI.setBranchSelection(this.directedBranch);
-                                this.router.navigate(['services']);
-                                resolve(false);
+                    MobileTicketAPI.setBranchSelection(this.directedBranch);
+                    this.router.navigate(['services']);
+                    resolve(false);
                 } else if (route.url.length === 2 && route.url[1].path) {
                     let id = route.url[1].path;
                     this.branchService.getBranchById(+id, (branchEntity: BranchEntity, isError: boolean) => {
@@ -178,10 +181,28 @@ export class AuthGuard implements CanActivate {
                                 if (this.checkCreateTicketOption(resolve)) {
                                     return;
                                 }
-                                this.createTicket(branchEntity, sEntity, resolve);
+                                let isCustomerDataEnabled = this.config.getConfig('customer_data');
+                                if (isCustomerDataEnabled === 'enable') {
+                                    MobileTicketAPI.setBranchSelection(branchEntity);
+
+                                    // this.serviceService.getServiceById(sEntity.id, (serviceEntity: ServiceEntity, isError: boolean) => {
+                                    //     if (!isError) {
+                                            MobileTicketAPI.setServiceSelection(sEntity);
+                                            this.router.navigate(['customer_data']);
+                                            resolve(false);
+                                    //     } else {
+                                    //         this.isNoSuchVisit = true;
+                                    //         this.router.navigate(['no_visit']);
+                                    //         resolve(false);
+                                    //     }
+                                    // })
+
+                                } else {
+                                    this.createTicket(branchEntity, sEntity, resolve);
+                                }
                             }
 
-                        }else {
+                        } else {
                             if (this.checkOpenHours(resolve)) {
                                 return;
                             }
@@ -239,7 +260,7 @@ export class AuthGuard implements CanActivate {
                 }
             } else if ((url.startsWith('/ticket') && ((branchId && visitId && checksum) ||
                 ((visitInfo !== null && visitInfo) && visitInfo.branchId && visitInfo.visitId && visitInfo.checksum)))) {
-                    resolve(true);
+                resolve(true);
             } else if (visitInfo) {
                 MobileTicketAPI.getVisitStatus(
                     (visitObj: any) => {
@@ -256,33 +277,65 @@ export class AuthGuard implements CanActivate {
                         resolve(false);
                     }
                 );
-            } else if (url.startsWith('/appointment')) {   
+            } else if (url.startsWith('/appointment')) {
                 this.aEntity = new AppointmentEntity();
-                MobileTicketAPI.findAppointment(appointmentId, (response) => {         
+                MobileTicketAPI.findAppointment(appointmentId, (response) => {
                     this.aEntity.publicId = appointmentId;
                     this.aEntity.branchName = response.branch.name;
                     this.aEntity.qpId = response.qpId;
                     MobileTicketAPI.findCentralAppointment(response.qpId,
                         (response2) => {
-                        this.aEntity.serviceId = response2.services[0].id;
-                        this.aEntity.serviceName = response2.services[0].name;
-                        this.aEntity.branchId = response2.branchId;                        
-                        this.aEntity.status = response2.status;
-                        this.aEntity.startTime = response2.startTime;
-                        this.aEntity.endTime = response2.endTime;                        
-                        MobileTicketAPI.setAppointment(this.aEntity);  
-                        resolve(true);
-                    }, 
-                    (xhr, status, errorMessage) => {
-                        resolve(true);
-                    });                                     
+                            this.aEntity.serviceId = response2.services[0].id;
+                            this.aEntity.serviceName = response2.services[0].name;
+                            this.aEntity.branchId = response2.branchId;
+                            this.aEntity.status = response2.status;
+                            this.aEntity.startTime = response2.startTime;
+                            this.aEntity.endTime = response2.endTime;
+                            MobileTicketAPI.setAppointment(this.aEntity);
+                            resolve(true);
+                        },
+                        (xhr, status, errorMessage) => {
+                            resolve(true);
+                        });
                 },
-                (xhr, status, errorMessage) => {
-                    this.aEntity.status = "NOTFOUND";
-                    MobileTicketAPI.setAppointment(this.aEntity); 
-                    resolve(true);
-                });            
-            } else {
+                    (xhr, status, errorMessage) => {
+                        this.aEntity.status = "NOTFOUND";
+                        MobileTicketAPI.setAppointment(this.aEntity);
+                        resolve(true);
+                    });
+            }
+
+            else if (url.startsWith('/customer_data')) {
+                if ((visitInfo && visitInfo !== null)) {
+                    this.router.navigate(['ticket']);
+                    resolve(false);
+                } else if ((this.prevUrl.startsWith('/services') ||
+                    this.prevUrl === '/') || (this.prevUrl.startsWith('/branches'))) {
+                    if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+                        this.router.navigate(['open_hours']);
+                        resolve(false);
+                    } else {
+                        if (this.checkCreateTicketOption(resolve)) {
+                            return;
+                        }
+                        resolve(true);
+                    }
+                } else if (this.prevUrl.startsWith('/ticket') &&
+                    (!visitInfo || visitInfo === null)) {
+                    if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+                        this.router.navigate(['open_hours']);
+                        resolve(false);
+                    } else {
+                        if (this.checkCreateTicketOption(resolve)) {
+                            return;
+                        }
+                        resolve(true);
+                    }
+                }
+            }
+
+
+            else {
                 this.router.navigate(['/branches']);
                 resolve(false);
             }

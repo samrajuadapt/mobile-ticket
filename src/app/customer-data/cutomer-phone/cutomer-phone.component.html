@@ -16,8 +16,8 @@
         <div class="phone-num-text" *ngIf="phoneSectionState === phoneSectionStates.EDIT_PHONE">
           {{'customer_info.editPhoneNumber' | translate}}
         </div>
-        <input class="phone-num-input" type="text" placeholder="Input text" [(ngModel)]="phoneNumber"
-          (change)="onPhoneNumberChanged()" (focusin) = "phoneNumberFeildFocused()" (focusout) = "phoneNumberFeildUnfocused()" *ngIf="phoneSectionState === phoneSectionStates.INITIAL">
+        <input class="phone-num-input" type="text" placeholder="  {{'customer_info.phone_placeholder' | translate}}" [(ngModel)]="phoneNumber"
+          (change)="onPhoneNumberChanged()" (keyup.enter) = "phoneNumContinue()" (focusin) = "phoneNumberFeildFocused()" (focusout) = "phoneNumberFeildUnfocused()" *ngIf="phoneSectionState === phoneSectionStates.INITIAL">
         <div class="phone-num-display" *ngIf="phoneSectionState === phoneSectionStates.EDIT_PHONE"> {{phoneNumber}}
         </div>
         <div class="phone-num-error" *ngIf="phoneNumberError"> {{'customer_info.phoneNumberError' | translate}}</div>
@@ -133,3 +133,4 @@
 
   </div>
 </div>
+

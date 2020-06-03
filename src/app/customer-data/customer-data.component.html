@@ -13,11 +13,21 @@
       <div class="selected-branch-title custom text-color"> {{'customer_info.selectedBranch' | translate}}</div>
       <div class="selected-branch-name custom text-color" *ngIf="selectedBranch"> {{ selectedBranch.name }}</div>
     </div>
-    <div class="row selected-service">
-      <div class="selected-service-title custom text-color">  {{'customer_info.selectedService' | translate}} </div>
-      <div class="selected-service-name custom text-color" *ngIf="selectedService">
+    <div class="row selected-service" *ngIf="selectedService && selectedService.name">
+      <div class="selected-service-title custom text-color" >  {{'customer_info.selectedService' | translate}} </div>
+      <div class="selected-service-name custom text-color">
         {{ selectedService.name }}
       </div>
     </div>
   </div>
+</div>
+<br> <br>
+<div class="table-child-footer" [hidden]="showNetWorkError">
+  <footer class="qm-footer">
+    <div class="center-text">
+      <div class="accent-btn custom accent-bg-color btn-text-color" (click)='createVisit()'>
+        {{ 'customer_info.skipAndGetInLine' | translate }}
+      </div>
+    </div>
+  </footer>
 </div>

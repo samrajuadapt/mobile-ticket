@@ -57,7 +57,7 @@
     },
     "timeFormat" : {
         "value": "HH:mm",
-        "description": "Time format for showing the appointment time. Allowed settings  are HH:mm, hh:mm, hh:mm a, h:mm, h:mm a"
+        "description": "Time format for showing the appointment time. Allowed settings are HH:mm, hh:mm, hh:mm a, h:mm, h:mm a"
     },
     "dateFormat" : {
         "value":"DD/MM/YYYY",
@@ -65,18 +65,18 @@
     },
     "customer_data" : {
         "value": "enable",
-        "description": "Enable or disable customer access to enter customoer phone number using mobile ticket UI, 'on = enbale', 'off = disable'"
+        "description": "Enable or disable customer access to enter customer phone number using mobile ticket UI, 'on = enble', 'off = disable'"
     },
     "privacy_policy" : {
         "value": "enable",
-        "description": "Enable or disable privacy policy when sending phone number, 'on = enbale', 'off = disable'"
+        "description": "Enable or disable privacy policy when sending phone number, 'on = enble', 'off = disable'"
     },
     "privacy_policy_link" : {
         "value": "",
         "description": "Whether to get privacy policy information from property file or send to a link. If value is not null users will send to that link"
     },
     "country_code" : {
-        "value": "+94",
-        "description": "Define the country code for phone number.If value is null no country code will be added."
+        "value": "",
+        "description": "Define the country code for phone number. If value is null no country code will be added."
     }
 }

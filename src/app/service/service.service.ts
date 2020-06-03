@@ -109,4 +109,22 @@ export class ServiceService {
       return false;
     }
   }
+
+
+  public convertToServiceEntity(serviceRes) {
+    let serviceEntity: ServiceEntity;
+    serviceEntity = new ServiceEntity();
+    serviceEntity.id = serviceRes.id;
+    serviceEntity.name = serviceRes.name;
+    return serviceEntity;
+
+  }
+
+  public getServiceById(id, onServiceRecieved): void {
+    MobileTicketAPI.getServiceInfoById(id, (res) => {
+      onServiceRecieved(this.convertToServiceEntity(res), false);
+    }, (error) => {
+      onServiceRecieved(null, true);
+    });
+  }
 }

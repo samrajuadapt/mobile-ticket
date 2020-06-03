@@ -30,10 +30,11 @@ export class CutomerPhoneComponent implements OnInit {
   private _showNetWorkError = false;
   public documentDir: string;
   public countryCode: string;
+  private isTakeTicketClickedOnce: boolean;
 
   @Output()
   showNetorkErrorEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
-  
+
   constructor(
     public router: Router,
     private translate: TranslateService,
@@ -60,19 +61,19 @@ export class CutomerPhoneComponent implements OnInit {
       this.documentDir = "rtl";
     }
   }
-  
+
   // Press continue button for phone number
   phoneNumContinue() {
     var isPrivacyEnable = this.config.getConfig('privacy_policy');
     if (this.phoneNumber.match(/^\(?\+?\d?[-\s()0-9]{6,}$/) && this.phoneNumber !== this.countryCode) {
       let isPrivacyAgreed = localStorage.getItem('privacy_agreed');
       MobileTicketAPI.setPhoneNumber(this.phoneNumber);
-      if ( isPrivacyAgreed === 'true' || isPrivacyEnable !== 'enable') {
+      if (isPrivacyAgreed === 'true' || isPrivacyEnable !== 'enable') {
         this.createVisit()
       } else {
         this.phoneSectionState = phoneSectionStates.PRIVACY_POLICY;
       }
-    
+
     } else {
       this.phoneNumberError = true;
     }
@@ -89,47 +90,56 @@ export class CutomerPhoneComponent implements OnInit {
   }
   // creating  visit
   createVisit() {
-    MobileTicketAPI.createVisit(
-      (visitInfo) => {
-        ga('send', {
-          hitType: 'event',
-          eventCategory: 'visit',
-          eventAction: 'create',
-          eventLabel: 'vist-create'
-        });
-
+    if (!this.isTakeTicketClickedOnce) {
+      this.isTakeTicketClickedOnce = true;
+      if (MobileTicketAPI.getCurrentVisit()) {
         this.router.navigate(['ticket']);
-        // this.isTakeTicketClickedOnce = false;
-      },
-      (xhr, status, errorMessage) => {
-        let util = new Util();
-        // this.isTakeTicketClickedOnce = false;
-        if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "8042") {
-          this.translate.get('error_codes.error_8042').subscribe((res: string) => {
-            this.alertDialogService.activate(res);
-          });
-        } else if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "11000") {
-          this.translate.get('ticketInfo.visitAppRemoved').subscribe((res: string) => {
-            this.alertDialogService.activate(res);
-          });
-        } else {
-          this.showHideNetworkError(true);
-          this.retryService.retry(() => {
-
-            /**
-            * replace this function once #140741231 is done
-            */
-            MobileTicketAPI.getBranchesNearBy(0, 0, 2147483647,
-              () => {
-                this.retryService.abortRetry();
-                this.showHideNetworkError(false);
-              }, () => {
-                //Do nothing on error
-              });
-          });
-        }
       }
-    );
+      else {
+        MobileTicketAPI.createVisit(
+          (visitInfo) => {
+            ga('send', {
+              hitType: 'event',
+              eventCategory: 'visit',
+              eventAction: 'create',
+              eventLabel: 'vist-create'
+            });
+
+            this.router.navigate(['ticket']);
+            this.isTakeTicketClickedOnce = false;
+          },
+          (xhr, status, errorMessage) => {
+            let util = new Util();
+            this.isTakeTicketClickedOnce = false;
+            if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "8042") {
+              this.translate.get('error_codes.error_8042').subscribe((res: string) => {
+                this.alertDialogService.activate(res);
+              });
+            } else if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "11000") {
+              this.translate.get('ticketInfo.visitAppRemoved').subscribe((res: string) => {
+                this.alertDialogService.activate(res);
+              });
+            } else {
+              this.showHideNetworkError(true);
+              this.retryService.retry(() => {
+
+                /**
+                * replace this function once #140741231 is done
+                */
+                MobileTicketAPI.getBranchesNearBy(0, 0, 2147483647,
+                  () => {
+                    this.retryService.abortRetry();
+                    this.showHideNetworkError(false);
+                  }, () => {
+                    //Do nothing on error
+                  });
+              });
+            }
+          }
+        );
+      }
+
+    }
   }
   phoneNumberFeildFocused() {
     if (this.phoneNumber === '') {
@@ -152,6 +162,9 @@ export class CutomerPhoneComponent implements OnInit {
     } else {
       this.router.navigate(['privacy_policy']);
     }
+  }
+  get showNetWorkError(): boolean {
+    return this._showNetWorkError;
   }
 
 }
