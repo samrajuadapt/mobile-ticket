@@ -76,7 +76,7 @@
         "description": "Whether to get privacy policy information from property file or send to a link. If value is not null users will send to that link"
     },
     "country_code" : {
-        "value": "",
+        "value": "+46",
         "description": "Define the country code for phone number. If value is null no country code will be added."
     }
 }
