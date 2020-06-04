@@ -61,7 +61,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h3>Upgrade instructions</h3> 
 
-- New customer data (mobile number) entry feature requires notification module version 4.0.0.49 or upwards.
+- New customer data (mobile number) entry feature requires notification module version 4.0.0.49 or above.
 
 ----------
 
