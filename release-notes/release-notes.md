@@ -59,6 +59,9 @@ This document describes the new features, bug corrections, known issues and reco
 | --- | --- |
 | **MOB-146** | **If branch is closed for the whole day the Opening hours are shown as "false" bug fixed** |
 
+<h3>Upgrade instructions</h3> 
+
+- New customer data (mobile number) entry feature requires notification module version 4.0.0.49 or upwards.
 
 ----------
 
