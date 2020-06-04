@@ -276,6 +276,22 @@ project directory
     "dateFormat" : {
         "value":"DD/MM/YYYY",
         "description": "Date format for showing the appointment date. Allowed placeholders are DD MM YY YYYY"
+    },
+     "customer_data" : {
+        "value": "disable",
+        "description": "Enable or disable customer access to enter customer phone number using mobile ticket UI, 'on = enable', 'off = disable'"
+    },
+    "privacy_policy" : {
+        "value": "enable",
+        "description": "Enable or disable privacy policy when sending phone number, 'on = enable', 'off = disable'"
+    },
+    "privacy_policy_link" : {
+        "value": "",
+        "description": "URL of privacy policy information starting with http:// or https://. If value is null privacy policy information will get from the property file."
+    },
+    "country_code" : {
+        "value": "+46",
+        "description": "Define the country code for phone number. If value is null no country code will be added."
     }
 }
 ```
@@ -646,6 +662,10 @@ Set the service selection.
 ```js
 MobileTicketAPI.setServiceSelection(service)
 ```
+Set the phone number selection.
+```js
+MobileTicketAPI.setPhoneNumber(phoneNumber)
+```
 Fetch the branch set via MobileTicketAPI.setBranchSelection(branch)
 ```js
 MobileTicketAPI.getSelectedBranch()
@@ -653,6 +673,10 @@ MobileTicketAPI.getSelectedBranch()
 Fetch the branch set via MobileTicketAPI.setServiceSelection(service)
 ```js
 MobileTicketAPI.getSelectedService()
+```
+Fetch the phone number set via MobileTicketAPI.setPhoneNumber(phoneNumber)
+```js
+MobileTicketAPI.getEnteredPhoneNum()
 ```
 Fetch the currently created visit
 ```js
@@ -719,3 +743,7 @@ Note:
 * If you are specifying styles in this stylesheet, it will override the default styles.
 * If you want to add a new logo or background image, make sure to include the images in the src/app/resources folder and refer it from the theme-styles sheet as shown in the above table.
 * If you do not want to customize your application, remove this file from the build. In this case, the application will load with the default styles.
+
+Updating privacy policy
+
+You can update the privacy policy from translations file by changing pricacy_policy.description. you can use inline styling if necessary. 

@@ -38,7 +38,29 @@ This document describes the new features, bug corrections, known issues and reco
 <h3>Upgrade instructions</h3> 
 
 ----------
+
 -->
+
+<h2>Version 22</h2>
+
+**Date:2020-05-18**
+ 
+**Build number:22**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-138** | **End user flow, enter mobile number feature** |
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-146** | **If branch is closed for the whole day the Opening hours are shown as "false" bug fixed** |
+
+
+----------
 
 <h2>Version 21</h2>
 
