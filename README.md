@@ -18,6 +18,7 @@ This is a web application that has been developed using Angular4 and the develop
 - [Mobileticket.js library](#mobileticketjs-library)
 - [Creating a Build](#creating-a-build)
 - [Branding & Customization](#branding--customization)
+- [Customer data](#customer-data)
 
 ## Installation
 BEFORE YOU INSTALL: please read the [prerequisites](#prerequisites)
@@ -744,6 +745,10 @@ Note:
 * If you want to add a new logo or background image, make sure to include the images in the src/app/resources folder and refer it from the theme-styles sheet as shown in the above table.
 * If you do not want to customize your application, remove this file from the build. In this case, the application will load with the default styles.
 
-Updating privacy policy
 
-You can update the privacy policy from translations file by changing pricacy_policy.description. you can use inline styling if necessary. 
+## Customer data
+Mobile Ticket can be configured to accept customer phone number as a part of accepting customer data when creating a ticket. To enable accepting customer data, `customer_data` attribute in `config.json` needs to be switched on. 
+
+As a part of accepting customer phone number, it is configurable whether privacy policy needs to be applied or not. Privacy policy can be applied by switching on the `privacy_policy` attribute. By default, privacy policy text in translation file will be applied. This text can be customized, and also inline CSS styling can be used. An external privacy policy link can be used instead of using the default privacy policy. In this case the link to the privacy policy statement should be specified in `privacy_policy_link` attribute in `config.json`. 
+
+Default phone number input text mask which is `+46 XX XXX XX XX` can be changed by using the `phone_placeholder` attribute in translation file. Country code can be specified by `country_code` attribute in `config.json`.
