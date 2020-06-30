@@ -306,6 +306,7 @@ export class AuthGuard implements CanActivate {
                             this.aEntity.status = response2.status;
                             this.aEntity.startTime = response2.startTime;
                             this.aEntity.endTime = response2.endTime;
+                            this.aEntity.notes = response2.properties.notes;
                             MobileTicketAPI.setAppointment(this.aEntity);
                             resolve(true);
                         },

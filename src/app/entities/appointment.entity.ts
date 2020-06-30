@@ -10,4 +10,5 @@ export class AppointmentEntity {
   startTimeFormatted: string = '';
   date: string = '';
   qpId: number;
+  notes: string;
 }

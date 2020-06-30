@@ -52,7 +52,7 @@ export class AppointmentComponent implements OnInit {
     MobileTicketAPI.findEntrypointId(this.app.branchId, (response) => {
       if (response.length > 0) {
         let entryPointId = response[0].id;
-        MobileTicketAPI.arriveAppointment(this.app.branchId, entryPointId, this.app.qpId, (response) => {
+        MobileTicketAPI.arriveAppointment(this.app.branchId, entryPointId, this.app.qpId, this.app.notes, (response) => {
           this.ticket = response;
           this.router.navigate(['ticket']);
         },

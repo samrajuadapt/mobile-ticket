@@ -3039,10 +3039,12 @@ var MobileTicketAPI = (function () {
         }
       });    
     },
-    arriveAppointment: function(branchId, entryPointId, appointmentId, onSuccess, onError) {
+    arriveAppointment: function(branchId, entryPointId, appointmentId, notes, onSuccess, onError) {
       var ARRIVE_REST_API = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/" + ARRIVE +"/" + BRANCHES + "/" + branchId + "/entryPoints/" + entryPointId + "/" + VISITS;     
       eventData = {};
       eventData.appointmentId = appointmentId;
+      eventData.parameters = {};
+      eventData.parameters.custom1 = notes;
       $.ajax({
         type: "POST",
         dataType: "json",

@@ -288,7 +288,8 @@ var apiFindCentralProxy = proxy(host, {	// ip and port off apigateway
 			newData.branchId = data.branchId;
 			newData.startTime = data.startTime;
 			newData.endTime = data.endTime;
-			
+			newData.properties = {};
+			newData.properties.notes = data.properties.notes;
 		}
 		return JSON.stringify(newData);
 	}
