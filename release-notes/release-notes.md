@@ -47,6 +47,12 @@ This document describes the new features, bug corrections, known issues and reco
  
 **Build number:23**
 
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-174** | **Give more attraction to phone number text and button** |
+
 <h3>Bug fixes</h3>
 
 | **Id** | **Release notes** |

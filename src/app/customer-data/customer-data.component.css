@@ -20,3 +20,10 @@
 .selected-service-name {
     font-size: 24px;
 }
+.skip-button{
+    background: none;
+}
+.skip-button:hover {
+    background: rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}

@@ -24,26 +24,10 @@
       </div>
       <div class="phone-container-icon">
         <!-- SEND ICON -->
-        <svg *ngIf="phoneSectionState === phoneSectionStates.INITIAL && documentDir !== 'rtl'" class="send-icon"
-          xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30"
-          viewBox="0 0 24 24" (click)="phoneNumContinue()">
-          <defs>
-            <path id="prefix__a" d="M0.01 18L21 9 0.01 0 0 7 15 9 0 11z" />
-          </defs>
-          <g fill="none" fill-rule="evenodd" transform="translate(2 3)">
-            <mask id="prefix__b" fill="#fff">
-              <use xlink:href="#prefix__a" />
-            </mask>
-            <g fill="#FFF" fill-opacity=".87" mask="url(#prefix__b)">
-              <path d="M0 0H24V24H0z" transform="translate(-2 -3)" />
-            </g>
-          </g>
-        </svg>
-        <svg *ngIf="phoneSectionState === phoneSectionStates.INITIAL && documentDir === 'rtl'" class="send-icon"
-          xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <path fill-opacity=".87" fill-rule="evenodd" d="M1.01 21L22 12 1.01 3 1 10 16 12 1 14z"
-            transform="matrix(-1 0 0 1 23 0)" />
-        </svg>
+
+        <div *ngIf="phoneSectionState === phoneSectionStates.INITIAL" class="send_button custom btn-text-color accent-bg-color" (click)="phoneNumContinue()">
+          {{'customer_info.send' | translate}}
+        </div>
 
         <!-- EDIT ICON -->
         <svg *ngIf="phoneSectionState === phoneSectionStates.EDIT_PHONE" class="edit-icon" width="30px" height="30px"

@@ -110,7 +110,8 @@
     "selectedBranch": "Selected branch",
     "selectedService": "Selected service",
     "skipAndGetInLine": "Skip & get in line",
-    "phone_placeholder": "+46 XX XXX XX XX"
+    "phone_placeholder": "+46 XX XXX XX XX",
+    "send": "Send"
 
   },
   "pricacy_policy" : { 

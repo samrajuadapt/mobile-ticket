@@ -7,9 +7,11 @@
 .customer-phone__number-container {
     background: rgba(0,0,0,.17);
     color: white;
+    height: 80px;
 }
 .phone-num{
     display: flex;
+    height: 80px;
 }
 .phone-container-icon {
     display: flex;
@@ -43,9 +45,10 @@
     caret-color: #bc0e3d;
     color: #fff;
     width: 100%;
+    font-size: 18px;
 }
 .phone-num-input-container {
-    margin: 10px 0;
+    margin: 14px 0;
     flex-grow: 1;
 }
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -166,6 +169,17 @@
   .edit-mode-policy-link::first-letter {
     text-transform: capitalize;
    }
+
+   .send_button {
+    /* background: #b30042; */
+    cursor: pointer;
+    padding: 10px 30px;
+    margin: 0 10px;
+    border-radius: 20px;
+    font-weight: 800;
+   }
+
+
 
 /* Small phones */
 @media (max-width: 400px){
