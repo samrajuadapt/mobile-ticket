@@ -173,10 +173,15 @@
    .send_button {
     /* background: #b30042; */
     cursor: pointer;
-    padding: 10px 30px;
+    padding: 10px 15px;
+    text-align: center;
     margin: 0 10px;
     border-radius: 20px;
     font-weight: 800;
+    width: 95px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
    }
 
 
@@ -187,6 +192,9 @@
     .customer-phone  {
       max-width: calc((9 * 35px) + 45px + (2px * 10) + 1px);
       width: calc((9 * 8.5vw) + 12vw + (2px * 10) + 1px);
+    }
+    .phone-num-error { 
+      font-size: 9px;
     }
   }
   

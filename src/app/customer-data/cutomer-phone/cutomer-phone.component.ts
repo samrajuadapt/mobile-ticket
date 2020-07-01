@@ -83,6 +83,14 @@ export class CutomerPhoneComponent implements OnInit {
   onPhoneNumberChanged() {
     this.phoneNumberError = false;
   }
+  private onPhoneNumberEnter(event) {
+    // console.log(event.keycode);
+    if (this.phoneNumberError && event.keyCode !== 13) {
+      if (this.phoneNumber.trim() !== '') {
+          this.phoneNumberError = false;
+      }
+    }
+  }
   // understood button pressed
   understoodPrivacyConsent() {
     localStorage.setItem('privacy_agreed', 'true');
