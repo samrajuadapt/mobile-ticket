@@ -41,6 +41,20 @@ This document describes the new features, bug corrections, known issues and reco
 
 -->
 
+<h2>Version 23</h2>
+
+**Date:2020-07-01**
+ 
+**Build number:23**
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-159** | **Notes are gone when checkin appointment** |
+
+----------
+
 <h2>Version 22</h2>
 
 **Date:2020-05-18**
