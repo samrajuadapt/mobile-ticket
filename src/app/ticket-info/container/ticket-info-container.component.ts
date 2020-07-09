@@ -43,6 +43,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   private tmpVisitId: number;
   public title1: string;
   public title2: string;
+  public isMeetingAvailable: boolean;
 
   @ViewChild('ticketNumberComponent') ticketNumberComponent;
   @ViewChild('queueComponent') queueComponent;
@@ -61,6 +62,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     this.isVisitRecycled = false;
     this.isUrlVisitLoading = true;
     this.visitState = new VisitState();
+    this.isMeetingAvailable = false;
 
 
 
@@ -188,6 +190,11 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       var servicePoint = currentEvent.servicePointName;
       this.updateVisitCallMsg(firstName, servicePoint, lastName);
       this.isVisitCall = true;
+      if (MobileTicketAPI.meetingUrl !== "Not present" && MobileTicketAPI.meetingUrl !== undefined) {
+        this.isMeetingAvailable = true;
+      } else {
+        this.isMeetingAvailable = false;
+      }
       if (this.isSoundPlay === false) {
         this.playNotificationSound();
       }
@@ -200,6 +207,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       this.isVisitCall = false;
       this.isVisitRecycled = true;
       this.queueComponent.onVisitRecycled(true);
+      this.isMeetingAvailable = false;
     }
     else if (visitStatus.status === this.visitState.IN_QUEUE) {
       this.isSoundPlay = false;
@@ -207,6 +215,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       this.isVisitCall = false;
       this.isVisitRecycled = false;
       this.queueComponent.onVisitRecycled(false);
+      this.isMeetingAvailable = false;
     }
     else if (visitStatus.status === this.visitState.CACHED) {
       if (this.prevVisitState === this.visitState.CALLED) {
@@ -222,6 +231,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       MobileTicketAPI.resetAllVars();
       this.isTicketEndedOrDeleted = true;
       this.isVisitCall = false;
+      this.isMeetingAvailable = false;
       MobileTicketAPI.resetCurrentVisitStatus();
       this.stopNotificationSound();
       this.openCustomerFeedback(this.tmpBranchId, this.tmpVisitId);
@@ -240,6 +250,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       MobileTicketAPI.resetAllVars();
       this.isTicketEndedOrDeleted = true;
       this.isVisitCall = false;
+      this.isMeetingAvailable = false;
       MobileTicketAPI.resetCurrentVisitStatus();
       this.stopNotificationSound();
       this.openCustomerFeedback(this.tmpBranchId, this.tmpVisitId);

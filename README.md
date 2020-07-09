@@ -83,6 +83,9 @@ For development one needs to add the following four routes to the application.ym
     arrive_appointment:
        path: /MobileTicket/MyAppointment/arrive/**
        url: ${orchestra.central.url}/qsystem/rest/entrypoint
+    meeting_info:
+      path: /MobileTicket/MyMeeting/branches/**
+      url: ${orchestra.central.url}/qsystem/rest/entrypoint/branches
 ```
 #### Configuring the Proxy for Development Environment
 
@@ -752,3 +755,17 @@ Mobile Ticket can be configured to accept customer phone number as a part of acc
 As a part of accepting customer phone number, it is configurable whether privacy policy needs to be applied or not. Privacy policy can be applied by switching on the `privacy_policy` attribute. By default, privacy policy text in translation file will be applied. This text can be customized, and also inline CSS styling can be used. An external privacy policy link can be used instead of using the default privacy policy. In this case the link to the privacy policy statement should be specified in `privacy_policy_link` attribute in `config.json`. 
 
 Default phone number input text mask which is `+46 XX XXX XX XX` can be changed by using the `phone_placeholder` attribute in translation file. Country code can be specified by `country_code` attribute in `config.json`.
+
+
+## Remote serving for customers
+Mobile Ticket can be configured to serve customers remotely by using application specific utt. This will create a virtual meeting for each visit based on the selected services or appointments. To enable this services, relevant utt should be configured and used. 
+
+Serve using Microsoft Teams
+
+To remote serve using Microsoft Teams, "teamsMeetingCreator" utt should be used. The fields `Directory (tenant) ID`, `Application (client) ID`, `Client Secret` and `User Object ID` need to be filled with information coming from the app registration on Azure
+
+Following options are available for creating virtual meetings.
+
+`Add meeting based on appointment` will look for appointments and create a meeting request.
+
+`Add meeting based on Service` will create meetings for the selected services from the branch level.

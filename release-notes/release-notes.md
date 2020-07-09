@@ -40,6 +40,20 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 
 -->
+<h2>Version 24</h2>
+
+**Date:2020-07-01**
+ 
+**Build number:23**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-158** | **Integration with MsTeams for Remote Serving customers in Core** |
+
+
+----------
 
 <h2>Version 23</h2>
 

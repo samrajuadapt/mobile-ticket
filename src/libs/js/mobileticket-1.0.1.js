@@ -2560,6 +2560,7 @@ var MobileTicketAPI = (function () {
   var checksum = undefined;
   var currentvisitEvent = undefined;
   var currentVisitStatus = undefined;
+  var meetingUrl = undefined;
 
   var visitFromQR = false;
   //var VISIT_EVENT_NAME = "visitFromQR";
@@ -2585,6 +2586,7 @@ var MobileTicketAPI = (function () {
   var WAIT_INFO = "wait-info";
   var EVENTS = "events";
   var CURRENT_STATUS = "CurrentStatus";
+  var MYMEETING = "MyMeeting"
   var self = this;
 
   $(document).ajaxError(function (event, request, settings) {
@@ -2627,15 +2629,19 @@ var MobileTicketAPI = (function () {
     var branch = MobileTicketAPI.selectedBranch;
     var service = MobileTicketAPI.selectedService;
     var visit = MobileTicketAPI.visitInformation;
+    var meetingUrl = MobileTicketAPI.meetingUrl;
 
     if (branch != undefined) {
       createCookie('branch', JSON.stringify(branch), 0.5);
     }
     if (service != undefined) {
       createCookie('service', JSON.stringify(service), 0.5);
-    }
+  }
     if (visit != undefined) {
       createCookie('visit', JSON.stringify(visit), 0.5);
+    }
+    if (meetingUrl != undefined) {
+      createCookie('meetingUrl', JSON.stringify(meetingUrl), 0.5);
     }
   }
 
@@ -2643,6 +2649,7 @@ var MobileTicketAPI = (function () {
     eraseCookie('branch');
     eraseCookie('service');
     eraseCookie('visit');
+    eraseCookie('meetingUrl');
   }
 
   function resetAllVars() {
@@ -2656,6 +2663,7 @@ var MobileTicketAPI = (function () {
     MobileTicketAPI.currentVisitStatus = undefined;
     MobileTicketAPI.visitInformation = undefined;
     MobileTicketAPI.appointment = undefined;
+    MobileTicketAPI.meetingUrl = undefined
   }
 
   function eraseCookie(name) {
@@ -2679,6 +2687,9 @@ var MobileTicketAPI = (function () {
 
   function getCurrentVisit() {
     return (MobileTicketAPI.visitInformation == undefined) ? JSON.parse(readCookie("visit")) : MobileTicketAPI.visitInformation;
+  }
+  function getCurrentMeeting() {
+    return (MobileTicketAPI.meetingUrl == undefined) ? JSON.parse(readCookie("meetingUrl")) : MobileTicketAPI.meetingUrl;
   }
 
   function processVisitStatus(data) {
@@ -2955,6 +2966,9 @@ var MobileTicketAPI = (function () {
           success: function (visitsData) {
             if (visitsData != undefined) {
               var visitStatus = processVisitStatus(visitsData);
+              if (MobileTicketAPI.meetingUrl === undefined && visitsData.currentStatus === "CALLED") {
+                MobileTicketAPI.getMeetingUrl(branchIdVal, visitIdVal);
+              }
               onSuccess(visitStatus);
             }
           },
@@ -3074,6 +3088,26 @@ var MobileTicketAPI = (function () {
           onSuccess(data);
         }
       });   
+    },
+    getMeetingUrl: function(branchId, visitId) {
+      var CENTR_REST_API = MOBILE_TICKET + "/" + MYMEETING + "/" + BRANCHES + "/" + branchId + "/" + VISITS + "/" + visitId;
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: CENTR_REST_API,
+        success: function (data) {                  
+          if (data != undefined) { 
+            if (data.parameterMap.meetingUrl  !== undefined ) {                       
+            MobileTicketAPI.meetingUrl =  data.parameterMap.meetingUrl;
+            } else {
+              MobileTicketAPI.meetingUrl = "Not present";
+            }
+          }
+        },
+        error: function (xhr, status, errorMsg) {
+          onError(xhr, status, errorMsg);
+        }
+      });    
     },
     setVisit: function (branchId, queueId, visitId, checksum) {
       MobileTicketAPI.visitId = visitId;

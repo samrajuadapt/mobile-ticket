@@ -361,6 +361,44 @@ var apiArriveProxy = proxy(host, {
 	}
 });
 
+var apiMeetingProxy = proxy(host, {
+	// ip and port off apigateway
+
+	proxyReqPathResolver: function (req) {
+		var newUrl = req.originalUrl.replace("/MobileTicket/MyMeeting/branches/","/rest/entrypoint/branches/");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL,
+	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
+		data = JSON.parse(proxyResData.toString('utf8'));
+		newData = {};
+		newData.parameterMap = {};
+		if (data !== undefined) {
+			newData.ticketId = data.ticketId;
+			newData.checksum = data.checksum;
+			newData.parameterMap.meetingUrl = data.parameterMap.meetingUrl;
+			
+		}
+		return JSON.stringify(newData);
+	}
+});
+
 var handleHeaders = function (res) {
 	if (isEmbedIFRAME === false) {
 		res.set('X-Frame-Options', "DENY");
@@ -382,6 +420,8 @@ app.use("/MobileTicket/MyAppointment/entrypoint/*", apiEntryPointProxy);
 app.use("/MobileTicket/MyAppointment/arrive/*", apiArriveProxy);
 app.use("/MobileTicket/services/*", apiProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
+app.use("/MobileTicket/MyMeeting/*", apiMeetingProxy);
+
 
 if (supportSSL) {
 	var httpsServer = https.createServer(credentials, app);

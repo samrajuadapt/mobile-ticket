@@ -34,7 +34,8 @@
     "ticketEndHeading": "Thank you for visiting us!",
     "welcomeback": "Welcome back!",
     "visitRecycledMessage": "You will be called shortly",
-    "visitAppRemoved": "No Entry Point of type SW_VISITAPP on branch, cannot create or delete visit"
+    "visitAppRemoved": "No Entry Point of type SW_VISITAPP on branch, cannot create or delete visit",
+    "btnOpenMeeting" : "Enter meeting"
   },
   "visit": {
     "notFound": "Sorry something went wrong,",

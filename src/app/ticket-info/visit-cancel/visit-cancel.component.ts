@@ -18,9 +18,11 @@ export class VisitCancelComponent {
 
   @Input() isTicketEndedOrDeleted: boolean;
   @Input() isUrlAccessedTicket: boolean;
+  @Input() isVisitCall: boolean;
 
   public btnTitleLeaveLine: string;
   public btnTitleNewTicket: string;
+  public btnTitleOpenMeeting: string;
   public confirmMsg: string;
   public currentHash;
   public visitCancelled: boolean = false;
@@ -37,6 +39,9 @@ export class VisitCancelComponent {
     });
     this.translate.get('ticketInfo.leaveVisitConfirmMsg').subscribe((res: string) => {
       this.confirmMsg = res;
+    });
+    this.translate.get('ticketInfo.btnOpenMeeting').subscribe((res: string) => {
+      this.btnTitleOpenMeeting = res;
     });
   }
 
@@ -119,7 +124,7 @@ export class VisitCancelComponent {
   }
 
   getButtonTitle(): string {
-    return (this.isTicketEndedOrDeleted ? this.btnTitleNewTicket : this.btnTitleLeaveLine);
+    return (this.isTicketEndedOrDeleted ? this.btnTitleNewTicket : (this.isVisitCall ? this.btnTitleOpenMeeting : this.btnTitleLeaveLine));
   }
 
   showButton(): boolean {
@@ -138,10 +143,17 @@ export class VisitCancelComponent {
       return false;
     }
   }
+  openMeeting () {
+    window.open(MobileTicketAPI.meetingUrl);
+  }
 
   onButtonClick() {
     if (!this.isTicketEndedOrDeleted) {
-      this.cancelVisit();
+      if (!this.isVisitCall) {
+        this.cancelVisit();
+      } else {
+        this.openMeeting();
+      }
     } else {
       this.getNewTicket();
     }
