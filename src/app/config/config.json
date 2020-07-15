@@ -70,6 +70,10 @@
         "value": "disable",
         "description": "Enable or disable privacy policy when sending phone number, 'on = enable', 'off = disable'"
     },
+    "active_consent" : {
+        "value": "disable",
+        "description": "Enable or disable whether customer need to actively press button to agree privacy policy"
+    },
     "privacy_policy_link" : {
         "value": "",
         "description": "URL of privacy policy information starting with http:// or https://. If value is null privacy policy information will get from the property file."

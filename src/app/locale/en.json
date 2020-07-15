@@ -99,10 +99,10 @@
     "phoneNumber" : "Phone number",
     "editPhoneNumber" : "Edit phone number",
     "phoneNumberError" : "Please enter vaild phone number",
-    "vistInfoTitle" : "VISIT INFORMATION YOU GET",
-    "smsOnTime" : "SMS when it's time",
-    "avoidTicketLoss" : "Ticket on SMS to avoid loss",
-    "agreeDescription" : "By sending information, you agree to the ",
+    "vistInfoTitle" : "By adding phone number you get:",
+    "firstAdvantageByEnteringPhone" : "1. Ticket on SMS that is safer than browser",
+    "secondAdvantageByEnteringPhone" : "2. SMS notify you when it’s you or close",
+    "agreeDescription" : "By sending information, you agree to our ",
     "privacyPolicy" : "privacy policy",
     "understood" : "Understood",
     "canDeleteInfo" : "You can delete your information.",
@@ -110,10 +110,9 @@
     "btnCancel" : "CANCEL",
     "selectedBranch": "Selected branch",
     "selectedService": "Selected service",
-    "skipAndGetInLine": "Skip & get in line",
-    "phone_placeholder": "+46 XX XXX XX XX",
-    "send": "Send"
-
+    "skipAndGetInLine": "Skip this",
+    "phone_placeholder": "Enter your phone number",
+    "send": "Send information"
   },
   "pricacy_policy" : { 
     "title" : "Privacy policy",

@@ -113,6 +113,7 @@ export class ServicesContainerComponent implements OnInit {
                         }
                     });
                     if ( customerData === 'enable') {
+                        MobileTicketAPI.setPhoneNumber('');
                         this.router.navigate(['customer_data']);
                     } else {
 

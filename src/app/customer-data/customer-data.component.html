@@ -9,7 +9,7 @@
     <div class="row">
       <app-cutomer-phone (showNetorkErrorEvent)="showHideNetworkError($event)"></app-cutomer-phone>
     </div>
-    <div class="row selected-branch">
+    <!-- <div class="row selected-branch">
       <div class="selected-branch-title custom text-color"> {{'customer_info.selectedBranch' | translate}}</div>
       <div class="selected-branch-name custom text-color" *ngIf="selectedBranch"> {{ selectedBranch.name }}</div>
     </div>
@@ -18,16 +18,7 @@
       <div class="selected-service-name custom text-color">
         {{ selectedService.name }}
       </div>
-    </div>
+    </div> -->
   </div>
 </div>
 <br> <br>
-<div class="table-child-footer" [hidden]="showNetWorkError">
-  <footer class="qm-footer">
-    <div class="center-text">
-      <div class="accent-btn  btn-text-color skip-button" (click)='createVisit()'>
-        {{ 'customer_info.skipAndGetInLine' | translate }}
-      </div>
-    </div>
-  </footer>
-</div>

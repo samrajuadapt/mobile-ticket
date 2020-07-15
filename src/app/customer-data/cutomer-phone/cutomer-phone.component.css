@@ -5,13 +5,14 @@
     font-family: Roboto-Regular;
 }
 .customer-phone__number-container {
-    background: rgba(0,0,0,.17);
+    background: white;
+    border-bottom: 2px solid #bc0e3d;
     color: white;
-    height: 80px;
+    height: 60px;
 }
 .phone-num{
     display: flex;
-    height: 80px;
+    height: 60px;
 }
 .phone-container-icon {
     display: flex;
@@ -19,7 +20,7 @@
     flex-direction: column;
 }
 .phone-icon {
-    fill: white;
+    fill: rgba(0, 0, 0, 0.54);;
     margin: 10px;
 }
 .send-icon{
@@ -32,7 +33,8 @@
     margin: 10px;
 }
 .phone-num-text{
-    font-size: 12px;
+    font-size: 14px;
+    font-weight: 500;
     letter-spacing: .15px;
     color: #fff;
     font-weight: 300;
@@ -43,21 +45,22 @@
     border: none;
     background: transparent;
     caret-color: #bc0e3d;
-    color: #fff;
+    color: rgba(0, 0, 0, 0.82);
     width: 100%;
-    font-size: 18px;
+    font-size: 14px;
+    margin: 0 -15px;
 }
 .phone-num-input-container {
-    margin: 14px 0;
+    margin: 14px 10px;
     flex-grow: 1;
 }
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: white;
+    color: rgba(0, 0, 0, 0.62);
     opacity: 0.6; /* Firefox */
   }
   
   :-ms-input-placeholder { /* Internet Explorer 10-11 */
-    color: white;
+    color: rgba(0, 0, 0, 0.62);
     opacity: 0.6;
   }
 
@@ -96,8 +99,9 @@
   }
   .phone-num-points-text {
     font-size: 14px;
+    line-height: 2;
+    letter-spacing: 0.4px;
     font-weight: 500;
-    letter-spacing: .1px;
     color: rgba(0,0,0,.6);
   }
   .phone-num-error {
@@ -175,15 +179,26 @@
     cursor: pointer;
     padding: 10px 15px;
     text-align: center;
-    margin: 0 10px;
+    margin: 20px 10px;
     border-radius: 20px;
     font-weight: 800;
-    width: 95px;
+    max-width: 400px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin: 10px auto;
+    font-size: 16px
    }
-
+.privcay-container-bottom {
+  margin: 30px;
+}
+.custom-phone-card {
+  height: calc(100vh - 16em) !important;
+  overflow: auto;
+}
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
 
 
 /* Small phones */

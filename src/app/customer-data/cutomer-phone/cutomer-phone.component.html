@@ -1,122 +1,110 @@
 <div class="customer-phone">
-  <!-- INITIAL AND EDIT PHONE SECTION -->
-  <div class="customer-phone__number-container"
-    *ngIf="phoneSectionState === phoneSectionStates.INITIAL || phoneSectionState === phoneSectionStates.EDIT_PHONE ">
-    <div class="phone-num">
-      <div class="phone-container-icon">
-        <svg class="phone-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
-          <path fill-opacity=".87" fill-rule="evenodd"
-            d="M7.576 11.005c1.184 2.327 3.092 4.226 5.419 5.419l1.809-1.81c.222-.221.55-.295.838-.197.921.305 1.916.469 2.936.469.452 0 .822.37.822.822v2.87c0 .452-.37.822-.822.822C10.858 19.4 4.6 13.143 4.6 5.422c0-.452.37-.822.822-.822H8.3c.452 0 .822.37.822.822 0 1.028.165 2.015.469 2.936.09.287.025.608-.206.838l-1.809 1.81z" />
-        </svg>
-
-      </div>
-      <div class="phone-num-input-container">
-        <div class="phone-num-text" *ngIf="phoneSectionState === phoneSectionStates.INITIAL">
-          {{'customer_info.phoneNumber' | translate}} </div>
-        <div class="phone-num-text" *ngIf="phoneSectionState === phoneSectionStates.EDIT_PHONE">
-          {{'customer_info.editPhoneNumber' | translate}}
+  <div class="custom-phone-card">
+    <!-- INITIAL AND EDIT PHONE SECTION -->
+    <div class="phone-num-text"> {{'customer_info.phoneNumber' | translate}} </div>
+    <div class="customer-phone__number-container"
+      *ngIf="phoneSectionState === phoneSectionStates.INITIAL || phoneSectionState === phoneSectionStates.EDIT_PHONE ">
+      <div class="phone-num">
+        <div class="phone-container-icon">
+          <svg class="phone-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24">
+            <path fill-opacity=".87" fill-rule="evenodd"
+              d="M7.576 11.005c1.184 2.327 3.092 4.226 5.419 5.419l1.809-1.81c.222-.221.55-.295.838-.197.921.305 1.916.469 2.936.469.452 0 .822.37.822.822v2.87c0 .452-.37.822-.822.822C10.858 19.4 4.6 13.143 4.6 5.422c0-.452.37-.822.822-.822H8.3c.452 0 .822.37.822.822 0 1.028.165 2.015.469 2.936.09.287.025.608-.206.838l-1.809 1.81z" />
+          </svg>
         </div>
-        <input class="phone-num-input" type="text" placeholder="  {{'customer_info.phone_placeholder' | translate}}" [(ngModel)]="phoneNumber"
-          (change)="onPhoneNumberChanged()" (keyup.enter) = "phoneNumContinue()" (focusin) = "phoneNumberFeildFocused()" 
-          (focusout) = "phoneNumberFeildUnfocused()" (keyup)="onPhoneNumberEnter($event)"
-          *ngIf="phoneSectionState === phoneSectionStates.INITIAL">
-        <div class="phone-num-display" *ngIf="phoneSectionState === phoneSectionStates.EDIT_PHONE"> {{phoneNumber}}
+        <div class="phone-num-input-container">
+          <input class="phone-num-input" type="text" placeholder="  {{'customer_info.phone_placeholder' | translate}}"
+            [(ngModel)]="phoneNumber" (change)="onPhoneNumberChanged()" (keyup.enter)="phoneNumContinue()"
+            (focusin)="phoneNumberFeildFocused()" (focusout)="phoneNumberFeildUnfocused()"
+            (keyup)="onPhoneNumberEnter($event)" *ngIf="phoneSectionState === phoneSectionStates.INITIAL">
+          <div class="phone-num-display" *ngIf="phoneSectionState === phoneSectionStates.EDIT_PHONE"> {{phoneNumber}}
+          </div>
+          <div class="phone-num-error" *ngIf="phoneNumberError"> {{'customer_info.phoneNumberError' | translate}}</div>
         </div>
-        <div class="phone-num-error" *ngIf="phoneNumberError"> {{'customer_info.phoneNumberError' | translate}}</div>
-      </div>
-      <div class="phone-container-icon">
-        <!-- SEND ICON -->
-
-        <div *ngIf="phoneSectionState === phoneSectionStates.INITIAL" class="send_button custom btn-text-color accent-bg-color" (click)="phoneNumContinue()">
-          {{'customer_info.send' | translate}}
-        </div>
-
-        <!-- EDIT ICON -->
-        <svg *ngIf="phoneSectionState === phoneSectionStates.EDIT_PHONE" class="edit-icon" width="30px" height="30px"
-          viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink">
-          <!-- Generator: sketchtool 63.1 (101010) - https://sketch.com -->
-          <g id="The-information-game" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
-            fill-opacity="0.87">
-            <g id="RTL-icons" transform="translate(-75.000000, -34.000000)" fill="#FFFFFF">
-              <g id="icon/interaction/edit" transform="translate(75.000000, 34.000000)">
-                <path
-                  d="M19.7500152,7.58300656 L18.1249517,9.20807005 L14.7916049,5.87472318 L16.4166684,4.24965968 C16.5834332,4.08289482 16.791483,4 17.0417928,4 C17.2917776,4 17.4998273,4.08289482 17.6665922,4.24965968 L19.7500152,6.33308275 C19.9167801,6.49984762 20,6.70822243 20,6.95788212 C20,7.20819196 19.9167801,7.4162417 19.7500152,7.58300656 L19.7500152,7.58300656 Z M4,16.666328 L13.8332758,6.83305228 L17.1666226,10.1663992 L7.33334688,19.9996749 L4,19.9996749 L4,16.666328 Z"
-                  id="Mask"></path>
+        <div class="phone-container-icon">
+          <!-- EDIT ICON -->
+          <svg *ngIf="phoneSectionState === phoneSectionStates.EDIT_PHONE" class="edit-icon" width="30px" height="30px"
+            viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink">
+            <!-- Generator: sketchtool 63.1 (101010) - https://sketch.com -->
+            <g id="The-information-game" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
+              fill-opacity="0.87">
+              <g id="RTL-icons" transform="translate(-75.000000, -34.000000)" fill="#FFFFFF">
+                <g id="icon/interaction/edit" transform="translate(75.000000, 34.000000)">
+                  <path
+                    d="M19.7500152,7.58300656 L18.1249517,9.20807005 L14.7916049,5.87472318 L16.4166684,4.24965968 C16.5834332,4.08289482 16.791483,4 17.0417928,4 C17.2917776,4 17.4998273,4.08289482 17.6665922,4.24965968 L19.7500152,6.33308275 C19.9167801,6.49984762 20,6.70822243 20,6.95788212 C20,7.20819196 19.9167801,7.4162417 19.7500152,7.58300656 L19.7500152,7.58300656 Z M4,16.666328 L13.8332758,6.83305228 L17.1666226,10.1663992 L7.33334688,19.9996749 L4,19.9996749 L4,16.666328 Z"
+                    id="Mask"></path>
+                </g>
               </g>
             </g>
-          </g>
-        </svg>
-      </div>
-    </div>
-  </div>
-  <!-- BOTTOM SECTION -->
-  <div class="phone-num-bottom-section">
-    <!-- INITIAL BOTTOM SECTION -->
-    <div *ngIf="phoneSectionState === phoneSectionStates.INITIAL">
-      <div class="phone-num-bottom-initial-topic">
-        {{'customer_info.vistInfoTitle' | translate}}
-      </div>
-      <hr class="phone-devider">
-      <div class="phone-num-points-container">
-        <div class="point-icon-container">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16">
-            <path fill-opacity=".54" fill-rule="evenodd"
-              d="M12.667 2H3.333C2.6 2 2 2.6 2 3.333v9.334C2 13.4 2.6 14 3.333 14h9.334C13.4 14 14 13.4 14 12.667V3.333C14 2.6 13.4 2 12.667 2zm-3.334 9.333H8V6H6.667V4.667h2.666v6.666z" />
           </svg>
-        </div>
-        <div class="phone-num-points-text">
-          {{'customer_info.smsOnTime' | translate}}
-        </div>
-      </div>
-      <div class="phone-num-points-container">
-        <div class="point-icon-container">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 16 16">
-            <path fill-opacity=".54" fill-rule="evenodd"
-              d="M12.667 2H3.333C2.6 2 2 2.6 2 3.333v9.334C2 13.4 2.6 14 3.333 14h9.334C13.4 14 14 13.4 14 12.667V3.333C14 2.6 13.4 2 12.667 2zM10 7.333c0 .74-.6 1.334-1.333 1.334H7.333V10H10v1.333H6V8.667c0-.74.6-1.334 1.333-1.334h1.334V6H6V4.667h2.667C9.4 4.667 10 5.26 10 6v1.333z" />
-          </svg>
-
-        </div>
-        <div class="phone-num-points-text">
-          {{'customer_info.avoidTicketLoss' | translate}}
         </div>
       </div>
     </div>
-    <!-- PRIVACY POLICY UNDERSTOOD BOTTOM SECTION -->
-    <div *ngIf="phoneSectionState === phoneSectionStates.PRIVACY_POLICY">
-      <div class="privacy-container">
-        <div>
-          <svg class="message-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
-            <path fill="#334366" fill-rule="evenodd"
-              d="M5.58 3.334l.162.01h18.511c.599.014 1.18.207 1.666.555.471.426.742 1.031.745 1.666v13.881c.034.642-.242 1.261-.74 1.666-.427.47-1.032.738-1.667.74H7.964l-4.629 4.629V5.565c-.03-.589.252-1.15.741-1.48.38-.53 1.018-.813 1.666-.74zm-.024 1.862s0-.185-.185 0c-.185.184-.185.184-.185.37V22.04l1.482-1.477.555-.556h17.4c.185-.185.185-.185.185-.37V5.681c-.004-.12-.026-.143-.185-.301l-.069-.069c-.12-.116-.142-.116-.3-.116zm4.813 6.478v1.85H8.52v-1.85h1.85zm3.518 0v1.85h-1.666v-1.85h1.666zm3.702 0v1.85h-1.85v-1.85h1.85zm3.703 0v1.85H19.44v-1.85h1.85z" />
-          </svg>
+    <!-- BOTTOM SECTION -->
+    <div class="phone-num-bottom-section">
+      <!-- INITIAL BOTTOM SECTION -->
+      <div *ngIf="phoneSectionState === phoneSectionStates.INITIAL">
+        <div class="phone-num-bottom-initial-topic">
+          {{'customer_info.vistInfoTitle' | translate}}
         </div>
-        <div>
-          {{'customer_info.agreeDescription' | translate}} <span class="privacy-policy-link" id="privacy_element"
-            (click)="privacyLinkButtonPressed()"> {{'customer_info.privacyPolicy' | translate}} </span>
+        <hr class="phone-devider">
+        <div class="phone-num-points-container">
+          <div class="phone-num-points-text">
+            {{'customer_info.firstAdvantageByEnteringPhone' | translate}}
+          </div>
         </div>
-      </div>
-      <div class="btn-understood-container">
-        <button class="btn-understood"
-          (click)="understoodPrivacyConsent()">{{'customer_info.understood' | translate}}</button>
-      </div>
-    </div>
-    <!-- EDIT PHONE BOTTOM SECTION -->
-    <div *ngIf="phoneSectionState === phoneSectionStates.EDIT_PHONE">
-      <div> {{'customer_info.canDeleteInfo' | translate}}</div>
-      <a class="edit-mode-policy-link" [routerLink]="['/privacy_policy']">
-        {{'customer_info.privacyPolicy' | translate}}</a>
-      <div>
-        <div class="button-container">
-          <div class="button-inner-container">
-            <button class="phone-secondary-btn custom accent-bg-color">
-              {{'customer_info.btnDelete' | translate}}</button>
-            <button class="phone-secondary-btn"> {{'customer_info.btnCancel' | translate}}</button>
+        <div class="phone-num-points-container">
+          <div class="phone-num-points-text">
+            {{'customer_info.secondAdvantageByEnteringPhone' | translate}}
           </div>
         </div>
       </div>
+      <!-- PRIVACY POLICY UNDERSTOOD BOTTOM SECTION -->
+      <div *ngIf="phoneSectionState === phoneSectionStates.PRIVACY_POLICY">
+        <div class="privacy-container">
+          <div>
+            <svg class="message-icon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30">
+              <path fill="#334366" fill-rule="evenodd"
+                d="M5.58 3.334l.162.01h18.511c.599.014 1.18.207 1.666.555.471.426.742 1.031.745 1.666v13.881c.034.642-.242 1.261-.74 1.666-.427.47-1.032.738-1.667.74H7.964l-4.629 4.629V5.565c-.03-.589.252-1.15.741-1.48.38-.53 1.018-.813 1.666-.74zm-.024 1.862s0-.185-.185 0c-.185.184-.185.184-.185.37V22.04l1.482-1.477.555-.556h17.4c.185-.185.185-.185.185-.37V5.681c-.004-.12-.026-.143-.185-.301l-.069-.069c-.12-.116-.142-.116-.3-.116zm4.813 6.478v1.85H8.52v-1.85h1.85zm3.518 0v1.85h-1.666v-1.85h1.666zm3.702 0v1.85h-1.85v-1.85h1.85zm3.703 0v1.85H19.44v-1.85h1.85z" />
+            </svg>
+          </div>
+          <div>
+            {{'customer_info.agreeDescription' | translate}} <span class="privacy-policy-link custom link-text-color"
+              id="privacy_element" (click)="privacyLinkButtonPressed()"> {{'customer_info.privacyPolicy' | translate}}
+            </span>
+          </div>
+        </div>
+        <div class="btn-understood-container">
+          <button class="btn-understood"
+            (click)="understoodPrivacyConsent()">{{'customer_info.understood' | translate}}</button>
+        </div>
+      </div>
     </div>
+    <div>
+      <div class="custom text-color privcay-container-bottom"
+        *ngIf="isPrivacyEnable === 'enable' && activeConsentEnable !== 'enable'">
+        {{'customer_info.agreeDescription' | translate}}
+        <span class="privacy-policy-link custom link-text-color" id="privacy_element"
+          (click)="privacyLinkButtonPressed()"> {{'customer_info.privacyPolicy' | translate}}
+        </span>
+      </div>
+    </div>
+  </div>
+  <div class="table-child-footer" [hidden]="showNetWorkError">
+    <footer class="qm-footer">
+      <div class="center-text">
+        <div *ngIf="phoneSectionState === phoneSectionStates.INITIAL"
+          class="send_button custom btn-text-color accent-bg-color" (click)="phoneNumContinue()">
+          {{'customer_info.send' | translate}}
+        </div>
 
+        <div
+          *ngIf="phoneSectionState === phoneSectionStates.INITIAL || phoneSectionState === phoneSectionStates.PRIVACY_POLICY"
+          class="send_button secondary-btn custom btn-text-color" (click)='skipAndcreateVisit()'>
+          {{ 'customer_info.skipAndGetInLine' | translate }}
+        </div>
+
+      </div>
+    </footer>
   </div>
 </div>
-

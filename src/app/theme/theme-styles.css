@@ -34,3 +34,8 @@
 .custom.logo-bg-color {
   background: transparent !important;
 }
+
+/* Edit to change link text color */
+.custom.link-text-color {
+  color: #03996c !important;
+}

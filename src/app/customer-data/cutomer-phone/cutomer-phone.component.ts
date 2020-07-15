@@ -31,6 +31,8 @@ export class CutomerPhoneComponent implements OnInit {
   public documentDir: string;
   public countryCode: string;
   private isTakeTicketClickedOnce: boolean;
+  public isPrivacyEnable = 'disable';
+  public activeConsentEnable = 'disable';
 
   @Output()
   showNetorkErrorEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -51,11 +53,12 @@ export class CutomerPhoneComponent implements OnInit {
 
     this.phoneNumberError = false;
     this.phoneSectionState = phoneSectionStates.INITIAL;
+    this.isPrivacyEnable = this.config.getConfig('privacy_policy');
+    this.activeConsentEnable = this.config.getConfig('active_consent');
     this.phoneNumber = MobileTicketAPI.getEnteredPhoneNum();
-    if (this.phoneNumber && (this.phoneNumber !== this.countryCode)) {
+    MobileTicketAPI.setPhoneNumber('');
+    if (this.phoneNumber && (this.phoneNumber !== this.countryCode) && this.activeConsentEnable === 'enable') {
       this.phoneSectionState = phoneSectionStates.PRIVACY_POLICY;
-    } else {
-      this.phoneNumber = '';
     }
     if (document.dir == "rtl") {
       this.documentDir = "rtl";
@@ -64,11 +67,11 @@ export class CutomerPhoneComponent implements OnInit {
 
   // Press continue button for phone number
   phoneNumContinue() {
-    var isPrivacyEnable = this.config.getConfig('privacy_policy');
+   
     if (this.phoneNumber.match(/^\(?\+?\d?[-\s()0-9]{6,}$/) && this.phoneNumber !== this.countryCode) {
       let isPrivacyAgreed = localStorage.getItem('privacy_agreed');
       MobileTicketAPI.setPhoneNumber(this.phoneNumber);
-      if (isPrivacyAgreed === 'true' || isPrivacyEnable !== 'enable') {
+      if (isPrivacyAgreed === 'true' || this.isPrivacyEnable !== 'enable' || this.activeConsentEnable !== 'enable') {
         this.createVisit()
       } else {
         this.phoneSectionState = phoneSectionStates.PRIVACY_POLICY;
@@ -94,6 +97,12 @@ export class CutomerPhoneComponent implements OnInit {
   // understood button pressed
   understoodPrivacyConsent() {
     localStorage.setItem('privacy_agreed', 'true');
+    MobileTicketAPI.setPhoneNumber(this.phoneNumber);
+    this.createVisit();
+  }
+
+  skipAndcreateVisit() {
+    MobileTicketAPI.setPhoneNumber('');
     this.createVisit();
   }
   // creating  visit
@@ -168,6 +177,7 @@ export class CutomerPhoneComponent implements OnInit {
     if (isLink !== '') {
         window.open(isLink, "_blank", '');
     } else {
+      MobileTicketAPI.setPhoneNumber(this.phoneNumber);
       this.router.navigate(['privacy_policy']);
     }
   }
