@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+
+<!--
+    
+    All modifications to this unit type must be added here.
+ 
+    The version number of the unit type template (utt) has the format X.Y.Z.n, for example 6.2.0.0, where:
+    -   X.Y stands for the Orchestra version, e.g. 6.2, 6.1 etc. First version of an utt for Orchestra 6.2
+        has version 6.2.0.0
+    -   Z stands for fix version, incremented for each update. First version of an utt that is 6.2.0.0 gets
+        version 6.2.1.0 when it is updated.
+    -   n is the serial number that should be updated as soon as the utt has been adapted/customised to better
+        suit your needs. Customising an utt that has version 6.2.1.0 receives version 6.2.1.1, then 6.2.1.2 etc.
+    -   When several versions of Orchestra are updated with the same utt, the lowest version number should be used. If,
+        for example, a new utt is added to version 6.0, 6.1 and 6.2 of Orchestra, it should have version number 6.0.0.0
+        in all Orchestra versions.
+ 
+    Below is a table with examples of how versions should be set:
+    | 6.0     | 6.1     | 6.2    | Fix                 |
+    |=========|=========|========|=====================|
+    | 2.3.0   | 2.3.0   | 2.3.0  | Starting point      |
+    |         |         | 6.2.0  | A (only 6.2)        |
+    |         | 6.1.0   | 6.2.1  | B (6.1 and 6.2)     |
+    |=========|=========|========|=====================|
+    | 2.3.0   | 2.3.0   | 2.3.0  | Starting point      |
+    |         | 6.1.0   | 6.1.0  | C (6.1 and 6.2)     |
+    |         |         | 6.2.0  | D (only 6.2)        |
+    |=========|=========|========|=====================|
+    | 2.3.0   | 2.3.0   | 2.3.0  | Starting point      |
+    | 6.0.0   | 6.0.0   | 6.0.0  | E (6.0, 6.1 and 6.2)|
+    |         | 6.1.0   | 6.1.0  | F (6.1 and 6.2)     |
+    |         |         | 6.2.0  | G (only 6.2)        |
+    | 6.0.1   | 6.1.1   | 6.2.1  | H (6.0, 6.1 and 6.2)|
+
+ 
+    Version history in descending order:
+    ====================================
+    Version    Date         Comments                                                                Signature
+    =========================================================================================================
+	7.0.3.0	   2020-07-03   Handle debug logs		                                                kasran
+
+	7.0.0.2					Added timer for refresh of Token			                            boudui
+
+	7.0.0.1	    			First release								                            boudui
+
+-->
+
+<unit name="MSTeams_MeetingCreator"
+      frameworkVersion="2"
+      unitVersion="7.0.3.0"
+      type="DISPLAY_POINT"
+      defaultNoUnits="1"
+      maxNoUnits="1"
+      description="Microsoft Teams Meeting Creator">
+
+<parameters>
+	<parameter name="unitId"
+		type="UnitId"
+		defaultValue="MSTeams_MeetingCreator"
+		label="Unit id"
+		description="Microsoft Teams Meeting Creator"
+		sortOrder="1"
+		readLevel="branch"
+		privilege="install:adminAdmin"
+		size="16" />
+
+	<parameter name="appMeeting"
+		sortOrder="400"
+		label="Add meeting based on appointment"
+		description="Meeting URL will be added if appointment has requestMeeting paramater set to yes"
+		defaultValue="false"
+		type="Boolean"
+		writeLevel="profile"/>
+	<parameter name="appService"
+		sortOrder="401"
+		label="Add meeting based on Service"
+		description="Meeting URL will be added if service is one of below"
+		defaultValue="false"
+		type="Boolean"
+		writeLevel="profile"/>	
+	<parameter name="meetingServices" 
+		description="Services where the meeting URL should be added"
+        sortOrder="402"
+        label="Services for meeting"
+        type="Service"
+        writeLevel="branch"
+        privilege="branchAdmin"
+        multiSelection="true"/>	
+	<parameter name="tenantId"
+		sortOrder="500"
+		label="Directory (tenant) ID"
+		description="Directory ID for the tenant"
+		defaultValue=""
+		type="String"
+		writeLevel="profile"
+		mandatory="true"/>
+	<parameter name="clientId"
+		sortOrder="501"
+		label="Application (client) ID"
+		description="Client ID for the application"
+		defaultValue=""
+		type="String"
+		writeLevel="profile"
+		mandatory="true"/>
+	<parameter name="clientSecret"
+		sortOrder="502"
+		label="Client Secret"
+		description="Client Secret for the application"
+		defaultValue=""
+		type="String"
+		writeLevel="profile"
+		mandatory="true"/>
+	<parameter name="userObjectId"
+		sortOrder="503"
+		label="User Object ID"
+		description="Object ID of the user which will be used to create the meetings"
+		defaultValue=""
+		type="String"
+		writeLevel="profile"
+		mandatory="true"/>		
+		
+
+	<parameter name="unitName"
+		type="UnitName"
+		defaultValue="${unit:name} ${unit:index}"
+		label="Unit name"/>
+</parameters>
+  
+	<devices>
+		<device id="1" name="MeetingCreator" type="SW_MEDIA_HD_DISPLAY_POINT">
+			<parameters>
+				<parameter name="refreshInterval" type="Integer" description="Parameter example">30</parameter>
+			</parameters>
+  		<deviceEventHandlers>
+			<deviceEventHandler handlerType="GROOVY" name="REFRESH_ACCESS_TOKEN">
+				<![CDATA[
+					import com.qmatic.qp.api.device.DeviceEvent
+					import com.qmatic.qp.api.device.DeviceCommand
+					DeviceCommand displayCommand = new DeviceCommand(device.getId(), "GET_ACCESS_TOKEN")
+					displayCommand.setParameter("originType", "REFRESH_ACCESS_TOKEN")
+					displayCommand.setParameter("commandTime", event.getEventTime())
+					displayCommand.setParameter("branchId",device.getBranchId())
+					unit = device.getUnit()
+					unit.log("DEBUG", "Refresh received, sending GET_ACCESS_TOKEN deviceCommand")
+
+					result = false
+					try {
+						result = device.executeCommand(displayCommand)    
+					} catch(e) {
+						result = false
+					}
+				]]>
+			</deviceEventHandler>
+		</deviceEventHandlers>
+  			<deviceCommandHandlers>
+				<deviceCommandHandler handlerType="GROOVY" name="GET_ACCESS_TOKEN">
+					<![CDATA[
+						import com.qmatic.qp.api.device.DeviceEvent
+						import com.qmatic.qp.api.device.DeviceCommand
+
+						import com.qmatic.qp.api.util.JsonUtil
+						import java.util.LinkedHashMap
+					
+						import java.util.Map
+						import java.io.OutputStreamWriter
+						import java.io.StringWriter
+						
+						unit = device.getUnit()
+												
+						timerDisplayRefresh = device.getState("REFRESH_STAT_INFO")
+						if(timerDisplayRefresh) {
+							device.getResource("EVENT_SCHEDULER").remove(timerDisplayRefresh)
+						}
+						DeviceEvent e = new DeviceEvent(device.getId(), "REFRESH_ACCESS_TOKEN")
+						timerRefresh = device.getResource("EVENT_SCHEDULER").scheduleEvent(3500, e)
+						device.setState("REFRESH_ACCESS_TOKEN", timerRefresh)
+						
+						unit.log("DEBUG", "Getting new access token")
+						String tenant_id = unit.getConfiguration().get("tenantId")
+						String address = "https://login.microsoftonline.com/" + tenant_id + "/oauth2/v2.0/token"
+
+						client_id = unit.getConfiguration().get("clientId")
+						client_secret = unit.getConfiguration().get("clientSecret")
+						String body  = "grant_type=client_credentials&scope=https://graph.microsoft.com/.default&client_id=" + client_id + "&client_secret=" + client_secret;
+
+						URL url = new URL( address );
+						HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+						connection.setRequestMethod( "POST" );
+						connection.setDoInput( true );
+						connection.setDoOutput( true );
+						connection.setUseCaches( false );
+						connection.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded" )
+						connection.setRequestProperty( "Content-Length", String.valueOf(body.length()) )
+
+						OutputStreamWriter writer = new OutputStreamWriter( connection.getOutputStream() )
+						writer.write( body )
+						writer.flush()
+
+						BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()) )
+						while ((line = reader.readLine()) != null) {
+							response = JsonUtil.convert(line, LinkedHashMap.class)
+							if (response.access_token != null) {
+								unit.log ("DEBUG", "New Token: " + response.access_token)
+								device.setState("ACCESS_TOKEN", response.access_token)
+							} else {
+								unit.log ("WARN", "Failed to get access token" )
+							}
+						}
+						writer.close()
+						reader.close()
+					]]>
+				</deviceCommandHandler>
+			</deviceCommandHandlers>
+		</device>
+	</devices>
+
+    <unitEvents>
+		<unitEvent name="RESET_COMMIT">
+			<unitEventHandler type="GROOVY">
+				<![CDATA[
+					import com.qmatic.qp.api.device.DeviceEvent
+					import com.qmatic.qp.api.device.DeviceCommand
+
+					unit.log("DEBUG","========================== Teams Meeting Creator ==========================")
+					unit.log("DEBUG","  Event: RESET_COMMIT")
+
+					device = unit.getDevice("MeetingCreator")
+
+					timerRefresh = device.getState("REFRESH_ACCESS_TOKEN")
+					if(timerRefresh) {
+						device.getResource("EVENT_SCHEDULER").remove(timerRefresh)
+					}
+					DeviceEvent e = new DeviceEvent(device.getId(), "REFRESH_ACCESS_TOKEN")
+					timerRefresh = device.getResource("EVENT_SCHEDULER").scheduleEvent(10, e)
+					device.setState("REFRESH_ACCESS_TOKEN", timerDisplayRefresh)
+				]]>
+			</unitEventHandler>
+		</unitEvent>
+        <unitEvent name="PUBLIC.VISIT_CREATE">
+			<unitEventHandler type="GROOVY">
+				<![CDATA[
+					import com.qmatic.qp.api.device.DeviceEvent
+					import com.qmatic.qp.api.device.DeviceCommand
+					import com.qmatic.qp.api.connectors.device.ServicePointDeviceResource
+					import com.qmatic.qp.api.connectors.dto.VisitParameters        
+					import com.qmatic.qp.api.connectors.dto.Visit 
+
+					import com.qmatic.qp.api.connectors.device.AppointmentDeviceResource	
+					import com.qmatic.qp.api.util.JsonUtil
+					import java.util.LinkedHashMap
+					import com.qmatic.qp.jiql.web.util.SpringApplicationContext
+					import com.qmatic.qp.api.connectors.rest.AppointmentService
+					
+					import java.util.Map
+					import java.io.OutputStreamWriter
+					import java.io.StringWriter
+					import com.qmatic.qp.api.util.JsonUtil
+					import java.util.LinkedHashMap
+					
+					device = unit.getDevice("MeetingCreator")
+					meetingUrl = ""
+					Boolean appMeeting =unit.getConfiguration().get("appMeeting")
+					Boolean appService =unit.getConfiguration().get("appService")
+					meetingServices = unit.getConfiguration().get("meetingServices")
+					
+					branchId = event.getParameters().get("branchId").toInteger()
+					visitId = event.getParameter("visitId")
+					
+					addMeeting = false
+					
+					unit.log("DEBUG","========================== Teams Meeting Creator ==========================")
+					unit.log("DEBUG","Event " + event.getParameters())
+				
+					if (!device.getState("ACCESS_TOKEN" )) {
+						device.setState("ACCESS_TOKEN", "" )
+					}
+
+					if (device.getState("ACCESS_TOKEN") == "" ) {
+						unit.log("DEBUG", "Getting new access token")
+						String tenant_id = unit.getConfiguration().get("tenantId")
+						String address = "https://login.microsoftonline.com/" + tenant_id + "/oauth2/v2.0/token"
+
+						client_id = unit.getConfiguration().get("clientId")
+						client_secret = unit.getConfiguration().get("clientSecret")
+						String body  = "grant_type=client_credentials&scope=https://graph.microsoft.com/.default&client_id=" + client_id + "&client_secret=" + client_secret;
+
+						URL url = new URL( address );
+						HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+						connection.setRequestMethod( "POST" );
+						connection.setDoInput( true );
+						connection.setDoOutput( true );
+						connection.setUseCaches( false );
+						connection.setRequestProperty( "Content-Type", "application/x-www-form-urlencoded" )
+						connection.setRequestProperty( "Content-Length", String.valueOf(body.length()) )
+
+						OutputStreamWriter writer = new OutputStreamWriter( connection.getOutputStream() )
+						writer.write( body )
+						writer.flush()
+
+						BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()) )
+						while ((line = reader.readLine()) != null) {
+							response = JsonUtil.convert(line, LinkedHashMap.class)
+							if (response.access_token != null) {
+								unit.log ("DEBUG", "New Token : " + response.access_token)
+								device.setState("ACCESS_TOKEN", response.access_token)
+							} else {
+								unit.log ("WARN", "Failed to get access token" )
+							}
+						}
+						writer.close()
+						reader.close()
+					}	     
+
+					if (event.getParameter("appointmentId") != null && appMeeting == true ) {
+						AppointmentService resource = SpringApplicationContext.getBean("appointmentService")   
+						appId = event.getParameter("appointmentId").toInteger()
+						app = resource.getAppointment(appId)
+						properties = app.getProperties()
+						custom = properties.custom
+						if (custom != null) {
+							customObject = JsonUtil.convert(custom, LinkedHashMap.class)
+							if (customObject.requestMeeting == "yes") {
+								// adding meeting url to visit
+								addMeeting = true
+							}
+						}
+					}
+					
+					if ( appService == true ) {
+						visitService = event.getParameter("serviceOrigId") toInteger()
+						for (j in meetingServices) {
+							if  (j.toInteger() == visitService){
+								addMeeting = true
+							}
+						}
+					}
+
+					if ( addMeeting == true){
+						// create json object 
+						jsonString = '{"meetingType":"'
+						jsonString += 'Meeting for ticket number: ' + event.getParameter("ticket")
+						jsonString += '","participants":{"organizer": {"identity": {"user": {"id": "'
+						jsonString += unit.getConfiguration().get("userObjectId")
+						jsonString += '"}}}},"subject": "'
+						jsonString += 'Meeting for ticket number: ' + event.getParameter("ticket")
+						jsonString += '"}'
+						
+						unit.log("DEBUG", "Geeting Meeting URL")
+						unit.log("DEBUG", "Body: " + jsonString)
+						
+						String requestUrl = "https://graph.microsoft.com/beta/app/onlineMeetings"
+						URL uri = new URL( requestUrl )
+						HttpURLConnection conn = (HttpURLConnection) uri.openConnection();
+						conn.setRequestMethod( "POST" )
+						conn.setDoInput( true );
+						conn.setDoOutput( true );
+						conn.setUseCaches( false );
+						conn.setRequestProperty("Accept", "application/json")
+						conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8")
+						conn.setRequestProperty("Authorization", "Bearer " + device.getState("ACCESS_TOKEN"));		
+						
+						byte[] outputInBytes = jsonString.getBytes("UTF-8");
+						wrt =conn.getOutputStream()
+						wrt.write( outputInBytes )
+						wrt.flush()
+
+						try{
+							BufferedReader rdr = new BufferedReader(new InputStreamReader(conn.getInputStream()) )
+							while ((line = rdr.readLine()) != null) {
+								response = JsonUtil.convert(line, LinkedHashMap.class)
+								if (response.joinWebUrl != null) {
+									unit.log ("DEBUG", response.joinWebUrl)
+									meetingUrl = response.joinWebUrl
+								} else {
+									unit.log ("WARN", "Failed to get meetingUrl" )
+									device.setState("ACCESS_TOKEN", "")
+								}
+							}
+							rdr.close()
+						} catch(IOException ex){
+							unit.log ("WARN", "Failed to get meetingUrl" )
+						}
+						wrt.close()
+						
+						if ( meetingUrl != "") {
+							ServicePointDeviceResource spResource = device.getResource("SERVICE_POINT")
+							Visit ticketParams = new Visit()
+							ticketParams.addParameter("meetingUrl", meetingUrl)
+							spResource.updateVisitParameters(branchId, visitId, ticketParams.getParameterMap())
+						}					
+					}
+				]]>
+			</unitEventHandler>
+        </unitEvent>
+    </unitEvents>
+</unit>
