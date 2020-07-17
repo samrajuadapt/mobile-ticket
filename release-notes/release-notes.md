@@ -42,16 +42,23 @@ This document describes the new features, bug corrections, known issues and reco
 -->
 <h2>Version 24</h2>
 
-**Date:2020-07-01**
+**Date:2020-07-17**
  
-**Build number:23**
+**Build number:24**
 
 <h3>Stories</h3>
 
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-158** | **Integration with MsTeams for Remote Serving customers in Core** |
+| **MOB-175** | **Improve UI, enter of mobile number more intuitive** |
+| **MOB-177** | **Introduce extra configurable color to be used for privacy policy link** |
 
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-155** | **Mobile Ticket Add Phone Number** |
 
 ----------
 
