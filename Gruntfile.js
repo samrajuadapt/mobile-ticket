@@ -164,6 +164,15 @@ module.exports = function (grunt) {
           { expand: true, cwd: 'dist/src/', src: ['bundle.min.js'], dest: 'dist/src/zip', ext: '.min.js.gz' },
           { expand: true, cwd: 'dist/src/', src: ['bundle.min.css'], dest: 'dist/src/zip', ext: '.min.css.gz' }
         ]
+      },
+      utt_ms_teams: {
+        options: {
+          archive: 'dist/utt/MSTeams_MeetingCreator.utt',
+          mode: 'zip'
+        },
+        files: [
+          { expand: true, cwd: 'utt/MSTeams_MeetingCreator/', src: ['**'] },
+        ]
       }
     },
     replace: {
