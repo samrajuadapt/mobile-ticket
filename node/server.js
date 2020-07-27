@@ -26,6 +26,8 @@ var supportSSL = false;
 var validAPIGWCert = "1";
 var APIGWHasSSL = true;
 var isEmbedIFRAME = false;
+var tlsVersion = '';
+var tlsversionSet = ['TLSv1_method', 'TLSv1_1_method', 'TLSv1_2_method'];
 
 var google_analytics = 'https://www.google-analytics.com';
 var bootstarp_cdn = 'https://maxcdn.bootstrapcdn.com';
@@ -113,6 +115,7 @@ supportSSL = (configuration.support_ssl.value.trim() === 'true')?true:false;
 validAPIGWCert = (configuration.gateway_certificate_is_valid.value.trim()=== 'true')?"1":"0";
 APIGWHasSSL = (configuration.gateway_has_certificate.value.trim()=== 'true')?true:false;
 isEmbedIFRAME = (configuration.embed_iFrame.value.trim() === 'true')?true:false;
+tlsVersion = configuration.tls_version.value;
 
 //this will bypass certificate errors in node to API gateway encrypted channel, if set to '1'
 //if '0' communication will be blocked. So production this should be set to '0'
@@ -123,7 +126,11 @@ var privateKey, certificate, credentials;
 if (supportSSL) {
 	privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
 	certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
-	credentials = { key: privateKey, cert: certificate };
+	if (tlsVersion.length > 0 && tlsversionSet.indexOf(tlsVersion) !== -1) {
+		credentials = { key: privateKey, cert: certificate, secureProtocol: tlsVersion };
+	} else {
+		credentials = { key: privateKey, cert: certificate };
+	}
 }
 
 var options = {

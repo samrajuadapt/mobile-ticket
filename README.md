@@ -200,6 +200,10 @@ project directory
     "embed_iFrame": {
         "value": "false",
         "description": "Flag indicating the enable or disable X-FRAME-OPTIONS in http header to block iframe"
+    },
+    "tls_version": {
+        "value": "",
+        "description": "Flag indicationg TLS version of the server. Possible values 'TLSv1_method', 'TLSv1_1_method' and 'TLSv1_2_method. Recommend for TLS 1.2 or later and keep it empty when use the latest version."
     }
 }
 ```
