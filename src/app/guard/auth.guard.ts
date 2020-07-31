@@ -251,7 +251,7 @@ export class AuthGuard implements CanActivate {
                     this.router.navigate(['ticket']);
                     resolve(false);
                 } else if ((this.prevUrl.startsWith('/branches') ||
-                    this.prevUrl === '/')) {
+                    this.prevUrl === '/' || this.prevUrl === '/services')) {
                     if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
                         this.router.navigate(['open_hours']);
                         resolve(false);

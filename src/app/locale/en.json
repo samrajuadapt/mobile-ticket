@@ -117,5 +117,11 @@
   "pricacy_policy" : { 
     "title" : "Privacy policy",
     "description" : "Policy statements serve to protect an organization from misunderstandings that might lead to unauthorized behavior or lawsuits. Each policy statement should include its purpose, terminology definitions, the statement itself and the steps to implement it. Policy statements serve to protect an organization from misunderstandings that might lead to unauthorized behavior or lawsuits. Each policy statement should include its purpose, terminology definitions, the statement itself and the steps to implement it. Policy statements serve to protect an organization from misunderstandings that might lead to unauthorized behavior or lawsuits. Each policy statement should include its purpose, terminology definitions, the statement itself and the steps to implement it. definitions, the statement itself and the steps to implement it. Policy statements serve to protect an organization from misunderstandings that might lead to unauthorized behavior or lawsuits. Each policy statement should include its purpose, terminology definitions, the statement itself and the steps to implement it. Policy statements serve to protect an organization from misunderstandings that might lead to unauthorized behavior or lawsuits. Each policy statement should include its purpose, terminology definitions, the statement itself and the steps to implement it."
+  },
+  "cookie_consent" : { 
+    "title" : "This site uses cookies to provide you with a great user experience. By using this service, you accept our",
+    "use.of.cookies" : "use of cookies",
+    "decline" : "Decline",
+    "accept" : "Accept"
   }
 }

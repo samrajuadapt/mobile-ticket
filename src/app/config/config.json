@@ -15,6 +15,10 @@
         "value":"",
         "description": "Google Analytic Track-ID"
     },
+    "cookie_consent": {
+        "value":"disable",
+        "description": "Enable or disable cookie consent popup in the first landing page, 'on = enable', 'off = disable'"
+    },
     "notification_sound": {
         "value":"YourTurn.wav",
         "description": "Sound file use for notification"

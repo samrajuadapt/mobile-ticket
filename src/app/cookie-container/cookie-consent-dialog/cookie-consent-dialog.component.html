@@ -1,0 +1,26 @@
+<div class="cookies" id="cookies-container" *ngIf="CookieConsentShow">
+  <div class="cookies-container">
+    <div class="flex-container">
+      <div class="cookie-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="36" height="36"
+          viewBox="0 0 90 90">
+          <defs>
+            <path id="b"
+              d="M72.76 10.034v-.003a8.957 8.957 0 0 1 4.998 1.667 6.785 6.785 0 0 1 2.234 4.998v41.642a6.03 6.03 0 0 1-2.222 4.998 6.785 6.785 0 0 1-4.998 2.222H23.891L10.006 79.442V16.696a5.052 5.052 0 0 1 2.222-4.443 5.414 5.414 0 0 1 4.998-2.22H72.76zm0 5.55v.003H16.669s0-.555-.555 0c-.555.554-.555.554-.555 1.11V66.12l4.444-4.431 1.666-1.667h52.2c.555-.555.555-.555.555-1.11V17.25c0-.555 0-.555-.555-1.11-.554-.555-.554-.555-1.11-.555zM31.108 35.022v5.553h-5.553v-5.553h5.553zm10.554 0v5.553h-4.998v-5.553h4.998zm11.105 0v5.553h-5.552v-5.553h5.552zm11.109 0v5.553h-5.553v-5.553h5.553z" />
+          </defs>
+          <g fill="none" fill-rule="evenodd">
+            <use fill="#000" fill-opacity=".82" xlink:href="#a" />
+          </g>
+        </svg>
+      </div>
+      <div class="cookie-description">
+        {{'cookie_consent.title' | translate  }}
+         <a class="custom link-text-color" (click)= "gotoCookieConsent()"> {{'cookie_consent.use.of.cookies' | translate  }}</a>.
+      </div>
+    </div>
+    <div class="btn-container">
+      <button class="cookie-btn" (click)="declineCookieConsent()">  {{'cookie_consent.decline' | translate  }}</button>
+      <button class="cookie-btn" (click)="acceptCookieConsent()">  {{'cookie_consent.accept' | translate  }}</button>
+    </div>
+  </div>
+</div>

@@ -226,7 +226,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       }
 
       if (!this.isUrlAccessedTicket) {
-        MobileTicketAPI.deleteAllCookies();
+        MobileTicketAPI.clearLocalStorage();
       }
       MobileTicketAPI.resetAllVars();
       this.isTicketEndedOrDeleted = true;
@@ -245,7 +245,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       }
 
       if (!this.isUrlAccessedTicket) {
-        MobileTicketAPI.deleteAllCookies();
+        MobileTicketAPI.clearLocalStorage();
       }
       MobileTicketAPI.resetAllVars();
       this.isTicketEndedOrDeleted = true;

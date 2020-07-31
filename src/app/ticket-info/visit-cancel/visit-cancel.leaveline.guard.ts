@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanDeactivate } from '@angular/router';
+import { CanDeactivate, ActivatedRoute, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { TranslateService } from 'ng2-translate';
 import { TicketInfoContainerComponent } from '../container/ticket-info-container.component';
@@ -16,8 +16,10 @@ export class VisitCancelLeavelineGuard implements CanDeactivate<TicketInfoContai
             this.confirmMsg = res;
         });
     }
-    canDeactivate(component: TicketInfoContainerComponent) {
+    canDeactivate(component: TicketInfoContainerComponent, next: ActivatedRouteSnapshot,  currentState: RouterStateSnapshot, nextState?: RouterStateSnapshot): Observable<boolean> | boolean  {
         if (component.getVisitCancelCalled()) {
+            return true;
+        } else if (nextState.url === '/cookie_consent') {
             return true;
         }
         else if (!component.isTicketEndedOrDeleted && !component.isVisitCall && !component.isVisitNotFound) {

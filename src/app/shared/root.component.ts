@@ -10,7 +10,9 @@ declare var ga: Function;
 export class RootComponent {
   constructor(private config: Config) {
     let track_id = config.getConfig('ga_track_id');
-    if (track_id && track_id !== '') {
+    let is_cookie_consent_enabled = config.getConfig('cookie_consent');
+    const isCookieCosentAccepted = localStorage.getItem('cookie_consent');
+    if (track_id && track_id !== '' && (isCookieCosentAccepted === 'true' || is_cookie_consent_enabled === 'disable')) {
       ga('create', track_id, 'auto');
       ga('send', 'pageview');
     }

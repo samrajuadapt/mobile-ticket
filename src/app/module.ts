@@ -11,7 +11,7 @@ import {ServicesComponent} from './service/list/services.component';
 import {ServicesContainerComponent} from './service/list-container/services-container.component';
 import {ServiceComponent} from './service/list-item/service.component';
 import {ServiceService} from './service/service.service';
-
+import { HttpClientModule } from '@angular/common/http';
 
 import {FrameLayoutComponent} from './shared/frame-layout/frame-layout.component';
 import {NotSupportComponent} from './shared/not-support/not-support.component';
@@ -48,6 +48,8 @@ import {OpenHourItemComponent} from "./shared/branch-open-hours/item/open-hour-i
 import {AppointmentComponent} from "./appointment/appointment.component";
 import {CutomerPhoneComponent} from "./customer-data/cutomer-phone/cutomer-phone.component";
 import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
+import {CookieContainerComponent} from "./cookie-container/cookie-container.component";
+import {CookieConsentDialogComponent} from "./cookie-container/cookie-consent-dialog/cookie-consent-dialog.component";
 import {CustomerDataComponent} from "./customer-data/customer-data.component";
 import { CustomerDataGuard } from "./customer-data/customer-data-guard";
 
@@ -62,12 +64,14 @@ declare var MobileTicketAPI:any;
     RootComponent, RoutingComponents, FrameLayoutComponent, TicketComponent, NotSupportComponent,
     QueueComponent, VisitCancelComponent, QueueItemComponent, SortPipe,
     ConnectivityMessageComponent, VisitNotfoundComponent, BranchNotfoundComponent, ConfirmDialogComponent, AlertDialogComponent,
-    BranchOpenHoursComponent, OpenHourItemComponent, AppointmentComponent, CutomerPhoneComponent,PrivacyPolicyComponent, CustomerDataComponent
+    BranchOpenHoursComponent, OpenHourItemComponent, AppointmentComponent, CutomerPhoneComponent,PrivacyPolicyComponent, CustomerDataComponent,
+    CookieContainerComponent,CookieConsentDialogComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     QmRouterModule,
     TranslateModule.forRoot({
       provide: TranslateLoader,

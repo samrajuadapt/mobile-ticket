@@ -2600,56 +2600,60 @@ var MobileTicketAPI = (function () {
     }
   });
 
-  function createCookie(name, value, days) {
-    var enc = window.btoa( unescape(encodeURIComponent(value)) );
+  function addToLocalStorage(name, value, days) {
+    var enc = window.btoa(unescape(encodeURIComponent(JSON.stringify({"data" : value, "created": date}))));
     if (days) {
-      var date = new Date();
-      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      var expires = "; expires=" + date.toGMTString();
+      var date = new Date();;
     }
     else var expires = "";
-    document.cookie = name + "=" + enc + expires + "; path=/";
+    localStorage.setItem(name,enc);
   }
 
-  function readCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-      if (c.indexOf(nameEQ) == 0) {
-        var val = c.substring(nameEQ.length, c.length);
-        return decodeURIComponent(escape(window.atob(val)));
-      }
+  function getFromLocalStorage(name) {
+    var Storeddata = localStorage.getItem(name);
+    if (Storeddata) {
+      var decordedData = JSON.parse(decodeURIComponent(escape(window.atob(Storeddata))));
     }
-    return null;
+    var value;
+    if (Storeddata) {
+      var today = new Date();
+      const timeDiff = Math.abs((today -  Date.parse(decordedData.created)) / 3600000);
+      if (timeDiff > 12) {
+        localStorage.removeItem(name);
+      } else {
+        value = decordedData.data;
+      }
+    } else {
+      value = null;
+    }
+    return value;
   }
 
-  function setCookies() {
+  function saveToLocalStorage() {
     var branch = MobileTicketAPI.selectedBranch;
     var service = MobileTicketAPI.selectedService;
     var visit = MobileTicketAPI.visitInformation;
     var meetingUrl = MobileTicketAPI.meetingUrl;
 
     if (branch != undefined) {
-      createCookie('branch', JSON.stringify(branch), 0.5);
+      addToLocalStorage('branch', JSON.stringify(branch), 0.005);
     }
     if (service != undefined) {
-      createCookie('service', JSON.stringify(service), 0.5);
+      addToLocalStorage('service', JSON.stringify(service), 0.5);
   }
     if (visit != undefined) {
-      createCookie('visit', JSON.stringify(visit), 0.5);
+      addToLocalStorage('visit', JSON.stringify(visit), 0.5);
     }
     if (meetingUrl != undefined) {
-      createCookie('meetingUrl', JSON.stringify(meetingUrl), 0.5);
+      addToLocalStorage('meetingUrl', JSON.stringify(meetingUrl), 0.5);
     }
   }
 
-  function deleteAllCookies() {
-    eraseCookie('branch');
-    eraseCookie('service');
-    eraseCookie('visit');
-    eraseCookie('meetingUrl');
+  function clearLocalStorage() {
+    localStorage.removeItem('branch');
+    localStorage.removeItem('service');
+    localStorage.removeItem('visit');
+    localStorage.removeItem('meetingUrl');
   }
 
   function resetAllVars() {
@@ -2667,11 +2671,11 @@ var MobileTicketAPI = (function () {
   }
 
   function eraseCookie(name) {
-    createCookie(name, "", -1);
+    addToLocalStorage(name, "", -1);
   }
 
   function getSelectedBranch() {
-    return (MobileTicketAPI.selectedBranch == undefined) ? JSON.parse(readCookie("branch")) : MobileTicketAPI.selectedBranch;
+    return (MobileTicketAPI.selectedBranch == undefined) ? JSON.parse(getFromLocalStorage("branch")) : MobileTicketAPI.selectedBranch;
   }
   function removePhoneNumber() {
     MobileTicketAPI.enteredPhoneNum = '';
@@ -2682,14 +2686,14 @@ var MobileTicketAPI = (function () {
   }
 
   function getSelectedService() {
-    return (MobileTicketAPI.selectedService == undefined) ? JSON.parse(readCookie("service")) : MobileTicketAPI.selectedService;
+    return (MobileTicketAPI.selectedService == undefined) ? JSON.parse(getFromLocalStorage("service")) : MobileTicketAPI.selectedService;
   }
 
   function getCurrentVisit() {
-    return (MobileTicketAPI.visitInformation == undefined) ? JSON.parse(readCookie("visit")) : MobileTicketAPI.visitInformation;
+    return (MobileTicketAPI.visitInformation == undefined) ? JSON.parse(getFromLocalStorage("visit")) : MobileTicketAPI.visitInformation;
   }
   function getCurrentMeeting() {
-    return (MobileTicketAPI.meetingUrl == undefined) ? JSON.parse(readCookie("meetingUrl")) : MobileTicketAPI.meetingUrl;
+    return (MobileTicketAPI.meetingUrl == undefined) ? JSON.parse(getFromLocalStorage("meetingUrl")) : MobileTicketAPI.meetingUrl;
   }
 
   function processVisitStatus(data) {
@@ -2917,7 +2921,7 @@ var MobileTicketAPI = (function () {
           .done(function (data) {
             if (data != undefined) {
               MobileTicketAPI.visitInformation = data;
-              setCookies();
+              saveToLocalStorage();
               onSuccess(data);
             }
           });
@@ -3084,7 +3088,7 @@ var MobileTicketAPI = (function () {
           MobileTicketAPI.visitInformation.serviceName = data.currentVisitService.serviceExternalName;
           MobileTicketAPI.visitInformation.clientId = "XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX"
           MobileTicketAPI.visitInformation.checksum = data.checksum;
-          setCookies();
+          saveToLocalStorage();
           onSuccess(data);
         }
       });   
@@ -3153,8 +3157,8 @@ var MobileTicketAPI = (function () {
     resetCurrentVisitStatus: function () {
       return resetCurrentVisitStatus();
     },
-    deleteAllCookies: function () {
-      deleteAllCookies();
+    clearLocalStorage: function () {
+      clearLocalStorage();
     },
     resetAllVars: function () {
       resetAllVars();

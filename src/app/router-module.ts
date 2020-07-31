@@ -15,6 +15,7 @@ import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component"
 import { AuthGuard } from './guard/index';
 import { CustomerDataComponent } from './customer-data/customer-data.component';
 import { CustomerDataGuard } from './customer-data/customer-data-guard';
+import { CookieContainerComponent } from './cookie-container/cookie-container.component';
 
 export const router: Routes = [
     
@@ -24,6 +25,7 @@ export const router: Routes = [
     { path: 'services', component: ServicesContainerComponent, canActivate: [AuthGuard] },
     { path: 'no_visit', component: VisitNotfoundComponent, canActivate: [AuthGuard] },
     { path: 'privacy_policy', component: PrivacyPolicyComponent,  canActivate: [CustomerDataGuard] },
+    { path: 'cookie_consent', component: CookieContainerComponent},
     { path: 'customer_data', component: CustomerDataComponent, canActivate: [AuthGuard, CustomerDataGuard] },
     { path: 'no_support', component: NotSupportComponent },
     { path: 'no_branch', component: BranchNotfoundComponent, canActivate: [AuthGuard] },

@@ -1,0 +1,46 @@
+.privacy-policy {
+    background: white;
+    width: 400px;
+    margin: auto;
+    position: absolute;
+    top: 5em;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    padding: 15px;
+    overflow: auto;
+}
+.privacy-policy-heading {
+    display: flex;
+    justify-content: space-between;
+}
+.privacy-policy-title {
+    font-weight: 700;
+    font-size: 16px;
+    margin: 10px 0;
+    
+}
+.privacy-policy-close {
+    margin: 10px 10px;
+    border: none;
+    background: transparent;
+}
+.privacy-policy-description {
+    color: rgba(0,0,0,.87);
+    font-size: 16px;
+}
+
+
+@media (max-width: 450px), (max-height: 450px)
+{
+    .privacy-policy {
+        top: 4em;
+    }
+}
+/* Small phones */
+@media (max-width: 400px){
+    .privacy-policy {
+        width: 90%;
+    }
+  }
+  
