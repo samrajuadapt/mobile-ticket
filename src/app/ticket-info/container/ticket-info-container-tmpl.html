@@ -1,3 +1,12 @@
+<div  [hidden]="!isUrlVisitLoading" class="row loader-container sub-heading-text-1-margin"> 
+  <div class="row width-control">
+    <div class="loader-container">
+      <div class="inline-block-elem right-cell">
+        <span id="ticketLoading" class="sub-heading-text-3 custom text-color">{{ 'ticketInfo.loading' | translate }}</span>
+      </div>
+    </div>
+</div>
+</div>
 <div [hidden]="isUrlVisitLoading" class="inner-margin-separator">
   <div class="row" [hidden]="isVisitCall && !isVisitRecycled">
     <app-queue-container #queueComponent

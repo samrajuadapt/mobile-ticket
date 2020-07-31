@@ -55,3 +55,22 @@
   text-overflow: ellipsis;
   margin: 0 auto;
 }
+
+
+.loader-container{
+  margin: 0 auto;
+  text-align: center;
+}
+
+.loader-container{
+  margin-top: 3em;
+}
+
+.inline-block-elem{
+  display: inline-block;
+}
+
+.width-control{
+  width: 100%;
+  margin: 0 auto;
+}

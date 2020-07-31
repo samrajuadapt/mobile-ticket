@@ -300,6 +300,10 @@ project directory
     "country_code" : {
         "value": "+46",
         "description": "Define the country code for phone number. If value is null no country code will be added."
+    },
+    "queue_poll_retry" : {
+        "value": "1",
+        "description": "Define how many times should retry the queue poll request."
     }
 }
 ```

@@ -2,13 +2,19 @@ import { Injectable } from '@angular/core';
 import { VisitEntity } from '../entities/visit.entity';
 import { QueueEntity } from '../entities/queue.entity';
 import { BranchEntity } from '../entities/branch.entity';
+import { Config } from 'app/config/config';
 
 declare var MobileTicketAPI: any;
 var isVisitCacheUpdate = true;
+var retryIterrations = 1;
+var returnPayload: any;
+var lastResponse: any;
 
 @Injectable()
 export class TicketInfoService {
-  constructor() { }
+  constructor(
+    private config: Config
+  ) { }
 
   public convertToQueueEntity(queueObj): QueueEntity {
     let queueEntity: QueueEntity;
@@ -21,35 +27,58 @@ export class TicketInfoService {
     return queueEntity;
   }
 
-  pollVisitStatus(success, err): any {
+  public retryRequest(success, err): any {
+    let convertToQueueEntityCallback = this.convertToQueueEntity
+    if (retryIterrations >= 1) {
+      --retryIterrations
+      setTimeout(() => {
+        MobileTicketAPI.getVisitStatus(
+          (queueObj: any) => {
+            isVisitCacheUpdate = true;
+            success(convertToQueueEntityCallback(queueObj));
+          },
+          (xhr, status, msg) => {
+            returnPayload = xhr.responseJSON;
+            lastResponse = [xhr, status, msg];
+            if (returnPayload != undefined &&
+              returnPayload.message.includes("New visits are not available until visitsOnBranchCache is refreshed") == true) {
+              isVisitCacheUpdate = false;
+              this.retryRequest(success, err);
+            } else {
+              isVisitCacheUpdate = true;
+              err(lastResponse[0], lastResponse[1], lastResponse[2])
+            }
+          });
+      }, returnPayload.refreshRate * 1000);
+    } else {
+      isVisitCacheUpdate = true;
+      err(lastResponse[0], lastResponse[1], lastResponse[2])
+    }
+  }
+
+   pollVisitStatus(success, err): any {
+    retryIterrations = parseInt(this.config.getConfig('queue_poll_retry'));
+    let convertToQueueEntityCallback = this.convertToQueueEntity
     if (isVisitCacheUpdate == true) {
       MobileTicketAPI.getVisitStatus(
         (queueObj: any) => {
-          success(this.convertToQueueEntity(queueObj));
+          success(convertToQueueEntityCallback(queueObj));
         },
         (xhr, status, msg) => {
           if (xhr !== null && xhr.status == 404) {
-            var payload = xhr.responseJSON;
-            if (payload != undefined &&
-              payload.message.includes("New visits are not available until visitsOnBranchCache is refreshed") == true) {
+            returnPayload = xhr.responseJSON;
+            if (returnPayload != undefined &&
+              returnPayload.message.includes("New visits are not available until visitsOnBranchCache is refreshed") == true) {
               isVisitCacheUpdate = false;
-              setTimeout(function () {
-                MobileTicketAPI.getVisitStatus(
-                  (queueObj: any) => {
-                    isVisitCacheUpdate = true;
-                    success(this.convertToQueueEntity(queueObj));
-                  },
-                  (xhr, status, msg) => {
-                    isVisitCacheUpdate = true;
-                    err(xhr, status, msg);
-                  });
-              }, payload.refreshRate * 1000);
+              this.retryRequest(success, err);
             }
             else {
+              isVisitCacheUpdate = true;
               err(xhr, status, msg);
             }
           }
           else {
+            isVisitCacheUpdate = true;
             err(xhr, status, msg);
           }
         }

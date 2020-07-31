@@ -9,6 +9,7 @@ import { TranslateService, TranslateModule, TranslateLoader, TranslateStaticLoad
 import { Http, Response, ResponseOptions,  XHRBackend, HttpModule  } from '@angular/http';
 import { MockBackend, MockConnection } from "@angular/http/testing";
 import { Injector } from '@angular/core';
+import { Config } from 'app/config/config';
 
 const mockBackendResponse = (connection: MockConnection, response: string) => {
     connection.mockRespond(new Response(new ResponseOptions({body: response})));
@@ -47,10 +48,11 @@ describe('QueueItemComponent', () => {
   }));
 
   beforeEach(() => {
+    let config: Config;
     fixture = TestBed.createComponent(QueueItemComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-    ticketInfoService = new TicketInfoService();
+    ticketInfoService = new TicketInfoService(config);
   });
 
   afterEach(() => {

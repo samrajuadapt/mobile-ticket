@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 import { QueueComponent } from './queue.component';
 import {TicketInfoService } from '../ticket-info.service';
-import { QueueItemComponent } from '../queue-item/Queue-item.component';
+import { QueueItemComponent } from '../queue-item/queue-item.component';
 
 describe('QueueComponent', () => {
   let component: QueueComponent;
