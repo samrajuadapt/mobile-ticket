@@ -203,7 +203,7 @@ project directory
     },
     "tls_version": {
         "value": "",
-        "description": "Flag indicating TLS version of the server. Possible values are 'TLSv1_method', 'TLSv1_1_method' and 'TLSv1_2_method'. Recommended TLS 1.2 or later and keep it empty to use the latest version."
+        "description": "Flag indicating TLS version of the server. Possible values are 'TLSv1_method', 'TLSv1_1_method' and 'TLSv1_2_method'. Keep empty when using the latest version. Recommended for TLS 1.2 or later."
     }
 }
 ```

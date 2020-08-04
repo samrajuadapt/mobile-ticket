@@ -44,7 +44,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date:2020-07-17**
  
-**Build number:24**
+**Build number:25**
 
 <h3>Stories</h3>
 
@@ -54,6 +54,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-220** | **Loading text on ticket page function implement** |
 | **MOB-208** | **Cookie clean up and convert cookie usage to use local storage** |
 | **MOB-195** | **Active Cookie consent implemented** |
+| **MOB-186** | **Possibility to change the TLS version in the proxy-config.json** |
 
 ----------
 
