@@ -40,6 +40,23 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 
 -->
+<h2>Version 25</h2>
+
+**Date:2020-07-17**
+ 
+**Build number:24**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-221** | **Handle API GW newly defined 404 error with message** |
+| **MOB-220** | **Loading text on ticket page function implement** |
+| **MOB-208** | **Cookie clean up and convert cookie usage to use local storage** |
+| **MOB-195** | **Active Cookie consent implemented** |
+
+----------
+
 <h2>Version 24</h2>
 
 **Date:2020-07-17**
