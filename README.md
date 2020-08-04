@@ -19,6 +19,8 @@ This is a web application that has been developed using Angular4 and the develop
 - [Creating a Build](#creating-a-build)
 - [Branding & Customization](#branding--customization)
 - [Customer data](#customer-data)
+- [Remote serving for customers](#remote-serving-for-customers)
+- [Cookie consent](#cookie-consent)
 
 ## Installation
 BEFORE YOU INSTALL: please read the [prerequisites](#prerequisites)
@@ -779,5 +781,5 @@ Following options are available for creating virtual meetings.
 
 `Add meeting based on Service` will create meetings for the selected services from the branch level.
 
-## Cookie consent.
-Mobile Ticket can be configured to ask cookie consent before using any cookies. This can be enabled by `cookie_consent` attribute in the `config.json`. If it is enabled, then the users will able to see a popup on every landing points to mobile ticket until user accept the cookie consent. Cookie consent messages can be stored inside    `cookie-consent-files` in `resources/locale` folder using the `cookie-LANG.html` format. Browsers will pick the relevant message depending on the browser language. If `cookie_consent` is enabled google analytics will only use after user accepting the cookie consent.
+## Cookie consent
+Mobile Ticket can be configured to add an interactive cookie permission popup to get the consent of the user before using any cookies. This can be enabled by `cookie_consent` attribute in the `config.json`. If it is `enabled`, then the user will be able to see a popup when landing the mobile ticket application. Cookie consent text has been stored in `cookie-LANG.html` which is stored in `locale/cookie-consent-files` directory. Browsers will pick the relevant message depending on the browser language. If `cookie_consent` is enabled, then cookies will be used only for google analytics after accepting the consent.
