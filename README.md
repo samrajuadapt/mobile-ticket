@@ -778,3 +778,6 @@ Following options are available for creating virtual meetings.
 `Add meeting based on appointment` will look for appointments and create a meeting request.
 
 `Add meeting based on Service` will create meetings for the selected services from the branch level.
+
+## Cookie consent.
+Mobile Ticket can be configured to ask cookie consent before using any cookies. This can be enabled by `cookie_consent` attribute in the `config.json`. If it is enabled, then the users will able to see a popup on every landing points to mobile ticket until user accept the cookie consent. Cookie consent messages can be stored inside    `cookie-consent-files` in `resources/locale` folder using the `cookie-LANG.html` format. Browsers will pick the relevant message depending on the browser language. If `cookie_consent` is enabled google analytics will only use after user accepting the cookie consent.
