@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
+
 @Component({
   selector: 'app-cookie-container',
   templateUrl: './cookie-container.component.html',
@@ -28,9 +29,8 @@ export class CookieContainerComponent implements OnInit {
     this.location.back();
   }
   ngOnInit() {
-    console.log(navigator.language);
-    const defaultPath = "app/cookie-container/cookie-consent-files/cookie-en-US.html";
-    const addedPath =  `app/cookie-container/cookie-consent-files/cookie-${navigator.language}.html`;
+    const defaultPath = "app/locale/cookie-consent-files/cookie-en-US.html";
+    const addedPath =  `app/locale/cookie-consent-files/cookie-${navigator.language}.html`;  
     const cookieDescription = document.getElementById('cookie-content');
     this.http.get(addedPath, { responseType: "text" }).subscribe(
       data => {

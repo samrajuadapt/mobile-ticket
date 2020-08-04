@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { VisitEntity } from '../entities/visit.entity';
 import { QueueEntity } from '../entities/queue.entity';
 import { BranchEntity } from '../entities/branch.entity';
-import { Config } from 'app/config/config';
+import { Config } from './../../app/config/config';
 
 declare var MobileTicketAPI: any;
 var isVisitCacheUpdate = true;
@@ -67,6 +67,7 @@ export class TicketInfoService {
         (xhr, status, msg) => {
           if (xhr !== null && xhr.status == 404) {
             returnPayload = xhr.responseJSON;
+            lastResponse = [xhr, status, msg];
             if (returnPayload != undefined &&
               returnPayload.message.includes("New visits are not available until visitsOnBranchCache is refreshed") == true) {
               isVisitCacheUpdate = false;

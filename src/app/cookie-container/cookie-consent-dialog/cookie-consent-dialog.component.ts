@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Config } from 'app/config/config';
+import { Config } from '../../../app/config/config';
 
 declare var ga: Function;
 @Component({
@@ -18,11 +18,13 @@ export class CookieConsentDialogComponent implements OnInit {
 
   ngOnInit() {
     const isCookieConsentAccepted = localStorage.getItem("cookie_consent");
-    if (isCookieConsentAccepted == 'true') {
+    const is_cookie_consent_enabled = this.config.getConfig('cookie_consent');
+    if (isCookieConsentAccepted == 'true' || is_cookie_consent_enabled === 'disable') {
       this.CookieConsentShow = false;
     } else {
       this.CookieConsentShow = true;
     }
+    
   }
 
   gotoCookieConsent() {

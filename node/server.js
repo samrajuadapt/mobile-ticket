@@ -201,6 +201,11 @@ app.get('/privacy_policy$', function (req, res) {
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
+app.get('/cookie_consent$', function (req, res) {
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
+});
+
 
 // Proxy mobile example to API gateway
 var apiProxy = proxy(host, {
