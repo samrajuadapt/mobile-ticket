@@ -63,7 +63,7 @@ export class Util {
 
     public isBrowseriOS(userAgentString) {
         let browser = this.getDetectBrowser(userAgentString);
-        if (browser.name === 'safari' || browser.name === 'ios') {
+        if ((browser.name === 'safari' && browser.name !== 'Windows Safari') || browser.name === 'ios') {
             return true;
         }
         return false;
@@ -86,6 +86,7 @@ export class Util {
             ['bb10', /BB10;\sTouch.*Version\/([0-9\.]+)/],
             ['android', /Android\s([0-9\.]+)/],
             ['ios', /Version\/([0-9\._]+).*Mobile.*Safari.*/],
+            ['Windows Safari', /.*Windows NT 6.2.*WOW64.*(Version\/([0-9\._]+)).*Safari/],
             ['safari', /Version\/([0-9\._]+).*Safari/]
         ];
 
