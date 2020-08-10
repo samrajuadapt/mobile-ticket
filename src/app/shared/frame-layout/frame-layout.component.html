@@ -1,5 +1,5 @@
 <div class="bg full-with">
-  <div class="qm-cookie-container">
+  <div class="qm-cookie-container" [hidden]="!isBrowserSupport">
     <app-cookie-consent-dialog></app-cookie-consent-dialog>
   </div>
   <div class="frame custom logo-bg-color parent-center">
@@ -9,7 +9,7 @@
     <ng-content></ng-content>
   </div>
   <div [hidden]="isBrowserSupport">
-    <not-support-layout [browserName]='onBrowserNotSupport'></not-support-layout>
+    <not-support-layout [browserName]='onBrowserNotSupport' [isApplePlatform]='isApplePlatform'></not-support-layout>
   </div>
 </div>
 <div id="app-bg" class="custom bg-image" [ngClass]="{'not-support-view': !isBrowserSupport}"></div>

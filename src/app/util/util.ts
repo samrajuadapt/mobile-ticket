@@ -69,6 +69,14 @@ export class Util {
         return false;
     }
 
+    public isApplePlatform() {
+        if (navigator) {
+            return /(Mac|iPhone|iPod|iPad)/i.test(navigator.platform);
+        } else {
+            return false;
+        }
+    }
+
     public getDetectBrowser(userAgentString): any {
         if (!userAgentString) return null;
 

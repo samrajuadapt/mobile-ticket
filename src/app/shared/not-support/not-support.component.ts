@@ -8,4 +8,5 @@ import { Component, Input } from '@angular/core';
 
 export class NotSupportComponent {
     @Input() browserName: string;
+    @Input() isApplePlatform: boolean;
 }

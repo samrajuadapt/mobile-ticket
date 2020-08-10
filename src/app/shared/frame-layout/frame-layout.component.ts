@@ -12,6 +12,7 @@ export class FrameLayoutComponent implements OnInit {
   public onBrowserNotSupport: string;
   private _isBrowserSupport = false;
   private thisBrowser;
+  public isApplePlatform = false;
 
   constructor(private translate: TranslateService) {
 
@@ -38,6 +39,7 @@ export class FrameLayoutComponent implements OnInit {
     if (typeof navigator !== 'undefined' && navigator) {
       agent = navigator.userAgent;
     }
+    this.isApplePlatform = util.isApplePlatform();
     try {
       let browser = util.getDetectBrowser(agent)
       // this.isBrowserSupport = true;
