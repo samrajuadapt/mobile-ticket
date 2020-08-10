@@ -22,6 +22,10 @@
   z-index: -1;
 }
 
+.not-support-view{
+  height: 100%;
+}
+
 .caption {
   text-align: center;
   font-size: 2em;

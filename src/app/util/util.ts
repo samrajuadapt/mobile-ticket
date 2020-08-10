@@ -63,7 +63,7 @@ export class Util {
 
     public isBrowseriOS(userAgentString) {
         let browser = this.getDetectBrowser(userAgentString);
-        if ((browser.name === 'safari' && browser.name !== 'Windows Safari') || browser.name === 'ios') {
+        if (browser.name === 'safari' || browser.name === 'ios') {
             return true;
         }
         return false;

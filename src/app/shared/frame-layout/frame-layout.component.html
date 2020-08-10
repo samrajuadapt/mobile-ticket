@@ -12,5 +12,5 @@
     <not-support-layout [browserName]='onBrowserNotSupport'></not-support-layout>
   </div>
 </div>
-<div id="app-bg" class="custom bg-image"></div>
+<div id="app-bg" class="custom bg-image" [ngClass]="{'not-support-view': !isBrowserSupport}"></div>
 

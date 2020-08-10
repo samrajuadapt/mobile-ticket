@@ -81,8 +81,30 @@ export class AuthGuard implements CanActivate {
         }
     }
 
+    checkBrowserSupport() {
+        let util = new Util()
+        var agent;
+        if (typeof navigator !== 'undefined' && navigator) {
+            agent = navigator.userAgent;
+        }
+        try {
+            let browser = util.getDetectBrowser(agent)
+            if (browser.name === 'chrome' || browser.name === 'safari' || browser.name === 'ios' 
+                || browser.name === 'opera' || browser.name === 'crios') {
+                    return true;
+            } else {
+                return false;
+            }
+        } catch (e) {
+            return false;
+        }
+    }
+
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
         return new Promise((resolve, reject) => {
+            if (!this.checkBrowserSupport()) {
+                resolve(false);
+            }
             let visitInfo = MobileTicketAPI.getCurrentVisit();
             let url = state.url;
             let branchId = route.queryParams['branch'];

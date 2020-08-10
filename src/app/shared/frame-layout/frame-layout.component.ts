@@ -41,7 +41,7 @@ export class FrameLayoutComponent implements OnInit {
     try {
       let browser = util.getDetectBrowser(agent)
       // this.isBrowserSupport = true;
-      if (browser.name === 'chrome' || (browser.name === 'safari' && browser.name !== 'Windows Safari') || browser.name === 'ios' 
+      if (browser.name === 'chrome' || browser.name === 'safari' || browser.name === 'ios' 
           || browser.name === 'opera' || browser.name === 'crios') {
         this._isBrowserSupport = true;
       }
@@ -55,7 +55,5 @@ export class FrameLayoutComponent implements OnInit {
     catch (e) {
       this.onBrowserNotSupport = this.thisBrowser;
     }
-
-
   }
 }
