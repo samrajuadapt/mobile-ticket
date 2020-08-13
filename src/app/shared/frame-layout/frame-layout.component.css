@@ -55,7 +55,7 @@
   width: 160px;
   max-width: 160px;
   margin: 0 auto;
-  content: url('/app/resources/qmLogo.png');
+  /* content: url('/app/resources/qmLogo.png'); */
 }
 
 .frame {

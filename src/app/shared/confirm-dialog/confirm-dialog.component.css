@@ -1,3 +1,7 @@
+* { 
+  -ms-overflow-style: none; /* edge */
+  scrollbar-width: none /* firefox */
+}
 .dialog-container {
   position: fixed;
   top: 0;
@@ -29,6 +33,7 @@
 #cancelBtn, #okBtn{
   width: calc((280px / 2) - 0.5px);
   background-color: transparent;
+  cursor: pointer;
 }
 
 #okBtn{

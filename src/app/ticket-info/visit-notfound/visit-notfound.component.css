@@ -3,4 +3,5 @@
 #link-to-reload {
   color: white !important;
   text-decoration: underline;
+  cursor: pointer;
 }

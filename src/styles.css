@@ -57,6 +57,7 @@ div.row {
   font-family: Roboto-Light;
   color: #303030;
   font-size: 12px;
+  cursor: pointer;
 }
 
 .common-btn {
@@ -84,6 +85,7 @@ div.row {
   font-size: 25px;
   font-family: Roboto-Bold;
   font-weight: 300;
+  cursor: pointer;
 }
 
 ::-webkit-scrollbar {
