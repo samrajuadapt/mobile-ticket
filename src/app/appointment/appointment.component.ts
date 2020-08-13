@@ -56,17 +56,17 @@ export class AppointmentComponent implements OnInit {
           this.ticket = response;
           this.router.navigate(['ticket']);
         },
-        (xhr, status, errorMessage) => {
-          // do something
-        });
+          (xhr, status, errorMessage) => {
+            // do something
+          });
       }
     },
-    (xhr, status, errorMessage) => {
-      // do something
-    });
+      (xhr, status, errorMessage) => {
+        // do something
+      });
   }
 
-  private getBranch () {
+  private getBranch() {
     if (this.app.branchId !== undefined) {
       MobileTicketAPI.getBranchInfoById(this.app.branchId, (res) => {
         let branchEntity: BranchEntity;
@@ -81,7 +81,7 @@ export class AppointmentComponent implements OnInit {
   // MOVE ALL MobileTicketAPI calls to service class otherwise using things this way
   // makes unit test writing impossible
 
-  private isAppointmentInvalid(): boolean{
+  private isAppointmentInvalid(): boolean {
     let now = new Date();
     let appStart = new Date(this.app.startTime.replace('T', ' ').replace(/-/g, '/'));
 
@@ -95,12 +95,12 @@ export class AppointmentComponent implements OnInit {
       this.isInvalidStatus = true;
 
     let minDiff = (now.getTime() - appStart.getTime()) / 1000 / 60;
-    if (minDiff >= 0 && Math.abs(minDiff) > this.config.getConfig("appointment_late") )
+    if (minDiff >= 0 && Math.abs(minDiff) > this.config.getConfig("appointment_late"))
       this.isLate = true;
     else
       this.isLate = false;
 
-    if (minDiff < 0 && Math.abs(minDiff) > this.config.getConfig("appointment_early") )
+    if (minDiff < 0 && Math.abs(minDiff) > this.config.getConfig("appointment_early"))
       this.isEarly = true;
     else
       this.isEarly = false;
@@ -111,63 +111,77 @@ export class AppointmentComponent implements OnInit {
     return this.isLate || this.isEarly || this.isInvalidStatus || this.isInvalidDate;
   }
 
-  private formatTime(time){
+  private formatTime(time) {
     var formatted = "";
     let format = this.config.getConfig("timeFormat");
 
-    let min = time.getMinutes() < 10 ? "0"+time.getMinutes() :time.getMinutes();
+    let min = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
     let hours = "";
 
-    if (format == "HH:mm"){
-      hours = time.getHours() < 10 ? "0"+time.getHours() :time.getHours();
+    if (format == "HH:mm") {
+      hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
       formatted = hours + ":" + min;
     }
 
-    else if (format == "hh:mm a"){
-      if (time.getHours() > 12){
-        hours = "0" + (time.getHours() - 12);
-        formatted = hours + ":" + min + " pm";
+    else if (format == "hh:mm a") {
+      if (time.getHours() > 12) {
+        hours = (time.getHours() - 12) < 10 ? "0" + (time.getHours() - 12) : (time.getHours() - 12).toString();
+        formatted = hours + ":" + min;
       }
-      else{
-        hours = "0" + time.getHours();
-        formatted = hours + ":" + min + " am";
+      else {
+        hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+        formatted = hours + ":" + min;
+      }
+      if (time.getHours() > 11) {
+        formatted += " pm";
+      } else {
+        formatted += " am";
       }
     }
-    else if (format == "hh:mm"){
-      if (time.getHours() > 12)
-        hours = "0" + (time.getHours() - 12);
-      else
-        hours = "0" + time.getHours();
-      formatted = hours + ":" + min + " am";
-    }
-    else if (format == "h:mm"){
-      if (time.getHours() > 12)
-        hours = "" + (time.getHours() - 12);
-      else
-        hours = time.getHours();
+    else if (format == "hh:mm") {
+      if (time.getHours() > 12) {
+        hours = (time.getHours() - 12) < 10 ? "0" + (time.getHours() - 12) : (time.getHours() - 12).toString();
+      }
+      else {
+              hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+      }
       formatted = hours + ":" + min;
     }
-    else if (format == "h:mm a"){
-      if (time.getHours() > 12){
+    else if (format == "h:mm") {
+      if (time.getHours() > 12) {
         hours = "" + (time.getHours() - 12);
-        formatted = hours + ":" + min + " pm";
       }
-      else{
+      else {
         hours = time.getHours();
-        formatted = hours + ":" + min + " am";
       }
+      formatted = hours + ":" + min;
+    }
+    else if (format == "h:mm a") {
+      if (time.getHours() > 12) { 
+        hours = "" + (time.getHours() - 12); 
+        formatted = hours + ":" + min; 
+      }
+      else { 
+        hours = time.getHours(); 
+        formatted = hours + ":" + min;
+       }
+      if (time.getHours() > 11) { 
+        formatted += " pm";
+       } else { 
+         formatted += " am"; 
+        }
     }
     return formatted;
   }
 
-  private formatDate (date){
+  private formatDate(date) {
     var formatted = "";
     let format = this.config.getConfig("dateFormat");
 
     formatted = format;
-    let day = date.getDate()<10 ? "0"+date.getDate() :date.getDate();
+    let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
     let realMonth = date.getMonth() + 1;
-    let month = realMonth<10 ? "0"+realMonth : realMonth;
+    let month = realMonth < 10 ? "0" + realMonth : realMonth;
     formatted = formatted.replace("DD", day);
     formatted = formatted.replace("MM", month);
     formatted = formatted.replace("YYYY", date.getFullYear());
