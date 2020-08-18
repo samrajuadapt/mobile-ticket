@@ -40,6 +40,30 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 
 -->
+<h2>Version 26</h2>
+
+**Date:2020-07-17**
+ 
+**Build number:26**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-225** | **MT compatibility issues when test in Firefox** |
+| **MOB-226** | **MT compatibility issues when test in Edge browser** |
+| **MOB-202** | **MT Application operate as a service** |
+| **MOB-151** | **MobileTicket Block in Windows+Safari** |
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-219** | **Appointment time display bug** |
+| **MOB-230** | **Set curser to pointer in service list** |
+
+----------
+
 <h2>Version 25</h2>
 
 **Date:2020-07-17**
