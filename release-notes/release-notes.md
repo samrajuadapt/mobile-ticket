@@ -42,7 +42,7 @@ This document describes the new features, bug corrections, known issues and reco
 -->
 <h2>Version 26</h2>
 
-**Date:2020-07-17**
+**Date:2020-08-17**
  
 **Build number:26**
 
