@@ -25,12 +25,13 @@ export class AppointmentComponent implements OnInit {
   private isIOS;
   private language;
   private ticket;
-  public isLate: boolean = false;
-  public isEarly: boolean = false;
-  public isInvalidStatus: boolean = false;
-  public isInvalidDate: boolean = false;
-  public isInvalid: boolean = false;
-  public isNotFound: boolean = false;
+  public isLate = false;
+  public isEarly = false;
+  public isInvalidStatus = false;
+  public isInvalidDate = false;
+  public isInvalid = false;
+  public isNotFound = false;
+  private arriveAppRetried = false;
 
   constructor(private config: Config, public router: Router) {
   }
@@ -57,7 +58,14 @@ export class AppointmentComponent implements OnInit {
           this.router.navigate(['ticket']);
         },
           (xhr, status, errorMessage) => {
-            // do something
+            console.log(errorMessage);
+            if (!this.arriveAppRetried) {
+              this.fetchAppointment().then(() => {
+                this.app = MobileTicketAPI.getAppointment();
+                this.isInvalid = this.isAppointmentInvalid();
+                this.arriveAppRetried = true;
+              });
+            }
           });
       }
     },
@@ -66,6 +74,36 @@ export class AppointmentComponent implements OnInit {
       });
   }
 
+  private async fetchAppointment() {
+    return await new Promise((resolve) => {
+      let aEntity = new AppointmentEntity();
+      MobileTicketAPI.findAppointment(this.app.publicId, (response) => {
+        aEntity.publicId = this.app.publicId;
+        aEntity.branchName = response.branch.name;
+        aEntity.qpId = response.qpId;
+        MobileTicketAPI.findCentralAppointment(response.qpId,
+          (response2) => {
+            aEntity.serviceId = response2.services[0].id;
+            aEntity.serviceName = response2.services[0].name;
+            aEntity.branchId = response2.branchId;
+            aEntity.status = response2.status;
+            aEntity.startTime = response2.startTime;
+            aEntity.endTime = response2.endTime;
+            aEntity.notes = response2.properties.notes;
+            MobileTicketAPI.setAppointment(aEntity);
+            resolve();
+          },
+          (xhr, status, errorMessage) => {
+            resolve();
+          });
+      },
+        (xhr, status, errorMessage) => {
+          aEntity.status = 'NOTFOUND';
+          MobileTicketAPI.setAppointment(aEntity);
+          resolve();
+        });
+    });
+  }
   private getBranch() {
     if (this.app.branchId !== undefined) {
       MobileTicketAPI.getBranchInfoById(this.app.branchId, (res) => {
@@ -88,19 +126,19 @@ export class AppointmentComponent implements OnInit {
     this.app.startTimeFormatted = this.formatTime(appStart);
     this.app.date = this.formatDate(appStart);
 
-    if (this.app.status == 'NOTFOUND')
+    if (this.app.status === 'NOTFOUND')
       this.isNotFound = true;
 
     if (this.app.status !== 'CREATED' && this.app.status !== 'NOTFOUND')
       this.isInvalidStatus = true;
 
     let minDiff = (now.getTime() - appStart.getTime()) / 1000 / 60;
-    if (minDiff >= 0 && Math.abs(minDiff) > this.config.getConfig("appointment_late"))
+    if (minDiff >= 0 && Math.abs(minDiff) > this.config.getConfig('appointment_late'))
       this.isLate = true;
     else
       this.isLate = false;
 
-    if (minDiff < 0 && Math.abs(minDiff) > this.config.getConfig("appointment_early"))
+    if (minDiff < 0 && Math.abs(minDiff) > this.config.getConfig('appointment_early'))
       this.isEarly = true;
     else
       this.isEarly = false;
@@ -112,80 +150,80 @@ export class AppointmentComponent implements OnInit {
   }
 
   private formatTime(time) {
-    var formatted = "";
-    let format = this.config.getConfig("timeFormat");
+    let formatted = '';
+    let format = this.config.getConfig('timeFormat');
 
-    let min = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
-    let hours = "";
+    let min = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
+    let hours = '';
 
-    if (format == "HH:mm") {
-      hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
-      formatted = hours + ":" + min;
+    if (format === 'HH:mm') {
+      hours = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
+      formatted = hours + ':' + min;
     }
 
-    else if (format == "hh:mm a") {
+    else if (format === 'hh:mm a') {
       if (time.getHours() > 12) {
-        hours = (time.getHours() - 12) < 10 ? "0" + (time.getHours() - 12) : (time.getHours() - 12).toString();
-        formatted = hours + ":" + min;
+        hours = (time.getHours() - 12) < 10 ? '0' + (time.getHours() - 12) : (time.getHours() - 12).toString();
+        formatted = hours + ':' + min;
       }
       else {
-        hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
-        formatted = hours + ":" + min;
+        hours = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
+        formatted = hours + ':' + min;
       }
       if (time.getHours() > 11) {
-        formatted += " pm";
+        formatted += ' pm';
       } else {
-        formatted += " am";
+        formatted += ' am';
       }
     }
-    else if (format == "hh:mm") {
+    else if (format === 'hh:mm') {
       if (time.getHours() > 12) {
-        hours = (time.getHours() - 12) < 10 ? "0" + (time.getHours() - 12) : (time.getHours() - 12).toString();
+        hours = (time.getHours() - 12) < 10 ? '0' + (time.getHours() - 12) : (time.getHours() - 12).toString();
       }
       else {
-              hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+              hours = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
       }
-      formatted = hours + ":" + min;
+      formatted = hours + ':' + min;
     }
-    else if (format == "h:mm") {
+    else if (format === 'h:mm') {
       if (time.getHours() > 12) {
-        hours = "" + (time.getHours() - 12);
+        hours = '' + (time.getHours() - 12);
       }
       else {
         hours = time.getHours();
       }
-      formatted = hours + ":" + min;
+      formatted = hours + ':' + min;
     }
-    else if (format == "h:mm a") {
-      if (time.getHours() > 12) { 
-        hours = "" + (time.getHours() - 12); 
-        formatted = hours + ":" + min; 
+    else if (format === 'h:mm a') {
+      if (time.getHours() > 12) {
+        hours = '' + (time.getHours() - 12);
+        formatted = hours + ':' + min;
       }
-      else { 
-        hours = time.getHours(); 
-        formatted = hours + ":" + min;
+      else {
+        hours = time.getHours();
+        formatted = hours + ':' + min;
        }
-      if (time.getHours() > 11) { 
-        formatted += " pm";
-       } else { 
-         formatted += " am"; 
+      if (time.getHours() > 11) {
+        formatted += ' pm';
+       } else {
+         formatted += ' am';
         }
     }
     return formatted;
   }
 
   private formatDate(date) {
-    var formatted = "";
-    let format = this.config.getConfig("dateFormat");
+    let formatted = '';
+    let format = this.config.getConfig('dateFormat');
 
     formatted = format;
-    let day = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+    let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
     let realMonth = date.getMonth() + 1;
-    let month = realMonth < 10 ? "0" + realMonth : realMonth;
-    formatted = formatted.replace("DD", day);
-    formatted = formatted.replace("MM", month);
-    formatted = formatted.replace("YYYY", date.getFullYear());
-    formatted = formatted.replace("YY", date.getYear());
+    let month = realMonth < 10 ? '0' + realMonth : realMonth;
+    formatted = formatted.replace('DD', day);
+    formatted = formatted.replace('MM', month);
+    formatted = formatted.replace('YYYY', date.getFullYear());
+    formatted = formatted.replace('YY', date.getYear());
 
     return formatted;
   }
