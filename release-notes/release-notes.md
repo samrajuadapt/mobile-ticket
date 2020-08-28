@@ -39,7 +39,20 @@ This document describes the new features, bug corrections, known issues and reco
 
 ----------
 
--->
+--><h2>Version 27</h2>
+
+**Date:2020-08-28**
+ 
+**Build number:27**
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-251** | **No error displayed when user try to arrive an already arrived visit** |
+
+----------
+
 <h2>Version 26</h2>
 
 **Date:2020-08-17**
