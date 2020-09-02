@@ -6,7 +6,6 @@ import { TranslateService } from 'ng2-translate';
 import { RetryService } from '../../shared/retry.service';
 import { AlertDialogService } from '../../shared/alert-dialog/alert-dialog.service';
 import { Config } from '../../config/config';
-
 enum phoneSectionStates {
   INITIAL,
   PRIVACY_POLICY,
@@ -67,7 +66,7 @@ export class CutomerPhoneComponent implements OnInit {
 
   // Press continue button for phone number
   phoneNumContinue() {
-   
+
     if (this.phoneNumber.match(/^\(?\+?\d?[-\s()0-9]{6,}$/) && this.phoneNumber !== this.countryCode) {
       let isPrivacyAgreed = localStorage.getItem('privacy_agreed');
       MobileTicketAPI.setPhoneNumber(this.phoneNumber);
@@ -90,7 +89,7 @@ export class CutomerPhoneComponent implements OnInit {
     // console.log(event.keycode);
     if (this.phoneNumberError && event.keyCode !== 13) {
       if (this.phoneNumber.trim() !== '') {
-          this.phoneNumberError = false;
+        this.phoneNumberError = false;
       }
     }
   }
@@ -113,51 +112,77 @@ export class CutomerPhoneComponent implements OnInit {
         this.router.navigate(['ticket']);
       }
       else {
-        MobileTicketAPI.createVisit(
-          (visitInfo) => {
-            ga('send', {
-              hitType: 'event',
-              eventCategory: 'visit',
-              eventAction: 'create',
-              eventLabel: 'vist-create'
-            });
+        let isDeviceBounded = this.config.getConfig('block_other_devices');
+        if (isDeviceBounded === 'enable') {
+          System.import('fingerprintjs2').then(Fingerprint2 => {
+            var that = this;
+            Fingerprint2.getPromise({
+              excludes: {
+                availableScreenResolution: true,
+                adBlock: true,
+                enumerateDevices: true
+              }
+            }).then(function (components) {
+              var values = components.map(function (component) { return component.value });
+              var murmur = Fingerprint2.x64hash128(values.join(''), 31);
+              MobileTicketAPI.setFingerprint(murmur);
+              that.createTicket();
+            })
+          });
 
-            this.router.navigate(['ticket']);
-            this.isTakeTicketClickedOnce = false;
-          },
-          (xhr, status, errorMessage) => {
-            let util = new Util();
-            this.isTakeTicketClickedOnce = false;
-            if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "8042") {
-              this.translate.get('error_codes.error_8042').subscribe((res: string) => {
-                this.alertDialogService.activate(res);
-              });
-            } else if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "11000") {
-              this.translate.get('ticketInfo.visitAppRemoved').subscribe((res: string) => {
-                this.alertDialogService.activate(res);
-              });
-            } else {
-              this.showHideNetworkError(true);
-              this.retryService.retry(() => {
+        } else {
+          this.createTicket();
+        }
 
-                /**
-                * replace this function once #140741231 is done
-                */
-                MobileTicketAPI.getBranchesNearBy(0, 0, 2147483647,
-                  () => {
-                    this.retryService.abortRetry();
-                    this.showHideNetworkError(false);
-                  }, () => {
-                    //Do nothing on error
-                  });
-              });
-            }
-          }
-        );
       }
 
     }
   }
+
+  createTicket() {
+    MobileTicketAPI.createVisit(
+      (visitInfo) => {
+        ga('send', {
+          hitType: 'event',
+          eventCategory: 'visit',
+          eventAction: 'create',
+          eventLabel: 'vist-create'
+        });
+
+        this.router.navigate(['ticket']);
+        this.isTakeTicketClickedOnce = false;
+      },
+      (xhr, status, errorMessage) => {
+        let util = new Util();
+        this.isTakeTicketClickedOnce = false;
+        if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "8042") {
+          this.translate.get('error_codes.error_8042').subscribe((res: string) => {
+            this.alertDialogService.activate(res);
+          });
+        } else if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "11000") {
+          this.translate.get('ticketInfo.visitAppRemoved').subscribe((res: string) => {
+            this.alertDialogService.activate(res);
+          });
+        } else {
+          this.showHideNetworkError(true);
+          this.retryService.retry(() => {
+
+            /**
+            * replace this function once #140741231 is done
+            */
+            MobileTicketAPI.getBranchesNearBy(0, 0, 2147483647,
+              () => {
+                this.retryService.abortRetry();
+                this.showHideNetworkError(false);
+              }, () => {
+                //Do nothing on error
+              });
+          });
+        }
+      }
+    );
+  }
+
   phoneNumberFeildFocused() {
     if (this.phoneNumber === '') {
       this.phoneNumber = this.countryCode;
@@ -175,7 +200,7 @@ export class CutomerPhoneComponent implements OnInit {
   privacyLinkButtonPressed() {
     var isLink = this.config.getConfig('privacy_policy_link');
     if (isLink !== '') {
-        window.open(isLink, "_blank", '');
+      window.open(isLink, "_blank", '');
     } else {
       MobileTicketAPI.setPhoneNumber(this.phoneNumber);
       this.router.navigate(['privacy_policy']);

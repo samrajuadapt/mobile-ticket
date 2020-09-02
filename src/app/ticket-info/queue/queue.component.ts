@@ -10,10 +10,10 @@ import { BranchEntity } from '../../entities/branch.entity';
 import { TranslateService } from 'ng2-translate';
 import { VisitState } from '../../util/visit.state';
 import { Util } from '../../util/util';
+import { Config } from '../../config/config';
 
 declare var MobileTicketAPI: any;
 declare var ga: Function;
-
 @Component({
   selector: 'app-queue-container',
   templateUrl: './queue.component.html',
@@ -62,7 +62,8 @@ export class QueueComponent implements OnInit, OnDestroy {
 
   constructor(public ticketService: TicketInfoService, private retryService: RetryService,
     private activatedRoute: ActivatedRoute,
-    public router: Router, private translate: TranslateService) {
+    public router: Router, private translate: TranslateService,
+    private config: Config) {
     this.visitPosition = 0;
     this.isTicketEndedOrDeleted = false;
     this.visitState = new VisitState();
@@ -125,8 +126,8 @@ export class QueueComponent implements OnInit, OnDestroy {
   }
 
   public onVisitRecycled(isRecyled) {
-    if(isRecyled) {
-     this.translate.get('ticketInfo.visitRecycledMessage').subscribe((res: string) => {
+    if (isRecyled) {
+      this.translate.get('ticketInfo.visitRecycledMessage').subscribe((res: string) => {
         this.visitRecycleMsg = res;
       });
     }
@@ -150,8 +151,43 @@ export class QueueComponent implements OnInit, OnDestroy {
     if (visitPosition <= 5) {
       this.timer = TimerObservable.create(0, 1000);
     }
-    this.subscription = this.timer.subscribe(visitPosition => this.queuePoll(visitPosition, ticketService, false));
+    let isDeviceBounded = this.config.getConfig('block_other_devices');
+    if (isDeviceBounded === 'enable') {
+      MobileTicketAPI.getCustomParameters(
+        (visit: any) => {
+          System.import('fingerprintjs2').then(Fingerprint2 => {
+            var that = this;
+            Fingerprint2.getPromise({
+              excludes: {
+                availableScreenResolution: true,
+                adBlock: true,
+                enumerateDevices: true
+              }
+            }).then(function (components) {
+              var values = components.map(function (component) { return component.value });
+              var murmur = Fingerprint2.x64hash128(values.join(''), 31);
+              console.log(murmur);
+              if (visit === murmur) {
+              } else {
+                that.redirectToUnautherized();
+              }
+            })
+          },
+            (xhr, status, msg) => {
+            });
+        });
+    }
+    this.subscription = this.timer.subscribe(visitPosition => {
+      this.queuePoll(visitPosition, ticketService, false);
+    });
+  }
 
+  public redirectToUnautherized() {
+    MobileTicketAPI.clearLocalStorage();
+    MobileTicketAPI.resetAllVars();
+    MobileTicketAPI.resetCurrentVisitStatus();
+
+    this.router.navigate(['unauthorized']);
   }
 
   public queuePoll(visitPosition, ticketService: TicketInfoService, onRetry: boolean) {
@@ -190,8 +226,8 @@ export class QueueComponent implements OnInit, OnDestroy {
           queueInfo.visitPosition = null;
           this.isTicketEndedOrDeleted = true;
           var payload = xhr.responseJSON;
-          if (payload !== undefined && 
-          payload.message.includes("New visits are not available until visitsOnBranchCache is refreshed") == true) {
+          if (payload !== undefined &&
+            payload.message.includes("New visits are not available until visitsOnBranchCache is refreshed") == true) {
             queueInfo.status = "CACHED";
           }
           this.onVisitStatusUpdate.emit(queueInfo);

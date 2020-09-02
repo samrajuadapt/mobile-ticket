@@ -52,6 +52,7 @@ import {CookieContainerComponent} from "./cookie-container/cookie-container.comp
 import {CookieConsentDialogComponent} from "./cookie-container/cookie-consent-dialog/cookie-consent-dialog.component";
 import {CustomerDataComponent} from "./customer-data/customer-data.component";
 import { CustomerDataGuard } from "./customer-data/customer-data-guard";
+import { UnautherizedComponent } from "./ticket-info/unautherized/unautherized.component";
 
 
 
@@ -65,7 +66,7 @@ declare var MobileTicketAPI:any;
     QueueComponent, VisitCancelComponent, QueueItemComponent, SortPipe,
     ConnectivityMessageComponent, VisitNotfoundComponent, BranchNotfoundComponent, ConfirmDialogComponent, AlertDialogComponent,
     BranchOpenHoursComponent, OpenHourItemComponent, AppointmentComponent, CutomerPhoneComponent,PrivacyPolicyComponent, CustomerDataComponent,
-    CookieContainerComponent,CookieConsentDialogComponent
+    CookieContainerComponent,CookieConsentDialogComponent,UnautherizedComponent
   ],
   imports: [
     BrowserModule,

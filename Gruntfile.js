@@ -44,7 +44,7 @@ module.exports = function (grunt) {
       prod: {
         files: [
           { expand: true, src: ['src/index.html', 'src/favicon.ico', 'src/styles.css'], dest: 'dist/src/', filter: 'isFile', flatten: true },
-          { expand: true, src: ['node_modules/core-js/client/shim.min.js', 'node_modules/zone.js/dist/zone.js'], dest: 'dist/src/', filter: 'isFile', flatten: true},
+          { expand: true, src: ['node_modules/core-js/client/shim.min.js', 'node_modules/zone.js/dist/zone.js',    'node_modules/fingerprintjs2/fingerprint2.js'], dest: 'dist/src/', filter: 'isFile', flatten: true},
           { expand: true, src: ['release-notes/**'], dest: 'dist/'}
         ]
       },

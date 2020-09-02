@@ -154,6 +154,11 @@ app.get('/no_branch$', function (req, res) {
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
+// Redirect fingerprint
+app.get('/fingerprintjs2$', function (req, res) {
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'fingerprint2.js'));
+});
 // Redirect no_visit requests to index.html
 app.get('/no_visit$', function (req, res) {
 	res = handleHeaders(res);

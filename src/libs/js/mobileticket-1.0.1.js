@@ -2553,6 +2553,7 @@ var MobileTicketAPI = (function () {
   var branches = [];
   var services = [];
   var enteredPhoneNum = '';
+  var fingerprint = '';
 
   var visitId = undefined;
   var queueId = undefined;
@@ -2576,7 +2577,7 @@ var MobileTicketAPI = (function () {
   var MYVISIT = "MyVisit";
   var MYAPPOINTMENT = "MyAppointment";
   var MY_CENTRAL_APPOINTMENT = "MyCentralAppointment";
-  var ENTRYPOINT = "Entrypoint";
+  var ENTRYPOINT = "entrypoint";
   var FIND = "find";
   var ARRIVE = "arrive";
   var POSITION = "Position";
@@ -2667,7 +2668,7 @@ var MobileTicketAPI = (function () {
     MobileTicketAPI.currentVisitStatus = undefined;
     MobileTicketAPI.visitInformation = undefined;
     MobileTicketAPI.appointment = undefined;
-    MobileTicketAPI.meetingUrl = undefined
+    MobileTicketAPI.meetingUrl = undefined;
   }
 
   function eraseCookie(name) {
@@ -2683,6 +2684,10 @@ var MobileTicketAPI = (function () {
 
   function getEnteredPhoneNum() {
     return MobileTicketAPI.enteredPhoneNum;
+  }
+
+  function getFingerprint() {
+    return MobileTicketAPI.fingerprint;
   }
 
   function getSelectedService() {
@@ -2898,11 +2903,26 @@ var MobileTicketAPI = (function () {
         var branch = getSelectedBranch();
         var service = getSelectedService();
         var enteredPhoneNum = getEnteredPhoneNum();
+        var fingerPrint = getFingerprint();
+        console.log(fingerPrint);
         var jsonData = {};
-        var CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + ISSUE;
-        if (enteredPhoneNum && enteredPhoneNum.length > 0) {
+
+        if (fingerPrint) {
           jsonData.parameters = {};
-          jsonData = { "parameters": {phoneNumber: enteredPhoneNum, primaryCustomerPhoneNumber: enteredPhoneNum}};
+          jsonData = { "parameters": {userId: fingerPrint}};
+          CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + PARAMS + "/" + ISSUE+"?delay=0";
+        } else {
+          var CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + ISSUE;
+        }
+
+        if ((enteredPhoneNum && enteredPhoneNum.length > 0)) {
+          jsonData.parameters = {};
+           if (fingerPrint) {
+            jsonData = { "parameters": {phoneNumber: enteredPhoneNum, primaryCustomerPhoneNumber: enteredPhoneNum, userId: fingerPrint}};
+           } else {
+            jsonData = { "parameters": {phoneNumber: enteredPhoneNum, primaryCustomerPhoneNumber: enteredPhoneNum}};
+           }
+        
           removePhoneNumber('');
           CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + PARAMS + "/" + ISSUE+"?delay=0";
         }
@@ -2952,6 +2972,34 @@ var MobileTicketAPI = (function () {
       } catch (e) {
         onError(null, null, e.message);
       }
+    },
+
+    getCustomParameters: function (onSuccess, onError) {
+      try {
+        var visitIdVal = getCurrentVisit().visitId;
+        var queueIdVal = getCurrentVisit().queueId;
+        var checksum = getCurrentVisit().checksum;
+        var branchIdVal = getCurrentVisit().branchId;
+
+        var VISIT_STATUS_REST = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/" + ENTRYPOINT + "/" + BRANCHES + "/" + branchIdVal + "/" + VISITS + "/" + visitIdVal + "?checksum=" + checksum;
+        $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: VISIT_STATUS_REST,
+          success: function (visitsData) {
+            if (visitsData != undefined && visitsData.parameterMap && visitsData.parameterMap.userId) {
+              onSuccess(visitsData.parameterMap.userId);
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            onError(xhr, status, errorMsg);
+          }
+        });
+
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+
     },
 
     getVisitStatus: function (onSuccess, onError) {
@@ -3138,6 +3186,12 @@ var MobileTicketAPI = (function () {
     },
     getEnteredPhoneNum: function () {
       return getEnteredPhoneNum();
+    },
+    setFingerprint: function (fingerprint) {
+      MobileTicketAPI.fingerprint = fingerprint;
+    },
+    getFingerprint: function () {
+      return getFingerprint();
     },
     getSelectedBranch: function () {
       return getSelectedBranch();

@@ -89,5 +89,9 @@
     "queue_poll_retry" : {
         "value": "1",
         "description": "Define how many times should retry the queue poll request."
+    },
+    "block_other_devices" : {
+        "value": "false",
+        "description": "Enable or disable whether user allow to use create in other devices apart from the created device."
     }
 }

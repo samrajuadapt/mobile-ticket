@@ -11,9 +11,10 @@ import { AlertDialogService } from '../shared/alert-dialog/alert-dialog.service'
 import { Config } from '../config/config';
 import { BranchOpenHoursValidator } from '../util/branch-open-hours-validator'
 import { ServiceService } from '../service/service.service';
-
+declare var System: any;
 declare var MobileTicketAPI: any;
 declare var ga: Function;
+declare var require: any;
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -235,7 +236,30 @@ export class AuthGuard implements CanActivate {
                                         }
                                     });
                                 } else {
-                                    this.createTicket(branchEntity, sEntity, resolve);
+                                    // Creating ticket
+                                    let isDeviceBounded = this.config.getConfig('block_other_devices');
+                                    if (isDeviceBounded === 'enable') {
+                                        System.import('fingerprintjs2').then(Fingerprint2 => {
+                                            var that = this;
+
+                                            Fingerprint2.getPromise({
+                                                excludes: {
+                                                    availableScreenResolution: true,
+                                                    adBlock: true,
+                                                    enumerateDevices: true
+                                                }
+                                            }).then(function (components) {
+                                                var values = components.map(function (component) { return component.value });
+                                                var murmur = Fingerprint2.x64hash128(values.join(''), 31);
+                                                MobileTicketAPI.setFingerprint(murmur);
+                                                that.createTicket(branchEntity, sEntity, resolve);
+                                            });
+                                        });
+                                    } else {
+                                        this.createTicket(branchEntity, sEntity, resolve);
+                                    }
+
+
                                 }
                             }
 

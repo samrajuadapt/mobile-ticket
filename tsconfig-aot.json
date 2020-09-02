@@ -13,6 +13,10 @@
     "suppressImplicitAnyIndexErrors": true
   },
 
+  "include": [
+    "src/typings.d.ts"
+  ],
+
   "files": [
     "src/app/module.ts",
     "src/main-aot.ts"

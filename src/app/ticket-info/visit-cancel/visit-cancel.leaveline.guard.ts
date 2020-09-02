@@ -22,6 +22,9 @@ export class VisitCancelLeavelineGuard implements CanDeactivate<TicketInfoContai
         } else if (nextState.url === '/cookie_consent') {
             return true;
         }
+        else if (nextState.url === '/unauthorized') {
+            return true;
+        }
         else if (!component.isTicketEndedOrDeleted && !component.isVisitCall && !component.isVisitNotFound) {
             if (!component.isVisitCanceledOnce()) {
                 this.confirmDialogService.activate(this.confirmMsg).then(res => {

@@ -16,6 +16,7 @@ import { AuthGuard } from './guard/index';
 import { CustomerDataComponent } from './customer-data/customer-data.component';
 import { CustomerDataGuard } from './customer-data/customer-data-guard';
 import { CookieContainerComponent } from './cookie-container/cookie-container.component';
+import { UnautherizedComponent } from './ticket-info/unautherized/unautherized.component';
 
 export const router: Routes = [
     
@@ -29,8 +30,9 @@ export const router: Routes = [
     { path: 'customer_data', component: CustomerDataComponent, canActivate: [AuthGuard, CustomerDataGuard] },
     { path: 'no_support', component: NotSupportComponent },
     { path: 'no_branch', component: BranchNotfoundComponent, canActivate: [AuthGuard] },
+    { path: 'unauthorized', component: UnautherizedComponent },
     { path: 'ticket', component: TicketInfoContainerComponent, canActivate: [AuthGuard], canDeactivate: [VisitCancelLeavelineGuard]},    
-    { path: '**', component: TicketInfoContainerComponent, canActivate: [AuthGuard] }
+    { path: '**', component: TicketInfoContainerComponent, canActivate: [AuthGuard] },
     
 ];
 

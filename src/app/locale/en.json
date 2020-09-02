@@ -36,7 +36,8 @@
     "visitRecycledMessage": "You will be called shortly",
     "visitAppRemoved": "No Entry Point of type SW_VISITAPP on branch, cannot create or delete visit",
     "btnOpenMeeting" : "Enter meeting",
-    "loading" : "Your ticket is being loaded, this might take a moment"
+    "loading" : "Your ticket is being loaded, this might take a moment",
+    "unauthorized" : "You are not authorized to open the ticket"
   },
   "visit": {
     "notFound": "Sorry something went wrong,",
