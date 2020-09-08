@@ -306,6 +306,10 @@ project directory
     "queue_poll_retry" : {
         "value": "1",
         "description": "Define how many times should retry the queue poll request."
+    },
+    "block_other_devices" : {
+        "value": "disable",
+        "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
     }
 }
 ```

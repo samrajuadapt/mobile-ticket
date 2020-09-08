@@ -191,7 +191,7 @@ export class QueueComponent implements OnInit, OnDestroy {
   }
 
   public queuePoll(visitPosition, ticketService: TicketInfoService, onRetry: boolean) {
-    this.doUnsubscribeForPolling();
+    // this.doUnsubscribeForPolling();
     ticketService.pollVisitStatus((queueInfo: QueueEntity) => {
       this.doSubscribeForPolling();
       this.onQueuePollSuccess(queueInfo, ticketService);

@@ -4,7 +4,7 @@
         "description": "Radius to include branches within (in meters)"
     },
     "version": {
-        "value": "1.0.0.27",
+        "value": "1.0.0.28",
         "description": "MobileTicket version"
     },
     "customer_feedback": {
@@ -91,7 +91,7 @@
         "description": "Define how many times should retry the queue poll request."
     },
     "block_other_devices" : {
-        "value": "false",
-        "description": "Enable or disable whether user allow to use create in other devices apart from the created device."
+        "value": "disable",
+        "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
     }
 }

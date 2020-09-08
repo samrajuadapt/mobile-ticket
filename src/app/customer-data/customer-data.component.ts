@@ -115,6 +115,7 @@ export class CustomerDataComponent implements OnInit {
                 this.showHideNetworkError(false);
               }, () => {
                 //Do nothing on error
+                this.router.navigate(['no_visit']);
               });
           });
         }

@@ -210,7 +210,7 @@ export class AuthGuard implements CanActivate {
 
 
 
-                                    this.serviceService.getServices((serviceList: Array<ServiceEntity>, error: boolean) => {
+                                    this.serviceService.fetchServices((serviceList: Array<ServiceEntity>, error: boolean) => {
                                         if (error) {
                                             this.isNoSuchVisit = true;
                                             this.router.navigate(['no_visit']);

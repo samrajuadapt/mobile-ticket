@@ -37,9 +37,31 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h3>Upgrade instructions</h3> 
 
+------------>
+<h2>Version 28</h2>
+
+**Date:2020-08-17**
+ 
+**Build number:28**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-272** | **Open MT from same device as created only** |
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-302** | **customer data related bug fix** |
+
+<h3>Upgrade Instructions</h3>
+- For the updates 'block_other_devices' parameter need to be added for config.json.
+
 ----------
 
---><h2>Version 27</h2>
+<h2>Version 27</h2>
 
 **Date:2020-08-28**
  

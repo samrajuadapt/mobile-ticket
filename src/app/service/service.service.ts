@@ -25,7 +25,7 @@ export class ServiceService {
     }
   }
 
-  private fetchServices(callback) {
+  public fetchServices(callback) {
     MobileTicketAPI.getServices(
       (serviceList: any) => {
         let serviceEntities = this.convertToServiceEntities(serviceList);

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { TranslateService } from 'ng2-translate';
 
 @Component({
   selector: 'app-unautherized',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UnautherizedComponent implements OnInit {
 
-  constructor() { }
+  constructor( private translate: TranslateService) { 
+    this.translate.get('ticketInfo.defaultTitle').subscribe((res: string) => {
+      document.title = res;
+    });
+  }
 
   ngOnInit() {
   }
