@@ -57,7 +57,14 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-302** | **customer data related bug fix** |
 
 <h3>Upgrade Instructions</h3>
-- For the updates 'block_other_devices' parameter need to be added for config.json.
+- When upgrading from a previous version, 'block_other_devices' parameter needs to be added to config.json.
+
+```
+"block_other_devices" : {
+        "value": "disable",
+        "description": "Enable or disable whether user allow to use/open the ticket in other devices ..."
+    }
+```
 
 ----------
 
