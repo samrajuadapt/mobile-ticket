@@ -1,97 +1,154 @@
 {
-    "branch_radius": {
-        "value": "2147483647",
-        "description": "Radius to include branches within (in meters)"
-    },
-    "version": {
-        "value": "1.0.0.28",
-        "description": "MobileTicket version"
-    },
-    "customer_feedback": {
-        "value": "",
-        "description": "URL to redirect to when visit is ended."
-    },
-    "ga_track_id": {
-        "value":"",
-        "description": "Google Analytic Track-ID"
-    },
-    "cookie_consent": {
-        "value":"disable",
-        "description": "Enable or disable cookie consent popup in the first landing page, 'on = enable', 'off = disable'"
-    },
-    "notification_sound": {
-        "value":"YourTurn.wav",
-        "description": "Sound file use for notification"
-    },
-    "service_fetch_interval":{
-        "value":"15",
-        "description": "The interval (in seconds) at which service information is refreshed periodically, this setting is only used if the setting Show number of waiting customers are enabled"
-    },
-     "service_screen_timeout":{
-        "value":"1",
-        "description": "The time duration (in minutes) which the app will stay in services screen without creating a ticket"
-    },
-    "branch_open_hours":{
-        "value" : [     
-            { "translation_key":"open_hours.week_day1", "from":"8:00", "to": "19:00" ,"description":"monday", "display_from":"8:00", "display_to": "18:00", "show":"true" } ,
-            { "translation_key":"open_hours.week_day2", "from":"8:00", "to": "19:00" ,"description":"tuesday", "display_from":"8:00", "display_to": "18:00", "show":"true" } ,
-            { "translation_key":"open_hours.week_day3", "from":"8:00", "to": "19:00" ,"description":"wednesday", "display_from":"8:00", "display_to": "18:00", "show":"true" } ,
-            { "translation_key":"open_hours.week_day4", "from":"8:00", "to": "19:00" ,"description":"thursday", "display_from":"8:00", "display_to": "18:00", "show":"true" } ,
-            { "translation_key":"open_hours.week_day5", "from":"8:00", "to": "19:00" ,"description":"friday", "display_from":"8:00", "display_to": "18:00", "show":"true" } ,
-            { "translation_key":"open_hours.week_day6", "from":"8:00", "to": "19:00" ,"description":"saturday", "display_from":"8:00", "display_to": "18:00", "show":"true" } ,
-            { "translation_key":"open_hours.week_day7", "from":"8:00", "to": "19:00" ,"description":"sunday", "display_from":"8:00", "display_to": "18:00", "show":"true" } ],
-        "description": "Open hours of all branches in general"
-    },
-    "create_new_ticket": {
-        "value": "enable",
-        "description": "Enable or disable access to create visits using the Mobile Ticket UI, 'on=enable', 'off=disable'"
-    },
-    "show_number_of_waiting_customers": {
-        "value": "enable",
-        "description": " If this setting is enabled the number of waiting customers will appear in the service list, if disabled only service names are listed."
-    },
-    "appointment_late" : {
-        "value":30,
-        "description": " How long is the customer allowed to arrive for his appointment (in minutes)"       
-    },
-    "appointment_early" : {
-        "value":180,
-        "description": " How early is the customer allowed to arrive for his appointment (in minutes)"        
-    },
-    "timeFormat" : {
-        "value": "HH:mm",
-        "description": "Time format for showing the appointment time. Allowed settings are HH:mm, hh:mm, hh:mm a, h:mm, h:mm a"
-    },
-    "dateFormat" : {
-        "value":"DD/MM/YYYY",
-        "description": "Date format for showing the appointment date. Allowed placeholders are DD MM YY YYYY"
-    },
-    "customer_data" : {
-        "value": "disable",
-        "description": "Enable or disable customer access to enter customer phone number using mobile ticket UI, 'on = enable', 'off = disable'"
-    },
-    "privacy_policy" : {
-        "value": "disable",
-        "description": "Enable or disable privacy policy when sending phone number, 'on = enable', 'off = disable'"
-    },
-    "active_consent" : {
-        "value": "disable",
-        "description": "Enable or disable whether customer need to actively press button to agree privacy policy"
-    },
-    "privacy_policy_link" : {
-        "value": "",
-        "description": "URL of privacy policy information starting with http:// or https://. If value is null privacy policy information will get from the property file."
-    },
-    "country_code" : {
-        "value": "",
-        "description": "Define the country code for phone number. If value is null no country code will be added."
-    },
-    "queue_poll_retry" : {
-        "value": "1",
-        "description": "Define how many times should retry the queue poll request."
-    },
-    "block_other_devices" : {
-        "value": "disable",
-        "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
-    }
+  "branch_radius": {
+    "value": "2147483647",
+    "description": "Radius to include branches within (in meters)"
+  },
+  "version": {
+    "value": "1.8.2",
+    "description": "MobileTicket version"
+  },
+  "customer_feedback": {
+    "value": "",
+    "description": "URL to redirect to when visit is ended."
+  },
+  "ga_track_id": {
+    "value": "",
+    "description": "Google Analytic Track-ID"
+  },
+  "cookie_consent": {
+    "value": "disable",
+    "description": "Enable or disable cookie consent popup in the first landing page, 'on = enable', 'off = disable'"
+  },
+  "notification_sound": {
+    "value": "YourTurn.wav",
+    "description": "Sound file use for notification"
+  },
+  "service_fetch_interval": {
+    "value": "15",
+    "description": "The interval (in seconds) at which service information is refreshed periodically, this setting is only used if the setting Show number of waiting customers are enabled"
+  },
+  "service_screen_timeout": {
+    "value": "1",
+    "description": "The time duration (in minutes) which the app will stay in services screen without creating a ticket"
+  },
+  "branch_open_hours": {
+    "value": [
+      {
+        "translation_key": "open_hours.week_day1",
+        "from": "8:00",
+        "to": "19:00",
+        "description": "monday",
+        "display_from": "8:00",
+        "display_to": "18:00",
+        "show": "true"
+      },
+      {
+        "translation_key": "open_hours.week_day2",
+        "from": "8:00",
+        "to": "19:00",
+        "description": "tuesday",
+        "display_from": "8:00",
+        "display_to": "18:00",
+        "show": "true"
+      },
+      {
+        "translation_key": "open_hours.week_day3",
+        "from": "8:00",
+        "to": "19:00",
+        "description": "wednesday",
+        "display_from": "8:00",
+        "display_to": "18:00",
+        "show": "true"
+      },
+      {
+        "translation_key": "open_hours.week_day4",
+        "from": "8:00",
+        "to": "19:00",
+        "description": "thursday",
+        "display_from": "8:00",
+        "display_to": "18:00",
+        "show": "true"
+      },
+      {
+        "translation_key": "open_hours.week_day5",
+        "from": "8:00",
+        "to": "19:00",
+        "description": "friday",
+        "display_from": "8:00",
+        "display_to": "18:00",
+        "show": "true"
+      },
+      {
+        "translation_key": "open_hours.week_day6",
+        "from": "8:00",
+        "to": "19:00",
+        "description": "saturday",
+        "display_from": "8:00",
+        "display_to": "18:00",
+        "show": "true"
+      },
+      {
+        "translation_key": "open_hours.week_day7",
+        "from": "8:00",
+        "to": "19:00",
+        "description": "sunday",
+        "display_from": "8:00",
+        "display_to": "18:00",
+        "show": "true"
+      }
+    ],
+    "description": "Open hours of all branches in general"
+  },
+  "create_new_ticket": {
+    "value": "enable",
+    "description": "Enable or disable access to create visits using the Mobile Ticket UI, 'on=enable', 'off=disable'"
+  },
+  "show_number_of_waiting_customers": {
+    "value": "enable",
+    "description": " If this setting is enabled the number of waiting customers will appear in the service list, if disabled only service names are listed."
+  },
+  "appointment_late": {
+    "value": 30,
+    "description": " How long is the customer allowed to arrive for his appointment (in minutes)"
+  },
+  "appointment_early": {
+    "value": 180,
+    "description": " How early is the customer allowed to arrive for his appointment (in minutes)"
+  },
+  "timeFormat": {
+    "value": "HH:mm",
+    "description": "Time format for showing the appointment time. Allowed settings are HH:mm, hh:mm, hh:mm a, h:mm, h:mm a"
+  },
+  "dateFormat": {
+    "value": "DD/MM/YYYY",
+    "description": "Date format for showing the appointment date. Allowed placeholders are DD MM YY YYYY"
+  },
+  "customer_data": {
+    "value": "disable",
+    "description": "Enable or disable customer access to enter customer phone number using mobile ticket UI, 'on = enable', 'off = disable'"
+  },
+  "privacy_policy": {
+    "value": "disable",
+    "description": "Enable or disable privacy policy when sending phone number, 'on = enable', 'off = disable'"
+  },
+  "active_consent": {
+    "value": "disable",
+    "description": "Enable or disable whether customer need to actively press button to agree privacy policy"
+  },
+  "privacy_policy_link": {
+    "value": "",
+    "description": "URL of privacy policy information starting with http:// or https://. If value is null privacy policy information will get from the property file."
+  },
+  "country_code": {
+    "value": "",
+    "description": "Define the country code for phone number. If value is null no country code will be added."
+  },
+  "queue_poll_retry": {
+    "value": "1",
+    "description": "Define how many times should retry the queue poll request."
+  },
+  "block_other_devices": {
+    "value": "disable",
+    "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
+  }
 }

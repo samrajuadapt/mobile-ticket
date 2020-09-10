@@ -209,7 +209,7 @@ module.exports = function (grunt) {
         cwd: 'dist/',
         //src: ['dist/node_modules/**','dist/src/**','dist/sslcert/**','dist/proxy-config.json','dist/server.js'],
         src: ['dist/**'],
-        dest: 'dist/mobile-ticket.zip'
+        dest: 'dist/mobile-ticket-<%= pkg.version %>.zip'
       }
     },
     secret: grunt.file.readJSON('secret.json'),
@@ -294,6 +294,17 @@ module.exports = function (grunt) {
     }
   });
 
+  grunt.registerTask('updateVersion', function () {
+    var configPath = "src/app/config/config.json";
+    var packagePath = "package.json";
+
+    var config = grunt.file.readJSON(configPath);
+    var package = grunt.file.readJSON(packagePath);
+    config.version.value = package.version;
+
+    grunt.file.write(configPath, JSON.stringify(config, null, 2));
+});
+
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-copy');
@@ -310,7 +321,6 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
-
   grunt.registerTask('help', function () {
     console.log("Available commands \n");
     console.log("Command - grunt \n");
@@ -321,6 +331,6 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('build_development', ['clean:start', 'shell:ngbuild_development:command', 'copy:common', 'clean:end', 'clean:folder', 'copy:proxy_files']);
-  grunt.registerTask('build_production', ['clean:start', 'copy:aot_script', 'shell:ngbuild_production:command', 'copy:common', 'copy:prod', 'uglify:pre', 'concat', 'string-replace', 'uglify:post', 'cssmin', 'imagemin', 'compress', 'htmlmin', 'clean:end', 'clean:folder', 'clean:folder_v2','clean:contents', 'copy:proxy_files', 'zip']);
+  grunt.registerTask('build_production', ['clean:start', 'updateVersion', 'copy:aot_script', 'shell:ngbuild_production:command', 'copy:common', 'copy:prod', 'uglify:pre', 'concat', 'string-replace', 'uglify:post', 'cssmin', 'imagemin', 'compress', 'htmlmin', 'clean:end', 'clean:folder', 'clean:folder_v2','clean:contents', 'copy:proxy_files', 'zip']);
   grunt.registerTask('remote_deploy', ['clean:start', 'copy:aot_script', 'shell:ngbuild_production:command', 'copy:common', 'copy:prod', 'uglify:pre', 'concat', 'string-replace', 'uglify:post', 'cssmin', 'imagemin', 'compress', 'htmlmin', 'clean:end', 'clean:folder', 'clean:folder_v2','clean:contents', 'copy:proxy_files', 'zip', 'sftp:deploy']);
 };
