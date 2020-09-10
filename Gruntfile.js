@@ -297,12 +297,16 @@ module.exports = function (grunt) {
   grunt.registerTask('updateVersion', function () {
     var configPath = "src/app/config/config.json";
     var packagePath = "package.json";
+    var serverPackagePath = "node/package.json";
 
     var config = grunt.file.readJSON(configPath);
     var package = grunt.file.readJSON(packagePath);
+    var serverPackage = grunt.file.readJSON(serverPackagePath);
     config.version.value = package.version;
+    serverPackage.version = package.version;
 
     grunt.file.write(configPath, JSON.stringify(config, null, 2));
+    grunt.file.write(serverPackagePath, JSON.stringify(serverPackage, null, 2));
 });
 
   grunt.loadNpmTasks('grunt-shell');
