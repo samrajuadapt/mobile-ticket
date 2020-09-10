@@ -19,7 +19,7 @@ declare var require: any;
 @Injectable()
 export class AuthGuard implements CanActivate {
 
-    private prevUrl: string = '/';
+    private prevUrl = '/';
     private branchService: BranchService;
     private serviceService: ServiceService
     private isNoSuchBranch = false;
@@ -84,13 +84,13 @@ export class AuthGuard implements CanActivate {
 
     checkBrowserSupport() {
         let util = new Util()
-        var agent;
+        let agent;
         if (typeof navigator !== 'undefined' && navigator) {
             agent = navigator.userAgent;
         }
         try {
             let browser = util.getDetectBrowser(agent)
-            if (browser.name === 'chrome' || browser.name === 'safari' || browser.name === 'ios' 
+            if (browser.name === 'chrome' || browser.name === 'safari' || browser.name === 'ios'
                 || browser.name === 'opera' || browser.name === 'crios' || browser.name === 'firefox' || browser.name === 'edge') {
                     return true;
             } else {
@@ -216,7 +216,7 @@ export class AuthGuard implements CanActivate {
                                             this.router.navigate(['no_visit']);
                                             resolve(false);
                                         } else {
-                                            var serviceFound = false;
+                                            let serviceFound = false;
                                             serviceList.forEach((service) => {
                                                 if (service.id === sEntity.id) {
                                                     serviceFound = true;
@@ -240,7 +240,7 @@ export class AuthGuard implements CanActivate {
                                     let isDeviceBounded = this.config.getConfig('block_other_devices');
                                     if (isDeviceBounded === 'enable') {
                                         System.import('fingerprintjs2').then(Fingerprint2 => {
-                                            var that = this;
+                                            let that = this;
 
                                             Fingerprint2.getPromise({
                                                 excludes: {
@@ -249,8 +249,8 @@ export class AuthGuard implements CanActivate {
                                                     enumerateDevices: true
                                                 }
                                             }).then(function (components) {
-                                                var values = components.map(function (component) { return component.value });
-                                                var murmur = Fingerprint2.x64hash128(values.join(''), 31);
+                                                let values = components.map(function (component) { return component.value });
+                                                let murmur = Fingerprint2.x64hash128(values.join(''), 31);
                                                 MobileTicketAPI.setFingerprint(murmur);
                                                 that.createTicket(branchEntity, sEntity, resolve);
                                             });
@@ -281,8 +281,11 @@ export class AuthGuard implements CanActivate {
                     this.isNoSuchVisit = true;
                     this.router.navigate(['no_visit']);
                     resolve(false);
-                } else if (visitInfo) {
-                    this.router.navigate(['ticket']);
+                } else if (visitInfo && this.router.url === '/ticket') {
+                    this.router.navigate(['/ticket']);
+                    resolve(false);
+                }else if (visitInfo) {
+                    this.router.navigate(['/ticket']);
                     resolve(false);
                 } else {
                     if (this.checkCreateTicketOption(resolve)) {
@@ -361,7 +364,7 @@ export class AuthGuard implements CanActivate {
                         });
                 },
                     (xhr, status, errorMessage) => {
-                        this.aEntity.status = "NOTFOUND";
+                        this.aEntity.status = 'NOTFOUND';
                         MobileTicketAPI.setAppointment(this.aEntity);
                         resolve(true);
                     });

@@ -1,5 +1,5 @@
 import { Component, ViewChild, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { QueueEntity } from '../../entities/queue.entity';
 import { Util } from '../../util/util';
@@ -37,13 +37,14 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   public visitCallMsgOne: string;
   public visitCallMsgThree: string;
   public visitRecycleMsg: string;
-  public isCalled: boolean = false;
-  public isVisitNotFound: boolean = false;
+  public isCalled = false;
+  public isVisitNotFound = false;
   private tmpBranchId: number;
   private tmpVisitId: number;
   public title1: string;
   public title2: string;
   public isMeetingAvailable: boolean;
+  private eventSub: Subscription;
 
   @ViewChild('ticketNumberComponent') ticketNumberComponent;
   @ViewChild('queueComponent') queueComponent;
@@ -64,7 +65,15 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     this.visitState = new VisitState();
     this.isMeetingAvailable = false;
 
-
+    this.router.routeReuseStrategy.shouldReuseRoute = function(){
+      return false;
+   }
+   this.eventSub = this.router.events.subscribe((evt) => {
+    if (evt instanceof NavigationEnd) {
+       // trick the Router into believing it's last link wasn't previously loaded
+       this.router.navigated = false;
+    }
+});
 
     this.getSelectedBranch();
 
@@ -81,12 +90,12 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-        
+
     this.scrollPageToTop();
     this.loadNotificationSound();
     this.setRtlStyles();
     this.loadTranslations();
-    
+
   }
 
   loadTranslations() {
@@ -104,8 +113,8 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
 
 
   loadNotificationSound() {
-    var fileName = this.config.getConfig("notification_sound");
-    this.notificaitonSound.src = "./app/resources/" + fileName;
+    let fileName = this.config.getConfig('notification_sound');
+    this.notificaitonSound.src = './app/resources/' + fileName;
     this.notificaitonSound.load();
     this.isSoundPlay = false;
   }
@@ -136,6 +145,9 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.eventSub) {
+      this.eventSub.unsubscribe();
+    }
   }
 
 
@@ -184,13 +196,13 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     this.updateBrowserTitle(visitStatus);
     if (visitStatus.status && visitStatus.status === this.visitState.CALLED) {
       this.prevVisitState = visitStatus.status;
-      var currentEvent = MobileTicketAPI.getCurrentVisitStatus();
-      var firstName = currentEvent.firstName;
-	  var lastName = currentEvent.lastName;
-      var servicePoint = currentEvent.servicePointName;
+      let currentEvent = MobileTicketAPI.getCurrentVisitStatus();
+      let firstName = currentEvent.firstName;
+	    let lastName = currentEvent.lastName;
+      let servicePoint = currentEvent.servicePointName;
       this.updateVisitCallMsg(firstName, servicePoint, lastName);
       this.isVisitCall = true;
-      if (MobileTicketAPI.meetingUrl !== "Not present" && MobileTicketAPI.meetingUrl !== undefined) {
+      if (MobileTicketAPI.meetingUrl !== 'Not present' && MobileTicketAPI.meetingUrl !== undefined) {
         this.isMeetingAvailable = true;
       } else {
         this.isMeetingAvailable = false;
@@ -262,18 +274,18 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   }
 
   openCustomerFeedback(branchId, visitId) {
-    if (this.isTicketEndedOrDeleted == true && this.isAfterCalled) {
+    if (this.isTicketEndedOrDeleted === true && this.isAfterCalled) {
       let customerFeedBackUrl = this.config.getConfig('customer_feedback');
-      if(new Util().isValidUrl(customerFeedBackUrl)){
+      if (new Util().isValidUrl(customerFeedBackUrl)){
         if (customerFeedBackUrl && customerFeedBackUrl.length > 0) {
-          customerFeedBackUrl = customerFeedBackUrl + "?" + "b=" + branchId + "&" + "v=" + visitId;
+          customerFeedBackUrl = customerFeedBackUrl + '?' + 'b=' + branchId + '&' + 'v=' + visitId;
           window.location.href = customerFeedBackUrl;
         }
       }
     }
   }
 
-  updateVisitCallMsg(firstName: string, servicePointName: string, lastName: string,) {
+  updateVisitCallMsg(firstName: string, servicePointName: string, lastName: string, ) {
     if (firstName !== null && firstName !== '' && servicePointName !== '') {
       this.visitCallMsgOne = this.title1;
       this.visitCallMsg = this.title2.replace('{firstName}', firstName );
@@ -287,11 +299,11 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   }
 
   updateBrowserTitle(visitStatus: QueueEntity) {
-    var title = "";
+    let title = '';
     this.translate.get('ticketInfo.defaultTitle').subscribe((res: string) => {
       title = res;
     });
-    if (visitStatus.visitPosition === null && visitStatus.status == "CALLED") {
+    if (visitStatus.visitPosition === null && visitStatus.status === 'CALLED') {
       this.translate.get('ticketInfo.titleYourTurn').subscribe((res: string) => {
         title = res;
       });
@@ -308,7 +320,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   public getSelectedBranch() {
     /**
      * if selected branch id is not equal to current ongoing
-     * branch id in multiple tab scenario, 
+     * branch id in multiple tab scenario,
      * reset vars to fetch branchId from cache
      */
     if (!this.isUrlAccessedTicket && MobileTicketAPI.getCurrentVisit()) {
@@ -326,7 +338,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   }
 
   setRtlStyles() {
-    if (document.dir == "rtl") {
+    if (document.dir === 'rtl') {
       this.isRtl = true;
     } else {
       this.isRtl = false;
