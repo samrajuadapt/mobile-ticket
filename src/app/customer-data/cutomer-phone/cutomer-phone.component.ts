@@ -185,7 +185,7 @@ export class CutomerPhoneComponent implements OnInit {
   }
 
   phoneNumberFeildFocused() {
-    if (this.phoneNumber === '') {
+    if (this.phoneNumber === '' || this.phoneNumber === undefined ) {
       this.phoneNumber = this.countryCode;
     }
   }
