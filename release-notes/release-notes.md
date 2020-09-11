@@ -1,11 +1,11 @@
 
-<h1>Release notes Mobile Ticket 1.0.0</h1>
+<h1>Release notes Mobile Ticket 1</h1>
 
 ----------
 
 <h2>Introduction</h2>
 
-This document describes the new features, bug corrections, known issues and recommendations for Mobile Ticket 1.0.0. If you want to know about connector changes details or similar, this document is for you.
+This document describes the new features, bug corrections, known issues and recommendations for Mobile Ticket 1. If you want to know about connector changes details or similar, this document is for you.
 
 **Note:** Several of the remarks refer to a Jira number (Jira is Qmatic&#39;s internal registration system for bugs), or Pivotal Tracker (internal system for improvements and other issues).
 
@@ -38,11 +38,11 @@ This document describes the new features, bug corrections, known issues and reco
 <h3>Upgrade instructions</h3> 
 
 ------------>
-<h2>Version 28</h2>
+<h2>Version 1.9.0</h2>
 
-**Date:2020-09-08**
+**Date:2020-09-11**
  
-**Build number:28**
+**Build number:1**
 
 <h3>Stories</h3>
 
@@ -54,7 +54,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 | **Id** | **Release notes** |
 | --- | --- |
-| **MOB-302** | **customer data related bug fix** |
+| **MOB-271** | **"Get new ticket" not functioning** |
 
 <h3>Upgrade Instructions</h3>
 - When upgrading from a previous version, 'block_other_devices' parameter needs to be added to config.json.
@@ -65,6 +65,20 @@ This document describes the new features, bug corrections, known issues and reco
         "description": "Enable or disable whether user allow to use/open the ticket in other devices ..."
     }
 ```
+
+----------
+
+<h2>Version 28</h2>
+
+**Date:2020-09-08**
+ 
+**Build number:28**
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-302** | **customer data related bug fix** |
 
 ----------
 
