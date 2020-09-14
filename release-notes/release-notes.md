@@ -37,7 +37,22 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h3>Upgrade instructions</h3> 
 
------------->
+----------
+-->
+<h2>Version 1.9.1</h2>
+
+**Date: 2020-09-14**
+ 
+**Build number: 1**
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-310** | **Preselected country code doesn't show when using link directly to service** |
+
+----------
+
 <h2>Version 1.9.0</h2>
 
 **Date:2020-09-11**
