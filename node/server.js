@@ -27,6 +27,7 @@ var validAPIGWCert = "1";
 var APIGWHasSSL = true;
 var isEmbedIFRAME = false;
 var tlsVersion = '';
+var hstsExpireTime = '63072000';
 var tlsversionSet = ['TLSv1_method', 'TLSv1_1_method', 'TLSv1_2_method'];
 
 var google_analytics = 'https://www.google-analytics.com';
@@ -116,6 +117,7 @@ validAPIGWCert = (configuration.gateway_certificate_is_valid.value.trim()=== 'tr
 APIGWHasSSL = (configuration.gateway_has_certificate.value.trim()=== 'true')?true:false;
 isEmbedIFRAME = (configuration.embed_iFrame.value.trim() === 'true')?true:false;
 tlsVersion = configuration.tls_version.value;
+hstsExpireTime = configuration.hsts_expire_time.value;
 
 //this will bypass certificate errors in node to API gateway encrypted channel, if set to '1'
 //if '0' communication will be blocked. So production this should be set to '0'
@@ -231,7 +233,7 @@ var apiProxy = proxy(host, {
 		headers['Content-Security-Policy'] = "default-src \'self\'";
 	
 		if (supportSSL) {
-			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
 		}
 		return headers;
 	},
@@ -255,7 +257,7 @@ var apiFindProxy = proxy(host, {	// ip and port off apigateway
 		headers['Content-Security-Policy'] = "default-src \'self\'";
 	
 		if (supportSSL) {
-			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
 		}
 		return headers;
 	},
@@ -291,7 +293,7 @@ var apiFindCentralProxy = proxy(host, {	// ip and port off apigateway
 		headers['Content-Security-Policy'] = "default-src \'self\'";
 	
 		if (supportSSL) {
-			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
 		}
 		return headers;
 	},
@@ -331,7 +333,7 @@ var apiEntryPointProxy = proxy(host, {
 		headers['Content-Security-Policy'] = "default-src \'self\'";
 	
 		if (supportSSL) {
-			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
 		}
 		return headers;
 	},
@@ -357,7 +359,7 @@ var apiArriveProxy = proxy(host, {
 		headers['Content-Security-Policy'] = "default-src \'self\'";
 	
 		if (supportSSL) {
-			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
 		}
 		return headers;
 	},
@@ -397,7 +399,7 @@ var apiMeetingProxy = proxy(host, {
 		headers['Content-Security-Policy'] = "default-src \'self\'";
 	
 		if (supportSSL) {
-			headers['Strict-Transport-Security'] = "max-age=31536000; includeSubDomains";
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
 		}
 		return headers;
 	},
@@ -424,7 +426,7 @@ var handleHeaders = function (res) {
 	}
 
 	if (supportSSL) {
-		res.set('Strict-Transport-Security', "max-age=31536000; includeSubDomains");
+		res.set('Strict-Transport-Security', "max-age=" + hstsExpireTime +"; includeSubDomains");
 	}
 	return res;
 }
