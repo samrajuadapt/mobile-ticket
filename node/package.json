@@ -1,6 +1,6 @@
 {
   "name": "mobile-ticket-server",
-  "version": "1.8.2",
+  "version": "1.9.2",
   "description": "Server Application for MT",
   "main": "server.js",
   "dependencies": {

@@ -39,6 +39,22 @@ This document describes the new features, bug corrections, known issues and reco
 
 ----------
 -->
+
+<h2>Version 1.9.2</h2>
+
+**Date: 2020-09-18**
+ 
+**Build number: 2**
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-287** | **Possibility to change the HSTS time** |
+| **MOB-286** | **Possibility to change the used ciphers** |
+
+----------
+
 <h2>Version 1.9.1</h2>
 
 **Date: 2020-09-14**

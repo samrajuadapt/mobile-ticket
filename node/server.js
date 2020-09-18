@@ -29,6 +29,7 @@ var isEmbedIFRAME = false;
 var tlsVersion = '';
 var hstsExpireTime = '63072000';
 var tlsversionSet = ['TLSv1_method', 'TLSv1_1_method', 'TLSv1_2_method'];
+var cipherSet = [];
 
 var google_analytics = 'https://www.google-analytics.com';
 var bootstarp_cdn = 'https://maxcdn.bootstrapcdn.com';
@@ -118,6 +119,7 @@ APIGWHasSSL = (configuration.gateway_has_certificate.value.trim()=== 'true')?tru
 isEmbedIFRAME = (configuration.embed_iFrame.value.trim() === 'true')?true:false;
 tlsVersion = configuration.tls_version.value;
 hstsExpireTime = configuration.hsts_expire_time.value;
+cipherSet = configuration.cipher_set.value;
 
 //this will bypass certificate errors in node to API gateway encrypted channel, if set to '1'
 //if '0' communication will be blocked. So production this should be set to '0'
@@ -128,10 +130,13 @@ var privateKey, certificate, credentials;
 if (supportSSL) {
 	privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
 	certificate = fs.readFileSync('sslcert/server.crt', 'utf8');
+
+	credentials = { key: privateKey, cert: certificate };
 	if (tlsVersion.length > 0 && tlsversionSet.indexOf(tlsVersion) !== -1) {
-		credentials = { key: privateKey, cert: certificate, secureProtocol: tlsVersion };
-	} else {
-		credentials = { key: privateKey, cert: certificate };
+		credentials.secureProtocol = tlsVersion;
+	} 
+	if (cipherSet.length > 0) {
+		credentials.ciphers = cipherSet.join(':');
 	}
 }
 
