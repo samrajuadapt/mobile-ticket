@@ -38,10 +38,10 @@ export class TicketInfoService {
             success(convertToQueueEntityCallback(queueObj));
           },
           (xhr, status, msg) => {
-            returnPayload = xhr.responseJSON;
+            returnPayload = xhr ? xhr.responseJSON : undefined ;
             lastResponse = [xhr, status, msg];
-            if (returnPayload != undefined &&
-              returnPayload.message.includes('New visits are not available until visitsOnBranchCache is refreshed') == true) {
+            if (returnPayload !== undefined &&
+              returnPayload.message.includes('New visits are not available until visitsOnBranchCache is refreshed') === true) {
               isVisitCacheUpdate = false;
               this.retryRequest(success, err);
             } else {
@@ -59,16 +59,16 @@ export class TicketInfoService {
    pollVisitStatus(success, err): any {
     retryIterrations = parseInt(this.config.getConfig('queue_poll_retry'));
     let convertToQueueEntityCallback = this.convertToQueueEntity
-    if (isVisitCacheUpdate == true) {
+    if (isVisitCacheUpdate === true) {
       MobileTicketAPI.getVisitStatus(
         (queueObj: any) => {
           success(convertToQueueEntityCallback(queueObj), queueObj.ticketId);
         },
         (xhr, status, msg) => {
-          if (xhr !== null && xhr.status == 404) {
+          if (xhr !== null && xhr.status === 404) {
             returnPayload = xhr.responseJSON;
             lastResponse = [xhr, status, msg];
-            if (returnPayload != undefined &&
+            if (returnPayload !== undefined &&
               returnPayload.message.includes('New visits are not available until visitsOnBranchCache is refreshed') === true) {
               isVisitCacheUpdate = false;
               this.retryRequest(success, err);
