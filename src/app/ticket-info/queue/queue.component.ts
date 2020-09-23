@@ -85,8 +85,9 @@ export class QueueComponent implements OnInit, OnDestroy {
               this.router.navigate(['no_visit']);
             } else {
               // this.onBranchFetchSuccess(branch);
-              MobileTicketAPI.setVisit(branchId, 0, visitId, checksum);
-              this.ticketService.pollVisitStatus((queueInfo: QueueEntity) => {
+                MobileTicketAPI.setVisit(branchId, 0, visitId, checksum);
+                this.ticketService.pollVisitStatus((queueInfo: QueueEntity, ticketId: any) => {
+                MobileTicketAPI.setVisit(branchId, 0, visitId, checksum, ticketId);
                 this.onUrlVisitLoading.emit(false);
                 MobileTicketAPI.setServiceSelection({ name: MobileTicketAPI.getCurrentVisitStatus().currentServiceName });
                 this.onUrlAccessedTicket.emit(true);
@@ -105,6 +106,7 @@ export class QueueComponent implements OnInit, OnDestroy {
                 (xhr, status, msg) => {
                   if (xhr.status === 404 || xhr.status === 401) {
                     MobileTicketAPI.resetAllVars();
+                    MobileTicketAPI.clearLocalStorage();
                     this.onVisitNotFound.emit(true);
                     this.router.navigate(['no_visit']);
                   }
@@ -141,7 +143,7 @@ export class QueueComponent implements OnInit, OnDestroy {
   }
 
   private detectTransfer(currentQueueId: number) {
-    return (this.queueIdPrev !== -1 && (this.queueIdPrev != currentQueueId));
+    return (this.queueIdPrev !== -1 && (this.queueIdPrev !== currentQueueId));
   }
 
   public initPollTimer(visitPosition, ticketService: TicketInfoService) {
@@ -156,7 +158,7 @@ export class QueueComponent implements OnInit, OnDestroy {
       MobileTicketAPI.getCustomParameters(
         (visit: any) => {
           System.import('fingerprintjs2').then(Fingerprint2 => {
-            var that = this;
+            let that = this;
             Fingerprint2.getPromise({
               excludes: {
                 availableScreenResolution: true,
@@ -164,8 +166,8 @@ export class QueueComponent implements OnInit, OnDestroy {
                 enumerateDevices: true
               }
             }).then(function (components) {
-              var values = components.map(function (component) { return component.value });
-              var murmur = Fingerprint2.x64hash128(values.join(''), 31);
+              let values = components.map(function (component) { return component.value });
+              let murmur = Fingerprint2.x64hash128(values.join(''), 31);
               console.log(murmur);
               if (visit === murmur) {
               } else {
@@ -212,12 +214,12 @@ export class QueueComponent implements OnInit, OnDestroy {
           this.isTicketEndedOrDeleted = true;
           this.onVisitStatusUpdate.emit(queueInfo);
         }
-        else if (xhr.status != 404 && !onRetry) {
+        else if (xhr.status !== 404 && !onRetry) {
           this.showHideNetworkError(true);
           this.retryService.retry(() => {
             this.queuePoll(visitPosition, ticketService, true);
           })
-        } else if (xhr.status == 404) {
+        } else if (xhr.status === 404) {
           /**
            * this is to try if initial polling failed
            */
@@ -225,10 +227,10 @@ export class QueueComponent implements OnInit, OnDestroy {
           queueInfo.status = '';
           queueInfo.visitPosition = null;
           this.isTicketEndedOrDeleted = true;
-          var payload = xhr.responseJSON;
+          let payload = xhr.responseJSON;
           if (payload !== undefined &&
-            payload.message.includes("New visits are not available until visitsOnBranchCache is refreshed") == true) {
-            queueInfo.status = "CACHED";
+            payload.message.includes('New visits are not available until visitsOnBranchCache is refreshed') === true) {
+            queueInfo.status = 'CACHED';
           }
           this.onVisitStatusUpdate.emit(queueInfo);
         }
@@ -245,9 +247,9 @@ export class QueueComponent implements OnInit, OnDestroy {
     this.prevUpperBound = ticketService.getQueueUpperBound(this.prevWaitingVisits, this.prevVisitPosition);
     this.prevLowerBound = ticketService.getQueueLowerBound(this.prevWaitingVisits, this.prevVisitPosition, this.prevUpperBound);
     /**
-     * get selected service name from getCurrentVisitStatus() object instead 
+     * get selected service name from getCurrentVisitStatus() object instead
      * of getSelectedService()
-     * because in multiple tab scenario, getSelectedService() returns the 
+     * because in multiple tab scenario, getSelectedService() returns the
      * value of the local variable which is not correct.
      */
     this.onServiceNameUpdate.emit(MobileTicketAPI.getCurrentVisitStatus().currentServiceName);
@@ -293,7 +295,7 @@ export class QueueComponent implements OnInit, OnDestroy {
   }
 
   setRtlStyles() {
-    if (document.dir == "rtl") {
+    if (document.dir === 'rtl') {
       this.isRtl = true;
     } else {
       this.isRtl = false;

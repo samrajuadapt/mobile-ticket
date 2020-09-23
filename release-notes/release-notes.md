@@ -52,6 +52,7 @@ This document describes the new features, bug corrections, known issues and reco
 | --- | --- |
 | **MOB-287** | **Possibility to change the HSTS time** |
 | **MOB-286** | **Possibility to change the used ciphers** |
+| **MOB-304** | **Allow to create a new ticket while viewing an existing ticket** |
 
 ----------
 

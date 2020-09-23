@@ -5,10 +5,10 @@ import { BranchEntity } from '../entities/branch.entity';
 import { Config } from './../../app/config/config';
 
 declare var MobileTicketAPI: any;
-var isVisitCacheUpdate = true;
-var retryIterrations = 1;
-var returnPayload: any;
-var lastResponse: any;
+let isVisitCacheUpdate = true;
+let retryIterrations = 1;
+let returnPayload: any;
+let lastResponse: any;
 
 @Injectable()
 export class TicketInfoService {
@@ -41,7 +41,7 @@ export class TicketInfoService {
             returnPayload = xhr.responseJSON;
             lastResponse = [xhr, status, msg];
             if (returnPayload != undefined &&
-              returnPayload.message.includes("New visits are not available until visitsOnBranchCache is refreshed") == true) {
+              returnPayload.message.includes('New visits are not available until visitsOnBranchCache is refreshed') == true) {
               isVisitCacheUpdate = false;
               this.retryRequest(success, err);
             } else {
@@ -62,14 +62,14 @@ export class TicketInfoService {
     if (isVisitCacheUpdate == true) {
       MobileTicketAPI.getVisitStatus(
         (queueObj: any) => {
-          success(convertToQueueEntityCallback(queueObj));
+          success(convertToQueueEntityCallback(queueObj), queueObj.ticketId);
         },
         (xhr, status, msg) => {
           if (xhr !== null && xhr.status == 404) {
             returnPayload = xhr.responseJSON;
             lastResponse = [xhr, status, msg];
             if (returnPayload != undefined &&
-              returnPayload.message.includes("New visits are not available until visitsOnBranchCache is refreshed") == true) {
+              returnPayload.message.includes('New visits are not available until visitsOnBranchCache is refreshed') === true) {
               isVisitCacheUpdate = false;
               this.retryRequest(success, err);
             }
