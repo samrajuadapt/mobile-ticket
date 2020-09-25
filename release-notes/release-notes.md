@@ -44,7 +44,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2020-09-25**
  
-**Build number: 3**
+**Build number: 4**
 
 <h3>Bug fixes</h3>
 
@@ -55,6 +55,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-304** | **Allow to create a new ticket while viewing an existing ticket** |
 | **MOB-305** | **Random issue in parallel ticket scenario > visit doesn't end in one tab** |
 | **MOB-307** | **Firefox and Edge support should be provide in iOS** |
+| **MOB-299** | **Very intense polling for mobile ticket status bug fixed** |
 
 ----------
 
