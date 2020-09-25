@@ -82,10 +82,12 @@ export class Util {
 
         var browsers = [
             ['edge', /Edge\/([0-9\._]+)/],
+            ['edgios', /EdgiOS\/([0-9\.]+)(:?\s|$)/],
             ['yandexbrowser', /YaBrowser\/([0-9\._]+)/],
             ['chrome', /(?!Chrom.*OPR)Chrom(?:e|ium)\/([0-9\.]+)(:?\s|$)/],
             ['crios', /CriOS\/([0-9\.]+)(:?\s|$)/],
             ['firefox', /Firefox\/([0-9\.]+)(?:\s|$)/],
+            ['fxios', /FxiOS\/([0-9\.]+)(:?\s|$)/],
             ['opera', /Opera\/([0-9\.]+)(?:\s|$)/],
             ['opera', /OPR\/([0-9\.]+)(:?\s|$)$/],
             ['ie', /Trident\/7\.0.*rv\:([0-9\.]+)\).*Gecko$/],

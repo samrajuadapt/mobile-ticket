@@ -54,7 +54,7 @@
   "support" : {
     "this_browser" : "this browser",
     "not_support_p1" : "Mobile Ticket is not compatible with ",
-    "not_support_p2" : ", please launch Mobile Ticket in the latest version of either Chrome, Safari, Firefox or Opera instead.",
+    "not_support_p2" : ", please launch Mobile Ticket in the latest version of either Chrome, Safari, Firefox, Edge or Opera instead.",
     "not_support_p2_extend" : ", please launch Mobile Ticket in the latest version of either Chrome, Firefox, Edge or Opera instead.",
     "not_support_create_ticket" : "Please contact a staff member if you need further help."
   },

@@ -42,9 +42,9 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h2>Version 1.9.2</h2>
 
-**Date: 2020-09-18**
+**Date: 2020-09-25**
  
-**Build number: 2**
+**Build number: 3**
 
 <h3>Bug fixes</h3>
 
@@ -54,6 +54,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-286** | **Possibility to change the used ciphers** |
 | **MOB-304** | **Allow to create a new ticket while viewing an existing ticket** |
 | **MOB-305** | **Random issue in parallel ticket scenario > visit doesn't end in one tab** |
+| **MOB-307** | **Firefox and Edge support should be provide in iOS** |
 
 ----------
 

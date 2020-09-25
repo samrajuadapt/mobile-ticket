@@ -91,7 +91,8 @@ export class AuthGuard implements CanActivate {
         try {
             let browser = util.getDetectBrowser(agent)
             if (browser.name === 'chrome' || browser.name === 'safari' || browser.name === 'ios'
-                || browser.name === 'opera' || browser.name === 'crios' || browser.name === 'firefox' || browser.name === 'edge') {
+                || browser.name === 'opera' || browser.name === 'crios' || browser.name === 'firefox'
+                || browser.name === 'fxios' || browser.name === 'edge' || browser.name === 'edgios') {
                     return true;
             } else {
                 return false;
