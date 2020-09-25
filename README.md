@@ -206,6 +206,14 @@ project directory
     "tls_version": {
         "value": "",
         "description": "Flag indicating TLS version of the server. Possible values are 'TLSv1_method', 'TLSv1_1_method' and 'TLSv1_2_method'. Keep empty when using the latest version. Recommended for TLS 1.2 or later."
+    },
+    "hsts_expire_time": {
+        "value": "63072000",
+        "description": "Flag indicating HSTS(HTTP Strict-Transport-Security) expire time."
+    },
+    "cipher_set": {
+        "value": [],
+        "description": "Flag indicating cipher set which use in the server. Fill the value like this. ['ECDHE-RSA-AES128-SHA256', 'DHE-RSA-AES128-SHA256', 'AES128-GCM-SHA256']. Keep it empty when not going to modify."
     }
 }
 ```
