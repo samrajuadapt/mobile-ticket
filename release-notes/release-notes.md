@@ -44,7 +44,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2020-09-30**
  
-**Build number: 5**
+**Build number: 6**
 
 <h3>Bug fixes</h3>
 
@@ -58,6 +58,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-299** | **Very intense polling for mobile ticket status bug fixed** |
 | **MOB-350** | **Allow to arrive an appointment visit while already open a ticket** |
 | **MOB-352** | **Allow to view/create a visit while open an appointment ticket from another tab** |
+| **MOB-355** | **iPhone input fields > zoom in persist after focus out from input fields** |
 
 ----------
 
