@@ -29,8 +29,9 @@ export class AuthGuard implements CanActivate {
     private directedBranch: BranchEntity = null;
     private aEntity: AppointmentEntity = null;
 
-    constructor(private router: Router, private activatedRoute: ActivatedRoute, private branchSrvc: BranchService, private serviceSrvc: ServiceService,
-        private alertDialogService: AlertDialogService, private translate: TranslateService, private config: Config) {
+    constructor(private router: Router, private activatedRoute: ActivatedRoute, private branchSrvc: BranchService,
+        private serviceSrvc: ServiceService, private alertDialogService: AlertDialogService,
+        private translate: TranslateService, private config: Config) {
         this.branchService = branchSrvc;
         this.serviceService = serviceSrvc;
     }
@@ -285,7 +286,7 @@ export class AuthGuard implements CanActivate {
                 } else if (visitInfo && this.router.url === '/ticket') {
                     this.router.navigate(['/ticket']);
                     resolve(false);
-                }else if (visitInfo) {
+                } else if (visitInfo) {
                     this.router.navigate(['/ticket']);
                     resolve(false);
                 } else {
@@ -323,6 +324,50 @@ export class AuthGuard implements CanActivate {
                         resolve(true);
                     }
                 }
+            } else if (url.startsWith('/appointment')) {
+                if (visitInfo && visitInfo !== null) {
+                    let alertMsg = '';
+                    this.translate.get('visit.onGoingVisit').subscribe((res: string) => {
+                        alertMsg = res;
+                        this.alertDialogService.activate(alertMsg).then(res => {
+                            this.router.navigate(['ticket']);
+                            resolve(false);
+                        }, () => {
+
+                        });
+                    });
+
+                } else {
+                    this.aEntity = new AppointmentEntity();
+                    MobileTicketAPI.findAppointment(appointmentId, (response) => {
+                        this.aEntity.publicId = appointmentId;
+                        this.aEntity.branchName = response.branch.name;
+                        this.aEntity.qpId = response.qpId;
+                        MobileTicketAPI.findCentralAppointment(response.qpId,
+                            (response2) => {
+                                this.aEntity.serviceId = response2.services[0].id;
+                                this.aEntity.serviceName = response2.services[0].name;
+                                this.aEntity.branchId = response2.branchId;
+                                this.aEntity.status = response2.status;
+                                this.aEntity.startTime = response2.startTime;
+                                this.aEntity.endTime = response2.endTime;
+                                this.aEntity.notes = response2.properties.notes;
+                                MobileTicketAPI.setAppointment(this.aEntity);
+                                resolve(true);
+                            },
+                            (xhr, status, errorMessage) => {
+                                this.aEntity.status = 'NOTFOUND';
+                                MobileTicketAPI.setAppointment(this.aEntity);
+                                resolve(true);
+                            });
+                    },
+                        (xhr, status, errorMessage) => {
+                            this.aEntity.status = 'NOTFOUND';
+                            MobileTicketAPI.setAppointment(this.aEntity);
+                            resolve(true);
+                        });
+                }
+
             } else if ((url.startsWith('/ticket') && ((branchId && visitId && checksum) ||
                 ((visitInfo !== null && visitInfo) && visitInfo.branchId && visitInfo.visitId && visitInfo.checksum)))) {
                 resolve(true);
@@ -342,36 +387,7 @@ export class AuthGuard implements CanActivate {
                         resolve(false);
                     }
                 );
-            } else if (url.startsWith('/appointment')) {
-                this.aEntity = new AppointmentEntity();
-                MobileTicketAPI.findAppointment(appointmentId, (response) => {
-                    this.aEntity.publicId = appointmentId;
-                    this.aEntity.branchName = response.branch.name;
-                    this.aEntity.qpId = response.qpId;
-                    MobileTicketAPI.findCentralAppointment(response.qpId,
-                        (response2) => {
-                            this.aEntity.serviceId = response2.services[0].id;
-                            this.aEntity.serviceName = response2.services[0].name;
-                            this.aEntity.branchId = response2.branchId;
-                            this.aEntity.status = response2.status;
-                            this.aEntity.startTime = response2.startTime;
-                            this.aEntity.endTime = response2.endTime;
-                            this.aEntity.notes = response2.properties.notes;
-                            MobileTicketAPI.setAppointment(this.aEntity);
-                            resolve(true);
-                        },
-                        (xhr, status, errorMessage) => {
-                            resolve(true);
-                        });
-                },
-                    (xhr, status, errorMessage) => {
-                        this.aEntity.status = 'NOTFOUND';
-                        MobileTicketAPI.setAppointment(this.aEntity);
-                        resolve(true);
-                    });
-            }
-
-            else if (url.startsWith('/customer_data')) {
+            } else if (url.startsWith('/customer_data')) {
                 if ((visitInfo && visitInfo !== null)) {
                     this.router.navigate(['ticket']);
                     resolve(false);
@@ -399,10 +415,7 @@ export class AuthGuard implements CanActivate {
                         resolve(true);
                     }
                 }
-            }
-
-
-            else {
+            } else {
                 this.router.navigate(['/branches']);
                 resolve(false);
             }

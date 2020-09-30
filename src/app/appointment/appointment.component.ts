@@ -7,6 +7,8 @@ import { Config } from '../config/config';
 import { Router } from '@angular/router';
 
 import { Util } from './../util/util'
+import { TranslateService } from 'ng2-translate';
+import { AlertDialogService } from '../shared/alert-dialog/alert-dialog.service';
 
 declare var MobileTicketAPI: any;
 declare var ga: Function;
@@ -33,7 +35,8 @@ export class AppointmentComponent implements OnInit {
   public isNotFound = false;
   private arriveAppRetried = false;
 
-  constructor(private config: Config, public router: Router) {
+  constructor(private config: Config, public router: Router, private translate: TranslateService,
+    private alertDialogService: AlertDialogService) {
   }
 
   ngOnInit() {
@@ -50,28 +53,41 @@ export class AppointmentComponent implements OnInit {
   }
 
   onArriveAppointment() {
-    MobileTicketAPI.findEntrypointId(this.app.branchId, (response) => {
-      if (response.length > 0) {
-        let entryPointId = response[0].id;
-        MobileTicketAPI.arriveAppointment(this.app.branchId, entryPointId, this.app.qpId, this.app.notes, (response) => {
-          this.ticket = response;
+    let visitInfo = MobileTicketAPI.getCurrentVisit();
+    if (visitInfo && visitInfo != null) {
+      let alertMsg = '';
+      this.translate.get('visit.onGoingVisit').subscribe((res: string) => {
+        alertMsg = res;
+        this.alertDialogService.activate(alertMsg).then(res => {
           this.router.navigate(['ticket']);
-        },
-          (xhr, status, errorMessage) => {
-            console.log(errorMessage);
-            if (!this.arriveAppRetried) {
-              this.fetchAppointment().then(() => {
-                this.app = MobileTicketAPI.getAppointment();
-                this.isInvalid = this.isAppointmentInvalid();
-                this.arriveAppRetried = true;
-              });
-            }
-          });
-      }
-    },
-      (xhr, status, errorMessage) => {
-        // do something
+        }, () => {
+
+        });
       });
+    } else {
+      MobileTicketAPI.findEntrypointId(this.app.branchId, (response) => {
+        if (response.length > 0) {
+          let entryPointId = response[0].id;
+          MobileTicketAPI.arriveAppointment(this.app.branchId, entryPointId, this.app.qpId, this.app.notes, (response) => {
+            this.ticket = response;
+            this.router.navigate(['ticket']);
+          },
+            (xhr, status, errorMessage) => {
+              console.log(errorMessage);
+              if (!this.arriveAppRetried) {
+                this.fetchAppointment().then(() => {
+                  this.app = MobileTicketAPI.getAppointment();
+                  this.isInvalid = this.isAppointmentInvalid();
+                  this.arriveAppRetried = true;
+                });
+              }
+            });
+        }
+      },
+        (xhr, status, errorMessage) => {
+          // do something
+        });
+    }
   }
 
   private async fetchAppointment() {
@@ -94,6 +110,8 @@ export class AppointmentComponent implements OnInit {
             resolve();
           },
           (xhr, status, errorMessage) => {
+            aEntity.status = 'NOTFOUND';
+            MobileTicketAPI.setAppointment(aEntity);
             resolve();
           });
       },
@@ -181,7 +199,7 @@ export class AppointmentComponent implements OnInit {
         hours = (time.getHours() - 12) < 10 ? '0' + (time.getHours() - 12) : (time.getHours() - 12).toString();
       }
       else {
-              hours = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
+        hours = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
       }
       formatted = hours + ':' + min;
     }
@@ -202,12 +220,12 @@ export class AppointmentComponent implements OnInit {
       else {
         hours = time.getHours();
         formatted = hours + ':' + min;
-       }
+      }
       if (time.getHours() > 11) {
         formatted += ' pm';
-       } else {
-         formatted += ' am';
-        }
+      } else {
+        formatted += ' am';
+      }
     }
     return formatted;
   }

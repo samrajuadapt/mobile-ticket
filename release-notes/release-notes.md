@@ -40,11 +40,11 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
-<h2>Version 1.9.2</h2>
+<h2>Version 1.9.2 - internal</h2>
 
-**Date: 2020-09-25**
+**Date: 2020-09-30**
  
-**Build number: 4**
+**Build number: 5**
 
 <h3>Bug fixes</h3>
 
@@ -56,6 +56,8 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-305** | **Random issue in parallel ticket scenario > visit doesn't end in one tab** |
 | **MOB-307** | **Firefox and Edge support should be provide in iOS** |
 | **MOB-299** | **Very intense polling for mobile ticket status bug fixed** |
+| **MOB-350** | **Allow to arrive an appointment visit while already open a ticket** |
+| **MOB-352** | **Allow to view/create a visit while open an appointment ticket from another tab** |
 
 ----------
 

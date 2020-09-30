@@ -3021,12 +3021,6 @@ var MobileTicketAPI = (function () {
               if (MobileTicketAPI.meetingUrl === undefined && visitsData.currentStatus === "CALLED") {
                 MobileTicketAPI.getMeetingUrl(branchIdVal, visitIdVal);
               }
-          // Adding some additional fields because the return values here are different from the 
-          // response of the mobile ticket api when creating a ticket
-          // MobileTicketAPI.visitInformation.ticketNumber = visitsData.ticketId;
-          // MobileTicketAPI.visitInformation.queueId = visitsData.queueId;
-          // MobileTicketAPI.visitInformation.serviceName = visitsData.currentServiceName;
-          // saveToLocalStorage();
               onSuccess(visitStatus);
             }
           },
