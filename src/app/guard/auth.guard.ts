@@ -368,8 +368,25 @@ export class AuthGuard implements CanActivate {
                         });
                 }
 
-            } else if ((url.startsWith('/ticket') && ((branchId && visitId && checksum) ||
-                ((visitInfo !== null && visitInfo) && visitInfo.branchId && visitInfo.visitId && visitInfo.checksum)))) {
+            } else if (url.startsWith('/ticket') && (branchId && visitId && checksum) ) {
+                if (visitInfo && visitInfo !== null) {
+                    let alertMsg = '';
+                    this.translate.get('visit.onGoingVisit').subscribe((res: string) => {
+                        alertMsg = res;
+                        this.alertDialogService.activate(alertMsg).then(res => {
+                            this.router.navigate(['ticket']);
+                            resolve(false);
+                        }, () => {
+
+                        });
+                    });
+
+                } else {
+                    resolve(true);
+                }
+
+            } else if (url.startsWith('/ticket') && ((visitInfo !== null && visitInfo)
+             && visitInfo.branchId && visitInfo.visitId && visitInfo.checksum) ) {
                 resolve(true);
             } else if (visitInfo) {
                 MobileTicketAPI.getVisitStatus(
