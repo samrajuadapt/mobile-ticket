@@ -14,50 +14,50 @@
   </div>
   <div class="appointment-container" *ngIf="!isNotFound">
   <div class="appointment-row">
-    <div class="col-xs-6 col-xxs">
+    <div class="col-xs-6 col-xxs" [ngClass]="{'col-rtl': isRtl}">
       <div class="custom">
-        <div class="appointment-label">{{'appointment.branch' | translate}}</div>
+        <div class="appointment-label" [ngClass]="{'appointment-label-rtl': isRtl, 'appointment-label': !isRtl}">{{'appointment.branch' | translate}}</div>
       </div>
     </div>
-    <div class="col-xs-6 col-xxs">
+    <div class="col-xs-6 col-xxs" [ngClass]="{'col-rtl': isRtl}">
       <div class="custom">
-        <div  class="appointment-data">{{ app.branchName }}</div>
-      </div>
-    </div>
-  </div>
-  <div class="appointment-row">
-    <div class="col-xs-6 col-xxs">
-      <div class="custom">
-        <div class="appointment-label">{{'appointment.service' | translate}}</div>
-      </div>
-    </div>
-    <div class="col-xs-6 col-xxs">
-      <div class="custom">
-        <div class="appointment-data">{{ app.serviceName }}</div>
+        <div  class="appointment-data" [ngClass]="{'appointment-data-rtl': isRtl, 'appointment-data': !isRtl}">{{ app.branchName }}</div>
       </div>
     </div>
   </div>
   <div class="appointment-row">
-    <div class="col-xs-6 col-xxs">
+    <div class="col-xs-6 col-xxs" [ngClass]="{'col-rtl': isRtl}">
       <div class="custom">
-        <div class="appointment-label">{{'appointment.date' | translate}}</div>
+        <div class="appointment-label" [ngClass]="{'appointment-label-rtl': isRtl, 'appointment-label': !isRtl}">{{'appointment.service' | translate}}</div>
       </div>
     </div>
-    <div class="col-xs-6 col-xxs">
+    <div class="col-xs-6 col-xxs" [ngClass]="{'col-rtl': isRtl}">
       <div class="custom">
-        <div class="appointment-data">{{ app.date }}</div>
+        <div class="appointment-data" [ngClass]="{'appointment-data-rtl': isRtl, 'appointment-data': !isRtl}">{{ app.serviceName }}</div>
       </div>
     </div>
   </div>
   <div class="appointment-row">
-    <div class="col-xs-6 col-xxs">
+    <div class="col-xs-6 col-xxs" [ngClass]="{'col-rtl': isRtl}">
       <div class="custom">
-        <div class="appointment-label">{{'appointment.time' | translate}}</div>
+        <div class="appointment-label" [ngClass]="{'appointment-label-rtl': isRtl, 'appointment-label': !isRtl}">{{'appointment.date' | translate}}</div>
       </div>
     </div>
-    <div class="col-xs-6 col-xxs">
+    <div class="col-xs-6 col-xxs" [ngClass]="{'col-rtl': isRtl}">
       <div class="custom">
-        <div class="appointment-data">{{ app.startTimeFormatted }}</div>
+        <div class="appointment-data" [ngClass]="{'appointment-data-rtl': isRtl, 'appointment-data': !isRtl}">{{ app.date }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="appointment-row">
+    <div class="col-xs-6 col-xxs" [ngClass]="{'col-rtl': isRtl}">
+      <div class="custom">
+        <div class="appointment-label" [ngClass]="{'appointment-label-rtl': isRtl, 'appointment-label': !isRtl}">{{'appointment.time' | translate}}</div>
+      </div>
+    </div>
+    <div class="col-xs-6 col-xxs" [ngClass]="{'col-rtl': isRtl}">
+      <div class="custom">
+        <div class="appointment-data" [ngClass]="{'appointment-data-rtl': isRtl, 'appointment-data': !isRtl}">{{ app.startTimeFormatted }}</div>
       </div>
     </div>
   </div>

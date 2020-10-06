@@ -16,7 +16,7 @@ declare var ga: Function;
 @Component({
   selector: 'appointment',
   templateUrl: './appointment.component.html',
-  styleUrls: ['./appointment.component.css', '../shared/css/common-styles.css']
+  styleUrls: ['./appointment.component.css', './appointment.component-rtl.css', '../shared/css/common-styles.css']
 })
 export class AppointmentComponent implements OnInit {
   public iHight = 0;
@@ -34,6 +34,7 @@ export class AppointmentComponent implements OnInit {
   public isInvalid = false;
   public isNotFound = false;
   private arriveAppRetried = false;
+  public isRtl: boolean;
 
   constructor(private config: Config, public router: Router, private translate: TranslateService,
     private alertDialogService: AlertDialogService) {
@@ -50,6 +51,15 @@ export class AppointmentComponent implements OnInit {
     this.app = MobileTicketAPI.getAppointment();
     this.isInvalid = this.isAppointmentInvalid();
     this.getBranch();
+    this.setRtlStyles();
+  }
+
+  setRtlStyles() {
+    if (document.dir === 'rtl') {
+      this.isRtl = true;
+    } else {
+      this.isRtl = false;
+    }
   }
 
   onArriveAppointment() {

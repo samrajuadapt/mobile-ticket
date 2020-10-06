@@ -42,9 +42,9 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h2>Version 1.9.2 - internal</h2>
 
-**Date: 2020-10-05**
+**Date: 2020-10-06**
  
-**Build number: 7**
+**Build number: 8**
 
 <h3>Bug fixes</h3>
 
@@ -60,6 +60,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-352** | **Allow to view/create a visit while open an appointment ticket from another tab** |
 | **MOB-355** | **iPhone input fields > zoom in persist after focus out from input fields** |
 | **MOB-351** | **Allow to view a ticket while already open a ticket from another tab** |
+| **MOB-353** | **RTL issue in Mobile ticket** |
 
 ----------
 
