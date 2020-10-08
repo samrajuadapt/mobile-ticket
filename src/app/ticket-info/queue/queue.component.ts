@@ -153,7 +153,7 @@ export class QueueComponent implements OnInit, OnDestroy {
     if (visitPosition <= 5) {
       this.timer = TimerObservable.create(1000, 1000);
     }
-    let isDeviceBounded = this.config.getConfig('block_other_devices');
+    let isDeviceBounded = this.config.getConfig('block_other_browsers');
     if (isDeviceBounded === 'enable') {
       MobileTicketAPI.getCustomParameters(
         (visit: any) => {

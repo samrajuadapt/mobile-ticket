@@ -239,7 +239,7 @@ export class AuthGuard implements CanActivate {
                                     });
                                 } else {
                                     // Creating ticket
-                                    let isDeviceBounded = this.config.getConfig('block_other_devices');
+                                    let isDeviceBounded = this.config.getConfig('block_other_browsers');
                                     if (isDeviceBounded === 'enable') {
                                         System.import('fingerprintjs2').then(Fingerprint2 => {
                                             let that = this;

@@ -97,10 +97,10 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-271** | **"Get new ticket" not functioning** |
 
 <h3>Upgrade Instructions</h3>
-- When upgrading from a previous version, 'block_other_devices' parameter needs to be added to config.json.
+- When upgrading from a previous version, 'block_other_browsers' parameter needs to be added to config.json.
 
 ```
-"block_other_devices" : {
+"block_other_browsers" : {
         "value": "disable",
         "description": "Enable or disable whether user allow to use/open the ticket in other devices ..."
     }

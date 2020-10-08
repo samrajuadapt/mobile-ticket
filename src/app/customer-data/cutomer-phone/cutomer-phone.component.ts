@@ -112,7 +112,7 @@ export class CutomerPhoneComponent implements OnInit {
         this.router.navigate(['ticket']);
       }
       else {
-        let isDeviceBounded = this.config.getConfig('block_other_devices');
+        let isDeviceBounded = this.config.getConfig('block_other_browsers');
         if (isDeviceBounded === 'enable') {
           System.import('fingerprintjs2').then(Fingerprint2 => {
             var that = this;

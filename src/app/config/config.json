@@ -147,8 +147,8 @@
     "value": "1",
     "description": "Define how many times should retry the queue poll request."
   },
-  "block_other_devices": {
+  "block_other_browsers": {
     "value": "disable",
-    "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
+    "description": "Enable or disable whether user allow to use/open the ticket in other browsers apart from the created device. 'on = enable', 'off = disable'"
   }
 }
