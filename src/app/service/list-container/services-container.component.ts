@@ -91,6 +91,7 @@ export class ServicesContainerComponent implements OnInit {
 
     private takeTicket(): void {       
         let customerData = this.config.getConfig('customer_data');   
+        let OtpService = this.config.getConfig('otp_service');   
         let isDeviceBounded  =  this.config.getConfig('block_other_devices');
         if (!this.isTakeTicketClickedOnce) {
             if (MobileTicketAPI.getCurrentVisit()) {
@@ -115,6 +116,9 @@ export class ServicesContainerComponent implements OnInit {
                     if ( customerData === 'enable') {
                         MobileTicketAPI.setPhoneNumber('');
                         this.router.navigate(['customer_data']);
+                    } else if (OtpService === 'enable'){
+                        MobileTicketAPI.setOtpPhoneNumber('');
+                        this.router.navigate(['otp_number']);
                     } else {
                         if ( isDeviceBounded === 'enable') {
                             System.import('fingerprintjs2').then(Fingerprint2 => {

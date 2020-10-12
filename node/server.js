@@ -6,6 +6,7 @@ var expressStaticGzip = require("express-static-gzip");
 
 var fs = require('fs');
 var https = require('https');
+const http = require('http');
 var path = require('path');
 var app = express();
 
@@ -52,6 +53,10 @@ if (fs.existsSync('./src/zip')) {
 var configuration = JSON.parse(
 	fs.readFileSync(configFile)
 );
+// //update user-configurations using config.json for functional server
+// var userConfiguration = JSON.parse(
+// 	fs.readFileSync(userConfigFile)
+// );
 
 //Set well-known web vulnerabilities by setting HTTP headers appropriately
 app.use(helmet());
@@ -120,6 +125,10 @@ isEmbedIFRAME = (configuration.embed_iFrame.value.trim() === 'true')?true:false;
 tlsVersion = configuration.tls_version.value;
 hstsExpireTime = configuration.hsts_expire_time.value;
 cipherSet = configuration.cipher_set.value;
+
+// // functional server services
+// otpService = userConfiguration.otp_service.value;
+// fsPort = configuration.local_functional_server_port.value;
 
 //this will bypass certificate errors in node to API gateway encrypted channel, if set to '1'
 //if '0' communication will be blocked. So production this should be set to '0'
@@ -423,6 +432,45 @@ var apiMeetingProxy = proxy(host, {
 	}
 });
 
+// proxy for 
+var apiOtpProxy = proxy('localhost:82', {
+	// ip and port off apigateway
+	proxyReqPathResolver: function (req) {
+		console.log(123);
+		var newUrl = req.originalUrl.replace("/MTService/otp/sms","/rest/notification/sendSMS");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL,
+	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
+		data = JSON.parse(proxyResData.toString('utf8'));
+		newData = {};
+		newData.parameterMap = {};
+		if (data !== undefined) {
+			newData.ticketId = data.ticketId;
+			newData.checksum = data.checksum;
+			newData.parameterMap.meetingUrl = data.parameterMap.meetingUrl;
+			
+		}
+		return JSON.stringify(newData);
+	}
+});
+
 var handleHeaders = function (res) {
 	if (isEmbedIFRAME === false) {
 		res.set('X-Frame-Options', "DENY");
@@ -436,6 +484,10 @@ var handleHeaders = function (res) {
 	return res;
 }
 
+app.post('/notification/*', (req, res) => {
+	console.log('post hit');
+});
+
 app.use("/geo/branches/*", apiProxy);
 app.use("/MobileTicket/branches/*", apiProxy);
 app.use("/MobileTicket/MyAppointment/find/*", apiFindProxy);
@@ -445,6 +497,8 @@ app.use("/MobileTicket/MyAppointment/arrive/*", apiArriveProxy);
 app.use("/MobileTicket/services/*", apiProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
 app.use("/MobileTicket/MyMeeting/*", apiMeetingProxy);
+app.use("/*", apiOtpProxy);
+app.use("/MTService/notification/*", apiOtpProxy);
 
 
 if (supportSSL) {
@@ -456,12 +510,11 @@ if (supportSSL) {
 		console.log("Mobile Ticket app listening at https://%s:%s over SSL", listenAddress, listenPort);
 	});
 } else{
-	var server = app.listen(port, function () {  										// port the mobileTicket will listen to.
+	var server = app.listen(port, function () {  // port the mobileTicket will listen to.
 	var listenAddress = server.address().address;
 	var listenPort = server.address().port;
 
 	console.log("Mobile Ticket app listening at http://%s:%s", listenAddress, listenPort);
-
 });
 }
 
