@@ -17,7 +17,6 @@ import { CustomerDataComponent } from './customer-data/customer-data.component';
 import { CustomerDataGuard } from './customer-data/customer-data-guard';
 import { CookieContainerComponent } from './cookie-container/cookie-container.component';
 import { UnautherizedComponent } from './ticket-info/unautherized/unautherized.component';
-import { OtpComponent } from './otp/otp.component';
 import { OtpPinComponent } from './otp/otp-pin/otp-pin.component';
 import { OtpPhoneNumberComponent } from './otp/otp-phone-number/otp-phone-number.component';
 
@@ -31,7 +30,6 @@ export const router: Routes = [
     { path: 'privacy_policy', component: PrivacyPolicyComponent,  canActivate: [CustomerDataGuard] },
     { path: 'cookie_consent', component: CookieContainerComponent},
     { path: 'customer_data', component: CustomerDataComponent, canActivate: [AuthGuard, CustomerDataGuard] },
-    { path: 'otp', component: OtpComponent },
     { path: 'otp_pin', component: OtpPinComponent, canActivate: [AuthGuard] },
     { path: 'otp_number', component: OtpPhoneNumberComponent, canActivate: [AuthGuard]},
     { path: 'no_support', component: NotSupportComponent },

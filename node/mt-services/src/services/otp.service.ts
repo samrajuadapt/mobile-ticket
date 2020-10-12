@@ -7,6 +7,7 @@ import * as fs from "fs";
 export default class OtpService {
   private db = connectDB();
   private configFile = "../proxy-config.json";
+  private userConfigFile = "src/config/config.json";
   private authToken = "nosecrets";
   private validAPIGWCert = "1";
   private host = "localhost:9090";
@@ -14,11 +15,17 @@ export default class OtpService {
   private supportSSL = false;
   private hostProtocol = "http://";
   private configuration: any;
+  private userConfig: any;
+  private tenantId: string;
 
   constructor() {
     this.configuration = JSON.parse(
       fs.readFileSync(this.configFile).toString()
     );
+    this.userConfig = JSON.parse(
+      fs.readFileSync(this.userConfigFile).toString()
+    );
+    this.tenantId = this.userConfig.tenant_id.value;
     this.authToken = this.configuration.auth_token.value;
     this.validAPIGWCert =
       this.configuration.gateway_certificate_is_valid.value.trim() === "true"
@@ -35,7 +42,7 @@ export default class OtpService {
     const url = this.hostProtocol + this.host + this.smsEndpoint;
     const phoneNumber = otpInstance.phoneNumber;
     // const message = otpInstance.otp;
-    const message = "Please use the following OTP \n" + otpInstance.otp + "\n in order to complete your mobile ticket";
+    const message = "Please use the following OTP \n" + otpInstance.pin + "\n in order to complete your mobile ticket";
     let returnValue = "";
     await axios
       .post(url, null, {
@@ -61,7 +68,7 @@ export default class OtpService {
 
   public async createOtp(otpInstance: IOtp) {
     // bind tenant ID
-    otpInstance.tenantId = this.configuration.tenant_id.value;
+    otpInstance.tenantId = this.tenantId;
 
     try {
       return await this.db.OtpModel.createOtp(otpInstance);
@@ -71,16 +78,26 @@ export default class OtpService {
   }
 
   public async findByPhone(phone: string) {
-    const tenantId = this.configuration.tenant_id.value;
+    const tenantId = this.tenantId;
     try {
       return await this.db.OtpModel.findByPhoneNumber(tenantId, phone);
     } catch (e) {
       return e;
     }
   }
+  public async deleteOtp(phone: string) {
+    const tenantId = this.configuration.tenant_id.value;
+    try {
+      return await this.db.OtpModel.deleteOne({tenantId: tenantId, phoneNumber: phone});
+    } catch (e) {
+      return e;
+    }
+  }
+
+  
 
   public async lockUpdate(phone: string, lock: number) {
-    const tenantId = this.configuration.tenant_id.value;
+    const tenantId = this.tenantId;
     let returnVal = 0;
     let curDate = new Date();
 
@@ -106,7 +123,7 @@ export default class OtpService {
   }
 
   public async updateResendOtp(phone: string, _otp: string) {
-    const tenantId = this.configuration.tenant_id.value;
+    const tenantId = this.tenantId;
     let returnVal = '';
     let curDate = new Date();
     curDate.setMinutes(curDate.getMinutes() + 10);

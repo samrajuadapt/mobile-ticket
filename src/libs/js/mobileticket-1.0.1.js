@@ -2834,9 +2834,29 @@ var MobileTicketAPI = (function () {
           url: MT_SERVICE_SEND_SMS,
           success: function (data) {
             console.log(data);
-            if (data != undefined) {
-              onSuccess(data);
-            }
+            onSuccess(data);
+          },
+          error: function (xhr, status, errorMsg) {
+            // onError(xhr, status, errorMsg);
+            console.log(status);
+          }
+        });
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
+    deleteOtp: function (phone, onSuccess, onError) {
+      try {
+        var MT_SERVICE_DELETE_OTP = MT_SERVICE + "/otp/delete";
+
+        $.ajax({
+          type: "DELETE",
+          data : JSON.stringify({ phone: phone }),
+          contentType: 'application/json',
+          url: MT_SERVICE_DELETE_OTP,
+          success: function (data) {
+            console.log(data);
+            onSuccess(data);
           },
           error: function (xhr, status, errorMsg) {
             // onError(xhr, status, errorMsg);
@@ -2871,13 +2891,13 @@ var MobileTicketAPI = (function () {
         onError(null, null, e.message);
       }
     },
-    checkOtp: function (otp, phone, onSuccess, onError) {
+    checkOtp: function (pin, phone, onSuccess, onError) {
       try {
         var MT_SERVICE_CHECK_OTP = MT_SERVICE + "/otp/check";
 
         $.ajax({
           type: "POST",
-          data : JSON.stringify({ otp: otp, phone: phone }),
+          data : JSON.stringify({ pin: pin, phone: phone }),
           contentType: 'application/json',
           url: MT_SERVICE_CHECK_OTP,
           success: function (data) {

@@ -11,7 +11,7 @@ const OtpSchema = new Mongoose.Schema({
     type: Number,
     default: 0,
   },
-  otp: String,
+  pin: String,
   created: {
     type: Date,
     default: Date.now,

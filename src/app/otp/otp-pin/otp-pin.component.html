@@ -2,7 +2,7 @@
   <div class="custom-phone-card">
     <!-- INITIAL AND EDIT PHONE SECTION -->
     <div style="display: inline-block; width: 100%;">
-      <div class="phone-num-text" style="float: left;"> {{'OTP code'}} </div>
+      <div class="phone-num-text" style="float: left;"> {{'One time password'}} </div>
       <div style="float: right;" [ngStyle]="{'color': timerColor}" *ngIf="showTimer">
         <span id="minute"></span>
         <span id="seperator"></span>
@@ -19,7 +19,7 @@
             </svg>
         </div>
         <div class="phone-num-input-container">
-          <input class="phone-num-input" type="text" placeholder="  {{ 'Enter OTP' }}"
+          <input class="phone-num-input" type="text" placeholder="  {{ 'Enter pin' }}"
             [(ngModel)]="pin" (change)="onPinChanged()" (keyup.enter)="pinContinue()"
             (keyup)="onPhoneNumberEnter($event)" >
           <div class="phone-num-error" *ngIf="pinError"> {{'Please enter vaild pin'}}</div>

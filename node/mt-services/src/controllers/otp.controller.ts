@@ -10,7 +10,7 @@ export class OtpController {
     if (req.body.phone) {
       const newOtp = new OtpModel();
       newOtp.phoneNumber = req.body.phone;
-      newOtp.otp = getOtpCode(process.env.TOKEN_LENGTH);
+      newOtp.pin = getOtpCode(4);
 
       await this.otpService
         .createOtp(newOtp)
@@ -38,14 +38,14 @@ export class OtpController {
     }
   }
   public async checkOtp(req: Request, res: Response) {
-    if (req.body.phone && req.body.otp) {
+    if (req.body.phone && req.body.pin) {
       const phone = req.body.phone;
-      const otp = req.body.otp;
+      const pin = req.body.pin;
       await this.otpService
         .findByPhone(phone)
         .then(async (result) => {
           if (result.length == 1) {
-            if (result[0].otp === otp) {
+            if (result[0].pin === pin) {
               res.sendStatus(200);
             } else {
               res.sendStatus(201);
@@ -87,15 +87,15 @@ export class OtpController {
   public async resendOtp(req: Request, res: Response) {
     if (req.body.phone) {
       const phoneNumber = req.body.phone;
-      const otp = getOtpCode(process.env.TOKEN_LENGTH);
+      const pin = getOtpCode(4);
       
       await this.otpService
-        .updateResendOtp(phoneNumber, otp)
+        .updateResendOtp(phoneNumber, pin)
         .then(async (result) => {
           if (result == "updated") {
             const newOtp = new OtpModel();
             newOtp.phoneNumber = phoneNumber;
-            newOtp.otp = otp;
+            newOtp.pin = pin;
             await this.otpService
               .sendSMS(req, res, newOtp)
               .then((result) => {
@@ -112,6 +112,23 @@ export class OtpController {
         .catch((error) => {
           console.log(error);
           return res.status(500);
+        });
+    } else {
+      return res.sendStatus(400);
+    }
+  }
+
+  public async deleteOtp(req: Request, res: Response) {
+    if (req.body.phone) {
+      const phone = req.body.phone;
+      await this.otpService
+        .deleteOtp(phone)
+        .then(async (result) => {
+          return res.sendStatus(200);       
+        })
+        .catch((error) => {
+          console.log(error);
+          return res.sendStatus(500);
         });
     } else {
       return res.sendStatus(400);

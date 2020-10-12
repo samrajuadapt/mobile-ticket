@@ -46,9 +46,5 @@
   "cipher_set": {
     "value": [],
     "description": "Flag indicating cipher set which use in the server. Fill the value like this. ['ECDHE-RSA-AES128-SHA256', 'DHE-RSA-AES128-SHA256', 'AES128-GCM-SHA256']. Keep it empty when not going to modify."
-  },
-  "tenant_id": {
-    "value": "1001",
-    "description": "unique identifire of the client application"
   }
 }

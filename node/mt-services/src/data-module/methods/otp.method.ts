@@ -2,12 +2,12 @@ import { IOtpDocument, LockState } from "../types/otp.type";
 
 // all static methods are defined here
 
-export async function resetOtp(this: IOtpDocument, otp: string): Promise<void> {
+export async function resetOtp(this: IOtpDocument, pin: string): Promise<void> {
   const now = new Date();
   if (this.lastUpdated < now) {
     // have to set 3 minute restriction
     this.lastUpdated = now;
-    this.otp = otp;
+    this.pin = pin;
     this.attempts = this.attempts + 1;
     await this.save();
   }

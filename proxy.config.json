@@ -1,6 +1,6 @@
 {
   "/MobileTicket/*": {
-    "target": "http://127.0.0.1:9090",
+    "target": "http://localhost:9090",
     "secure": true
   },
   "/geo/*": {
@@ -8,7 +8,7 @@
     "secure": true
   },
   "/MTService/*": {
-    "target": "http://127.0.0.1:82",
+    "target": "http://localhost:82",
     "secure": true
   },
   "/rest/*": {

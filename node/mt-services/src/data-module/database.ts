@@ -1,11 +1,18 @@
 import * as Mongoose from "mongoose";
 import { OtpModel } from "./models/otp.model";
+import * as fs from "fs";
 
 
 let database: Mongoose.Connection;
+let configuration: any;
+const userConfigFile = "src/config/config.json";
+configuration = JSON.parse(
+  fs.readFileSync(userConfigFile).toString()
+);
+const localConString = configuration.local_db_connection_string.value;
 
 export const connectDB = () => {
-  const uri = "mongodb://user3:user3@localhost/test1";
+  const uri = localConString;
 
   if (database) {
     return;

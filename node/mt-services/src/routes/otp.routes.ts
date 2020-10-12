@@ -19,9 +19,8 @@ export class OtpRoutes {
         app.post('/MTService/otp/resend', (req: Request, res: Response) => {
             this.otpController.resendOtp(req, res);
         });
-        app.get('/MTService/sms', (req: Request, res: Response) => {
-            console.log(123445);
-            // this.otpController.createOtp(req, res);
+        app.delete('/MTService/otp/delete', (req: Request, res: Response) => {
+            this.otpController.deleteOtp(req, res);
         });
 
         // app.get('/api/user/:id', (req: Request, res: Response) => {

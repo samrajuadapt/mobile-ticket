@@ -8,18 +8,18 @@ export async function createOtp(
   {
     tenantId,
     phoneNumber,
-    otp,
+    pin,
   }: {
     tenantId: string;
     phoneNumber: string;
-    otp: string;
+    pin: string;
   }
 ): Promise<IOtpDocument> {
   const record = await this.findOne({ tenantId, phoneNumber });
   if (record) {
     throw new Error('User already exists');
   } else {
-    return this.create({ tenantId, phoneNumber, otp });
+    return this.create({ tenantId, phoneNumber, pin });
   }
 }
 

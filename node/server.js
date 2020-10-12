@@ -227,6 +227,16 @@ app.get('/cookie_consent$', function (req, res) {
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
+app.get('/otp_number$', function (req, res) {
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
+});
+
+app.get('/otp_pin$', function (req, res) {
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
+});
+
 
 // Proxy mobile example to API gateway
 var apiProxy = proxy(host, {
@@ -432,20 +442,15 @@ var apiMeetingProxy = proxy(host, {
 	}
 });
 
-// proxy for 
+// proxy for MT service
 var apiOtpProxy = proxy('localhost:82', {
 	// ip and port off apigateway
 	proxyReqPathResolver: function (req) {
-		console.log(123);
-		var newUrl = req.originalUrl.replace("/MTService/otp/sms","/rest/notification/sendSMS");
-		return require('url').parse(newUrl).path;
-	},
-	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
-		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
-		proxyReqOpts.headers['Content-Type'] = 'application/json'
-		return proxyReqOpts;
+		console.log(req.originalUrl);
+		return require('url').parse(req.originalUrl).path;
 	},
 	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		console.log(123);
 		if (isEmbedIFRAME === false) {
 			headers['X-Frame-Options'] = "DENY";
 		}
@@ -456,19 +461,7 @@ var apiOtpProxy = proxy('localhost:82', {
 		}
 		return headers;
 	},
-	https: APIGWHasSSL,
-	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
-		data = JSON.parse(proxyResData.toString('utf8'));
-		newData = {};
-		newData.parameterMap = {};
-		if (data !== undefined) {
-			newData.ticketId = data.ticketId;
-			newData.checksum = data.checksum;
-			newData.parameterMap.meetingUrl = data.parameterMap.meetingUrl;
-			
-		}
-		return JSON.stringify(newData);
-	}
+	https: APIGWHasSSL
 });
 
 var handleHeaders = function (res) {
@@ -497,8 +490,7 @@ app.use("/MobileTicket/MyAppointment/arrive/*", apiArriveProxy);
 app.use("/MobileTicket/services/*", apiProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
 app.use("/MobileTicket/MyMeeting/*", apiMeetingProxy);
-app.use("/*", apiOtpProxy);
-app.use("/MTService/notification/*", apiOtpProxy);
+app.use("/MTService/*", apiOtpProxy);
 
 
 if (supportSSL) {

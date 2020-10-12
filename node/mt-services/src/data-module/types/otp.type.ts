@@ -1,22 +1,22 @@
 import { Document, Model } from "mongoose";
 
 export enum LockState {
-  WRONG_OTP = 0,
-  TRY_OTP = 1,
+  WRONG_OTP = 1,
+  TRY_OTP = 2,
 }
 
 export interface IOtp {
   tenantId: string;
   phoneNumber: string;
   attempts?: number;
-  otp: string;
+  pin: string;
   created?: Date;
   lastUpdated?: Date;
   locked?: LockState;
 }
 
 export interface IOtpDocument extends IOtp, Document {
-  resetOtp: (this: IOtpDocument, otp: string ) => Promise<void>;
+  resetOtp: (this: IOtpDocument, pin: string ) => Promise<void>;
   updateLock: (this: IOtpDocument, phone: string, tenantId: string, lockType: number ) => Promise<void>;
 }
 export interface IOtpModel extends Model<IOtpDocument> {
@@ -25,8 +25,8 @@ export interface IOtpModel extends Model<IOtpDocument> {
     {
       tenantId,
       phoneNumber,
-      otp,
-    }: { tenantId: string; phoneNumber: string; otp: string }
+      pin,
+    }: { tenantId: string; phoneNumber: string; pin: string }
   ) => Promise<IOtpDocument>;
 
   findByPhoneNumber: (

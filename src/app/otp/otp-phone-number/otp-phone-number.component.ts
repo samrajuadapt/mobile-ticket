@@ -86,6 +86,8 @@ export class OtpPhoneNumberComponent implements OnInit {
       MobileTicketAPI.getOtp(
         this.phoneNumber,
         (data) => {
+          console.log(data);
+          
           if (data == "OK") {
             this.showLoader = false;
             this.router.navigate(["otp_pin"]);

@@ -1,7 +1,7 @@
 {
-  "local_db_url": {
+  "local_db_connection_string": {
     "value": "mongodb://user3:user3@localhost/test1",
-    "description": "On premise mongo db connect url"
+    "description": "On premise mongo database connection URL"
   },
   "tenant_id": {
     "value": "1001",

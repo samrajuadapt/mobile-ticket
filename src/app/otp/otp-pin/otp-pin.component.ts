@@ -6,6 +6,7 @@ import { AlertDialogService } from "../../shared/alert-dialog/alert-dialog.servi
 import { RetryService } from "../../shared/retry.service";
 import { Util } from "../../util/util";
 import { TranslateService } from "ng2-translate";
+import { min } from "rxjs/operator/min";
 
 declare var MobileTicketAPI: any;
 declare var ga: Function;
@@ -53,23 +54,32 @@ export class OtpPinComponent implements OnInit {
   }
 
   public timer() {
-    // let t = timeLeft;
     this.showTimer = true;
-    let timer = setInterval( () =>{
-      let minutes = Math.floor((this.leftTime / (60)));
-      let seconds = Math.floor((this.leftTime % (60)));
-      if (this.leftTime < 1) {
-        clearInterval(timer);
-        this.timeUp();
+    let timer = setInterval(() => {
+      if (this.showTimer) {
+        let minutes = Math.floor(this.leftTime / 60);
+        let minutes_ = minutes.toString();
+        if (minutes < 10) {
+          minutes_ = "0" + minutes_;
+        }
+        let seconds = Math.floor(this.leftTime % 60);
+        let seconds_ = seconds.toString();
+        if (seconds < 10) {
+          seconds_ = "0" + seconds;
+        }
+        if (this.leftTime < 1) {
+          clearInterval(timer);
+          this.timeUp();
+        }
+        if (this.leftTime == this.timeLeft - 10) {
+          this.showResend();
+        }
+        document.getElementById("minute").innerHTML = minutes_;
+        document.getElementById("seperator").innerHTML = ":";
+        document.getElementById("second").innerHTML = seconds_;
+        this.leftTime--;
       }
-      if (this.leftTime==(this.timeLeft-10)) {
-        this.showResend();
-      } 
-      document.getElementById("minute").innerHTML = minutes.toString();  
-      document.getElementById("seperator").innerHTML = ':';  
-      document.getElementById("second").innerHTML = seconds.toString();
-      this.leftTime--;   
-    } , 1000 )
+    }, 1000);
   }
 
   public onPinChanged() {
@@ -87,12 +97,22 @@ export class OtpPinComponent implements OnInit {
 
   public timeUp() {
     // delete otp
-    this.alertDialogService.activate("Your token is expired").then((res) => {
+    MobileTicketAPI.deleteOtp(
+      MobileTicketAPI.getEnteredOtpPhoneNum(),
+      (data) => {
+        console.log(data);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+
+    this.alertDialogService.activate("Your pin is expired").then((res) => {
       this.router.navigate(["otp_number"]);
     });
   }
 
-  showResend(): void {  
+  showResend(): void {
     this.disableResend = "auto";
   }
 
@@ -105,7 +125,7 @@ export class OtpPinComponent implements OnInit {
         if (data == "OK") {
           this.showLoader = false;
           this.alertDialogService
-            .activate("You will be recieved an otp")
+            .activate("You will be recieved a pin")
             .then((res) => {});
           this.pin = "";
           this.leftTime = this.timeLeft;
@@ -141,6 +161,7 @@ export class OtpPinComponent implements OnInit {
 
           if (data == "OK") {
             this.showLoader = false;
+            this.showTimer = false;
             // createVisit
             MobileTicketAPI.setOtpPhoneNumber("");
             MobileTicketAPI.createVisit(
@@ -151,7 +172,6 @@ export class OtpPinComponent implements OnInit {
                   eventAction: "create",
                   eventLabel: "vist-create",
                 });
-
                 this.router.navigate(["ticket"]);
                 // this.isTakeTicketClickedOnce = false;
               },
@@ -205,7 +225,7 @@ export class OtpPinComponent implements OnInit {
             this.showLoader = false;
             if (this.otpTries < 3) {
               let alertMessage =
-                "Otp is invalid. Please try again.You have " +
+                "Pin is invalid. Please try again.You have " +
                 (3 - this.otpTries) +
                 " attempt(s) remaining";
               this.alertDialogService.activate(alertMessage).then((res) => {

@@ -53,7 +53,6 @@ import {CookieConsentDialogComponent} from "./cookie-container/cookie-consent-di
 import {CustomerDataComponent} from "./customer-data/customer-data.component";
 import { CustomerDataGuard } from "./customer-data/customer-data-guard";
 import { UnautherizedComponent } from "./ticket-info/unautherized/unautherized.component";
-import { OtpComponent } from './otp/otp.component';
 import { OtpPhoneNumberComponent } from './otp/otp-phone-number/otp-phone-number.component';
 import { OtpPinComponent } from './otp/otp-pin/otp-pin.component';
 
@@ -69,7 +68,7 @@ declare var MobileTicketAPI:any;
     QueueComponent, VisitCancelComponent, QueueItemComponent, SortPipe,
     ConnectivityMessageComponent, VisitNotfoundComponent, BranchNotfoundComponent, ConfirmDialogComponent, AlertDialogComponent,
     BranchOpenHoursComponent, OpenHourItemComponent, AppointmentComponent, CutomerPhoneComponent,PrivacyPolicyComponent, CustomerDataComponent,
-    CookieContainerComponent,CookieConsentDialogComponent,UnautherizedComponent, OtpComponent, OtpPhoneNumberComponent, OtpPinComponent
+    CookieContainerComponent,CookieConsentDialogComponent,UnautherizedComponent, OtpPhoneNumberComponent, OtpPinComponent
   ],
   imports: [
     BrowserModule,

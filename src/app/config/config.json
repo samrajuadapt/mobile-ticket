@@ -151,6 +151,10 @@
     "value": "disable",
     "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
   },
+  "block_other_devices": {
+    "value": "disable",
+    "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
+  },
   "otp_service": {
     "value": "enable",
     "description": "Enable or disable OTP service"
