@@ -126,5 +126,14 @@
     "use.of.cookies" : "use of cookies",
     "decline" : "Decline",
     "accept" : "Accept"
+  },
+  "otp" : {
+    "submit" : "Create ticket",
+    "resend" : "Resend OTP",
+    "getOTP" : "Get OTP",
+    "firstAdvantageByEnteringOtpPhone" : "1. One Time Password to your mobile",
+    "secondAdvantageByEnteringOtpPhone" : "2. Secure ticket creating",
+    "firstAdvantageByEnteringPin" : "1. Enter pin before it expires",
+    "secondAdvantageByEnteringPin" : "2. Resend pin if you did not get "
   }
 }

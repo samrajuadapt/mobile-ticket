@@ -432,7 +432,58 @@ export class AuthGuard implements CanActivate {
                         resolve(true);
                     }
                 }
-            } else {
+            }
+            else if (url.startsWith('/otp_number')) {
+                if ((visitInfo && visitInfo !== null)) {
+                    this.router.navigate(['ticket']);
+                    resolve(false);
+                } else if (this.prevUrl.startsWith('/customer_data') || this.prevUrl.startsWith('/services')) {
+                    if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+                        this.router.navigate(['open_hours']);
+                        resolve(false);
+                    } else {
+                        if (this.checkCreateTicketOption(resolve)) {
+                            return;
+                        }
+                        resolve(true);
+                    }
+                } else if (this.prevUrl.startsWith('/otp_pin')) {
+                    if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+                        this.router.navigate(['open_hours']);
+                        resolve(false);
+                    } else {
+                        if (this.checkCreateTicketOption(resolve)) {
+                            return;
+                        }
+                        resolve(true);
+                    }
+                } else {
+                    this.router.navigate(['/branches']);
+                    resolve(false);
+                }
+            }
+            else if (url.startsWith('/otp_pin')) {
+                if ((visitInfo && visitInfo !== null)) {
+                    this.router.navigate(['ticket']);
+                    resolve(false);
+                } else if (this.prevUrl.startsWith('/otp_number')) {
+                    if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+                        this.router.navigate(['open_hours']);
+                        resolve(false);
+                    } else {
+                        if (this.checkCreateTicketOption(resolve)) {
+                            return;
+                        }
+                        resolve(true);
+                    }
+                } else {
+                    this.router.navigate(['/branches']);
+                    resolve(false);
+                }
+            }
+
+
+            else {
                 this.router.navigate(['/branches']);
                 resolve(false);
             }

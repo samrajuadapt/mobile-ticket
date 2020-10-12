@@ -1,0 +1,10 @@
+{
+  "local_db_url": {
+    "value": "mongodb://user3:user3@localhost/test1",
+    "description": "On premise mongo db connect url"
+  },
+  "tenant_id": {
+    "value": "1001",
+    "description": "unique identifire of the client application"
+  }
+}

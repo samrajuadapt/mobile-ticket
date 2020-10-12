@@ -35,7 +35,7 @@
     "value": [
       {
         "translation_key": "open_hours.week_day1",
-        "from": "8:00",
+        "from": "5:00",
         "to": "19:00",
         "description": "monday",
         "display_from": "8:00",
@@ -45,7 +45,7 @@
       {
         "translation_key": "open_hours.week_day2",
         "from": "8:00",
-        "to": "19:00",
+        "to": "23:59",
         "description": "tuesday",
         "display_from": "8:00",
         "display_to": "18:00",
@@ -53,8 +53,8 @@
       },
       {
         "translation_key": "open_hours.week_day3",
-        "from": "8:00",
-        "to": "19:00",
+        "from": "0:00",
+        "to": "23:59",
         "description": "wednesday",
         "display_from": "8:00",
         "display_to": "18:00",
@@ -62,8 +62,8 @@
       },
       {
         "translation_key": "open_hours.week_day4",
-        "from": "8:00",
-        "to": "19:00",
+        "from": "0:00",
+        "to": "23:00",
         "description": "thursday",
         "display_from": "8:00",
         "display_to": "18:00",
@@ -90,7 +90,7 @@
       {
         "translation_key": "open_hours.week_day7",
         "from": "8:00",
-        "to": "19:00",
+        "to": "23:59",
         "description": "sunday",
         "display_from": "8:00",
         "display_to": "18:00",
@@ -124,7 +124,7 @@
     "description": "Date format for showing the appointment date. Allowed placeholders are DD MM YY YYYY"
   },
   "customer_data": {
-    "value": "disable",
+    "value": "enable",
     "description": "Enable or disable customer access to enter customer phone number using mobile ticket UI, 'on = enable', 'off = disable'"
   },
   "privacy_policy": {
@@ -149,6 +149,14 @@
   },
   "block_other_browsers": {
     "value": "disable",
-    "description": "Enable or disable whether user allow to use/open the ticket in other browsers apart from the created device. 'on = enable', 'off = disable'"
+    "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
+  },
+  "otp_service": {
+    "value": "enable",
+    "description": "Enable or disable OTP service"
+  },
+  "otp_timer_color": {
+    "value": "#FF0000",
+    "description": "Displying color of otp countdown timer"
   }
 }

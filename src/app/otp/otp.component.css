@@ -1,0 +1,215 @@
+.customer-phone {
+    margin: 10px auto;
+    max-width: calc((9 * 40px) + 50px + (2px * 10) + 1px);
+    width: calc((9 * 8.5vw) + 12vw + (2px * 10) + 1px);
+    font-family: Roboto-Regular;
+}
+.customer-phone__number-container {
+    background: white;
+    border-bottom: 2px solid #bc0e3d;
+    color: white;
+    height: 60px;
+}
+.phone-num{
+    display: flex;
+    height: 60px;
+}
+.phone-container-icon {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.phone-icon {
+    fill: rgba(0, 0, 0, 0.54);;
+    margin: 10px;
+}
+.send-icon{
+    fill: white;
+    margin: 10px;
+    cursor: pointer;
+}
+.edit-icon{
+    fill: white;
+    margin: 10px;
+}
+.phone-num-text{
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: .15px;
+    color: #fff;
+    font-weight: 300;
+    padding: 0;
+    margin: 0;
+}
+.phone-num-input {
+    border: none;
+    background: transparent;
+    caret-color: #bc0e3d;
+    color: rgba(0, 0, 0, 0.82);
+    width: 100%;
+    font-size: 14px;
+    margin: 0 -15px;
+}
+.phone-num-input-container {
+    margin: 14px 10px;
+    flex-grow: 1;
+}
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: rgba(0, 0, 0, 0.62);
+    opacity: 0.6; /* Firefox */
+  }
+  
+  :-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: rgba(0, 0, 0, 0.62);
+    opacity: 0.6;
+  }
+
+  .phone-num-bottom-section {
+      background: white;
+      padding: 15px;
+  }
+  .phone-num-bottom-initial-topic {
+    font-size: 12px;
+    font-weight: 500;
+    color: #b30042;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .phone-devider {
+    width: 100px;
+    left: 0px;
+    text-align: left;
+    margin: 8px 0px;
+    border-width: 0px 0px 2px;
+    border-top-style: initial;
+    border-right-style: initial;
+    border-bottom-style: solid;
+    border-left-style: initial;
+    border-top-color: initial;
+    border-right-color: initial;
+    border-bottom-color: #bc0e3d;
+    border-left-color: initial;
+    border-image: initial;
+  }
+  .phone-num-points-container {
+      display: flex;
+  }
+  .point-icon-container{
+      margin: 0 10px;
+  }
+  .phone-num-points-text {
+    font-size: 14px;
+    line-height: 2;
+    letter-spacing: 0.4px;
+    font-weight: 500;
+    color: rgba(0,0,0,.6);
+  }
+  .phone-num-error {
+    font-size: 12px;
+    color: red;
+  }
+  .privacy-container {
+      display: flex;
+  }
+  .message-icon {
+      margin: 0 10px;
+  }
+  .btn-understood {
+    font-size: 14px;
+    color: #a9023b;
+    text-transform: uppercase;
+    font-weight: 500;
+    border: 1px solid rgba(0,0,0,.12);
+    padding: 8px 20px;
+    cursor: pointer;
+    border-radius: 40px;
+  }
+  .btn-understood-container {
+      display: flex;
+      flex-direction: row-reverse;
+  }
+  .privacy-policy-link {
+    color: #03996c;
+    cursor: pointer;
+  }
+  .phone-num-display {
+    font-size: 16px;
+    letter-spacing: .15px;
+    color: hsla(0,0%,100%,.38);
+    display: block;
+  }
+  .button-container{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .button-inner-container {
+      display: flex;
+      width: 220px;
+  }
+  .phone-secondary-btn {
+    text-transform: uppercase;
+    color: #a9023b;
+    text-align: center;
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+    border: none!important;
+    font-size: 16px;
+    margin: auto;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: transparent;
+    line-height: 1.14;
+    font-weight: 500;
+  }
+  .edit-mode-policy-link {
+    color: #a9023b;
+    cursor: pointer;
+    text-decoration: underline;
+    display:block
+  }
+  .edit-mode-policy-link::first-letter {
+    text-transform: capitalize;
+   }
+
+   .send_button {
+    /* background: #b30042; */
+    cursor: pointer;
+    padding: 10px 15px;
+    text-align: center;
+    margin: 20px 10px;
+    border-radius: 20px;
+    font-weight: 800;
+    max-width: 400px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 10px auto;
+    font-size: 16px
+   }
+.privcay-container-bottom {
+  margin: 30px;
+}
+.custom-phone-card {
+  height: calc(100vh - 16em) !important;
+  overflow: auto;
+}
+.secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* Small phones */
+@media (max-width: 400px){
+
+    .customer-phone  {
+      max-width: calc((9 * 35px) + 45px + (2px * 10) + 1px);
+      width: calc((9 * 8.5vw) + 12vw + (2px * 10) + 1px);
+    }
+    .phone-num-error { 
+      font-size: 9px;
+    }
+  }
+  

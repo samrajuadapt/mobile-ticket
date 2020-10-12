@@ -2553,6 +2553,7 @@ var MobileTicketAPI = (function () {
   var branches = [];
   var services = [];
   var enteredPhoneNum = '';
+  var enteredOtpPhoneNum = '';
   var fingerprint = '';
 
   var visitId = undefined;
@@ -2568,6 +2569,8 @@ var MobileTicketAPI = (function () {
   var VISIT_EVENT_NAME = "OPEN_MT_VISIT";
 
   var MOBILE_TICKET = "/MobileTicket";
+  var MT_SERVICE = "/MTService";
+  var rest = "/rest";
   var GEO = "/geo";
   var SERVICES = "services";
   var BRANCHES = "branches";
@@ -2597,7 +2600,7 @@ var MobileTicketAPI = (function () {
   $.ajaxSetup({
     beforeSend: function (xhr) {
       xhr.setRequestHeader("Accept", "application/json");
-      xhr.setRequestHeader("auth-token", "d0516eee-a32d-11e5-bf7f-feff819cdc9f"); //Change the api token with your one      
+      xhr.setRequestHeader("auth-token", "1234"); //Change the api token with your one      
     }
   });
 
@@ -2684,6 +2687,10 @@ var MobileTicketAPI = (function () {
 
   function getEnteredPhoneNum() {
     return MobileTicketAPI.enteredPhoneNum;
+  }
+
+  function getEnteredOtpPhoneNum() {
+    return MobileTicketAPI.enteredOtpPhoneNum;
   }
 
   function getFingerprint() {
@@ -2810,6 +2817,106 @@ var MobileTicketAPI = (function () {
           },
           error: function (xhr, status, errorMsg) {
             onError(xhr, status, errorMsg);
+          }
+        });
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
+    getOtp: function (phone, onSuccess, onError) {
+      try {
+        var MT_SERVICE_SEND_SMS = MT_SERVICE + "/sms";
+
+        $.ajax({
+          type: "POST",
+          data : JSON.stringify({ phone: phone }),
+          contentType: 'application/json',
+          url: MT_SERVICE_SEND_SMS,
+          success: function (data) {
+            console.log(data);
+            if (data != undefined) {
+              onSuccess(data);
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            // onError(xhr, status, errorMsg);
+            console.log(status);
+          }
+        });
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
+    resendOtp: function (phone, onSuccess, onError) {
+      try {
+        var MT_SERVICE_SEND_SMS = MT_SERVICE + "/otp/resend";
+
+        $.ajax({
+          type: "POST",
+          data : JSON.stringify({ phone: phone }),
+          contentType: 'application/json',
+          url: MT_SERVICE_SEND_SMS,
+          success: function (data) {
+            console.log(data);
+            if (data != undefined) {
+              onSuccess(data);
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            // onError(xhr, status, errorMsg);
+            console.log(status);
+          }
+        });
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
+    checkOtp: function (otp, phone, onSuccess, onError) {
+      try {
+        var MT_SERVICE_CHECK_OTP = MT_SERVICE + "/otp/check";
+
+        $.ajax({
+          type: "POST",
+          data : JSON.stringify({ otp: otp, phone: phone }),
+          contentType: 'application/json',
+          url: MT_SERVICE_CHECK_OTP,
+          success: function (data) {
+            console.log("otp checked");
+            console.log(data);
+            if (data != undefined) {
+              onSuccess(data);
+            } else {
+              // lifespan+3
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            // onError(xhr, status, errorMsg);
+            console.log(status);
+          }
+        });
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
+    lockNumber: function (phone, lockType, onSuccess, onError) {
+      try {
+        var MT_SERVICE_LOCK_NUMBER = MT_SERVICE + "/otp/lock";
+
+        $.ajax({
+          type: "POST",
+          data : JSON.stringify({ phone: phone, lockType: lockType }),
+          contentType: 'application/json',
+          url: MT_SERVICE_LOCK_NUMBER,
+          success: function (data) {
+            console.log("number locked");
+            console.log(data);
+            if (data != undefined) {
+              onSuccess(data);
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            // onError(xhr, status, errorMsg);
+            console.log(status);
           }
         });
       } catch (e) {
@@ -3186,6 +3293,12 @@ var MobileTicketAPI = (function () {
     },
     setPhoneNumber: function (phone) {
       MobileTicketAPI.enteredPhoneNum = phone;
+    },
+    setOtpPhoneNumber: function (phone) {
+      MobileTicketAPI.enteredOtpPhoneNum = phone;
+    },
+    getEnteredOtpPhoneNum: function () {
+      return getEnteredOtpPhoneNum();
     },
     getEnteredPhoneNum: function () {
       return getEnteredPhoneNum();

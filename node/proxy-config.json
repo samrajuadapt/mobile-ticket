@@ -1,46 +1,54 @@
 {
-    "apigw_ip_port": {
-        "value": "10.2.3.88:9090",
-        "description": "API Gateway - host address"
-    },
-    "local_webserver_port": {
-        "value": "81",
-        "description": "Local webserver port"
-    },
-    "auth_token": {
-        "value": "nosecrets",
-        "description": "Mobile API user - authentication token"
-    },
-    "local_webserver_ssl_port": {
-        "value": "4443",
-        "description": "Local webserver HTTPS port"
-    },
-    "support_ssl": {
-        "value": "true",
-        "description": "Flag indicating server supports SSL.Should have a valid public key and certificate in 'sslcert' folder "
-    },
-    "gateway_has_certificate": {
-        "value": "true",
-        "description": "Flag indicating the API gateway is configured to run on HTTPS"
-    },
-    "gateway_certificate_is_valid": {
-        "value": "true",
-        "description": "Flag indicating the configured SSL certificate in the API gateway is a valid. This setting is active only if 'gateway_has_certificate' is true. This must be set to 'false' if API gateway is configured with a self signed certificate "
-    },
-    "embed_iFrame": {
-        "value": "false",
-        "description": "Flag indicating the enable or disable X-FRAME-OPTIONS in http header to block iframe"
-    },
-    "tls_version": {
-        "value": "",
-        "description": "Flag indicating TLS version of the server. Possible values are 'TLSv1_method', 'TLSv1_1_method' and 'TLSv1_2_method'. Keep empty when using the latest version. Recommended for TLS 1.2 or later."
-    },
-    "hsts_expire_time": {
-        "value": "63072000",
-        "description": "Flag indicating HSTS(HTTP Strict-Transport-Security) expire time."
-    },
-    "cipher_set": {
-        "value": [],
-        "description": "Flag indicating cipher set which use in the server. Fill the value like this. ['ECDHE-RSA-AES128-SHA256', 'DHE-RSA-AES128-SHA256', 'AES128-GCM-SHA256']. Keep it empty when not going to modify."
-    }
+  "apigw_ip_port": {
+    "value": "localhost:9090",
+    "description": "API Gateway - host address"
+  },
+  "local_webserver_port": {
+    "value": "81",
+    "description": "Local webserver port"
+  },
+  "local_functional_server_port": {
+    "value": "82",
+    "description": "Local functional server port"
+  },
+  "auth_token": {
+    "value": "1234",
+    "description": "Mobile API user - authentication token"
+  },
+  "local_webserver_ssl_port": {
+    "value": "4443",
+    "description": "Local webserver HTTPS port"
+  },
+  "support_ssl": {
+    "value": "false",
+    "description": "Flag indicating server supports SSL.Should have a valid public key and certificate in 'sslcert' folder "
+  },
+  "gateway_has_certificate": {
+    "value": "false",
+    "description": "Flag indicating the API gateway is configured to run on HTTPS"
+  },
+  "gateway_certificate_is_valid": {
+    "value": "true",
+    "description": "Flag indicating the configured SSL certificate in the API gateway is a valid. This setting is active only if 'gateway_has_certificate' is true. This must be set to 'false' if API gateway is configured with a self signed certificate "
+  },
+  "embed_iFrame": {
+    "value": "false",
+    "description": "Flag indicating the enable or disable X-FRAME-OPTIONS in http header to block iframe"
+  },
+  "tls_version": {
+    "value": "",
+    "description": "Flag indicating TLS version of the server. Possible values are 'TLSv1_method', 'TLSv1_1_method' and 'TLSv1_2_method'. Keep empty when using the latest version. Recommended for TLS 1.2 or later."
+  },
+  "hsts_expire_time": {
+    "value": "63072000",
+    "description": "Flag indicating HSTS(HTTP Strict-Transport-Security) expire time."
+  },
+  "cipher_set": {
+    "value": [],
+    "description": "Flag indicating cipher set which use in the server. Fill the value like this. ['ECDHE-RSA-AES128-SHA256', 'DHE-RSA-AES128-SHA256', 'AES128-GCM-SHA256']. Keep it empty when not going to modify."
+  },
+  "tenant_id": {
+    "value": "1001",
+    "description": "unique identifire of the client application"
+  }
 }
