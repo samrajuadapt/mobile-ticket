@@ -33,7 +33,8 @@ export class BranchesComponent implements AfterViewInit {
   @Output() isBranchOpen = new EventEmitter<boolean>();
 
   constructor(private branchService: BranchService, private retryService: RetryService, private route: ActivatedRoute,
-    public router: Router, private translate: TranslateService, private sort: SortPipe, location: PlatformLocation, private config: Config) {
+    public router: Router, private translate: TranslateService,
+    private sort: SortPipe, location: PlatformLocation, private config: Config, private openHourValidator: BranchOpenHoursValidator) {
     this.translate.get('branch.defaultTitle').subscribe((res: string) => {
       document.title = res;
     });
@@ -61,7 +62,7 @@ export class BranchesComponent implements AfterViewInit {
   }
 
   public branchOpenCheck(){
-     return (new BranchOpenHoursValidator(this.config)).openHoursValid();
+     return this.openHourValidator.openHoursValid();
   }
 
   public loadData(branchService: BranchService, retryService: RetryService) {

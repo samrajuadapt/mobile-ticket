@@ -40,11 +40,17 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
-<h2>Version 1.9.2 - internal</h2>
+<h2>Version 1.10.0 - internal</h2>
 
-**Date: 2020-10-06**
+**Date: 2020-10-14**
  
-**Build number: 8**
+**Build number: 1**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-312** | **Mobile Ticket works with button sheduler** |
 
 <h3>Bug fixes</h3>
 

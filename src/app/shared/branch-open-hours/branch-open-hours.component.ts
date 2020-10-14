@@ -4,6 +4,8 @@ import { Config } from '../../config/config';
 import { BranchOpenHoursValidator } from '../../util/branch-open-hours-validator'
 import { Router } from '@angular/router';
 
+declare var MobileTicketAPI: any;
+
 @Component({
   selector: 'app-branch-open-hours',
   templateUrl: './branch-open-hours-tmpl.html',
@@ -13,17 +15,20 @@ import { Router } from '@angular/router';
 export class BranchOpenHoursComponent {
 
   public openHours;
+  public branchShedule = false;
 
-  constructor(private config: Config, private translate: TranslateService, private router: Router) {
+  constructor(private config: Config, private translate: TranslateService,
+    private router: Router, private openHourValidator: BranchOpenHoursValidator) {
 
    }
 
   ngOnInit() {
-    if ((new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+    let config =  this.config.getConfig('branch_open_hours');
+    this.branchShedule = this.config.getConfig('branch_shedule') === 'enable' ? true : false;
+    if (this.openHourValidator.openHoursValid() && !this.branchShedule) {
            this.router.navigate(['branches']);
     }
-     this.openHours = [];
-    let config =  this.config.getConfig('branch_open_hours');
+    this.openHours = [];
 
     if (config !== null) {
       for (let i = 0; i < config.length; i++ ) {

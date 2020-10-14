@@ -70,7 +70,7 @@ The current implementation is intended to be hosted on node.js and proxying is p
 
 #### Configuring ApiGateway for Development Environment
 
-For development one needs to add the following four routes to the application.yml
+For development one needs to add the following five routes to the application.yml
 
 ```yml
     my_appointment:
@@ -88,6 +88,9 @@ For development one needs to add the following four routes to the application.ym
     meeting_info:
       path: /MobileTicket/MyMeeting/branches/**
       url: ${orchestra.central.url}/qsystem/rest/entrypoint/branches
+    branch_shedule:
+      path: /MobileTicket/BranchShedule/**
+      url: ${orchestra.central.url}/qsystem/rest/servicepoint
 ```
 #### Configuring the Proxy for Development Environment
 
@@ -258,6 +261,10 @@ project directory
      "service_screen_timeout":{
         "value":"10",
         "description": "The time duration (in minutes) which the app will stay in services screen without creating a ticket"
+    },
+    "branch_shedule":{
+        "value": "disable",
+        "description": "Enable or disable branch shedule. When enabled, ignore the branch_open_hours values."
     },
     "branch_open_hours":{
         "value" : [     
@@ -795,3 +802,6 @@ Following options are available for creating virtual meetings.
 
 ## Cookie consent
 Mobile Ticket can be configured to add an interactive cookie permission popup to get the consent of the user before using any cookies. This can be enabled by `cookie_consent` attribute in the `config.json`. If it is `enabled`, then the user will be able to see a popup when landing the mobile ticket application. Cookie consent text has been stored in `cookie-LANG.html` which is stored in `locale/cookie-consent-files` directory. Browsers will pick the relevant message depending on the browser language. If `cookie_consent` is enabled, then cookies will be used only for google analytics after accepting the consent.
+
+## Branch shedule
+Mobile Ticket can be works with Button Sheduler. To enable this service, relevent Button Shedule application and utt should be configured and also enable `branch_shedule` attribute in the `config.json`.

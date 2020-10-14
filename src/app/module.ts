@@ -57,6 +57,8 @@ import { OtpPhoneNumberComponent } from './otp/otp-phone-number/otp-phone-number
 import { OtpPinComponent } from './otp/otp-pin/otp-pin.component';
 
 
+import { BranchSheduleService } from './shared/branch-shedule.service'
+import { BranchOpenHoursValidator } from './util/branch-open-hours-validator';
 
 declare var MobileTicketAPI:any;
 
@@ -84,7 +86,7 @@ declare var MobileTicketAPI:any;
   ],
   providers: [BranchService, ServiceService, TicketInfoService, AuthGuard, ConfirmDialogService, AlertDialogService,
     VisitCancelLeavelineGuard, RetryService, Locale, LocationService, SortPipe, CustomerDataGuard,
-    Config, 
+    Config, BranchSheduleService, BranchOpenHoursValidator,
     {provide: APP_INITIALIZER, useFactory: configuration, deps: [Config], multi: true}
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],

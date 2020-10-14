@@ -45,7 +45,7 @@ describe('ServiceService', () => {
   let serviceListService
 
   beforeEach(() => {
-    serviceListService = new ServiceService(null, translate);
+    serviceListService = new ServiceService(null, translate, null);
   });
 
   afterEach(() => {

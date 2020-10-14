@@ -23,7 +23,7 @@ export class ServicesComponent implements AfterViewInit {
   @Output() onServiceListLoaded = new EventEmitter<boolean>();
 
   constructor(private serviceService: ServiceService, private retryService: RetryService, private router: Router,
-              private config: Config) {
+              private config: Config, private openHourValidator: BranchOpenHoursValidator) {
     this.onShowHideServiceFetchError.emit(false);
     serviceService.getServices((serviceList: Array<ServiceEntity>, error: boolean) => {
       if (error) {
@@ -61,7 +61,7 @@ export class ServicesComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if(!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+    if(!this.openHourValidator.openHoursValid()) {
             this.router.navigate(['open_hours']);
     }
     window.addEventListener('orientationchange', this.setListShadow, true);

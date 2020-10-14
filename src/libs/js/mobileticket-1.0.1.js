@@ -2550,6 +2550,7 @@ var MobileTicketAPI = (function () {
   var selectedService = {};
   var selectedBranch = {};
   var visitInformation = {};
+  var serviceAvailablity = {};
   var branches = [];
   var services = [];
   var enteredPhoneNum = '';
@@ -2591,6 +2592,7 @@ var MobileTicketAPI = (function () {
   var EVENTS = "events";
   var CURRENT_STATUS = "CurrentStatus";
   var MYMEETING = "MyMeeting"
+  var BRANCH_SHEDULE = "BranchShedule"
   var self = this;
 
   $(document).ajaxError(function (event, request, settings) {
@@ -2672,6 +2674,7 @@ var MobileTicketAPI = (function () {
     MobileTicketAPI.visitInformation = undefined;
     MobileTicketAPI.appointment = undefined;
     MobileTicketAPI.meetingUrl = undefined;
+    MobileTicketAPI.serviceAvailablity = undefined;
   }
 
   function eraseCookie(name) {
@@ -2964,6 +2967,26 @@ var MobileTicketAPI = (function () {
         onError(null, null, e.message);
       }
     },
+    getBranchShedule : function(branchId, onSuccess, onError) {
+      try {
+        var BRANCH_SHEDULE_REST_API = MOBILE_TICKET + "/" + BRANCH_SHEDULE + "/variables/scheduleStatus" + branchId;
+        $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: BRANCH_SHEDULE_REST_API,
+          success: function (data) {
+            if (data != undefined) {
+              onSuccess(data);
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            onError(xhr, status, errorMsg);
+          }
+        });
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
     getBranchInfoById: function (id, onSuccess, onError) {
       try {
         var SERVICES_REST_API = MOBILE_TICKET + "/" + BRANCHES + "/" + id;
@@ -3182,7 +3205,7 @@ var MobileTicketAPI = (function () {
     },
     findAppointment: function(appointmentId, onSuccess, onError) {
       try {
-        var APP_REST_API = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/" +FIND + "/" +  appointmentId;
+        var APP_REST_API = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/" + FIND + "/" +  appointmentId;
          $.ajax({
           type: "GET",
           dataType: "json",
@@ -3311,6 +3334,9 @@ var MobileTicketAPI = (function () {
     setServiceSelection: function (service) {
       MobileTicketAPI.selectedService = service;
     },
+    setServiceAvailability: function (services) {
+      MobileTicketAPI.serviceAvailablity = services;
+    },
     setPhoneNumber: function (phone) {
       MobileTicketAPI.enteredPhoneNum = phone;
     },
@@ -3334,6 +3360,9 @@ var MobileTicketAPI = (function () {
     },
     getSelectedService: function () {
       return getSelectedService();
+    },
+    getServiceAvailablity: function () {
+      return MobileTicketAPI.serviceAvailablity;
     },
     getCurrentVisit: function () {
       return getCurrentVisit();

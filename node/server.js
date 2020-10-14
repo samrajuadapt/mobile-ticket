@@ -463,6 +463,31 @@ var apiOtpProxy = proxy('localhost:82', {
 	},
 	https: APIGWHasSSL
 });
+var apiButtonSheduleProxy = proxy(host, {
+	// ip and port off apigateway
+
+	proxyReqPathResolver: function (req) {
+		var newUrl = req.originalUrl.replace("/MobileTicket/BranchShedule/","/rest/servicepoint/");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL
+});
 
 var handleHeaders = function (res) {
 	if (isEmbedIFRAME === false) {
@@ -491,6 +516,7 @@ app.use("/MobileTicket/services/*", apiProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
 app.use("/MobileTicket/MyMeeting/*", apiMeetingProxy);
 app.use("/MTService/*", apiOtpProxy);
+app.use("/MobileTicket/BranchShedule/*", apiButtonSheduleProxy);
 
 
 if (supportSSL) {

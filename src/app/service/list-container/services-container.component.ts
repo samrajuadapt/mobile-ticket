@@ -10,6 +10,7 @@ import { NavigationExtras } from '@angular/router';
 import { AlertDialogService } from "../../shared/alert-dialog/alert-dialog.service";
 import { Config} from '../../config/config';
 import {BranchOpenHoursValidator} from '../../util/branch-open-hours-validator'
+import { BranchSheduleService } from '../../shared/branch-shedule.service';
 declare var MobileTicketAPI: any;
 declare var ga: Function;
 
@@ -29,7 +30,7 @@ export class ServicesContainerComponent implements OnInit {
 
     constructor(private branchService: BranchService, private serviceService: ServiceService, public router: Router,
         private translate: TranslateService, private retryService: RetryService, private alertDialogService: AlertDialogService,
-        private config: Config) {
+        private config: Config, private openHourValidator: BranchOpenHoursValidator, private branchSheduleService: BranchSheduleService) {
 
         this._isServiceListLoaded = false;
         serviceService.registerCountDownCompleteCallback(() => {
@@ -80,16 +81,26 @@ export class ServicesContainerComponent implements OnInit {
         this.selectedServiceId = selectedServiceId;
     }
 
-    onTakeTicket() {        
-        if(!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+    onTakeTicket() {
+        if (this.config.getConfig('branch_shedule') === 'enable') {
+            const _thisObj = this;
+            const selectedBranch = MobileTicketAPI.getSelectedBranch();
+            const branchId = selectedBranch ? selectedBranch.id : undefined;
+            this.branchSheduleService.checkAvailability(branchId, this.selectedServiceId, function(status){
+                if (status) {
+                    _thisObj.takeTicket();
+                } else {
+                    _thisObj.router.navigate(['open_hours']);
+                }
+            });
+        } else if (!this.openHourValidator.openHoursValid()) {
             this.router.navigate(['open_hours']);
-        }
-        else{
+        } else {
             this.takeTicket();
         }
     }
 
-    private takeTicket(): void {       
+    private takeTicket(): void {
         let customerData = this.config.getConfig('customer_data');   
         let OtpService = this.config.getConfig('otp_service');   
         let isDeviceBounded  =  this.config.getConfig('block_other_devices');

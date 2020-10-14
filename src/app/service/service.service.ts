@@ -3,6 +3,7 @@ import { ServiceEntity } from '../entities/service.entity';
 import 'rxjs/add/operator/map';
 import { TranslateService } from 'ng2-translate';
 import { Config } from '../config/config';
+import { BranchSheduleService } from '../shared/branch-shedule.service';
 
 declare var MobileTicketAPI: any;
 
@@ -17,7 +18,7 @@ export class ServiceService {
   private countDownreTimersource;
   private serviceFecthTimerResource
 
-  constructor(private config: Config, private translate: TranslateService) {
+  constructor(private config: Config, private translate: TranslateService, private branchSheduleService: BranchSheduleService) {
     try {
       this.timerStart = this.config.getConfig('service_screen_timeout') * 60 * 1000;
     } catch (error) {
@@ -60,17 +61,21 @@ export class ServiceService {
   public convertToServiceEntities(serviceList): Array<ServiceEntity> {
     let entities: Array<ServiceEntity> = [];
     let serviceEntity: ServiceEntity;
+    const serviceAvailablity = MobileTicketAPI.getServiceAvailablity();
     for (let i = 0; i < serviceList.length; i++) {
-      serviceEntity = new ServiceEntity();
-      serviceEntity.id = serviceList[i].serviceId;
-      serviceEntity.name = serviceList[i].serviceName;
-      serviceEntity.waitingTime = serviceList[i].waitingTimeInDefaultQueue;
-      serviceEntity.customersWaiting = this.getShowCustomerAvailability() ?
-       serviceList[i].customersWaitingInDefaultQueue.toString() : undefined;
-      serviceEntity.selected = false;
-      entities.push(serviceEntity);
+      const serviceStatus = this.branchSheduleService.getServiceStatus(serviceList[i].serviceId, serviceAvailablity);
+      if (serviceStatus) {
+        serviceEntity = new ServiceEntity();
+        serviceEntity.id = serviceList[i].serviceId;
+        serviceEntity.name = serviceList[i].serviceName;
+        serviceEntity.waitingTime = serviceList[i].waitingTimeInDefaultQueue;
+        serviceEntity.customersWaiting = this.getShowCustomerAvailability() ?
+        serviceList[i].customersWaitingInDefaultQueue.toString() : undefined;
+        serviceEntity.selected = false;
+        entities.push(serviceEntity);
+      }
     }
-    if (serviceList.length === 1) {
+    if (entities.length === 1) {
       entities[0].selected = true;
     }
     return entities;

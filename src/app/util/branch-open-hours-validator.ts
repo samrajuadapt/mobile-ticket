@@ -1,5 +1,7 @@
 import { Config } from '../config/config';
+import { Injectable } from '@angular/core';
 
+@Injectable()
 export class BranchOpenHoursValidator {
 
     
@@ -8,6 +10,9 @@ export class BranchOpenHoursValidator {
     }
 
    public  openHoursValid(){
+    if (this.config.getConfig('branch_shedule') === 'enable') {
+        return true;
+    }
        var days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday','friday', 'saturday'];
        let entries = this.config.getConfig("branch_open_hours");
        if(entries == null){
