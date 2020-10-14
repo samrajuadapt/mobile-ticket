@@ -7,6 +7,8 @@ export class OtpController {
   private otpService: OtpService = new OtpService();
 
   public async createOtp(req: Request, res: Response) {
+   
+    
     if (req.body.phone) {
       const newOtp = new OtpModel();
       newOtp.phoneNumber = req.body.phone;

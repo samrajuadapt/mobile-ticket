@@ -1,39 +1,42 @@
-var proxy = require('express-http-proxy');
-var express = require('express');
-var compression = require('compression');
-var zlib = require('zlib')
-var expressStaticGzip = require("express-static-gzip");
+import * as proxy from "express-http-proxy";
+import * as express from "express";
+import * as compression from "compression";
+import * as zlib from "zlib";
+import * as expressStaticGzip from "express-static-gzip";
+import * as fs from "fs";
+import * as https from "https";
+import * as path from "path";
 
-var fs = require('fs');
-var https = require('https');
-const http = require('http');
-var path = require('path');
-var app = express();
+import * as helmet from "helmet";
+import * as hidePoweredBy from "hide-powered-by";
+import * as csp  from "helmet-csp";
+import * as nocache  from "nocache";
+import * as nosniff  from "dont-sniff-mimetype";
+import * as frameguard  from "frameguard";
+import * as xssFilter  from "frameguard";
 
-var helmet = require('helmet');
-var hidePoweredBy = require('hide-powered-by');
-var csp = require('helmet-csp');
-var nocache = require('nocache');
-var nosniff = require('dont-sniff-mimetype');
-var frameguard = require('frameguard');
-var xssFilter = require('x-xss-protection');
+import { OtpRoutes } from "./mt-service/src/routes/otp.routes";
+import { connectDB } from "./mt-service/src/data-module/database";
+import bodyParser = require("body-parser");
 
-var configFile = 'proxy-config.json';
-var host = 'localhost:9090';
-var authToken = 'nosecrets';
-var port = '80';
-var sslPort = '4443';
-var supportSSL = false;
-var validAPIGWCert = "1";
-var APIGWHasSSL = true;
-var isEmbedIFRAME = false;
-var tlsVersion = '';
-var hstsExpireTime = '63072000';
-var tlsversionSet = ['TLSv1_method', 'TLSv1_1_method', 'TLSv1_2_method'];
-var cipherSet = [];
+const app: express.Application = express();
 
-var google_analytics = 'https://www.google-analytics.com';
-var bootstarp_cdn = 'https://maxcdn.bootstrapcdn.com';
+let configFile = 'proxy-config.json';
+let host = 'localhost:9090';
+let authToken = 'nosecrets';
+let port = '80';
+let sslPort = '4443';
+let supportSSL = false;
+let validAPIGWCert = "1";
+let APIGWHasSSL = true;
+let isEmbedIFRAME = false;
+let tlsVersion = '';
+let hstsExpireTime = '63072000';
+let tlsversionSet = ['TLSv1_method', 'TLSv1_1_method', 'TLSv1_2_method'];
+let cipherSet = [];
+
+const google_analytics = 'https://www.google-analytics.com';
+const bootstarp_cdn = 'https://maxcdn.bootstrapcdn.com';
 
 // Enable packet compression of each response
 app.use(compression({level: zlib.Z_BEST_COMPRESSION, strategy: zlib.Z_DEFAULT_STRATEGY}));
@@ -50,8 +53,8 @@ if (fs.existsSync('./src/zip')) {
 
 
 //update configurations using config.json
-var configuration = JSON.parse(
-	fs.readFileSync(configFile)
+const configuration = JSON.parse(
+	fs.readFileSync(configFile, "utf8")
 );
 // //update user-configurations using config.json for functional server
 // var userConfiguration = JSON.parse(
@@ -91,7 +94,6 @@ app.use(csp({
 	reportUri: '/report-violation',
 	objectSrc: ["'none'"]
 	},
-
 	// This module will detect common mistakes in your directives and throw errors
 	// if it finds any. To disable this, enable "loose mode".
 	loose: false,
@@ -126,15 +128,11 @@ tlsVersion = configuration.tls_version.value;
 hstsExpireTime = configuration.hsts_expire_time.value;
 cipherSet = configuration.cipher_set.value;
 
-// // functional server services
-// otpService = userConfiguration.otp_service.value;
-// fsPort = configuration.local_functional_server_port.value;
-
 //this will bypass certificate errors in node to API gateway encrypted channel, if set to '1'
 //if '0' communication will be blocked. So production this should be set to '0'
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = validAPIGWCert;
 
-var privateKey, certificate, credentials;
+let privateKey, certificate, credentials;
 
 if (supportSSL) {
 	privateKey = fs.readFileSync('sslcert/server.key', 'utf8');
@@ -149,7 +147,7 @@ if (supportSSL) {
 	}
 }
 
-var options = {
+const options = {
 	setHeaders: function (res, path, stat) {
 		res = handleHeaders(res);
 	}
@@ -159,87 +157,87 @@ app.use(express.static(__dirname + '/src', options));
 
 
 // Redirect no_branch requests to index.html
-app.get('/no_support$', function (req, res) {
+app.get('/no_support$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect no_branch requests to index.html
-app.get('/no_branch$', function (req, res) {
+app.get('/no_branch$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect fingerprint
-app.get('/fingerprintjs2$', function (req, res) {
+app.get('/fingerprintjs2$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'fingerprint2.js'));
 });
 // Redirect no_visit requests to index.html
-app.get('/no_visit$', function (req, res) {
+app.get('/no_visit$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect all requests that start with branches and end, to index.html
-app.get('/branches*', function (req, res) {
+app.get('/branches*', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect all requests that start with services and end, to index.html
-app.get('/services$', function (req, res) {
+app.get('/services$',  (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect all requests that start with ticket info and end, to index.html
-app.get('/ticket$', function (req, res) {
+app.get('/ticket$',  (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect all requests that start with branches and end, to index.html
-app.get('/open_hours$', function (req, res) {
+app.get('/open_hours$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 // Redirect all requests that start with appointment and end, to index.html
-app.get('/appointment$', function (req, res) {
+app.get('/appointment$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect all requests that start with customer data and end, to index.html
-app.get('/customer_data$', function (req, res) {
+app.get('/customer_data$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 // Redirect all requests that start with privacy policy and end, to index.html
-app.get('/privacy_policy$', function (req, res) {
+app.get('/privacy_policy$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
-app.get('/cookie_consent$', function (req, res) {
+app.get('/cookie_consent$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
-app.get('/otp_number$', function (req, res) {
+app.get('/otp_number$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
-app.get('/otp_pin$', function (req, res) {
+app.get('/otp_pin$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
 
 // Proxy mobile example to API gateway
-var apiProxy = proxy(host, {
+const apiProxy = proxy(host, {
 	// ip and port off apigateway
 
 	proxyReqPathResolver: function (req) {
@@ -264,7 +262,7 @@ var apiProxy = proxy(host, {
 	https: APIGWHasSSL
 });
 
-var apiFindProxy = proxy(host, {	// ip and port off apigateway
+const apiFindProxy = proxy(host, {	// ip and port off apigateway
 	proxyReqPathResolver: function (req) {
 		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/find/","/rest/calendar-backend/api/v1/appointments/publicid/");
 		return require('url').parse(newUrl).path;
@@ -287,20 +285,20 @@ var apiFindProxy = proxy(host, {	// ip and port off apigateway
 	},
 	https: APIGWHasSSL,
 	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
-		data = JSON.parse(proxyResData.toString('utf8'));
-		newData = {};
-		newData.appointment = {};
+		const data = JSON.parse(proxyResData.toString('utf8'));
+		let newData = {};
+		this.newData.appointment = {};
 		if (data.appointment !== undefined) {
-			newData.appointment.qpId = data.appointment.qpId
-			newData.appointment.branch = data.appointment.branch;
-			newData.appointment.start = data.appointment.start;
-			newData.appointment.services = data.appointment.services;
+			this.newData.appointment.qpId = data.appointment.qpId
+			this.newData.appointment.branch = data.appointment.branch;
+			this.newData.appointment.start = data.appointment.start;
+			this.newData.appointment.services = data.appointment.services;
 		}
 		return JSON.stringify(newData);
 	}
 });
 
-var apiFindCentralProxy = proxy(host, {	// ip and port off apigateway
+const apiFindCentralProxy = proxy(host, {	// ip and port off apigateway
 	proxyReqPathResolver: function (req) {
 		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/findCentral/","/rest/appointment/appointments/");
 		return require('url').parse(newUrl).path;
@@ -323,22 +321,22 @@ var apiFindCentralProxy = proxy(host, {	// ip and port off apigateway
 	},
 	https: APIGWHasSSL,
 	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
-		data = JSON.parse(proxyResData.toString('utf8'));
-		newData = {};
+		const data = JSON.parse(proxyResData.toString('utf8'));
+		let newData = {};
 		if (data !== undefined) {
-			newData.services = data.services;
-			newData.status = data.status
-			newData.branchId = data.branchId;
-			newData.startTime = data.startTime;
-			newData.endTime = data.endTime;
-			newData.properties = {};
-			newData.properties.notes = data.properties.notes;
+			this.newData.services = data.services;
+			this.newData.status = data.status
+			this.newData.branchId = data.branchId;
+			this.newData.startTime = data.startTime;
+			this.newData.endTime = data.endTime;
+			this.newData.properties = {};
+			this.newData.properties.notes = data.properties.notes;
 		}
 		return JSON.stringify(newData);
 	}
 });
 
-var apiEntryPointProxy = proxy(host, {
+const apiEntryPointProxy = proxy(host, {
 	// ip and port off apigateway
 
 	proxyReqPathResolver: function (req) {
@@ -364,7 +362,7 @@ var apiEntryPointProxy = proxy(host, {
 	https: APIGWHasSSL
 });
 
-var apiArriveProxy = proxy(host, {
+const apiArriveProxy = proxy(host, {
 	// ip and port off apigateway
 
 	proxyReqPathResolver: function (req) {
@@ -389,22 +387,22 @@ var apiArriveProxy = proxy(host, {
 	},
 	https: APIGWHasSSL,
 	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
-		data = JSON.parse(proxyResData.toString('utf8'));
-		newData = {};
-		newData.parameterMap = {};
+		const data = JSON.parse(proxyResData.toString('utf8'));
+		let newData = {};
+		this.newData.parameterMap = {};
 		if (data !== undefined) {
-			newData.id = data.id;
-			newData.ticketId = data.ticketId;
-			newData.currentVisitService = data.currentVisitService;
-			newData.checksum = data.checksum;
-			newData.parameterMap.startQueueOrigId = data.parameterMap.startQueueOrigId;
-			newData.parameterMap.branchName = data.parameterMap.branchName;
+			this.newData.id = data.id;
+			this.newData.ticketId = data.ticketId;
+			this.newData.currentVisitService = data.currentVisitService;
+			this.newData.checksum = data.checksum;
+			this.newData.parameterMap.startQueueOrigId = data.parameterMap.startQueueOrigId;
+			this.newData.parameterMap.branchName = data.parameterMap.branchName;
 		}
 		return JSON.stringify(newData);
 	}
 });
 
-var apiMeetingProxy = proxy(host, {
+const apiMeetingProxy = proxy(host, {
 	// ip and port off apigateway
 
 	proxyReqPathResolver: function (req) {
@@ -429,13 +427,13 @@ var apiMeetingProxy = proxy(host, {
 	},
 	https: APIGWHasSSL,
 	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
-		data = JSON.parse(proxyResData.toString('utf8'));
-		newData = {};
-		newData.parameterMap = {};
+		const data = JSON.parse(proxyResData.toString('utf8'));
+		let newData = {};
+		this.newData.parameterMap = {};
 		if (data !== undefined) {
-			newData.ticketId = data.ticketId;
-			newData.checksum = data.checksum;
-			newData.parameterMap.meetingUrl = data.parameterMap.meetingUrl;
+			this.newData.ticketId = data.ticketId;
+			this.newData.checksum = data.checksum;
+			this.newData.parameterMap.meetingUrl = data.parameterMap.meetingUrl;
 			
 		}
 		return JSON.stringify(newData);
@@ -443,7 +441,7 @@ var apiMeetingProxy = proxy(host, {
 });
 
 // proxy for MT service
-var apiOtpProxy = proxy('localhost:82', {
+const apiOtpProxy = proxy('localhost:82', {
 	// ip and port off apigateway
 	proxyReqPathResolver: function (req) {
 		console.log(req.originalUrl);
@@ -463,33 +461,8 @@ var apiOtpProxy = proxy('localhost:82', {
 	},
 	https: APIGWHasSSL
 });
-var apiButtonSheduleProxy = proxy(host, {
-	// ip and port off apigateway
 
-	proxyReqPathResolver: function (req) {
-		var newUrl = req.originalUrl.replace("/MobileTicket/BranchShedule/","/rest/servicepoint/");
-		return require('url').parse(newUrl).path;
-	},
-	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
-		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
-		proxyReqOpts.headers['Content-Type'] = 'application/json'
-		return proxyReqOpts;
-	},
-	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
-		if (isEmbedIFRAME === false) {
-			headers['X-Frame-Options'] = "DENY";
-		}
-		headers['Content-Security-Policy'] = "default-src \'self\'";
-	
-		if (supportSSL) {
-			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
-		}
-		return headers;
-	},
-	https: APIGWHasSSL
-});
-
-var handleHeaders = function (res) {
+const handleHeaders = function (res) {
 	if (isEmbedIFRAME === false) {
 		res.set('X-Frame-Options', "DENY");
 	} else {
@@ -515,22 +488,39 @@ app.use("/MobileTicket/MyAppointment/arrive/*", apiArriveProxy);
 app.use("/MobileTicket/services/*", apiProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
 app.use("/MobileTicket/MyMeeting/*", apiMeetingProxy);
-app.use("/MTService/*", apiOtpProxy);
-app.use("/MobileTicket/BranchShedule/*", apiButtonSheduleProxy);
+// app.use("/MTService/*", apiOtpProxy);
 
+// MT service
+let env = process.argv[2] || 'prod';
+let otpService = "disable";
+let userConfigFile = "./src/app/config/config.json";
+if (env=='dev') {
+	userConfigFile = "../src/app/config/config.json";	
+}
+const userConfiguration = JSON.parse(fs.readFileSync(userConfigFile, "utf8"));
+otpService = userConfiguration.otp_service.value;
+
+if (otpService == 'enable') {
+	console.log('MT service is running');
+	const otpRoutes: OtpRoutes = new OtpRoutes();
+	app.use(bodyParser.json());
+    app.use(bodyParser.urlencoded({ extended: true }));
+	otpRoutes.route(app);
+	connectDB();
+}
 
 if (supportSSL) {
-	var httpsServer = https.createServer(credentials, app);
-	httpsServer.listen(sslPort, function () {
-		var listenAddress = httpsServer.address().address;
-		var listenPort = httpsServer.address().port;
+	const httpsServer = https.createServer(credentials, app);
+	httpsServer.listen(sslPort,  () => {
+		const listenAddress = httpsServer.address()['address'];
+		const listenPort = httpsServer.address()['port'];
 
 		console.log("Mobile Ticket app listening at https://%s:%s over SSL", listenAddress, listenPort);
 	});
 } else{
-	var server = app.listen(port, function () {  // port the mobileTicket will listen to.
-	var listenAddress = server.address().address;
-	var listenPort = server.address().port;
+	const server = app.listen(port, () => {  // port the mobileTicket will listen to.
+	const listenAddress = server.address()['address'];
+	const listenPort = server.address()['port'];
 
 	console.log("Mobile Ticket app listening at http://%s:%s", listenAddress, listenPort);
 });

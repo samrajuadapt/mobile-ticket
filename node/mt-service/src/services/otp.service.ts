@@ -6,8 +6,8 @@ import * as fs from "fs";
 
 export default class OtpService {
   private db = connectDB();
-  private configFile = "../proxy-config.json";
-  private userConfigFile = "src/config/config.json";
+  private configFile = "./proxy-config.json";
+  private userConfigFile = "./mt-service/src/config/config.json";
   private authToken = "nosecrets";
   private validAPIGWCert = "1";
   private host = "localhost:9090";
@@ -86,7 +86,7 @@ export default class OtpService {
     }
   }
   public async deleteOtp(phone: string) {
-    const tenantId = this.configuration.tenant_id.value;
+    const tenantId = this.tenantId;
     try {
       return await this.db.OtpModel.deleteOne({tenantId: tenantId, phoneNumber: phone});
     } catch (e) {

@@ -7,10 +7,6 @@
     "value": "81",
     "description": "Local webserver port"
   },
-  "local_functional_server_port": {
-    "value": "82",
-    "description": "Local functional server port"
-  },
   "auth_token": {
     "value": "1234",
     "description": "Mobile API user - authentication token"

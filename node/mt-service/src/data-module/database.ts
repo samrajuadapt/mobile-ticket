@@ -5,7 +5,7 @@ import * as fs from "fs";
 
 let database: Mongoose.Connection;
 let configuration: any;
-const userConfigFile = "src/config/config.json";
+const userConfigFile = "mt-service/src/config/config.json";
 configuration = JSON.parse(
   fs.readFileSync(userConfigFile).toString()
 );
