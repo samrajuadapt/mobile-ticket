@@ -128,12 +128,18 @@
     "accept" : "Accept"
   },
   "otp" : {
-    "submit" : "Create ticket",
-    "resend" : "Resend OTP",
-    "getOTP" : "Get OTP",
-    "firstAdvantageByEnteringOtpPhone" : "1. One time password to your mobile",
-    "secondAdvantageByEnteringOtpPhone" : "2. Secure ticket creating",
-    "firstAdvantageByEnteringPin" : "1. Enter pin before it expires",
-    "secondAdvantageByEnteringPin" : "2. Resend pin if you did not get "
+    "submit" : "Submit",
+    "resend" : "Resend PIN",
+    "getOTP" : "Send PIN",
+    "firstAdvantageByEnteringOtpPhone" : "To confirm that you are not a bot, a one-time PIN will be sent to your phone number. No personal information is saved.",
+    "firstAdvantageByEnteringPin" : "Enter the PIN sent to your phone. If you did not receive a PIN, please select “Resend PIN”.",
+    "secondAdvantageByEnteringPin" : "2. Resend pin if you did not get ",
+    "phoneNumberError": "Please enter a valid phone number",
+    "phoneInfoTitle": "ENTER PHONE NUMBER",
+    "pinHeading": "One-time PIN",
+    "pinError": "Please enter a valid PIN",
+    "pin_placeholder": "Enter PIN",
+    "pinInfoTitle": "Enter PIN",
+    "pinExpired": "The PIN has expired. Please try again"
   }
 }

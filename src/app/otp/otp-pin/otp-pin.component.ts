@@ -107,9 +107,12 @@ export class OtpPinComponent implements OnInit {
       }
     );
 
-    this.alertDialogService.activate("Your pin is expired").then((res) => {
-      this.router.navigate(["otp_number"]);
+    this.translate.get('otp.pinExpired').subscribe((res: string) => {
+      this.alertDialogService.activate(res).then((res) => {
+        this.router.navigate(["otp_number"]);
+      });
     });
+
   }
 
   showResend(): void {
@@ -125,7 +128,7 @@ export class OtpPinComponent implements OnInit {
         if (data == "OK") {
           this.showLoader = false;
           this.alertDialogService
-            .activate("You will be recieved a pin")
+            .activate("The PIN will be resent")
             .then((res) => {});
           this.pin = "";
           this.leftTime = this.timeLeft;
@@ -135,7 +138,7 @@ export class OtpPinComponent implements OnInit {
           this.pin = "";
           this.alertDialogService
             .activate(
-              "maximum resend attempts are exceeded. You will have to wait for 10 minutes since the last attempt"
+              "Please wait 10 minutes before trying to resend the PIN again"
             )
             .then((res) => {
               this.router.navigate(["otp_number"]);
@@ -225,9 +228,9 @@ export class OtpPinComponent implements OnInit {
             this.showLoader = false;
             if (this.otpTries < 3) {
               let alertMessage =
-                "Pin is invalid. Please try again.You have " +
+                "The PIN you entered is invalid. You have " +
                 (3 - this.otpTries) +
-                " attempt(s) remaining";
+                " left";
               this.alertDialogService.activate(alertMessage).then((res) => {
                 this.pin = "";
               });
@@ -235,7 +238,7 @@ export class OtpPinComponent implements OnInit {
               // 3rd try
               this.showLoader = true;
               let alertMessage =
-                "You have to wait 3 minutes since the last attempt";
+                "No attempts left. Please wait 3 minutes and try again";
               MobileTicketAPI.lockNumber(
                 MobileTicketAPI.getEnteredOtpPhoneNum(),
                 1, // 1 for exceeding wrong otp attempts

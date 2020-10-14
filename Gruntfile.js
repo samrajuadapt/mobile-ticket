@@ -26,6 +26,18 @@ module.exports = function (grunt) {
       },
       ngbuild_production: {
         command: '"./node_modules/.bin/ngc" -p tsconfig-aot.json && "./node_modules/.bin/rollup" -c rollup-config.js'
+      },
+      mt_build: {
+        command: [
+          'cd node',
+          'npm run build'
+        ].join('&&')
+      },
+      mt_clean: {
+        command: [
+          'cd node',
+          'npm run clean'
+        ].join('&&')
       }
     },
     copy: {
@@ -38,7 +50,12 @@ module.exports = function (grunt) {
           { expand: true, src: ['src/app/locale/cookie-consent-files/*'], dest: 'dist/src/app/locale/cookie-consent-files', filter: 'isFile', flatten: true },
           { expand: true, src: ['src/app/theme/*'], dest: 'dist/src/app/theme', filter: 'isFile', flatten: true },
           { expand: true, src: ['src/libs/css/*'], dest: 'dist/src/libs/css/', filter: 'isFile', flatten: true },
-          { expand: true, src: ['src/libs/js/*'], dest: 'dist/src/libs/js/', filter: 'isFile', flatten: true }
+          { expand: true, src: ['src/libs/js/*'], dest: 'dist/src/libs/js/', filter: 'isFile', flatten: true },
+        ]
+      },
+      mt_service: {
+        files: [
+          { expand: true, cwd: 'node/mt-service', src: ['**/*.js','**/*.json'], dest: 'dist/mt-service' }
         ]
       },
       prod: {
@@ -55,8 +72,8 @@ module.exports = function (grunt) {
       },
       proxy_files: {
         files: [
-          { expand: true, cwd: 'node', src: '**', dest: 'dist/' },
-          { expand: true, src: ['node/*'], dest: 'dist/', filter: 'isFile', flatten: true }
+          { expand: true, cwd: 'node', src: '**,!./mt-service/', dest: 'dist/' },
+          { expand: true, src: ['node/*','!node/server.ts','!node/tsconfig.json'], dest: 'dist/', filter: 'isFile', flatten: true }
         ]
       }
     },
@@ -79,7 +96,15 @@ module.exports = function (grunt) {
         files: {
           'dist/src/bundle.min.js': ['dist/src/bundle.js']
         }
-      }
+      },
+      mt_service: {
+        files: [{
+          expand: true,
+          cwd: 'dist/mt-service/',
+          src: ['*.js', '**/*.js'],
+          dest: 'dist/mt-service/',
+        }],
+      },
     },
     cssmin: {
       options: {
@@ -208,7 +233,7 @@ module.exports = function (grunt) {
       'using-cwd': {
         cwd: 'dist/',
         //src: ['dist/node_modules/**','dist/src/**','dist/sslcert/**','dist/proxy-config.json','dist/server.js'],
-        src: ['dist/**'],
+        src: ['dist/**','!dist/node_modules/**'],
         dest: 'dist/mobile-ticket-<%= pkg.version %>.zip'
       }
     },
@@ -311,6 +336,7 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-shell');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks("grunt-ts");
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-replace');
@@ -335,6 +361,6 @@ module.exports = function (grunt) {
   });
 
   grunt.registerTask('build_development', ['clean:start', 'shell:ngbuild_development:command', 'copy:common', 'clean:end', 'clean:folder', 'copy:proxy_files']);
-  grunt.registerTask('build_production', ['clean:start', 'updateVersion', 'copy:aot_script', 'shell:ngbuild_production:command', 'copy:common', 'copy:prod', 'uglify:pre', 'concat', 'string-replace', 'uglify:post', 'cssmin', 'imagemin', 'compress', 'htmlmin', 'clean:end', 'clean:folder', 'clean:folder_v2','clean:contents', 'copy:proxy_files', 'zip']);
+  grunt.registerTask('build_production', ['clean:start', 'updateVersion', 'copy:aot_script', 'shell:ngbuild_production:command', 'shell:mt_build:command', 'copy:common', 'copy:prod', 'copy:mt_service', 'uglify:pre', 'concat', 'string-replace', 'uglify:post','uglify:mt_service','cssmin', 'imagemin', 'compress', 'htmlmin', 'clean:end', 'clean:folder', 'clean:folder_v2','clean:contents', 'copy:proxy_files', 'shell:mt_clean:command', 'zip']);
   grunt.registerTask('remote_deploy', ['clean:start', 'copy:aot_script', 'shell:ngbuild_production:command', 'copy:common', 'copy:prod', 'uglify:pre', 'concat', 'string-replace', 'uglify:post', 'cssmin', 'imagemin', 'compress', 'htmlmin', 'clean:end', 'clean:folder', 'clean:folder_v2','clean:contents', 'copy:proxy_files', 'zip', 'sftp:deploy']);
 };

@@ -92,7 +92,7 @@ export class OtpPhoneNumberComponent implements OnInit {
             this.showLoader = false;
             this.router.navigate(["otp_pin"]);
           } else if(data == "Already Reported") {
-            this.alertDialogService.activate("You have to wait for a while").then(res => {
+            this.alertDialogService.activate("Please wait before trying again").then(res => {
               this.showLoader = false;
             }); 
           }

@@ -2,7 +2,7 @@
   <div class="custom-phone-card">
     <!-- INITIAL AND EDIT PHONE SECTION -->
     <div style="display: inline-block; width: 100%;">
-      <div class="phone-num-text" style="float: left;"> {{'One time password'}} </div>
+      <div class="phone-num-text" style="float: left;"> {{'otp.pinHeading' | translate}} </div>
       <div style="float: right;" [ngStyle]="{'color': timerColor}" *ngIf="showTimer">
         <span id="minute"></span>
         <span id="seperator"></span>
@@ -19,10 +19,10 @@
             </svg>
         </div>
         <div class="phone-num-input-container">
-          <input class="phone-num-input" type="text" placeholder="  {{ 'Enter pin' }}"
+          <input class="phone-num-input" type="text" placeholder="{{'otp.pin_placeholder' | translate}}"
             [(ngModel)]="pin" (change)="onPinChanged()" (keyup.enter)="pinContinue()"
             (keyup)="onPhoneNumberEnter($event)" >
-          <div class="phone-num-error" *ngIf="pinError"> {{'Please enter vaild pin'}}</div>
+          <div class="phone-num-error" *ngIf="pinError"> {{'otp.pinError' | translate}}</div>
         </div>
       </div>
     </div>
@@ -30,7 +30,7 @@
       <!-- INITIAL BOTTOM SECTION -->
       <div>
         <div class="phone-num-bottom-initial-topic">
-          {{'Use the pin you have recieved' | translate}}
+          {{'otp.pinInfoTitle' | translate}}
         </div>
         <hr class="phone-devider">
         <div class="phone-num-points-container">
@@ -38,11 +38,11 @@
             {{'otp.firstAdvantageByEnteringPin' | translate}}
           </div>
         </div>
-        <div class="phone-num-points-container">
+        <!-- <div class="phone-num-points-container">
           <div class="phone-num-points-text">
             {{'otp.secondAdvantageByEnteringPin' | translate}}
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div *ngIf="showLoader" class="" style="display: flex;">
