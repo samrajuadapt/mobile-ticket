@@ -93,7 +93,6 @@ export class VisitCancelComponent {
     this.confirmDialogService.activate(this.confirmMsg).then(res => {
       if (res === true) {
         // Confirm Success Callback
-        console.log('User clicked ok');
         this.visitCancelled = true;
         this.visitCancelledViaBtn = true;
         MobileTicketAPI.cancelVisit(
@@ -102,6 +101,22 @@ export class VisitCancelComponent {
               MobileTicketAPI.clearLocalStorage();
             }
             MobileTicketAPI.resetAllVars();
+            // delete otp
+            let OtpService = this.config.getConfig("otp_service");
+            if (OtpService === "enable") {
+              MobileTicketAPI.deleteOtp(
+                MobileTicketAPI.getEnteredOtpPhoneNum(),
+                (data) => {
+                   //console.log(data);
+                },
+                (err) => {
+                  //console.log(err);
+                }
+              );
+              MobileTicketAPI.setOtpPhoneNumber("");
+
+            }
+
             // 168477572 : Always route to thank you page
             // this.router.navigate(['branches']);
           },

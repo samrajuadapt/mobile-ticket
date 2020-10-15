@@ -9,7 +9,7 @@ const userConfigFile = "mt-service/src/config/config.json";
 configuration = JSON.parse(
   fs.readFileSync(userConfigFile).toString()
 );
-const localConString = configuration.local_db_connection_string.value;
+const localConString = configuration.db_connection_string.value;
 
 export const connectDB = () => {
   const uri = localConString;

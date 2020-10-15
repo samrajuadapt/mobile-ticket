@@ -39,3 +39,8 @@
 .custom.link-text-color {
   color: #03996c !important;
 }
+
+/* Edit to change OTP timer color */
+.custom.otp-timer {
+  color: #d4152b !important;
+}

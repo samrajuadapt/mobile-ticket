@@ -3,11 +3,12 @@
     <!-- INITIAL AND EDIT PHONE SECTION -->
     <div style="display: inline-block; width: 100%;">
       <div class="phone-num-text" style="float: left;"> {{'otp.pinHeading' | translate}} </div>
-      <div style="float: right;" [ngStyle]="{'color': timerColor}" *ngIf="showTimer">
+      <div class="custom otp-timer" *ngIf="showTimer">
         <span id="minute"></span>
         <span id="seperator"></span>
         <span id="second"></span>
       </div>
+      
     </div>
     
     <div class="customer-phone__number-container">

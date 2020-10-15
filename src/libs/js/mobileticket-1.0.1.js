@@ -2826,7 +2826,7 @@ var MobileTicketAPI = (function () {
         onError(null, null, e.message);
       }
     },
-    getOtp: function (phone, onSuccess, onError) {
+    getOtp: function (phone, onSuccess, onError) { // sendOTP
       try {
         var MT_SERVICE_SEND_SMS = MT_SERVICE + "/sms";
 
@@ -2836,7 +2836,6 @@ var MobileTicketAPI = (function () {
           contentType: 'application/json',
           url: MT_SERVICE_SEND_SMS,
           success: function (data) {
-            console.log(data);
             onSuccess(data);
           },
           error: function (xhr, status, errorMsg) {
@@ -2851,14 +2850,12 @@ var MobileTicketAPI = (function () {
     deleteOtp: function (phone, onSuccess, onError) {
       try {
         var MT_SERVICE_DELETE_OTP = MT_SERVICE + "/otp/delete";
-
         $.ajax({
           type: "DELETE",
           data : JSON.stringify({ phone: phone }),
           contentType: 'application/json',
           url: MT_SERVICE_DELETE_OTP,
           success: function (data) {
-            console.log(data);
             onSuccess(data);
           },
           error: function (xhr, status, errorMsg) {
@@ -2880,7 +2877,6 @@ var MobileTicketAPI = (function () {
           contentType: 'application/json',
           url: MT_SERVICE_SEND_SMS,
           success: function (data) {
-            console.log(data);
             if (data != undefined) {
               onSuccess(data);
             }
@@ -2904,8 +2900,6 @@ var MobileTicketAPI = (function () {
           contentType: 'application/json',
           url: MT_SERVICE_CHECK_OTP,
           success: function (data) {
-            console.log("otp checked");
-            console.log(data);
             if (data != undefined) {
               onSuccess(data);
             } else {
@@ -2931,8 +2925,6 @@ var MobileTicketAPI = (function () {
           contentType: 'application/json',
           url: MT_SERVICE_LOCK_NUMBER,
           success: function (data) {
-            console.log("number locked");
-            console.log(data);
             if (data != undefined) {
               onSuccess(data);
             }

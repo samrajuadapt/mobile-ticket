@@ -1,12 +1,10 @@
 import { LocationStrategy } from "@angular/common";
-import { Component, EventEmitter, HostListener, OnInit, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, HostListener, OnInit, Output } from "@angular/core";
 import { Router } from "@angular/router";
-import { Config } from '../../config/config';
 import { AlertDialogService } from "../../shared/alert-dialog/alert-dialog.service";
 import { RetryService } from "../../shared/retry.service";
 import { Util } from "../../util/util";
 import { TranslateService } from "ng2-translate";
-import { min } from "rxjs/operator/min";
 
 declare var MobileTicketAPI: any;
 declare var ga: Function;
@@ -19,20 +17,22 @@ declare var ga: Function;
 export class OtpPinComponent implements OnInit {
   public pin: string = "";
   public pinError: boolean;
-  public timerColor: string = "#fff";
   public leftTime: number;
-  public timeLeft: number = 180;
+  public timeLeft: number = 5;
   public disableResend: string = "none";
   public showLoader = false;
   public showTimer = false;
+  public invalidPinMsg_p: string;
+  public invalidPinMsg_s: string;
+  public clock;
   private _showNetWorkError = false;
   private otpTries: number = 0;
+  
 
   @Output()
   showNetorkErrorEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
-    private config: Config,
     private translate: TranslateService,
     private router: Router,
     private alertDialogService: AlertDialogService,
@@ -44,10 +44,18 @@ export class OtpPinComponent implements OnInit {
     this.location.onPopState(() => {
       history.pushState(null, null, window.location.href);
     });
+
+    this.translate.get('otp.pleaseWaitPrefix').subscribe((res: string) => {
+      this.invalidPinMsg_p = res;
+    });
+
+    this.translate.get('otp.pleaseWaitSuffix').subscribe((res: string) => {
+      this.invalidPinMsg_s = res;
+    });
+    
   }
 
   ngOnInit() {
-    this.timerColor = this.config.getConfig("otp_timer_color");
     this.pinError = false;
     this.leftTime = this.timeLeft;
     this.timer();
@@ -55,7 +63,7 @@ export class OtpPinComponent implements OnInit {
 
   public timer() {
     this.showTimer = true;
-    let timer = setInterval(() => {
+    this.clock = setInterval(() => {
       if (this.showTimer) {
         let minutes = Math.floor(this.leftTime / 60);
         let minutes_ = minutes.toString();
@@ -68,7 +76,7 @@ export class OtpPinComponent implements OnInit {
           seconds_ = "0" + seconds;
         }
         if (this.leftTime < 1) {
-          clearInterval(timer);
+          clearInterval(this.clock);
           this.timeUp();
         }
         if (this.leftTime == this.timeLeft - 10) {
@@ -87,7 +95,6 @@ export class OtpPinComponent implements OnInit {
   }
 
   public onPhoneNumberEnter(event) {
-    // console.log(event.keycode);
     if (this.pinError && event.keyCode !== 13) {
       if (this.pin.trim() !== "") {
         this.pinError = false;
@@ -100,10 +107,10 @@ export class OtpPinComponent implements OnInit {
     MobileTicketAPI.deleteOtp(
       MobileTicketAPI.getEnteredOtpPhoneNum(),
       (data) => {
-        console.log(data);
+        // console.log(data);
       },
       (err) => {
-        console.log(err);
+        // console.log(err);
       }
     );
 
@@ -122,27 +129,26 @@ export class OtpPinComponent implements OnInit {
   public resend() {
     this.showLoader = true;
     this.disableResend = "none";
+    this.otpTries = 0;
     MobileTicketAPI.resendOtp(
       MobileTicketAPI.getEnteredOtpPhoneNum(),
       (data) => {
         if (data == "OK") {
           this.showLoader = false;
-          this.alertDialogService
-            .activate("The PIN will be resent")
-            .then((res) => {});
+          this.translate.get('otp.pinResend').subscribe((res: string) => {
+            this.alertDialogService.activate(res);
+          });
           this.pin = "";
           this.leftTime = this.timeLeft;
         } else {
-          console.log(11);
           this.showLoader = false;
           this.pin = "";
-          this.alertDialogService
-            .activate(
-              "Please wait 10 minutes before trying to resend the PIN again"
-            )
-            .then((res) => {
+          clearInterval(this.clock);
+          this.translate.get('otp.lockedPhone').subscribe((res: string) => {
+            this.alertDialogService.activate(res).then( data => {
               this.router.navigate(["otp_number"]);
             });
+          });
         }
       },
       (err) => {
@@ -152,21 +158,20 @@ export class OtpPinComponent implements OnInit {
   }
 
   public pinContinue() {
-    if (this.pin.match(/^\(?\d?[-\s()0-9]{4,}$/)) {
+    if (this.pin.match(/^\(?\d?[-\s()0-9]{4,}$/) && this.pin.trim().length > 3) {
       // check pin
       this.showLoader = true;
+      this.pin = this.pin.trim();
       this.otpTries++;
       MobileTicketAPI.checkOtp(
         this.pin,
         MobileTicketAPI.getEnteredOtpPhoneNum(),
         (data) => {
-          console.log(data);
-
           if (data == "OK") {
             this.showLoader = false;
             this.showTimer = false;
+            clearInterval(this.clock);
             // createVisit
-            MobileTicketAPI.setOtpPhoneNumber("");
             MobileTicketAPI.createVisit(
               (visitInfo) => {
                 ga("send", {
@@ -227,30 +232,28 @@ export class OtpPinComponent implements OnInit {
             // otp not matched
             this.showLoader = false;
             if (this.otpTries < 3) {
-              let alertMessage =
-                "The PIN you entered is invalid. You have " +
-                (3 - this.otpTries) +
-                " left";
-              this.alertDialogService.activate(alertMessage).then((res) => {
+              let alertMSg = this.invalidPinMsg_p + (3 - this.otpTries) + this.invalidPinMsg_s;
+              this.alertDialogService.activate(alertMSg).then((res) => {
                 this.pin = "";
               });
+              
             } else {
               // 3rd try
               this.showLoader = true;
-              let alertMessage =
-                "No attempts left. Please wait 3 minutes and try again";
+              clearInterval(this.clock);
               MobileTicketAPI.lockNumber(
                 MobileTicketAPI.getEnteredOtpPhoneNum(),
                 1, // 1 for exceeding wrong otp attempts
                 (data) => {
                   if (data == "OK") {
                     this.showLoader = false;
-                    this.alertDialogService
-                      .activate(alertMessage)
-                      .then((res) => {
+                    this.translate.get('otp.lockedOtp').subscribe((res: string) => {
+                      this.alertDialogService.activate(res).then( data => {
                         this.pin = "";
+                        this.showTimer = false;
                         this.router.navigate(["otp_number"]);
                       });
+                    });
                   }
                 },
                 (err) => {

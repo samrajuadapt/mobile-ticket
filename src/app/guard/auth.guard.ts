@@ -491,7 +491,7 @@ export class AuthGuard implements CanActivate {
                     resolve(true);
                 }
             }
-            else if (url.startsWith('/otp_number')) {
+        } else if (url.startsWith('/otp_number')) {
                 if ((visitInfo && visitInfo !== null)) {
                     this.router.navigate(['ticket']);
                     resolve(false);
@@ -519,8 +519,7 @@ export class AuthGuard implements CanActivate {
                     this.router.navigate(['/branches']);
                     resolve(false);
                 }
-            }
-            else if (url.startsWith('/otp_pin')) {
+        } else if (url.startsWith('/otp_pin')) {
                 if ((visitInfo && visitInfo !== null)) {
                     this.router.navigate(['ticket']);
                     resolve(false);
@@ -538,17 +537,6 @@ export class AuthGuard implements CanActivate {
                     this.router.navigate(['/branches']);
                     resolve(false);
                 }
-            }
-
-
-            else {
-                this.router.navigate(['/branches']);
-                resolve(false);
-            }
-
-            if (!(this.prevUrl.startsWith('/branches') && url.startsWith('/ticket'))) {
-                this.prevUrl = url;
-            }
         } else {
             this.router.navigate(['/branches']);
             resolve(false);
@@ -556,6 +544,7 @@ export class AuthGuard implements CanActivate {
 
         if (!(this.prevUrl.startsWith('/branches') && url.startsWith('/ticket'))) {
             this.prevUrl = url;
-        }
+        } 
+        
     }
 }

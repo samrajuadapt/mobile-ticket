@@ -467,7 +467,7 @@ var apiBranchScheduleProxy = proxy(host, {
 });
 
 // proxy for MT service
-const apiOtpProxy = proxy('localhost:82', {
+const apiOtpProxy = proxy('localhost:81', {
 	// ip and port off apigateway
 	proxyReqPathResolver: function (req) {
 		console.log(req.originalUrl);

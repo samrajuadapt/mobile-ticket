@@ -33,10 +33,6 @@ export class OtpPhoneNumberComponent implements OnInit {
   }
 
   ngOnInit() {
-    // if(MobileTicketAPI.getEnteredOtpPhoneNum()){
-    //   this.alertDialogService.activate("Your token is expired").then(res => {});
-    // }
-
     this.countryCode = this.config.getConfig("country_code");
     if (this.countryCode === "") {
       this.countryCode = "+";
@@ -64,7 +60,6 @@ export class OtpPhoneNumberComponent implements OnInit {
   }
 
   onPhoneNumberEnter(event) {
-    // console.log(event.keycode);
     if (this.phoneNumberError && event.keyCode !== 13) {
       if (this.phoneNumber.trim() !== "") {
         this.phoneNumberError = false;
@@ -79,21 +74,29 @@ export class OtpPhoneNumberComponent implements OnInit {
   phoneNumContinue() {
     if (
       this.phoneNumber.match(/^\(?\+?\d?[-\s()0-9]{6,}$/) &&
-      this.phoneNumber !== this.countryCode
+      this.phoneNumber !== this.countryCode && this.phoneNumber.trim().length > 5
     ) {
-      this.showLoader = true; // make submit button disable
+      this.showLoader = true;
+      this.phoneNumber = this.phoneNumber.trim();
+      if( this.phoneNumber[0]=='+'){
+        this.phoneNumber = this.phoneNumber.slice(1);
+      }
+      if( this.phoneNumber.slice(0,2)=='00'){
+        this.phoneNumber = this.phoneNumber.slice(2);
+      }
+
       MobileTicketAPI.setOtpPhoneNumber(this.phoneNumber);
       MobileTicketAPI.getOtp(
         this.phoneNumber,
         (data) => {
-          console.log(data);
-          
           if (data == "OK") {
             this.showLoader = false;
             this.router.navigate(["otp_pin"]);
           } else if(data == "Already Reported") {
-            this.alertDialogService.activate("Please wait before trying again").then(res => {
-              this.showLoader = false;
+            this.translate.get('otp.pleaseWait').subscribe((res: string) => {
+              this.alertDialogService.activate(res).then( data => {
+                this.showLoader = false;
+              });
             }); 
           }
         },

@@ -70,7 +70,6 @@ export class OtpController {
       await this.otpService
         .lockUpdate(phone, lockType)
         .then(async (result) => {
-          console.log(result);
           if (result == 1) {
             res.sendStatus(200);
           } else {

@@ -207,6 +207,10 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
+.otp-timer {
+  float: right;
+}
+
 /* Small phones */
 @media (max-width: 400px){
 

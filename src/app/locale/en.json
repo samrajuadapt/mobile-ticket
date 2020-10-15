@@ -140,6 +140,12 @@
     "pinError": "Please enter a valid PIN",
     "pin_placeholder": "Enter PIN",
     "pinInfoTitle": "Enter PIN",
-    "pinExpired": "The PIN has expired. Please try again"
+    "pinExpired": "The PIN has expired. Please try again",
+    "pleaseWait": "Please wait before trying again",
+    "pleaseWaitPrefix": "The PIN you entered is invalid. You have ",
+    "pleaseWaitSuffix": " attempt(s) left",
+    "lockedOtp": "No attempts left. Please wait 3 minutes and try again",
+    "lockedPhone": "Please wait 10 minutes before trying to resend the PIN again",
+    "pinResend": "The PIN will be resent"
   }
 }

@@ -162,9 +162,5 @@
   "otp_service": {
     "value": "enable",
     "description": "Enable or disable OTP service"
-  },
-  "otp_timer_color": {
-    "value": "#FF0000",
-    "description": "Displying color of otp countdown timer"
   }
 }

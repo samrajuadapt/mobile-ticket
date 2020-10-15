@@ -20,6 +20,7 @@ This is a web application that has been developed using Angular4 and the develop
 - [Branding & Customization](#branding--customization)
 - [Customer data](#customer-data)
 - [Remote serving for customers](#remote-serving-for-customers)
+// one time password
 - [Cookie consent](#cookie-consent)
 
 ## Installation
@@ -61,7 +62,6 @@ To do this you need to create a role which contains the modules Appointment and 
 Then create a user with the name mobile and the same password as for the mobile user under System Administration > Paramaters.
 Give this user access to all branches and the newly created Role.
 
-
 ## Proxy to Backend
 
 Mobile Ticket solution is intended to work with QMATIC API Gateway service, which provides anonymous access to Orchestra REST API. The Mobile Ticket solution
@@ -91,6 +91,8 @@ For development one needs to add the following five routes to the application.ym
     branch_schedule:
       path: /MobileTicket/BranchSchedule/**
       url: ${orchestra.central.url}/qsystem/rest/servicepoint
+
+      //sms
 ```
 #### Configuring the Proxy for Development Environment
 
@@ -112,6 +114,8 @@ project directory
     "target": "http://192.168.1.35:9090",
     "secure": false
   }
+
+  // update
 }
 ```
 
@@ -131,6 +135,8 @@ with a valid certificate will be as below.
     "target": "https://192.168.1.35:9090",
     "secure": true
   }
+
+  // update
 }
 ```
 
@@ -147,6 +153,7 @@ NOTE : npm start will run the command configured for "start" in package.json
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor"
+    // update
   }
 ```
 
@@ -326,6 +333,7 @@ project directory
         "value": "disable",
         "description": "Enable or disable whether user allow to use/open the ticket in other browsers apart from the created device. 'on = enable', 'off = disable'"
     }
+    //update
 }
 ```
 #### Configuring the branch open hours
@@ -719,6 +727,8 @@ MobileTicketAPI.getCurrentVisit()
 ```js
 MobileTicketAPI.getCurrentVisitEvent()
 ```
+
+//update sendOTP and all
      
 ## Creating a Build
 Install grunt command line interpreter by running following command.
@@ -771,7 +781,7 @@ Css selector                                  |   Css property | Description   |
 ```.custom.logo-image            ```           |    content     | Edit to change app logo  |  url('../../app/resources/qmLogo.png') !important;
 ```.custom.logo-bg-color         ```           |   background   | Edit to change app logo  |  transparent !important;
 ```.custom.link-text-color         ```         |   color        | Edit to change text color of links  |  #03996c !important;
-
+//update
 Note:
 
 * If you are specifying styles in this stylesheet, it will override the default styles.
