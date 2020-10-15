@@ -515,7 +515,7 @@ app.use("/MobileTicket/services/*", apiProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
 app.use("/MobileTicket/MyMeeting/*", apiMeetingProxy);
 // app.use("/MTService/*", apiOtpProxy);
-app.use("/MobileTicket/BranchShedule/*", apiBranchScheduleProxy);
+app.use("/MobileTicket/BranchSchedule/*", apiBranchScheduleProxy);
 
 // MT service
 let env = process.argv[2] || 'prod';
