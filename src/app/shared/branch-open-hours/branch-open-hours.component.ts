@@ -15,7 +15,7 @@ declare var MobileTicketAPI: any;
 export class BranchOpenHoursComponent {
 
   public openHours;
-  public branchShedule = false;
+  public branchSchedule = false;
 
   constructor(private config: Config, private translate: TranslateService,
     private router: Router, private openHourValidator: BranchOpenHoursValidator) {
@@ -24,8 +24,8 @@ export class BranchOpenHoursComponent {
 
   ngOnInit() {
     let config =  this.config.getConfig('branch_open_hours');
-    this.branchShedule = this.config.getConfig('branch_shedule') === 'enable' ? true : false;
-    if (this.openHourValidator.openHoursValid() && !this.branchShedule) {
+    this.branchSchedule = this.config.getConfig('branch_schedule') === 'enable' ? true : false;
+    if (this.openHourValidator.openHoursValid() && !this.branchSchedule) {
            this.router.navigate(['branches']);
     }
     this.openHours = [];

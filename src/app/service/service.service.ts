@@ -3,7 +3,7 @@ import { ServiceEntity } from '../entities/service.entity';
 import 'rxjs/add/operator/map';
 import { TranslateService } from 'ng2-translate';
 import { Config } from '../config/config';
-import { BranchSheduleService } from '../shared/branch-shedule.service';
+import { BranchScheduleService } from '../shared/branch-schedule.service';
 
 declare var MobileTicketAPI: any;
 
@@ -18,7 +18,7 @@ export class ServiceService {
   private countDownreTimersource;
   private serviceFecthTimerResource
 
-  constructor(private config: Config, private translate: TranslateService, private branchSheduleService: BranchSheduleService) {
+  constructor(private config: Config, private translate: TranslateService, private branchScheduleService: BranchScheduleService) {
     try {
       this.timerStart = this.config.getConfig('service_screen_timeout') * 60 * 1000;
     } catch (error) {
@@ -63,7 +63,7 @@ export class ServiceService {
     let serviceEntity: ServiceEntity;
     const serviceAvailablity = MobileTicketAPI.getServiceAvailablity();
     for (let i = 0; i < serviceList.length; i++) {
-      const serviceStatus = this.branchSheduleService.getServiceStatus(serviceList[i].serviceId, serviceAvailablity);
+      const serviceStatus = this.branchScheduleService.getServiceStatus(serviceList[i].serviceId, serviceAvailablity);
       if (serviceStatus) {
         serviceEntity = new ServiceEntity();
         serviceEntity.id = serviceList[i].serviceId;

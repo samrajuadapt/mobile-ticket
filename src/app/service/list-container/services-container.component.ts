@@ -10,7 +10,7 @@ import { NavigationExtras } from '@angular/router';
 import { AlertDialogService } from "../../shared/alert-dialog/alert-dialog.service";
 import { Config} from '../../config/config';
 import {BranchOpenHoursValidator} from '../../util/branch-open-hours-validator'
-import { BranchSheduleService } from '../../shared/branch-shedule.service';
+import { BranchScheduleService } from '../../shared/branch-schedule.service';
 declare var MobileTicketAPI: any;
 declare var ga: Function;
 
@@ -30,7 +30,7 @@ export class ServicesContainerComponent implements OnInit {
 
     constructor(private branchService: BranchService, private serviceService: ServiceService, public router: Router,
         private translate: TranslateService, private retryService: RetryService, private alertDialogService: AlertDialogService,
-        private config: Config, private openHourValidator: BranchOpenHoursValidator, private branchSheduleService: BranchSheduleService) {
+        private config: Config, private openHourValidator: BranchOpenHoursValidator, private branchScheduleService: BranchScheduleService) {
 
         this._isServiceListLoaded = false;
         serviceService.registerCountDownCompleteCallback(() => {
@@ -82,11 +82,11 @@ export class ServicesContainerComponent implements OnInit {
     }
 
     onTakeTicket() {
-        if (this.config.getConfig('branch_shedule') === 'enable') {
+        if (this.config.getConfig('branch_schedule') === 'enable') {
             const _thisObj = this;
             const selectedBranch = MobileTicketAPI.getSelectedBranch();
             const branchId = selectedBranch ? selectedBranch.id : undefined;
-            this.branchSheduleService.checkAvailability(branchId, this.selectedServiceId, function(status){
+            this.branchScheduleService.checkAvailability(branchId, this.selectedServiceId, function(status){
                 if (status) {
                     _thisObj.takeTicket();
                 } else {

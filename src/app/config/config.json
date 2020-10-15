@@ -4,7 +4,7 @@
     "description": "Radius to include branches within (in meters)"
   },
   "version": {
-    "value": "1.9.2",
+    "value": "1.10.0",
     "description": "MobileTicket version"
   },
   "customer_feedback": {
@@ -31,9 +31,9 @@
     "value": "1",
     "description": "The time duration (in minutes) which the app will stay in services screen without creating a ticket"
   },
-  "branch_shedule": {
+  "branch_schedule": {
     "value": "disable",
-    "description": "Enable or disable branch shedule. When enabled, ignore the branch_open_hours values."
+    "description": "Enable or disable branch schedule. When enabled, ignore the branch_open_hours values."
   },
   "branch_open_hours": {
     "value": [

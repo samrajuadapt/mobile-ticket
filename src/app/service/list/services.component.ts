@@ -51,7 +51,9 @@ export class ServicesComponent implements AfterViewInit {
 
   private onServicesReceived(serviceList, serviceService): void {
     this.onShowHideServiceFetchError.emit(false);
-    if (serviceList.length === 1) {
+    if (serviceList.length === 0) {
+      this.router.navigate(['open_hours']);
+    } else if (serviceList.length === 1) {
       this.onServiceSelection.emit(serviceList[0].id);
       MobileTicketAPI.setServiceSelection(serviceList[0]);
     }

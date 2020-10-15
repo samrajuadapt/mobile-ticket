@@ -50,7 +50,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 | **Id** | **Release notes** |
 | --- | --- |
-| **MOB-312** | **Mobile Ticket works with button sheduler** |
+| **MOB-312** | **Mobile Ticket works with button scheduler** |
 
 <h3>Bug fixes</h3>
 

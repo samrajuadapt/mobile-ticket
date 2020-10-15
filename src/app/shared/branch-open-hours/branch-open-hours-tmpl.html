@@ -2,10 +2,10 @@
 <div class="heading1">
   {{ 'open_hours.heading1' | translate }}
 </div>
-<div *ngIf="!branchShedule" class="heading2">
+<div *ngIf="!branchSchedule" class="heading2">
   {{ 'open_hours.heading2' | translate }}
 </div>
-<div *ngIf="!branchShedule" class="content">
+<div *ngIf="!branchSchedule" class="content">
   <open-hour-item class="row" [day]="item.day" [fromAndTo]="item.fromAndTo" *ngFor="let item of openHours"></open-hour-item>
 </div>
 </div>

@@ -2592,7 +2592,7 @@ var MobileTicketAPI = (function () {
   var EVENTS = "events";
   var CURRENT_STATUS = "CurrentStatus";
   var MYMEETING = "MyMeeting"
-  var BRANCH_SHEDULE = "BranchShedule"
+  var BRANCH_SCHEDULE = "BranchSchedule"
   var self = this;
 
   $(document).ajaxError(function (event, request, settings) {
@@ -2967,13 +2967,13 @@ var MobileTicketAPI = (function () {
         onError(null, null, e.message);
       }
     },
-    getBranchShedule : function(branchId, onSuccess, onError) {
+    getBranchSchedule : function(branchId, onSuccess, onError) {
       try {
-        var BRANCH_SHEDULE_REST_API = MOBILE_TICKET + "/" + BRANCH_SHEDULE + "/variables/scheduleStatus" + branchId;
+        var BRANCH_SCHEDULE_REST_API = MOBILE_TICKET + "/" + BRANCH_SCHEDULE + "/variables/scheduleStatus" + branchId;
         $.ajax({
           type: "GET",
           dataType: "json",
-          url: BRANCH_SHEDULE_REST_API,
+          url: BRANCH_SCHEDULE_REST_API,
           success: function (data) {
             if (data != undefined) {
               onSuccess(data);

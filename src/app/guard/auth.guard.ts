@@ -11,7 +11,7 @@ import { AlertDialogService } from '../shared/alert-dialog/alert-dialog.service'
 import { Config } from '../config/config';
 import { BranchOpenHoursValidator } from '../util/branch-open-hours-validator'
 import { ServiceService } from '../service/service.service';
-import { BranchSheduleService } from '../shared/branch-shedule.service';
+import { BranchScheduleService } from '../shared/branch-schedule.service';
 declare var System: any;
 declare var MobileTicketAPI: any;
 declare var ga: Function;
@@ -33,7 +33,7 @@ export class AuthGuard implements CanActivate {
     constructor(private router: Router, private activatedRoute: ActivatedRoute, private branchSrvc: BranchService,
         private serviceSrvc: ServiceService, private alertDialogService: AlertDialogService,
         private translate: TranslateService, private config: Config,
-        private branchSheduleService: BranchSheduleService, private openHourValidator: BranchOpenHoursValidator) {
+        private branchScheduleService: BranchScheduleService, private openHourValidator: BranchOpenHoursValidator) {
         this.branchService = branchSrvc;
         this.serviceService = serviceSrvc;
     }
@@ -65,7 +65,7 @@ export class AuthGuard implements CanActivate {
     }
 
     checkOpenHours(resolve) {
-        if (this.config.getConfig('branch_shedule') !== 'enable') {
+        if (this.config.getConfig('branch_schedule') !== 'enable') {
             return false;
         } else if (!this.openHourValidator.openHoursValid()) {
             this.router.navigate(['open_hours']);
@@ -122,7 +122,7 @@ export class AuthGuard implements CanActivate {
             } else if (this.isNoSuchVisit && url.startsWith('/no_visit')) {
                 this.isNoSuchVisit = false;
                 resolve(true);
-            } else if (this.config.getConfig('branch_shedule') === 'enable') {
+            } else if (this.config.getConfig('branch_schedule') === 'enable') {
                 let branchId = route.queryParams['branch'];
                 let serviceId;
                 if (url.startsWith('/branches/')) {
@@ -138,7 +138,7 @@ export class AuthGuard implements CanActivate {
 
                 if (branchId) {
                     const _thisObj = this;
-                    this.branchSheduleService.checkAvailability(branchId, serviceId, function(status){
+                    this.branchScheduleService.checkAvailability(branchId, serviceId, function(status){
                         if (status) {
                             _thisObj.processRoute(state, route, resolve);
                         } else {

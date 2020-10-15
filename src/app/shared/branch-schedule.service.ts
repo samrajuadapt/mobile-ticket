@@ -7,13 +7,13 @@ import { Config } from '../config/config';
 declare var MobileTicketAPI: any;
 
 @Injectable()
-export class BranchSheduleService {
-    private branchShedule;
+export class BranchScheduleService {
+    private branchSchedule;
     constructor(private config: Config, private translate: TranslateService) {
         try {
-          this.branchShedule = this.config.getConfig('branch_shedule');
+          this.branchSchedule = this.config.getConfig('branch_schedule');
         } catch (error) {
-          console.log(error.message + ' error reading branch_shedule');
+          console.log(error.message + ' error reading branch_schedule');
         }
     }
 
@@ -31,7 +31,7 @@ export class BranchSheduleService {
         const errorCallBack = function(error){
             success(true);
         }
-        MobileTicketAPI.getBranchShedule(branchId, successCallBack, errorCallBack);
+        MobileTicketAPI.getBranchSchedule(branchId, successCallBack, errorCallBack);
     }
 
     getBranchStatus(data) {

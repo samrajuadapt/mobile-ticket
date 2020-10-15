@@ -10,7 +10,7 @@ export class BranchOpenHoursValidator {
     }
 
    public  openHoursValid(){
-    if (this.config.getConfig('branch_shedule') === 'enable') {
+    if (this.config.getConfig('branch_schedule') === 'enable') {
         return true;
     }
        var days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday','friday', 'saturday'];
