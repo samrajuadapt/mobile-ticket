@@ -44,13 +44,17 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2020-10-14**
  
-**Build number: 1**
+**Build number: 2**
 
 <h3>Stories</h3>
 
 | **Id** | **Release notes** |
 | --- | --- |
-| **MOB-312** | **Mobile Ticket works with button scheduler** |
+| **MOB-312** | **Mobile Ticket works with button sheduler** |
+| **MOB-300** | **Improved Installation Procedure** |
+| **MOB-301** | **Improved Upgrade Procedure** |
+
+
 
 <h3>Bug fixes</h3>
 
