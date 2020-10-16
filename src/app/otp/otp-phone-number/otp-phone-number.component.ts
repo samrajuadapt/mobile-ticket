@@ -1,5 +1,5 @@
 import { LocationStrategy } from "@angular/common";
-import { Component, HostListener, OnInit } from "@angular/core";
+import { Component, EventEmitter, HostListener, OnInit, Output } from "@angular/core";
 import { Router } from "@angular/router";
 import { AlertDialogService } from "../../shared/alert-dialog/alert-dialog.service";
 import { TranslateService } from "ng2-translate";
@@ -17,6 +17,10 @@ export class OtpPhoneNumberComponent implements OnInit {
   public phoneNumberError: boolean;
   public countryCode: string;
   public showLoader = false;
+  private _showNetWorkError = false;
+
+  @Output()
+  showNetorkErrorEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(
     private config: Config,
@@ -86,7 +90,7 @@ export class OtpPhoneNumberComponent implements OnInit {
       }
 
       MobileTicketAPI.setOtpPhoneNumber(this.phoneNumber);
-      MobileTicketAPI.getOtp(
+      MobileTicketAPI.sendOTP(
         this.phoneNumber,
         (data) => {
           if (data == "OK") {
@@ -98,15 +102,38 @@ export class OtpPhoneNumberComponent implements OnInit {
                 this.showLoader = false;
               });
             }); 
+          } else {
+            this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+              this.alertDialogService.activate(res).then( data => {
+                this.showLoader = false;
+                MobileTicketAPI.setOtpPhoneNumber("");
+                this.router.navigate(["branches"]);
+              });
+            });
           }
         },
         (err) => {
-          console.log(err);
+          this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+            this.alertDialogService.activate(res).then( data => {
+              this.showLoader = false;
+              MobileTicketAPI.setOtpPhoneNumber("");
+              this.router.navigate(["branches"]);
+            });
+          });
         }
       );
     } else {
       this.phoneNumberError = true;
     }
+  }
+
+  showHideNetworkError(value: boolean) {
+    this._showNetWorkError = value;
+    this.showNetorkErrorEvent.emit(this._showNetWorkError);
+  }
+
+  get showNetWorkError(): boolean {
+    return this._showNetWorkError;
   }
 
   @HostListener('window:beforeunload',['$event'])

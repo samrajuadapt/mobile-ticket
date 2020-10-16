@@ -1,4 +1,9 @@
-<div class="customer-phone">
+<div class="text-center table-child-heading-2">
+  <span class="center-text sub-heading-text-2 service-limit-label custom text-color"  [hidden]="!showNetWorkError">
+    <app-network-message></app-network-message>
+  </span>
+</div>
+<div class="customer-phone" [hidden]="showNetWorkError">
   
   <div class="custom-phone-card">
     <!-- INITIAL AND EDIT PHONE SECTION -->
@@ -35,11 +40,6 @@
             {{'otp.firstAdvantageByEnteringOtpPhone' | translate}}
           </div>
         </div>
-        <!-- <div class="phone-num-points-container">
-          <div class="phone-num-points-text">
-            {{'otp.secondAdvantageByEnteringOtpPhone' | translate}}
-          </div>
-        </div> -->
       </div>
     </div>
     <div *ngIf="showLoader" class="" style="display: flex;">

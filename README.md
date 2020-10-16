@@ -20,8 +20,9 @@ This is a web application that has been developed using Angular4 and the develop
 - [Branding & Customization](#branding--customization)
 - [Customer data](#customer-data)
 - [Remote serving for customers](#remote-serving-for-customers)
-// one time password
 - [Cookie consent](#cookie-consent)
+- [one time password](#one-time-password)
+
 
 ## Installation
 BEFORE YOU INSTALL: please read the [prerequisites](#prerequisites)
@@ -91,8 +92,9 @@ For development one needs to add the following five routes to the application.ym
     branch_schedule:
       path: /MobileTicket/BranchSchedule/**
       url: ${orchestra.central.url}/qsystem/rest/servicepoint
-
-      //sms
+    sms_api:
+      path: /rest/notification/**
+      url: ${orchestra.central.url}/notification/
 ```
 #### Configuring the Proxy for Development Environment
 
@@ -113,9 +115,11 @@ project directory
   "/geo/*": {
     "target": "http://192.168.1.35:9090",
     "secure": false
+  },
+  "/MTService/*": {
+    "target": "http://localhost:81",
+    "secure": true
   }
-
-  // update
 }
 ```
 
@@ -134,9 +138,11 @@ with a valid certificate will be as below.
   "/geo/*": {
     "target": "https://192.168.1.35:9090",
     "secure": true
+  },
+  "/MTService/*": {
+    "target": "http://localhost:81",
+    "secure": true
   }
-
-  // update
 }
 ```
 
@@ -153,7 +159,6 @@ NOTE : npm start will run the command configured for "start" in package.json
     "test": "ng test",
     "pree2e": "webdriver-manager update",
     "e2e": "protractor"
-    // update
   }
 ```
 
@@ -332,8 +337,11 @@ project directory
     "block_other_browsers" : {
         "value": "disable",
         "description": "Enable or disable whether user allow to use/open the ticket in other browsers apart from the created device. 'on = enable', 'off = disable'"
+    },
+    "otp_service": {
+    "value": "disable",
+    "description": "Enable or disable OTP service"
     }
-    //update
 }
 ```
 #### Configuring the branch open hours
@@ -728,7 +736,21 @@ MobileTicketAPI.getCurrentVisit()
 MobileTicketAPI.getCurrentVisitEvent()
 ```
 
-//update sendOTP and all
+```js
+MobileTicketAPI.sendSMS(phoneNumber)
+```
+```js
+MobileTicketAPI.deleteOTP(phoneNumber)
+```
+```js
+MobileTicketAPI.resendOTP(phoneNumber)
+```
+```js
+MobileTicketAPI.checkOTP(pin, phoneNumber)
+```
+```js
+MobileTicketAPI.lockNumber(phoneNumber, lockType)
+```
      
 ## Creating a Build
 Install grunt command line interpreter by running following command.
@@ -781,7 +803,7 @@ Css selector                                  |   Css property | Description   |
 ```.custom.logo-image            ```           |    content     | Edit to change app logo  |  url('../../app/resources/qmLogo.png') !important;
 ```.custom.logo-bg-color         ```           |   background   | Edit to change app logo  |  transparent !important;
 ```.custom.link-text-color         ```         |   color        | Edit to change text color of links  |  #03996c !important;
-//update
+```.custom.otp-timer-color         ```         |   color        | Edit to change text color of OTP timer  |  #d4152b !important;
 Note:
 
 * If you are specifying styles in this stylesheet, it will override the default styles.
@@ -815,3 +837,43 @@ Mobile Ticket can be configured to add an interactive cookie permission popup to
 
 ## Branch schedule
 Mobile Ticket can be works with Button Scheduler. To enable this service, relevent Button Schedule application and utt should be configured and also enable `branch_schedule` attribute in the `config.json`.
+
+## one time password
+Mobile ticket can be configured to add "One Time Password" feature to avoid bot attacks. This can be enabled by `otp_service` attribute in the `config.json`. If it is `enabled`, then the user will be able to add phone number to get the one time password. Then user has to enter the received password and will be able to create the ticket. Browsers will pick the relevant message depending on the browser language. Before enable this feature, following should be considered.
+
+`Setting up api gateway`
+sms_api mapping should be added to api gateway additionally.
+```yml
+    sms_api:
+      path: /rest/notification/**
+      url: ${orchestra.central.url}/notification/
+```
+
+`Orchestra configuration`
+For the send sms feature it is needed that the Mobile user gets access to the notification.
+To do this mobile user should have a role with NotificationConnectorUser access.
+
+`Configuring the Proxy for Development Environment`
+Edit proxy-config.json and set target to the backend API IP and port of the API
+
+File location
+```html
+project directory
+|---proxy.config.json
+```
+
+```
+{
+  "/MTService/*": {
+    "target": "http://localhost:81",
+    "secure": true
+  }
+}
+```
+
+
+`Database configuration`
+Since this feature uses a database, you should provide a connection string which is stored in `node/mt-service/src/config/config.json`.
+
+`API backend`
+This feature requires a backend which is located in `node` folder. When you run the application in `development` environment you should run the api additionally using `npm run start:dev` command. To build this in `development` environment you can use `npm run build` command.

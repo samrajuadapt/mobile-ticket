@@ -2602,7 +2602,7 @@ var MobileTicketAPI = (function () {
   $.ajaxSetup({
     beforeSend: function (xhr) {
       xhr.setRequestHeader("Accept", "application/json");
-      xhr.setRequestHeader("auth-token", "1234"); //Change the api token with your one      
+      xhr.setRequestHeader("auth-token", "d0516eee-a32d-11e5-bf7f-feff819cdc9f"); //Change the api token with your one      
     }
   });
 
@@ -2826,7 +2826,7 @@ var MobileTicketAPI = (function () {
         onError(null, null, e.message);
       }
     },
-    getOtp: function (phone, onSuccess, onError) { // sendOTP
+    sendOTP: function (phone, onSuccess, onError) {
       try {
         var MT_SERVICE_SEND_SMS = MT_SERVICE + "/sms";
 
@@ -2839,15 +2839,14 @@ var MobileTicketAPI = (function () {
             onSuccess(data);
           },
           error: function (xhr, status, errorMsg) {
-            // onError(xhr, status, errorMsg);
-            console.log(status);
+            onError(xhr, status, errorMsg);
           }
         });
       } catch (e) {
         onError(null, null, e.message);
       }
     },
-    deleteOtp: function (phone, onSuccess, onError) {
+    deleteOTP: function (phone, onSuccess, onError) {
       try {
         var MT_SERVICE_DELETE_OTP = MT_SERVICE + "/otp/delete";
         $.ajax({
@@ -2859,15 +2858,14 @@ var MobileTicketAPI = (function () {
             onSuccess(data);
           },
           error: function (xhr, status, errorMsg) {
-            // onError(xhr, status, errorMsg);
-            console.log(status);
+            onError(xhr, status, errorMsg);
           }
         });
       } catch (e) {
         onError(null, null, e.message);
       }
     },
-    resendOtp: function (phone, onSuccess, onError) {
+    resendOTP: function (phone, onSuccess, onError) {
       try {
         var MT_SERVICE_SEND_SMS = MT_SERVICE + "/otp/resend";
 
@@ -2882,15 +2880,14 @@ var MobileTicketAPI = (function () {
             }
           },
           error: function (xhr, status, errorMsg) {
-            // onError(xhr, status, errorMsg);
-            console.log(status);
+            onError(xhr, status, errorMsg);
           }
         });
       } catch (e) {
         onError(null, null, e.message);
       }
     },
-    checkOtp: function (pin, phone, onSuccess, onError) {
+    checkOTP: function (pin, phone, onSuccess, onError) {
       try {
         var MT_SERVICE_CHECK_OTP = MT_SERVICE + "/otp/check";
 
@@ -2902,13 +2899,10 @@ var MobileTicketAPI = (function () {
           success: function (data) {
             if (data != undefined) {
               onSuccess(data);
-            } else {
-              // lifespan+3
             }
           },
           error: function (xhr, status, errorMsg) {
-            // onError(xhr, status, errorMsg);
-            console.log(status);
+            onError(xhr, status, errorMsg);
           }
         });
       } catch (e) {
@@ -2930,8 +2924,7 @@ var MobileTicketAPI = (function () {
             }
           },
           error: function (xhr, status, errorMsg) {
-            // onError(xhr, status, errorMsg);
-            console.log(status);
+            onError(xhr, status, errorMsg);
           }
         });
       } catch (e) {

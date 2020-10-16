@@ -1,9 +1,14 @@
-<div class="customer-phone">
-  <div class="custom-phone-card">
+<div class="text-center table-child-heading-2">
+  <span class="center-text sub-heading-text-2 service-limit-label custom text-color"  [hidden]="!showNetWorkError">
+    <app-network-message></app-network-message>
+  </span>
+</div>
+<div class="customer-phone" [hidden]="showNetWorkError">
+  <div class="custom-phone-card" >
     <!-- INITIAL AND EDIT PHONE SECTION -->
     <div style="display: inline-block; width: 100%;">
       <div class="phone-num-text" style="float: left;"> {{'otp.pinHeading' | translate}} </div>
-      <div class="custom otp-timer" *ngIf="showTimer">
+      <div class="custom otp-timer-color otp-timer" *ngIf="showTimer">
         <span id="minute"></span>
         <span id="seperator"></span>
         <span id="second"></span>
@@ -39,11 +44,6 @@
             {{'otp.firstAdvantageByEnteringPin' | translate}}
           </div>
         </div>
-        <!-- <div class="phone-num-points-container">
-          <div class="phone-num-points-text">
-            {{'otp.secondAdvantageByEnteringPin' | translate}}
-          </div>
-        </div> -->
       </div>
     </div>
     <div *ngIf="showLoader" class="" style="display: flex;">
@@ -60,7 +60,7 @@
     </div>
   </div>
 
-  <div class="table-child-footer" *ngIf="!showLoader" [hidden]="showNetWorkError">
+  <div class="table-child-footer" *ngIf="!showLoader">
     <footer class="qm-footer">
       <div class="center-text">
         <div

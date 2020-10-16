@@ -240,10 +240,10 @@ app.get('/otp_pin$', (req, res) => {
 const apiProxy = proxy(host, {
 	// ip and port off apigateway
 
-	proxyReqPathResolver: function (req) {
+	proxyReqPathResolver: (req) => {
 		return require('url').parse(req.originalUrl).path;
 	},
-	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
 		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
 		proxyReqOpts.headers['Content-Type'] = 'application/json'
 		return proxyReqOpts;
@@ -263,11 +263,11 @@ const apiProxy = proxy(host, {
 });
 
 const apiFindProxy = proxy(host, {	// ip and port off apigateway
-	proxyReqPathResolver: function (req) {
+	proxyReqPathResolver: (req) => {
 		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/find/","/rest/calendar-backend/api/v1/appointments/publicid/");
 		return require('url').parse(newUrl).path;
 	},
-	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
 		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
 		proxyReqOpts.headers['Content-Type'] = 'application/json'
 		return proxyReqOpts;
@@ -284,26 +284,26 @@ const apiFindProxy = proxy(host, {	// ip and port off apigateway
 		return headers;
 	},
 	https: APIGWHasSSL,
-	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
+	userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
 		const data = JSON.parse(proxyResData.toString('utf8'));
-		let newData = {};
-		this.newData.appointment = {};
+		const newData:any = {};
+		newData.appointment = {};
 		if (data.appointment !== undefined) {
-			this.newData.appointment.qpId = data.appointment.qpId
-			this.newData.appointment.branch = data.appointment.branch;
-			this.newData.appointment.start = data.appointment.start;
-			this.newData.appointment.services = data.appointment.services;
+			newData.appointment.qpId = data.appointment.qpId
+			newData.appointment.branch = data.appointment.branch;
+			newData.appointment.start = data.appointment.start;
+			newData.appointment.services = data.appointment.services;
 		}
 		return JSON.stringify(newData);
 	}
 });
 
 const apiFindCentralProxy = proxy(host, {	// ip and port off apigateway
-	proxyReqPathResolver: function (req) {
+	proxyReqPathResolver: (req) => {
 		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/findCentral/","/rest/appointment/appointments/");
 		return require('url').parse(newUrl).path;
 	},
-	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
 		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
 		proxyReqOpts.headers['Content-Type'] = 'application/json'
 		return proxyReqOpts;
@@ -320,17 +320,17 @@ const apiFindCentralProxy = proxy(host, {	// ip and port off apigateway
 		return headers;
 	},
 	https: APIGWHasSSL,
-	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
-		const data = JSON.parse(proxyResData.toString('utf8'));
-		let newData = {};
+	userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+		let data = JSON.parse(proxyResData.toString('utf8'));
+		let newData:any = {};
 		if (data !== undefined) {
-			this.newData.services = data.services;
-			this.newData.status = data.status
-			this.newData.branchId = data.branchId;
-			this.newData.startTime = data.startTime;
-			this.newData.endTime = data.endTime;
-			this.newData.properties = {};
-			this.newData.properties.notes = data.properties.notes;
+			newData.services = data.services;
+			newData.status = data.status
+			newData.branchId = data.branchId;
+			newData.startTime = data.startTime;
+			newData.endTime = data.endTime;
+			newData.properties = {};
+			newData.properties.notes = data.properties.notes;
 		}
 		return JSON.stringify(newData);
 	}
@@ -339,11 +339,11 @@ const apiFindCentralProxy = proxy(host, {	// ip and port off apigateway
 const apiEntryPointProxy = proxy(host, {
 	// ip and port off apigateway
 
-	proxyReqPathResolver: function (req) {
+	proxyReqPathResolver: (req) => {
 		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/entrypoint/branches/","/rest/entrypoint/branches/");
 		return require('url').parse(newUrl).path;
 	},
-	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
 		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
 		proxyReqOpts.headers['Content-Type'] = 'application/json'
 		return proxyReqOpts;
@@ -365,11 +365,11 @@ const apiEntryPointProxy = proxy(host, {
 const apiArriveProxy = proxy(host, {
 	// ip and port off apigateway
 
-	proxyReqPathResolver: function (req) {
+	proxyReqPathResolver: (req) => {
 		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/arrive/branches/","/rest/entrypoint/branches/");
 		return require('url').parse(newUrl).path;
 	},
-	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
 		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
 		proxyReqOpts.headers['Content-Type'] = 'application/json'
 		return proxyReqOpts;
@@ -386,17 +386,17 @@ const apiArriveProxy = proxy(host, {
 		return headers;
 	},
 	https: APIGWHasSSL,
-	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
+	userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
 		const data = JSON.parse(proxyResData.toString('utf8'));
-		let newData = {};
-		this.newData.parameterMap = {};
+		let newData:any = {};
+		newData.parameterMap = {};
 		if (data !== undefined) {
-			this.newData.id = data.id;
-			this.newData.ticketId = data.ticketId;
-			this.newData.currentVisitService = data.currentVisitService;
-			this.newData.checksum = data.checksum;
-			this.newData.parameterMap.startQueueOrigId = data.parameterMap.startQueueOrigId;
-			this.newData.parameterMap.branchName = data.parameterMap.branchName;
+			newData.id = data.id;
+			newData.ticketId = data.ticketId;
+			newData.currentVisitService = data.currentVisitService;
+			newData.checksum = data.checksum;
+			newData.parameterMap.startQueueOrigId = data.parameterMap.startQueueOrigId;
+			newData.parameterMap.branchName = data.parameterMap.branchName;
 		}
 		return JSON.stringify(newData);
 	}
@@ -405,11 +405,11 @@ const apiArriveProxy = proxy(host, {
 const apiMeetingProxy = proxy(host, {
 	// ip and port off apigateway
 
-	proxyReqPathResolver: function (req) {
+	proxyReqPathResolver: (req) => {
 		var newUrl = req.originalUrl.replace("/MobileTicket/MyMeeting/branches/","/rest/entrypoint/branches/");
 		return require('url').parse(newUrl).path;
 	},
-	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
 		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
 		proxyReqOpts.headers['Content-Type'] = 'application/json'
 		return proxyReqOpts;
@@ -426,15 +426,14 @@ const apiMeetingProxy = proxy(host, {
 		return headers;
 	},
 	https: APIGWHasSSL,
-	userResDecorator: function(proxyRes, proxyResData, userReq, userRes) {
+	userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
 		const data = JSON.parse(proxyResData.toString('utf8'));
-		let newData = {};
-		this.newData.parameterMap = {};
+		let newData:any = {};
+		newData.parameterMap = {};
 		if (data !== undefined) {
-			this.newData.ticketId = data.ticketId;
-			this.newData.checksum = data.checksum;
-			this.newData.parameterMap.meetingUrl = data.parameterMap.meetingUrl;
-			
+			newData.ticketId = data.ticketId;
+			newData.checksum = data.checksum;
+			newData.parameterMap.meetingUrl = data.parameterMap.meetingUrl;
 		}
 		return JSON.stringify(newData);
 	}
@@ -443,11 +442,11 @@ const apiMeetingProxy = proxy(host, {
 var apiBranchScheduleProxy = proxy(host, {
 	// ip and port off apigateway
 
-	proxyReqPathResolver: function (req) {
+	proxyReqPathResolver: (req) => {
 		var newUrl = req.originalUrl.replace("/MobileTicket/BranchSchedule/","/rest/servicepoint/");
 		return require('url').parse(newUrl).path;
 	},
-	proxyReqOptDecorator: function(proxyReqOpts, srcReq) {
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
 		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
 		proxyReqOpts.headers['Content-Type'] = 'application/json'
 		return proxyReqOpts;
@@ -466,29 +465,7 @@ var apiBranchScheduleProxy = proxy(host, {
 	https: APIGWHasSSL
 });
 
-// proxy for MT service
-const apiOtpProxy = proxy('localhost:81', {
-	// ip and port off apigateway
-	proxyReqPathResolver: function (req) {
-		console.log(req.originalUrl);
-		return require('url').parse(req.originalUrl).path;
-	},
-	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
-		console.log(123);
-		if (isEmbedIFRAME === false) {
-			headers['X-Frame-Options'] = "DENY";
-		}
-		headers['Content-Security-Policy'] = "default-src \'self\'";
-	
-		if (supportSSL) {
-			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
-		}
-		return headers;
-	},
-	https: APIGWHasSSL
-});
-
-const handleHeaders = function (res) {
+const handleHeaders = (res) => {
 	if (isEmbedIFRAME === false) {
 		res.set('X-Frame-Options', "DENY");
 	} else {
@@ -501,10 +478,6 @@ const handleHeaders = function (res) {
 	return res;
 }
 
-app.post('/notification/*', (req, res) => {
-	console.log('post hit');
-});
-
 app.use("/geo/branches/*", apiProxy);
 app.use("/MobileTicket/branches/*", apiProxy);
 app.use("/MobileTicket/MyAppointment/find/*", apiFindProxy);
@@ -514,7 +487,6 @@ app.use("/MobileTicket/MyAppointment/arrive/*", apiArriveProxy);
 app.use("/MobileTicket/services/*", apiProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
 app.use("/MobileTicket/MyMeeting/*", apiMeetingProxy);
-// app.use("/MTService/*", apiOtpProxy);
 app.use("/MobileTicket/BranchSchedule/*", apiBranchScheduleProxy);
 
 // MT service

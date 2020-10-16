@@ -18,7 +18,7 @@ export class OtpPinComponent implements OnInit {
   public pin: string = "";
   public pinError: boolean;
   public leftTime: number;
-  public timeLeft: number = 5;
+  public timeLeft: number = 180;
   public disableResend: string = "none";
   public showLoader = false;
   public showTimer = false;
@@ -104,21 +104,29 @@ export class OtpPinComponent implements OnInit {
 
   public timeUp() {
     // delete otp
-    MobileTicketAPI.deleteOtp(
+    this.showLoader = false;
+    MobileTicketAPI.deleteOTP(
       MobileTicketAPI.getEnteredOtpPhoneNum(),
       (data) => {
-        // console.log(data);
+        this.translate.get('otp.pinExpired').subscribe((res: string) => {
+          this.alertDialogService.activate(res).then((res) => {
+            this.pin = '';
+            this.router.navigate(["otp_number"]);
+          });
+        });
       },
       (err) => {
-        // console.log(err);
+        this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+          this.alertDialogService.activate(res).then( data => {
+            MobileTicketAPI.setOtpPhoneNumber("");
+            this.pin = '';
+            this.router.navigate(["branches"]);
+          });
+        });
       }
     );
 
-    this.translate.get('otp.pinExpired').subscribe((res: string) => {
-      this.alertDialogService.activate(res).then((res) => {
-        this.router.navigate(["otp_number"]);
-      });
-    });
+    
 
   }
 
@@ -130,7 +138,7 @@ export class OtpPinComponent implements OnInit {
     this.showLoader = true;
     this.disableResend = "none";
     this.otpTries = 0;
-    MobileTicketAPI.resendOtp(
+    MobileTicketAPI.resendOTP(
       MobileTicketAPI.getEnteredOtpPhoneNum(),
       (data) => {
         if (data == "OK") {
@@ -151,8 +159,16 @@ export class OtpPinComponent implements OnInit {
           });
         }
       },
-      (err) => {
-        console.log(err);
+      (err) => { 
+        this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+          this.alertDialogService.activate(res).then( data => {
+            this.showLoader = false;
+            MobileTicketAPI.setOtpPhoneNumber("");
+            this.pin = '';
+            clearInterval(this.clock);
+            this.router.navigate(["branches"]);
+          });
+        });
       }
     );
   }
@@ -163,14 +179,12 @@ export class OtpPinComponent implements OnInit {
       this.showLoader = true;
       this.pin = this.pin.trim();
       this.otpTries++;
-      MobileTicketAPI.checkOtp(
+      MobileTicketAPI.checkOTP(
         this.pin,
         MobileTicketAPI.getEnteredOtpPhoneNum(),
         (data) => {
           if (data == "OK") {
-            this.showLoader = false;
-            this.showTimer = false;
-            clearInterval(this.clock);
+            this.showLoader = false;  
             // createVisit
             MobileTicketAPI.createVisit(
               (visitInfo) => {
@@ -180,6 +194,8 @@ export class OtpPinComponent implements OnInit {
                   eventAction: "create",
                   eventLabel: "vist-create",
                 });
+                clearInterval(this.clock);
+                this.showTimer = false;
                 this.router.navigate(["ticket"]);
                 // this.isTakeTicketClickedOnce = false;
               },
@@ -254,17 +270,41 @@ export class OtpPinComponent implements OnInit {
                         this.router.navigate(["otp_number"]);
                       });
                     });
+                  } else {
+                    this.showLoader = false;
+                    this.pin = "";
+                    this.showTimer = false;
+                    this.router.navigate(["otp_number"]);
                   }
                 },
                 (err) => {
-                  console.log(err);
+                  
+                  this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+                    this.alertDialogService.activate(res).then( data => {
+                      this.showLoader = false;
+                      this.showTimer = false;
+                      MobileTicketAPI.setOtpPhoneNumber("");
+                      this.pin = '';
+                      this.router.navigate(["branches"]);
+                    });
+                  });
                 }
               );
             }
           }
         },
         (err) => {
-          console.log(err);
+          
+          this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+            this.alertDialogService.activate(res).then( data => {
+              this.showLoader = false;
+              this.showTimer = false;
+              this.pin = '';
+              clearInterval(this.clock);
+              MobileTicketAPI.setOtpPhoneNumber("");
+              this.router.navigate(["branches"]);
+            });
+          });
         }
       );
     } else {
@@ -273,7 +313,7 @@ export class OtpPinComponent implements OnInit {
   }
 
   showHideNetworkError(value: boolean) {
-    this._showNetWorkError = value;
+    this._showNetWorkError = value; 
     this.showNetorkErrorEvent.emit(this._showNetWorkError);
   }
 

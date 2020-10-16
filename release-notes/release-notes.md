@@ -40,11 +40,11 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
-<h2>Version 1.10.0 - internal</h2>
+<h2>Version 1.10.0-internal</h2>
 
 **Date: 2020-10-14**
  
-**Build number: 2**
+**Build number: 3**
 
 <h3>Stories</h3>
 
@@ -53,6 +53,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-312** | **Mobile Ticket works with button sheduler** |
 | **MOB-300** | **Improved Installation Procedure** |
 | **MOB-301** | **Improved Upgrade Procedure** |
+| **MOB-311** | **Get New Ticket - OTP Implementation** |
 
 
 
@@ -72,6 +73,32 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-351** | **Allow to view a ticket while already open a ticket from another tab** |
 | **MOB-353** | **RTL issue in Mobile ticket** |
 
+<h3>Upgrade Instructions</h3>
+- When upgrading from a previous version, following should be considered.
+
+1. 'otp_service' parameter needs to be added to config.json
+
+```
+"block_other_browsers" : {
+        "value": "disable",
+        "description": "Enable or disable whether user allow to use/open the ticket in other devices ..."
+    }
+```
+2. 'tenand_id' parameter needs to be configured in mt-service/src/config/config.json
+```
+  "tenant_id": {
+    "value": "1001",
+    "description": "unique identifire of the client application"
+  }
+```
+3. 'db_connection_string' parameter needs to be configured in mt-service/src/config/config.json
+```
+"db_connection_string": {
+    "value": "",
+    "description": "mongo database connection URL"
+  }
+```
+connection string can be either cloud database connection or local database connection. 
 ----------
 
 <h2>Version 1.9.1</h2>

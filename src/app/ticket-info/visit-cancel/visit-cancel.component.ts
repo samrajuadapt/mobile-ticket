@@ -104,16 +104,21 @@ export class VisitCancelComponent {
             // delete otp
             let OtpService = this.config.getConfig("otp_service");
             if (OtpService === "enable") {
-              MobileTicketAPI.deleteOtp(
+              MobileTicketAPI.deleteOTP(
                 MobileTicketAPI.getEnteredOtpPhoneNum(),
                 (data) => {
-                   //console.log(data);
+                  MobileTicketAPI.setOtpPhoneNumber("");
                 },
                 (err) => {
-                  //console.log(err);
+                  this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+                    this.alertDialogService.activate(res).then( data => {
+                      MobileTicketAPI.setOtpPhoneNumber("");
+                      this.router.navigate(["branches"]);
+                    });
+                  });
                 }
               );
-              MobileTicketAPI.setOtpPhoneNumber("");
+              
 
             }
 

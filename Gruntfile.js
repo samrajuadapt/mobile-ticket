@@ -72,7 +72,8 @@ module.exports = function (grunt) {
       },
       proxy_files: {
         files: [
-          { expand: true, cwd: 'node', src: '**', dest: 'dist/' },
+          { expand: true, cwd: 'node', src: '**,!mtservice', dest: 'dist/' },
+          { expand: true, cwd: 'node', src: ['upgrade-helper/*','bin/**','sslcert/**'], filter: 'isFile', dest: 'dist/' },
           { expand: true, src: ['node/*','!node/server.ts','!node/tsconfig.json'], dest: 'dist/', filter: 'isFile', flatten: true }
         ]
       }

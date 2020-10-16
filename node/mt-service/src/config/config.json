@@ -1,6 +1,6 @@
 {
   "db_connection_string": {
-    "value": "mongodb://defaultDbUser:defaultDbUser@localhost/mobileticket",
+    "value": "",
     "description": "mongo database connection URL"
   },
   "tenant_id": {

@@ -133,7 +133,6 @@
     "getOTP" : "Send PIN",
     "firstAdvantageByEnteringOtpPhone" : "To confirm that you are not a bot, a one-time PIN will be sent to your phone number. No personal information is saved.",
     "firstAdvantageByEnteringPin" : "Enter the PIN sent to your phone. If you did not receive a PIN, please select “Resend PIN”.",
-    "secondAdvantageByEnteringPin" : "2. Resend pin if you did not get ",
     "phoneNumberError": "Please enter a valid phone number",
     "phoneInfoTitle": "ENTER PHONE NUMBER",
     "pinHeading": "One-time PIN",

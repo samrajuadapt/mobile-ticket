@@ -59,7 +59,6 @@ export default class OtpService {
         returnValue = response.data.code;
       })
       .catch(function (error) {
-        console.log(error);
         returnValue = error;
       });
 
@@ -114,10 +113,10 @@ export default class OtpService {
           returnVal = data.n;
         })
         .catch((e) => {
-          console.log(e);
+         // console.log(e);
         });
     } catch (e) {
-      console.log(e);
+      //console.log(e);
     }
     return returnVal;
   }
@@ -142,7 +141,7 @@ export default class OtpService {
             returnVal = 'locked';
           })
           .catch((e) => {
-            console.log(e);
+            //console.log(e);
           });
       } else {
         // increase attempt count
@@ -154,11 +153,11 @@ export default class OtpService {
             returnVal = 'updated';
           })
           .catch((e) => {
-            console.log(e);
+            //console.log(e);
           });
       }
     } catch (e) {
-      console.log(e);
+      //console.log(e);
     }
     return returnVal;
   }

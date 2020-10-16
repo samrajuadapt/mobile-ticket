@@ -19,12 +19,29 @@ export class OtpController {
         .then(async (result) => {
           if (result instanceof Error) {
             // user already exists
-            return res.sendStatus(208);
+            if(result.name == 'MongooseError'){
+              return res.sendStatus(208);
+            } else {
+              // DB error
+              return res.status(500);
+            }   
           } else {
             await this.otpService
               .sendSMS(req, res, newOtp)
-              .then((result) => {
-                return res.sendStatus(200);
+              .then( async(result) => {
+                if (result=='1') {
+                  return res.sendStatus(200);
+                } else {
+                  await this.otpService
+                    .deleteOtp(newOtp.phoneNumber)
+                    .then(async (result) => {
+                      return res.sendStatus(500);       
+                    })
+                    .catch((error) => {
+                      return res.sendStatus(500);
+                    });
+                  return res.sendStatus(500);
+                }  
               })
               .catch((error) => {
                 return res.status(500);
@@ -32,7 +49,6 @@ export class OtpController {
           }
         })
         .catch((error) => {
-          console.log(error);
           return res.status(500);
         });
     } else {
@@ -55,7 +71,6 @@ export class OtpController {
           }
         })
         .catch((error) => {
-          console.log(error);
           return res.status(500);
         });
     } else {
@@ -77,7 +92,6 @@ export class OtpController {
           }
         })
         .catch((error) => {
-          console.log(error);
           return res.status(500);
         });
     } else {
@@ -111,7 +125,6 @@ export class OtpController {
           }
         })
         .catch((error) => {
-          console.log(error);
           return res.status(500);
         });
     } else {
@@ -128,7 +141,6 @@ export class OtpController {
           return res.sendStatus(200);       
         })
         .catch((error) => {
-          console.log(error);
           return res.sendStatus(500);
         });
     } else {
