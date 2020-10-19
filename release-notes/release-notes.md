@@ -54,6 +54,8 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-300** | **Improved Installation Procedure** |
 | **MOB-301** | **Improved Upgrade Procedure** |
 | **MOB-311** | **Get New Ticket - OTP Implementation** |
+| **MOB-385** | **Get New Ticket - Configurable unit of distance** |
+
 
 <h3>Bug fixes</h3>
 
