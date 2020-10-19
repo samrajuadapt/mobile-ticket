@@ -38,11 +38,11 @@ export default class OtpService {
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = this.validAPIGWCert;
   }
 
-  public async sendSMS(req: Request, res: Response, otpInstance: IOtpDocument) {
+  public async sendSMS(req: Request, res: Response, otpInstance: IOtpDocument, sms: string) {
     const url = this.hostProtocol + this.host + this.smsEndpoint;
     const phoneNumber = otpInstance.phoneNumber;
     // const message = otpInstance.otp;
-    const message = "Please use the following OTP \n" + otpInstance.pin + "\n in order to complete your mobile ticket";
+    const message = sms.replace("0000", otpInstance.pin);
     let returnValue = "";
     await axios
       .post(url, null, {
@@ -93,7 +93,26 @@ export default class OtpService {
     }
   }
 
-  
+  public async updateTryOTP(phone: string, tries: number) {
+    const tenantId = this.tenantId;
+    let returnVal = 0;
+
+    try {
+      await this.db.OtpModel.updateOne(
+        { tenantId: tenantId, phoneNumber: phone },
+        { tries: tries }
+      )
+        .then((data) => {
+          returnVal = data.n;
+        })
+        .catch((e) => {
+         // console.log(e);
+        });
+    } catch (e) {
+      //console.log(e);
+    }
+    return returnVal;
+  }
 
   public async lockUpdate(phone: string, lock: number) {
     const tenantId = this.tenantId;
@@ -147,7 +166,7 @@ export default class OtpService {
         // increase attempt count
         const a = await this.db.OtpModel.updateOne(
           { tenantId: tenantId, phoneNumber: phone },
-          { lastUpdated: newDate, attempts: (attempts+1), otp: _otp }
+          { lastUpdated: new Date(), attempts: (attempts+1), pin: _otp, tries: 0}
         )
           .then((data) => {
             returnVal = 'updated';

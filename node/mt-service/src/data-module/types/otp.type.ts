@@ -13,6 +13,7 @@ export interface IOtp {
   created?: Date;
   lastUpdated?: Date;
   locked?: LockState;
+  tries?: number;
 }
 
 export interface IOtpDocument extends IOtp, Document {

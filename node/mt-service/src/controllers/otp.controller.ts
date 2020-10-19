@@ -7,45 +7,52 @@ export class OtpController {
   private otpService: OtpService = new OtpService();
 
   public async createOtp(req: Request, res: Response) {
-   
-    
-    if (req.body.phone) {
+    if (req.body.phone && req.body.sms) {
       const newOtp = new OtpModel();
+      const sms = req.body.sms;
       newOtp.phoneNumber = req.body.phone;
       newOtp.pin = getOtpCode(4);
 
       await this.otpService
-        .createOtp(newOtp)
+        .findByPhone(newOtp.phoneNumber)
         .then(async (result) => {
-          if (result instanceof Error) {
-            // user already exists
-            if(result.name == 'MongooseError'){
-              return res.sendStatus(208);
-            } else {
-              // DB error
-              return res.status(500);
-            }   
-          } else {
+          if (result.length == 0) {
             await this.otpService
-              .sendSMS(req, res, newOtp)
-              .then( async(result) => {
-                if (result=='1') {
-                  return res.sendStatus(200);
-                } else {
+              .createOtp(newOtp)
+              .then(async (result) => {
+                if (result) {
+                  // send SMS
                   await this.otpService
-                    .deleteOtp(newOtp.phoneNumber)
+                    .sendSMS(req, res, newOtp, sms)
                     .then(async (result) => {
-                      return res.sendStatus(500);       
+                      if (result == "1") {
+                        return res.sendStatus(200);
+                      } else {
+                        await this.otpService
+                          .deleteOtp(newOtp.phoneNumber)
+                          .then(async (result) => {
+                            return res.sendStatus(500);
+                          })
+                          .catch((error) => {
+                            return res.sendStatus(500);
+                          });
+                        return res.sendStatus(500);
+                      }
                     })
                     .catch((error) => {
-                      return res.sendStatus(500);
+                      return res.status(500);
                     });
+                } else {
                   return res.sendStatus(500);
-                }  
+                }
               })
               .catch((error) => {
                 return res.status(500);
               });
+          } else {
+            // return otp
+            const otp = result[0];
+            return res.json({phoneNumber: otp.phoneNumber, lastUpdated: otp.lastUpdated, attempts: otp.attempts, tries: otp.tries});
           }
         })
         .catch((error) => {
@@ -63,10 +70,32 @@ export class OtpController {
         .findByPhone(phone)
         .then(async (result) => {
           if (result.length == 1) {
-            if (result[0].pin === pin) {
-              res.sendStatus(200);
+            const otp = result[0];
+            if (otp.pin === pin && otp.attempts<3 && otp.tries<3) {
+              return res.sendStatus(200);
             } else {
-              res.sendStatus(201);
+              // update tries
+              await this.otpService
+                .updateTryOTP(otp.phoneNumber,otp.tries+1)
+                .then(async (result) => {
+                  if (result == 1) {
+                    await this.otpService
+                      .findByPhone(otp.phoneNumber)
+                      .then(async (result) => {
+                        const otp_ = result[0];
+                        return res.json({phoneNumber: otp_.phoneNumber, lastUpdated: otp_.lastUpdated, attempts: otp_.attempts, tries: otp_.tries});
+                      })
+                      .catch((error) => {
+                        return res.status(500);
+                      });
+                    
+                  } else {
+                    res.sendStatus(500);
+                  } 
+                })
+                .catch((error) => {
+                  return res.status(500);
+                })
             }
           }
         })
@@ -100,10 +129,10 @@ export class OtpController {
   }
 
   public async resendOtp(req: Request, res: Response) {
-    if (req.body.phone) {
+    if (req.body.phone && req.body.sms) {
       const phoneNumber = req.body.phone;
+      const sms = req.body.sms;
       const pin = getOtpCode(4);
-      
       await this.otpService
         .updateResendOtp(phoneNumber, pin)
         .then(async (result) => {
@@ -112,7 +141,7 @@ export class OtpController {
             newOtp.phoneNumber = phoneNumber;
             newOtp.pin = pin;
             await this.otpService
-              .sendSMS(req, res, newOtp)
+              .sendSMS(req, res, newOtp, sms)
               .then((result) => {
                 return res.sendStatus(200);
               })
@@ -138,7 +167,7 @@ export class OtpController {
       await this.otpService
         .deleteOtp(phone)
         .then(async (result) => {
-          return res.sendStatus(200);       
+          return res.sendStatus(200);
         })
         .catch((error) => {
           return res.sendStatus(500);

@@ -140,11 +140,12 @@
     "pin_placeholder": "Enter PIN",
     "pinInfoTitle": "Enter PIN",
     "pinExpired": "The PIN has expired. Please try again",
-    "pleaseWait": "Please wait before trying again",
-    "pleaseWaitPrefix": "The PIN you entered is invalid. You have ",
-    "pleaseWaitSuffix": " attempt(s) left",
+    "pleaseWait": "You've exceeded maximum number of attempts. Please wait.",
+    "invalidOTP": "The PIN you entered is invalid. You have # attempt(s) left",
     "lockedOtp": "No attempts left. Please wait 3 minutes and try again",
-    "lockedPhone": "Please wait 10 minutes before trying to resend the PIN again",
-    "pinResend": "The PIN will be resent"
+    "lockedPhone": "You've exceeded maximum number of attempts. Please wait 10 minutes",
+    "pinResend": "The PIN will be resent",
+    "smsText": "Your one time password is 0000. Please use this to continue your mobile ticket.",
+    "havePIN": "You already have a PIN"
   }
 }

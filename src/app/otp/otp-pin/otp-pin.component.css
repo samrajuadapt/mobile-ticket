@@ -207,10 +207,22 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
+.otp-heading {
+  display: flex;
+  justify-content: space-between;
+}
 .otp-timer {
+  direction: ltr;
   float: right;
 }
-
+.disable {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.active {
+  opacity: 1;
+  pointer-events: auto;
+}
 /* Small phones */
 @media (max-width: 400px){
 

@@ -2555,6 +2555,7 @@ var MobileTicketAPI = (function () {
   var services = [];
   var enteredPhoneNum = '';
   var enteredOtpPhoneNum = '';
+  var leftTime = undefined;
   var fingerprint = '';
 
   var visitId = undefined;
@@ -2571,7 +2572,6 @@ var MobileTicketAPI = (function () {
 
   var MOBILE_TICKET = "/MobileTicket";
   var MT_SERVICE = "/MTService";
-  var rest = "/rest";
   var GEO = "/geo";
   var SERVICES = "services";
   var BRANCHES = "branches";
@@ -2694,6 +2694,10 @@ var MobileTicketAPI = (function () {
 
   function getEnteredOtpPhoneNum() {
     return MobileTicketAPI.enteredOtpPhoneNum;
+  }
+
+  function getOTPleftTime() {
+    return MobileTicketAPI.leftTime;
   }
 
   function getFingerprint() {
@@ -2826,13 +2830,13 @@ var MobileTicketAPI = (function () {
         onError(null, null, e.message);
       }
     },
-    sendOTP: function (phone, onSuccess, onError) {
+    sendOTP: function (phone, smsText, onSuccess, onError) {
       try {
         var MT_SERVICE_SEND_SMS = MT_SERVICE + "/sms";
 
         $.ajax({
           type: "POST",
-          data : JSON.stringify({ phone: phone }),
+          data : JSON.stringify({ phone: phone, sms: smsText }),
           contentType: 'application/json',
           url: MT_SERVICE_SEND_SMS,
           success: function (data) {
@@ -2865,13 +2869,13 @@ var MobileTicketAPI = (function () {
         onError(null, null, e.message);
       }
     },
-    resendOTP: function (phone, onSuccess, onError) {
+    resendOTP: function (phone, smsText, onSuccess, onError) {
       try {
         var MT_SERVICE_SEND_SMS = MT_SERVICE + "/otp/resend";
 
         $.ajax({
           type: "POST",
-          data : JSON.stringify({ phone: phone }),
+          data : JSON.stringify({ phone: phone, sms: smsText }),
           contentType: 'application/json',
           url: MT_SERVICE_SEND_SMS,
           success: function (data) {
@@ -3328,8 +3332,14 @@ var MobileTicketAPI = (function () {
     setOtpPhoneNumber: function (phone) {
       MobileTicketAPI.enteredOtpPhoneNum = phone;
     },
+    setOTPleftTime: function (time) {
+      MobileTicketAPI.leftTime = time;
+    },
     getEnteredOtpPhoneNum: function () {
       return getEnteredOtpPhoneNum();
+    },
+    getOTPleftTime: function () {
+      return getOTPleftTime();
     },
     getEnteredPhoneNum: function () {
       return getEnteredPhoneNum();

@@ -55,8 +55,6 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-301** | **Improved Upgrade Procedure** |
 | **MOB-311** | **Get New Ticket - OTP Implementation** |
 
-
-
 <h3>Bug fixes</h3>
 
 | **Id** | **Release notes** |
@@ -79,10 +77,10 @@ This document describes the new features, bug corrections, known issues and reco
 1. 'otp_service' parameter needs to be added to config.json
 
 ```
-"block_other_browsers" : {
-        "value": "disable",
-        "description": "Enable or disable whether user allow to use/open the ticket in other devices ..."
-    }
+"otp_service": {
+    "value": "enable",
+    "description": "Enable or disable OTP service"
+  }
 ```
 2. 'tenand_id' parameter needs to be configured in mt-service/src/config/config.json
 ```
@@ -95,7 +93,7 @@ This document describes the new features, bug corrections, known issues and reco
 ```
 "db_connection_string": {
     "value": "",
-    "description": "mongo database connection URL"
+    "description": "database connection URL"
   }
 ```
 connection string can be either cloud database connection or local database connection. 

@@ -31,8 +31,7 @@
     "build": "rimraf ./mt-service/**/*.js server.js && tsc",
     "clean": "rimraf ./mt-service/**/*.js server.js",
     "start:dev": "ts-node server.ts dev",
-    "start:prod": "npm install && npm run server",
-    "dev": "concurrently \"cd mt-services && npm run start\" \"npm run start_\""
+    "start:prod": "npm install && npm run server"
   },
   "repository": {
     "type": "",

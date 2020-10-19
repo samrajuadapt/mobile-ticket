@@ -6,14 +6,13 @@
 <div class="customer-phone" [hidden]="showNetWorkError">
   <div class="custom-phone-card" >
     <!-- INITIAL AND EDIT PHONE SECTION -->
-    <div style="display: inline-block; width: 100%;">
-      <div class="phone-num-text" style="float: left;"> {{'otp.pinHeading' | translate}} </div>
+    <div class="otp-heading">
+      <div class="phone-num-text"> {{'otp.pinHeading' | translate}} </div>
       <div class="custom otp-timer-color otp-timer" *ngIf="showTimer">
         <span id="minute"></span>
         <span id="seperator"></span>
         <span id="second"></span>
       </div>
-      
     </div>
     
     <div class="customer-phone__number-container">
@@ -46,7 +45,7 @@
         </div>
       </div>
     </div>
-    <div *ngIf="showLoader" class="" style="display: flex;">
+    <div *ngIf="showLoader" style="display: flex;">
       <div class="row width-control">
         <div class="loader-container">
           <div class="inline-block-elem left-cell" style="margin-left: 10px;">
@@ -69,7 +68,7 @@
         </div>
 
         <div
-          class="send_button secondary-btn custom btn-text-color" [ngStyle]="{'pointer-events': disableResend}" (click)="resend()">
+          class="send_button secondary-btn custom btn-text-color" [ngClass]=" disableResend ? 'disable': 'active'" (click)="resend()">
           {{ 'otp.resend' | translate }}
         </div>
       </div>

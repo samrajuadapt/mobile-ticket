@@ -15,9 +15,9 @@ export const connectDB = () => {
   const uri = localConString;
 
   if (database) {
-    return;
+   return;
   }
-
+  // Mongoose.set('maxTimeMS', 5000);
   Mongoose.connect(uri, {
     useNewUrlParser: true,
     useFindAndModify: true,
@@ -30,6 +30,14 @@ export const connectDB = () => {
   database.once("open", async () => {
     console.log("Connected to database");
   });
+
+  // database.on("disconnected", async () => {
+  //   console.log("disconnected from database");
+  // });
+
+  // database.on("close", async () => {
+  //   console.log("close");
+  // });
 
   database.on("error", () => {
     console.log("Error connecting to database");

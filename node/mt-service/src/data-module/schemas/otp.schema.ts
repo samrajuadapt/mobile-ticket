@@ -22,6 +22,10 @@ const OtpSchema = new Mongoose.Schema({
   },
   locked: {
     type: Number
+  },
+  tries:{
+    type: Number,
+    default: 0,
   }
 });
 

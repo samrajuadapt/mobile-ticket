@@ -13,12 +13,13 @@ declare var MobileTicketAPI: any;
   styleUrls: ["./otp-phone-number.component.css"],
 })
 export class OtpPhoneNumberComponent implements OnInit {
-  public phoneNumber: string;
+  public phoneNumber: string = '';
   public phoneNumberError: boolean;
   public countryCode: string;
   public showLoader = false;
+  public counterTime: number = 180;
   private _showNetWorkError = false;
-
+  private smsText: string;
   @Output()
   showNetorkErrorEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -34,9 +35,13 @@ export class OtpPhoneNumberComponent implements OnInit {
     this.location.onPopState(() => {
       history.pushState(null, null, window.location.href);
     });
+    MobileTicketAPI.setOTPleftTime(undefined);
+    this.translate.get('otp.smsText').subscribe((res: string) => {
+        this.smsText = res;
+    });
   }
 
-  ngOnInit() {
+  ngOnInit() {    
     this.countryCode = this.config.getConfig("country_code");
     if (this.countryCode === "") {
       this.countryCode = "+";
@@ -45,6 +50,9 @@ export class OtpPhoneNumberComponent implements OnInit {
     this.phoneNumber = MobileTicketAPI.getEnteredOtpPhoneNum()
       ? MobileTicketAPI.getEnteredOtpPhoneNum()
       : MobileTicketAPI.getEnteredPhoneNum();
+    if(!this.phoneNumber){
+      this.phoneNumber = '';
+    }
 
     MobileTicketAPI.setOtpPhoneNumber("");
 
@@ -75,10 +83,10 @@ export class OtpPhoneNumberComponent implements OnInit {
     this.phoneNumberError = false;
   }
 
-  phoneNumContinue() {
-    if (
+  phoneNumContinue() {    
+    if (this.phoneNumber.trim().length > 5 &&
       this.phoneNumber.match(/^\(?\+?\d?[-\s()0-9]{6,}$/) &&
-      this.phoneNumber !== this.countryCode && this.phoneNumber.trim().length > 5
+      this.phoneNumber !== this.countryCode 
     ) {
       this.showLoader = true;
       this.phoneNumber = this.phoneNumber.trim();
@@ -88,37 +96,69 @@ export class OtpPhoneNumberComponent implements OnInit {
       if( this.phoneNumber.slice(0,2)=='00'){
         this.phoneNumber = this.phoneNumber.slice(2);
       }
-
+      
+      
       MobileTicketAPI.setOtpPhoneNumber(this.phoneNumber);
       MobileTicketAPI.sendOTP(
-        this.phoneNumber,
+        this.phoneNumber, this.smsText,
         (data) => {
+          this.showLoader = false;
           if (data == "OK") {
-            this.showLoader = false;
             this.router.navigate(["otp_pin"]);
-          } else if(data == "Already Reported") {
-            this.translate.get('otp.pleaseWait').subscribe((res: string) => {
-              this.alertDialogService.activate(res).then( data => {
-                this.showLoader = false;
+          } else if (data.phoneNumber == this.phoneNumber) {
+            if (data.attempts > 2) {
+              this.translate.get('otp.pleaseWait').subscribe((res: string) => {
+                this.alertDialogService.activate(res);
+                this.router.navigate(["otp_number"]);
               });
-            }); 
+            } else if (data.tries > 2) {
+              this.translate.get('otp.pleaseWait').subscribe((res: string) => {
+                this.alertDialogService.activate(res);
+                this.router.navigate(["otp_number"]);
+              });
+            } else {
+              const now = Date.now();
+              const updatedAt = Date.parse(data.lastUpdated);   
+              const timeDif = Math.ceil((now-updatedAt)/1000);
+              if(timeDif <= this.counterTime) {
+                MobileTicketAPI.setOTPleftTime(this.counterTime - timeDif);
+                this.translate.get('otp.havePIN').subscribe((res: string) => {
+                  this.alertDialogService.activate(res);
+                  this.router.navigate(["otp_pin"]);
+                });
+              } else {
+                MobileTicketAPI.deleteOTP(
+                  data.phoneNumber,
+                  (data) => {
+                    this.translate.get('otp.pinExpired').subscribe((res: string) => {
+                      this.alertDialogService.activate(res);
+                      this.router.navigate(["otp_number"]);
+                    });
+                  },
+                  (err) => {
+                    this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+                      this.alertDialogService.activate(res);
+                      MobileTicketAPI.setOtpPhoneNumber("");
+                      this.router.navigate(["branches"]);
+                    });
+                  }
+                );
+              }  
+            } 
           } else {
             this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
-              this.alertDialogService.activate(res).then( data => {
-                this.showLoader = false;
-                MobileTicketAPI.setOtpPhoneNumber("");
-                this.router.navigate(["branches"]);
-              });
+              this.alertDialogService.activate(res);
+              MobileTicketAPI.setOtpPhoneNumber("");
+              this.router.navigate(["branches"]);
             });
           }
         },
         (err) => {
           this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
-            this.alertDialogService.activate(res).then( data => {
-              this.showLoader = false;
-              MobileTicketAPI.setOtpPhoneNumber("");
-              this.router.navigate(["branches"]);
-            });
+            this.alertDialogService.activate(res);
+            this.showLoader = false;
+            MobileTicketAPI.setOtpPhoneNumber("");
+            this.router.navigate(["branches"]);
           });
         }
       );

@@ -20,9 +20,9 @@ This is a web application that has been developed using Angular4 and the develop
 - [Branding & Customization](#branding--customization)
 - [Customer data](#customer-data)
 - [Remote serving for customers](#remote-serving-for-customers)
+- [Branch schedule](#branch-schedule)
+- [One time password](#one-time-password)
 - [Cookie consent](#cookie-consent)
-- [one time password](#one-time-password)
-
 
 ## Installation
 BEFORE YOU INSTALL: please read the [prerequisites](#prerequisites)
@@ -339,8 +339,8 @@ project directory
         "description": "Enable or disable whether user allow to use/open the ticket in other browsers apart from the created device. 'on = enable', 'off = disable'"
     },
     "otp_service": {
-    "value": "disable",
-    "description": "Enable or disable OTP service"
+        "value": "disable",
+        "description": "Enable or disable OTP service"
     }
 }
 ```
@@ -739,15 +739,19 @@ MobileTicketAPI.getCurrentVisitEvent()
 ```js
 MobileTicketAPI.sendSMS(phoneNumber)
 ```
+
 ```js
 MobileTicketAPI.deleteOTP(phoneNumber)
 ```
+
 ```js
 MobileTicketAPI.resendOTP(phoneNumber)
 ```
+
 ```js
 MobileTicketAPI.checkOTP(pin, phoneNumber)
 ```
+
 ```js
 MobileTicketAPI.lockNumber(phoneNumber, lockType)
 ```
@@ -793,17 +797,17 @@ Customizations can be done on the fly, after building your application ([Creatin
 
 In your build, open and edit src/app/theme/theme-styles.css file.
 
-Css selector                                  |   Css property | Description   | Example(Default Styles)
-------------                                  |   ------------ | ------------- | -------------
-```.custom.text-color            ```           |     color      | Edit to change font color |  #FFFFFF !important;
-```.custom.btn-text-color         ```           |   color   | Edit to change font color of the accent buttons  |  #FFFFFF !important;
-```.custom.accent-bg-color       ```           |   background   | Edit to change accent color of buttons |  #A9023A !important;
-```.custom.accent-tick-color.tick```           |     stroke     | Edit to change accent color of tick mark |  #A9023A !important;
-```.custom.bg-image              ```           |   background   | Edit to change app background |  url('../../app/resources/background.jpg') !important;
-```.custom.logo-image            ```           |    content     | Edit to change app logo  |  url('../../app/resources/qmLogo.png') !important;
-```.custom.logo-bg-color         ```           |   background   | Edit to change app logo  |  transparent !important;
-```.custom.link-text-color         ```         |   color        | Edit to change text color of links  |  #03996c !important;
-```.custom.otp-timer-color         ```         |   color        | Edit to change text color of OTP timer  |  #d4152b !important;
+Css selector                           |   Css property | Description   | Example(Default Styles)
+------------                           |   ------------ | ------------- | -------------
+```.custom.text-color            ```   |   color        | Edit to change font color |  #FFFFFF !important;
+```.custom.btn-text-color        ```   |   color        | Edit to change font color of the accent buttons  |  #FFFFFF !important;
+```.custom.accent-bg-color       ```   |   background   | Edit to change accent color of buttons |  #A9023A !important;
+```.custom.accent-tick-color.tick```   |   stroke       | Edit to change accent color of tick mark |  #A9023A !important;
+```.custom.bg-image              ```   |   background   | Edit to change app background |  url('../../app/resources/background.jpg') !important;
+```.custom.logo-image            ```   |   content      | Edit to change app logo  |  url('../../app/resources/qmLogo.png') !important;
+```.custom.logo-bg-color         ```   |   background   | Edit to change app logo  |  transparent !important;
+```.custom.link-text-color       ```   |   color        | Edit to change text color of links  |  #03996c !important;
+```.custom.otp-timer-color       ```   |   color        | Edit to change text color of OTP timer  |  #d4152b !important;
 Note:
 
 * If you are specifying styles in this stylesheet, it will override the default styles.
@@ -832,16 +836,13 @@ Following options are available for creating virtual meetings.
 
 `Add meeting based on Service` will create meetings for the selected services from the branch level.
 
-## Cookie consent
-Mobile Ticket can be configured to add an interactive cookie permission popup to get the consent of the user before using any cookies. This can be enabled by `cookie_consent` attribute in the `config.json`. If it is `enabled`, then the user will be able to see a popup when landing the mobile ticket application. Cookie consent text has been stored in `cookie-LANG.html` which is stored in `locale/cookie-consent-files` directory. Browsers will pick the relevant message depending on the browser language. If `cookie_consent` is enabled, then cookies will be used only for google analytics after accepting the consent.
-
 ## Branch schedule
-Mobile Ticket can be works with Button Scheduler. To enable this service, relevent Button Schedule application and utt should be configured and also enable `branch_schedule` attribute in the `config.json`.
+Mobile Ticket can work with Button Scheduler. To enable this service, relevent Button Schedule application and utt should be configured and also enable `branch_schedule` attribute in the `config.json`.
 
-## one time password
+## One time password
 Mobile ticket can be configured to add "One Time Password" feature to avoid bot attacks. This can be enabled by `otp_service` attribute in the `config.json`. If it is `enabled`, then the user will be able to add phone number to get the one time password. Then user has to enter the received password and will be able to create the ticket. Browsers will pick the relevant message depending on the browser language. Before enable this feature, following should be considered.
 
-`Setting up api gateway`
+### `Setting up api gateway`
 sms_api mapping should be added to api gateway additionally.
 ```yml
     sms_api:
@@ -849,11 +850,11 @@ sms_api mapping should be added to api gateway additionally.
       url: ${orchestra.central.url}/notification/
 ```
 
-`Orchestra configuration`
+### `Orchestra configuration`
 For the send sms feature it is needed that the Mobile user gets access to the notification.
 To do this mobile user should have a role with NotificationConnectorUser access.
 
-`Configuring the Proxy for Development Environment`
+### `Configuring the Proxy for Development Environment`
 Edit proxy-config.json and set target to the backend API IP and port of the API
 
 File location
@@ -872,8 +873,24 @@ project directory
 ```
 
 
-`Database configuration`
+### `Database configuration`
 Since this feature uses a database, you should provide a connection string which is stored in `node/mt-service/src/config/config.json`.
+```
+"db_connection_string": {
+    "value": "",
+    "description": "database connection URL"
+}
+```
+Also have to set the `tenant ID` for the client application which is also stored in `node/mt-service/src/config/config.json`.
+```
+"tenant_id": {
+    "value": "001",
+    "description": "unique identifire of the client application"
+  }
+```
 
-`API backend`
+### `API backend`
 This feature requires a backend which is located in `node` folder. When you run the application in `development` environment you should run the api additionally using `npm run start:dev` command. To build this in `development` environment you can use `npm run build` command.
+
+## Cookie consent
+Mobile Ticket can be configured to add an interactive cookie permission popup to get the consent of the user before using any cookies. This can be enabled by `cookie_consent` attribute in the `config.json`. If it is `enabled`, then the user will be able to see a popup when landing the mobile ticket application. Cookie consent text has been stored in `cookie-LANG.html` which is stored in `locale/cookie-consent-files` directory. Browsers will pick the relevant message depending on the browser language. If `cookie_consent` is enabled, then cookies will be used only for google analytics after accepting the consent.

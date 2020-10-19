@@ -103,7 +103,7 @@ export class ServicesContainerComponent implements OnInit {
     private takeTicket(): void {
         let customerData = this.config.getConfig('customer_data');   
         let OtpService = this.config.getConfig('otp_service');   
-        let isDeviceBounded  =  this.config.getConfig('block_other_devices');
+        let isDeviceBounded  =  this.config.getConfig('block_other_browsers');
         if (!this.isTakeTicketClickedOnce) {
             if (MobileTicketAPI.getCurrentVisit()) {
                 this.serviceService.stopBranchRedirectionCountDown();

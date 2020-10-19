@@ -18,15 +18,14 @@ export class OtpPinComponent implements OnInit {
   public pin: string = "";
   public pinError: boolean;
   public leftTime: number;
-  public timeLeft: number = 180;
-  public disableResend: string = "none";
+  public counterTime: number = 180;
+  public disableResend: boolean = true;
   public showLoader = false;
   public showTimer = false;
-  public invalidPinMsg_p: string;
-  public invalidPinMsg_s: string;
+  public invalidOTP: string;
   public clock;
   private _showNetWorkError = false;
-  private otpTries: number = 0;
+  private smsText: string;
   
 
   @Output()
@@ -45,24 +44,28 @@ export class OtpPinComponent implements OnInit {
       history.pushState(null, null, window.location.href);
     });
 
-    this.translate.get('otp.pleaseWaitPrefix').subscribe((res: string) => {
-      this.invalidPinMsg_p = res;
+    this.translate.get('otp.invalidOTP').subscribe((res: string) => {
+      this.invalidOTP = res;
     });
 
-    this.translate.get('otp.pleaseWaitSuffix').subscribe((res: string) => {
-      this.invalidPinMsg_s = res;
+    this.translate.get('otp.smsText').subscribe((res: string) => {
+        this.smsText = res;
     });
     
   }
 
   ngOnInit() {
     this.pinError = false;
-    this.leftTime = this.timeLeft;
+    this.leftTime = MobileTicketAPI.getOTPleftTime() ? MobileTicketAPI.getOTPleftTime() : this.counterTime;
+    if (this.leftTime <= (this.counterTime-10)) {
+      this.showResend();
+    }
+    this.showTimer = true;
     this.timer();
   }
 
   public timer() {
-    this.showTimer = true;
+    // this.showTimer = true;
     this.clock = setInterval(() => {
       if (this.showTimer) {
         let minutes = Math.floor(this.leftTime / 60);
@@ -79,7 +82,7 @@ export class OtpPinComponent implements OnInit {
           clearInterval(this.clock);
           this.timeUp();
         }
-        if (this.leftTime == this.timeLeft - 10) {
+        if (this.leftTime == this.counterTime - 10) {
           this.showResend();
         }
         document.getElementById("minute").innerHTML = minutes_;
@@ -109,19 +112,17 @@ export class OtpPinComponent implements OnInit {
       MobileTicketAPI.getEnteredOtpPhoneNum(),
       (data) => {
         this.translate.get('otp.pinExpired').subscribe((res: string) => {
-          this.alertDialogService.activate(res).then((res) => {
-            this.pin = '';
-            this.router.navigate(["otp_number"]);
-          });
+          this.alertDialogService.activate(res);
+          this.pin = '';
+          this.router.navigate(["otp_number"]);
         });
       },
       (err) => {
         this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
-          this.alertDialogService.activate(res).then( data => {
-            MobileTicketAPI.setOtpPhoneNumber("");
-            this.pin = '';
-            this.router.navigate(["branches"]);
-          });
+          this.alertDialogService.activate(res);
+          MobileTicketAPI.setOtpPhoneNumber("");
+          this.pin = '';
+          this.router.navigate(["branches"]);
         });
       }
     );
@@ -131,15 +132,15 @@ export class OtpPinComponent implements OnInit {
   }
 
   showResend(): void {
-    this.disableResend = "auto";
+    this.disableResend = false;
   }
 
   public resend() {
     this.showLoader = true;
-    this.disableResend = "none";
-    this.otpTries = 0;
+    this.disableResend = true;
+    clearInterval(this.clock);
     MobileTicketAPI.resendOTP(
-      MobileTicketAPI.getEnteredOtpPhoneNum(),
+      MobileTicketAPI.getEnteredOtpPhoneNum(), this.smsText,
       (data) => {
         if (data == "OK") {
           this.showLoader = false;
@@ -147,27 +148,27 @@ export class OtpPinComponent implements OnInit {
             this.alertDialogService.activate(res);
           });
           this.pin = "";
-          this.leftTime = this.timeLeft;
+          this.leftTime = this.counterTime;
+          this.showTimer = true;
+          this.timer();
         } else {
           this.showLoader = false;
           this.pin = "";
           clearInterval(this.clock);
           this.translate.get('otp.lockedPhone').subscribe((res: string) => {
-            this.alertDialogService.activate(res).then( data => {
-              this.router.navigate(["otp_number"]);
-            });
+            this.alertDialogService.activate(res);
+            this.router.navigate(["otp_number"]);
           });
         }
       },
       (err) => { 
         this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
-          this.alertDialogService.activate(res).then( data => {
-            this.showLoader = false;
-            MobileTicketAPI.setOtpPhoneNumber("");
-            this.pin = '';
-            clearInterval(this.clock);
-            this.router.navigate(["branches"]);
-          });
+          this.alertDialogService.activate(res);
+          this.showLoader = false;
+          MobileTicketAPI.setOtpPhoneNumber("");
+          this.pin = '';
+          clearInterval(this.clock);
+          this.router.navigate(["branches"]);
         });
       }
     );
@@ -177,8 +178,9 @@ export class OtpPinComponent implements OnInit {
     if (this.pin.match(/^\(?\d?[-\s()0-9]{4,}$/) && this.pin.trim().length > 3) {
       // check pin
       this.showLoader = true;
+      clearInterval(this.clock);
+      const clickTime = Date.now();  
       this.pin = this.pin.trim();
-      this.otpTries++;
       MobileTicketAPI.checkOTP(
         this.pin,
         MobileTicketAPI.getEnteredOtpPhoneNum(),
@@ -245,30 +247,37 @@ export class OtpPinComponent implements OnInit {
               }
             );
           } else {
-            // otp not matched
             this.showLoader = false;
-            if (this.otpTries < 3) {
-              let alertMSg = this.invalidPinMsg_p + (3 - this.otpTries) + this.invalidPinMsg_s;
-              this.alertDialogService.activate(alertMSg).then((res) => {
-                this.pin = "";
-              });
+            if (data.tries<3) {
+              let alertMSg = this.invalidOTP;
+              const remainingTries = 3 - data.tries;
+              alertMSg = alertMSg.replace('#', remainingTries.toString());
+              this.alertDialogService.activate(alertMSg);
+              this.pin = "";
+              this.showTimer = false;
+              const timeDif = Math.ceil((Date.now()-clickTime)/1000);
+              this.leftTime = this.leftTime - timeDif;
+              if (this.leftTime>0) { 
+                this.timer();
+                this.showTimer = true;
+              } else {
+                this.timeUp();
+              }
               
             } else {
-              // 3rd try
               this.showLoader = true;
               clearInterval(this.clock);
               MobileTicketAPI.lockNumber(
                 MobileTicketAPI.getEnteredOtpPhoneNum(),
-                1, // 1 for exceeding wrong otp attempts
+                1, // 1 for exceeding wrong otp tries
                 (data) => {
                   if (data == "OK") {
                     this.showLoader = false;
                     this.translate.get('otp.lockedOtp').subscribe((res: string) => {
-                      this.alertDialogService.activate(res).then( data => {
-                        this.pin = "";
-                        this.showTimer = false;
-                        this.router.navigate(["otp_number"]);
-                      });
+                      this.alertDialogService.activate(res);
+                      this.pin = "";
+                      this.showTimer = false;
+                      this.router.navigate(["otp_number"]);
                     });
                   } else {
                     this.showLoader = false;
@@ -280,13 +289,12 @@ export class OtpPinComponent implements OnInit {
                 (err) => {
                   
                   this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
-                    this.alertDialogService.activate(res).then( data => {
-                      this.showLoader = false;
-                      this.showTimer = false;
-                      MobileTicketAPI.setOtpPhoneNumber("");
-                      this.pin = '';
-                      this.router.navigate(["branches"]);
-                    });
+                    this.alertDialogService.activate(res);
+                    this.showLoader = false;
+                    this.showTimer = false;
+                    MobileTicketAPI.setOtpPhoneNumber("");
+                    this.pin = '';
+                    this.router.navigate(["branches"]);
                   });
                 }
               );
@@ -296,14 +304,13 @@ export class OtpPinComponent implements OnInit {
         (err) => {
           
           this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
-            this.alertDialogService.activate(res).then( data => {
-              this.showLoader = false;
-              this.showTimer = false;
-              this.pin = '';
-              clearInterval(this.clock);
-              MobileTicketAPI.setOtpPhoneNumber("");
-              this.router.navigate(["branches"]);
-            });
+            this.alertDialogService.activate(res);
+            this.showLoader = false;
+            this.showTimer = false;
+            this.pin = '';
+            clearInterval(this.clock);
+            MobileTicketAPI.setOtpPhoneNumber("");
+            this.router.navigate(["branches"]);
           });
         }
       );

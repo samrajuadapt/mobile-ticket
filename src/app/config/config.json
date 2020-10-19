@@ -58,7 +58,7 @@
       {
         "translation_key": "open_hours.week_day3",
         "from": "8:00",
-        "to": "18:59",
+        "to": "18:00",
         "description": "wednesday",
         "display_from": "8:00",
         "display_to": "18:00",
@@ -152,10 +152,6 @@
     "description": "Define how many times should retry the queue poll request."
   },
   "block_other_browsers": {
-    "value": "disable",
-    "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
-  },
-  "block_other_devices": {
     "value": "disable",
     "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
   },
