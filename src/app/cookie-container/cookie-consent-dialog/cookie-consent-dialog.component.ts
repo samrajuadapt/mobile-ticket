@@ -13,7 +13,7 @@ export class CookieConsentDialogComponent implements OnInit {
 
   constructor(
     public router: Router,
-    private config: Config
+    private config: Config,
   ) { }
 
   ngOnInit() {

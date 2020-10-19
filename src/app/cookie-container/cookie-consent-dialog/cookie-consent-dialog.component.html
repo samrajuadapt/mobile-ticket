@@ -1,4 +1,5 @@
-<div class="cookies" id="cookies-container" *ngIf="CookieConsentShow">
+<div class="cookies" id="cookies-container" *ngIf="CookieConsentShow && 
+(this.router.url !== '/open_hours') && (this.router.url !== '/unauthorized') && (this.router.url !== '/no_support')">
   <div class="cookies-container">
     <div class="flex-container">
       <div class="cookie-icon">
