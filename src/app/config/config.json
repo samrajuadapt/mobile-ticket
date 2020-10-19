@@ -127,6 +127,10 @@
     "value": "DD/MM/YYYY",
     "description": "Date format for showing the appointment date. Allowed placeholders are DD MM YY YYYY"
   },
+  "system_of_units": {
+    "value": "metrics",
+    "description": "Unit of measure the distance. Can be metrics, imperial, auto"
+  },
   "customer_data": {
     "value": "disable",
     "description": "Enable or disable customer access to enter customer phone number using mobile ticket UI, 'on = enable', 'off = disable'"

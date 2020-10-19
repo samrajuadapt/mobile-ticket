@@ -1,17 +1,31 @@
 import { Util } from './util';
-
+import { Config } from '../config/config';
 export class GpsPositionCalculator {
+
+    
+    
+    constructor(private config : Config){
+    }
 
     //ref http://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
 
     public getDistanceFromLatLon(lat1, lon1, lat2, lon2) {
         let util = new Util();
-        if (util.isImperial()) {
-            return this.getImperialDistance(lat1, lon1, lat2, lon2);
-        }
-        else {
+        const unitSystem = this.config.getConfig('system_of_units');
+        
+        if (unitSystem === 'metrics')  {
             return this.getMetricDistance(lat1, lon1, lat2, lon2);
-        }
+        } else if (unitSystem === 'imperial') {
+            return this.getImperialDistance(lat1, lon1, lat2, lon2);
+        } else {
+            if (util.isImperial()) {
+                return this.getImperialDistance(lat1, lon1, lat2, lon2);
+            }
+            else {
+                return this.getMetricDistance(lat1, lon1, lat2, lon2);
+            }
+        }  
+     
     }
 
     public getRawDiatance(lat1, lon1, lat2, lon2){
@@ -62,7 +76,7 @@ export class GpsPositionCalculator {
         let d: any = R * c; // Distance in miles
 
         if (d <= 1) {
-            d = Math.round(d * 1760) + " yd";
+            d = "0." + Math.round(d) + " mi";
         } else {
             d = Math.round(d) + " mi";
         }

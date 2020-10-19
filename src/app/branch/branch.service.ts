@@ -57,13 +57,13 @@ export class BranchService {
   }
 
  public getBranchRawDistance(branchPosition: PositionEntity, customerPosition: PositionEntity): number {
-    let calculator = new GpsPositionCalculator();
+    let calculator = new GpsPositionCalculator(this.config);
     return calculator.getRawDiatance(customerPosition.latitude,
       customerPosition.longitude, branchPosition.latitude, branchPosition.longitude);
   }
 
   public getBranchDistance(branchPosition: PositionEntity, customerPosition: PositionEntity): number {
-    let calculator = new GpsPositionCalculator();
+    let calculator = new GpsPositionCalculator(this.config);
     return calculator.getDistanceFromLatLon(customerPosition.latitude,
       customerPosition.longitude, branchPosition.latitude, branchPosition.longitude);
   }
