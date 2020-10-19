@@ -1,10 +1,10 @@
 {
   "db_connection_string": {
-    "value": "",
+    "value": "mongodb+srv://chamut:chamut@cluster0.7dtrr.mongodb.net/test",
     "description": "mongo database connection URL"
   },
   "tenant_id": {
-    "value": "1001",
+    "value": "internal-a3de98bc",
     "description": "unique identifire of the client application"
   }
 }

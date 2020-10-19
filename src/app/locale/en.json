@@ -142,7 +142,7 @@
     "pinExpired": "The PIN has expired. Please try again",
     "pleaseWait": "You've exceeded maximum number of attempts. Please wait.",
     "invalidOTP": "The PIN you entered is invalid. You have # attempt(s) left",
-    "lockedOtp": "No attempts left. Please wait 3 minutes and try again",
+    "lockedOtp": "No attempts left. Please wait for 3 minutes and try again",
     "lockedPhone": "You've exceeded maximum number of attempts. Please wait 10 minutes",
     "pinResend": "The PIN will be resent",
     "smsText": "Your one time password is 0000. Please use this to continue your mobile ticket.",

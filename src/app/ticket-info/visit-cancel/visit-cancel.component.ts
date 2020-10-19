@@ -101,27 +101,6 @@ export class VisitCancelComponent {
               MobileTicketAPI.clearLocalStorage();
             }
             MobileTicketAPI.resetAllVars();
-            // delete otp
-            let OtpService = this.config.getConfig("otp_service");
-            if (OtpService === "enable") {
-              MobileTicketAPI.deleteOTP(
-                MobileTicketAPI.getEnteredOtpPhoneNum(),
-                (data) => {
-                  MobileTicketAPI.setOtpPhoneNumber("");
-                },
-                (err) => {
-                  this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
-                    this.alertDialogService.activate(res).then( data => {
-                      MobileTicketAPI.setOtpPhoneNumber("");
-                      this.router.navigate(["branches"]);
-                    });
-                  });
-                }
-              );
-              
-
-            }
-
             // 168477572 : Always route to thank you page
             // this.router.navigate(['branches']);
           },

@@ -198,7 +198,22 @@ export class OtpPinComponent implements OnInit {
                 });
                 clearInterval(this.clock);
                 this.showTimer = false;
-                this.router.navigate(["ticket"]);
+                
+                // delete otp 
+                MobileTicketAPI.deleteOTP(
+                  MobileTicketAPI.getEnteredOtpPhoneNum(),
+                  (data) => {
+                    MobileTicketAPI.setOtpPhoneNumber("");
+                  },
+                  (err) => {
+                    this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+                      this.alertDialogService.activate(res);
+                      MobileTicketAPI.setOtpPhoneNumber("");
+                      this.router.navigate(["branches"]);
+                    });
+                  }
+                );
+                this.router.navigate(["ticket"]); 
                 // this.isTakeTicketClickedOnce = false;
               },
               (xhr, status, errorMessage) => {
