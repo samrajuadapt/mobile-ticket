@@ -128,8 +128,8 @@
     "description": "Date format for showing the appointment date. Allowed placeholders are DD MM YY YYYY"
   },
   "system_of_units": {
-    "value": "metrics",
-    "description": "Unit of measure the distance. Can be metrics, imperial, auto"
+    "value": "auto",
+    "description": "Unit of measure the distance. Can be metric, imperial, auto"
   },
   "customer_data": {
     "value": "disable",

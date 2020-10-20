@@ -13,7 +13,7 @@ export class GpsPositionCalculator {
         let util = new Util();
         const unitSystem = this.config.getConfig('system_of_units');
         
-        if (unitSystem === 'metrics')  {
+        if (unitSystem === 'metric')  {
             return this.getMetricDistance(lat1, lon1, lat2, lon2);
         } else if (unitSystem === 'imperial') {
             return this.getImperialDistance(lat1, lon1, lat2, lon2);
@@ -55,6 +55,7 @@ export class GpsPositionCalculator {
         let d: any = R * c; // Distance in km
 
         if (d <= 1) {
+            console.log(d);
             d = Math.round(d * 1000) + " m";
         } else {
             d = Math.round(d) + " km";
@@ -76,7 +77,7 @@ export class GpsPositionCalculator {
         let d: any = R * c; // Distance in miles
 
         if (d <= 1) {
-            d = "0." + Math.round(d) + " mi";
+            d = d.toFixed(2) + " mi";
         } else {
             d = Math.round(d) + " mi";
         }

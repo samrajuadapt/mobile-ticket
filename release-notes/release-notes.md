@@ -44,7 +44,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2020-10-14**
  
-**Build number: 4**
+**Build number: 5**
 
 <h3>Stories</h3>
 
@@ -72,6 +72,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-355** | **iPhone input fields > zoom in persist after focus out from input fields** |
 | **MOB-351** | **Allow to view a ticket while already open a ticket from another tab** |
 | **MOB-353** | **RTL issue in Mobile ticket** |
+| **MOB-387** | **Cookie consent popup shouldn't appear in some pages bug fixed** |
 
 <h3>Upgrade Instructions</h3>
 - When upgrading from a previous version, following should be considered.
