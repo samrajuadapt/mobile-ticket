@@ -94,12 +94,13 @@ This document describes the new features, bug corrections, known issues and reco
 ```
 3. 'db_connection_string' parameter needs to be configured in mt-service/src/config/config.json
 ```
-"db_connection_string": {
+  "db_connection_string": {
     "value": "",
     "description": "database connection URL"
   }
 ```
-connection string can be either cloud database connection or local database connection. 
+Connection string can be either cloud database connection or local database connection. Please read the deployment guide for available options for the database and more information with regard to OTP configurations.
+
 ----------
 
 <h2>Version 1.9.1</h2>
