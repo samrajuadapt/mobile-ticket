@@ -222,6 +222,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     }
     else if (visitStatus.status === this.visitState.IN_QUEUE) {
       this.isSoundPlay = false;
+      this.isTicketFlashed = false;
       this.prevVisitState = this.visitState.IN_QUEUE;
       this.isVisitCall = false;
       this.isVisitRecycled = false;
