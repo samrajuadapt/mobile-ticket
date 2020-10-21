@@ -107,6 +107,7 @@
   .phone-num-error {
     font-size: 12px;
     color: red;
+    margin:0 -15px;
   }
   .privacy-container {
       display: flex;
@@ -210,6 +211,9 @@
     }
     .phone-num-error { 
       font-size: 9px;
+    }
+    .center-text {
+      margin-top: -16px;
     }
   }
   

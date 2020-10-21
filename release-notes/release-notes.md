@@ -42,9 +42,13 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h2>Version 1.10.0-internal</h2>
 
-**Date: 2020-10-14**
+**Date: 2020-10-21**
  
+<<<<<<< HEAD
 **Build number: 5**
+=======
+**Build number: 6**
+>>>>>>> MOB-311: MOB-402 - MOB-407
 
 <h3>Stories</h3>
 

@@ -1,10 +1,10 @@
 {
   "db_connection_string": {
     "value": "",
-    "description": "mongo database connection URL"
+    "description": "mongo database connection URL, ex: mongodb://[username:password@]host[:port][/[database][?options]]"
   },
   "tenant_id": {
-    "value": "1001",
-    "description": "unique identifire of the client application"
+    "value": "",
+    "description": "unique identifier of the client application"
   }
 }

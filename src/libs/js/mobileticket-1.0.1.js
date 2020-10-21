@@ -2935,6 +2935,28 @@ var MobileTicketAPI = (function () {
         onError(null, null, e.message);
       }
     },
+    getOTPTime: function (phone, onSuccess, onError) {
+      try {
+        var MT_SERVICE_LOCK_NUMBER = MT_SERVICE + "/otp/time";
+
+        $.ajax({
+          type: "POST",
+          data : JSON.stringify({ phone: phone }),
+          contentType: 'application/json',
+          url: MT_SERVICE_LOCK_NUMBER,
+          success: function (data) {
+            if (data != undefined) {
+              onSuccess(data);
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            onError(xhr, status, errorMsg);
+          }
+        });
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
     getAllBranches: function (onSuccess, onError) {
       try {
         var service = getSelectedService();
