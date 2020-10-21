@@ -234,6 +234,10 @@ app.get('/otp_pin$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
+app.get('/unauthorized$', (req, res) => {
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
+});
 
 
 // Proxy mobile example to API gateway
