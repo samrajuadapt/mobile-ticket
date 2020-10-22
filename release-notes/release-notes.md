@@ -44,7 +44,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2020-10-21**
  
-**Build number: 7**
+**Build number: 8**
 
 <h3>Stories</h3>
 

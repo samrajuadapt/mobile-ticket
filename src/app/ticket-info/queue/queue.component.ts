@@ -153,32 +153,6 @@ export class QueueComponent implements OnInit, OnDestroy {
     if (visitPosition <= 5) {
       this.timer = TimerObservable.create(1000, 1000);
     }
-    let isDeviceBounded = this.config.getConfig('block_other_browsers');
-    if (isDeviceBounded === 'enable') {
-      MobileTicketAPI.getCustomParameters(
-        (visit: any) => {
-          System.import('fingerprintjs2').then(Fingerprint2 => {
-            let that = this;
-            Fingerprint2.getPromise({
-              excludes: {
-                availableScreenResolution: true,
-                adBlock: true,
-                enumerateDevices: true
-              }
-            }).then(function (components) {
-              let values = components.map(function (component) { return component.value });
-              let murmur = Fingerprint2.x64hash128(values.join(''), 31);
-              console.log(murmur);
-              if (visit === murmur) {
-              } else {
-                that.redirectToUnautherized();
-              }
-            })
-          },
-            (xhr, status, msg) => {
-            });
-        });
-    }
     this.subscription = this.timer.subscribe(visitPosition => {
       this.queuePoll(visitPosition, ticketService, false);
     });

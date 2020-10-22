@@ -12,6 +12,7 @@ import { Config } from '../config/config';
 import { BranchOpenHoursValidator } from '../util/branch-open-hours-validator'
 import { ServiceService } from '../service/service.service';
 import { BranchScheduleService } from '../shared/branch-schedule.service';
+import { TicketInfoService } from 'app/ticket-info/ticket-info.service';
 declare var System: any;
 declare var MobileTicketAPI: any;
 declare var ga: Function;
@@ -32,7 +33,7 @@ export class AuthGuard implements CanActivate {
 
     constructor(private router: Router, private activatedRoute: ActivatedRoute, private branchSrvc: BranchService,
         private serviceSrvc: ServiceService, private alertDialogService: AlertDialogService,
-        private translate: TranslateService, private config: Config,
+        private translate: TranslateService, private config: Config,public ticketService: TicketInfoService,
         private branchScheduleService: BranchScheduleService, private openHourValidator: BranchOpenHoursValidator) {
         this.branchService = branchSrvc;
         this.serviceService = serviceSrvc;
@@ -64,6 +65,8 @@ export class AuthGuard implements CanActivate {
         );
     }
 
+    
+
     checkOpenHours(resolve) {
         if (this.config.getConfig('branch_schedule') !== 'enable') {
             return false;
@@ -86,6 +89,13 @@ export class AuthGuard implements CanActivate {
             return true;
         }
     }
+    redirectToUnautherized() {
+        MobileTicketAPI.clearLocalStorage();
+        MobileTicketAPI.resetAllVars();
+        MobileTicketAPI.resetCurrentVisitStatus();
+    
+        this.router.navigate(['unauthorized']);
+      }
 
     checkBrowserSupport() {
         let util = new Util()
@@ -279,6 +289,7 @@ export class AuthGuard implements CanActivate {
                             } else {
                                 // Creating ticket
                                 let isDeviceBounded = this.config.getConfig('block_other_browsers');
+                                
                                 if (isDeviceBounded === 'enable') {
                                     System.import('fingerprintjs2').then(Fingerprint2 => {
                                         let that = this;
@@ -428,6 +439,7 @@ export class AuthGuard implements CanActivate {
             }
 
         } else if (url.startsWith('/ticket') && (branchId && visitId && checksum) ) {
+            let isDeviceBounded = this.config.getConfig('block_other_browsers');
             if (visitInfo && visitInfo !== null) {
                 let alertMsg = '';
                 this.translate.get('visit.onGoingVisit').subscribe((res: string) => {
@@ -440,8 +452,51 @@ export class AuthGuard implements CanActivate {
                     });
                 });
 
-            } else {
+            } else if (isDeviceBounded === 'enable') {
+                let branchId = route.queryParams['branch'];
+                let visitId = route.queryParams['visit'];
+                let checksum = route.queryParams['checksum'];
+                console.log(visitInfo);
+                this.ticketService.getBranchInformation(branchId, (success: boolean) => { 
+                    if (!success) {
+                        this.router.navigate(['branches']);
+                        resolve(false);
+                      } else {
+                    MobileTicketAPI.setVisit(branchId, 0, visitId, checksum);
+                    MobileTicketAPI.getCustomParameters(
+                            (visit: any) => {
+                                System.import('fingerprintjs2').then(Fingerprint2 => {
+                                    let that = this;
+                                    Fingerprint2.getPromise({
+                                        excludes: {
+                                            availableScreenResolution: true,
+                                            adBlock: true,
+                                            enumerateDevices: true
+                                        }
+                                    }).then(function (components) {
+                                        let values = components.map(function (component) { return component.value });
+                                        let murmur = Fingerprint2.x64hash128(values.join(''), 31);
+                                        console.log(murmur);
+                                        if (visit === murmur) {
+                                            resolve(true);
+                                        } else {
+                                            that.redirectToUnautherized();
+                                            resolve(false);
+                                        }
+                                    })
+                                },
+                                    (xhr, status, msg) => {
+                                        this.router.navigate(['no_visit']);
+                                        resolve(false);
+                                    });
+                            });
+                        }
+                });
+            }
+            
+            else{
                 resolve(true);
+                
             }
 
         } else if (url.startsWith('/ticket') && ((visitInfo !== null && visitInfo)

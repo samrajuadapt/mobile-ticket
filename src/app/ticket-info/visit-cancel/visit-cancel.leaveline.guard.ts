@@ -24,6 +24,8 @@ export class VisitCancelLeavelineGuard implements CanDeactivate<TicketInfoContai
         }
         else if (nextState.url === '/unauthorized') {
             return true;
+        }  else if (nextState.url === '/branches') {
+            return true;
         }
         else if (!component.isTicketEndedOrDeleted && !component.isVisitCall && !component.isVisitNotFound) {
             if (!component.isVisitCanceledOnce()) {
