@@ -12,7 +12,7 @@ import { Config } from '../config/config';
 import { BranchOpenHoursValidator } from '../util/branch-open-hours-validator'
 import { ServiceService } from '../service/service.service';
 import { BranchScheduleService } from '../shared/branch-schedule.service';
-import { TicketInfoService } from 'app/ticket-info/ticket-info.service';
+import { TicketInfoService } from '../ticket-info/ticket-info.service';
 declare var System: any;
 declare var MobileTicketAPI: any;
 declare var ga: Function;
