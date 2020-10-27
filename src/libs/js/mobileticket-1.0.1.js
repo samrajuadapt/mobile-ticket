@@ -3065,7 +3065,6 @@ var MobileTicketAPI = (function () {
         var service = getSelectedService();
         var enteredPhoneNum = getEnteredPhoneNum();
         var fingerPrint = getFingerprint();
-        console.log(fingerPrint);
         var jsonData = {};
 
         if (fingerPrint) {

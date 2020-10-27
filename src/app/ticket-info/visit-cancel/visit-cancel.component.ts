@@ -113,7 +113,6 @@ export class VisitCancelComponent {
           });
       } else {
         // Confirm fail Callback
-        console.log('User clicked cancel');
         this.visitCancelledViaBtn = false;
         this.visitCancelled = false;
       }

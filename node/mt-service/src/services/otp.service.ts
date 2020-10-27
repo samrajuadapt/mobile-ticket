@@ -67,7 +67,6 @@ export default class OtpService {
         returnValue = response.data.code;
       })
       .catch(function (error) {
-        console.log(error);
         returnValue = error;
       });
 
@@ -75,17 +74,12 @@ export default class OtpService {
   }
 
   public async createOtp(otpInstance: IOtp) {
-    console.log(1);  
     // bind tenant ID
     otpInstance.tenantId = this.tenantId;
 
     try {
-      console.log('createOTP');
-      
       return await this.db.OtpModel.createOtp(otpInstance);
     } catch (e) {
-      console.log(e);
-
       return e;
     }
   }
@@ -186,7 +180,7 @@ export default class OtpService {
             returnVal = 'updated';
           })
           .catch((e) => {
-            //console.log(e);
+            //  .log(e);
           });
       }
     } catch (e) {
