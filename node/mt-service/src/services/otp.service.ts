@@ -17,6 +17,7 @@ export default class OtpService {
   private configuration: any;
   private userConfig: any;
   private tenantId: string;
+  private hasCertificate: string;
 
   constructor() {
     this.configuration = JSON.parse(
@@ -25,6 +26,7 @@ export default class OtpService {
     this.userConfig = JSON.parse(
       fs.readFileSync(this.userConfigFile).toString()
     );
+   
     this.tenantId = this.userConfig.tenant_id.value;
     this.authToken = this.configuration.auth_token.value;
     this.validAPIGWCert =
@@ -32,9 +34,15 @@ export default class OtpService {
         ? "1"
         : "0";
     this.host = this.configuration.apigw_ip_port.value;
-    this.supportSSL =
-      this.configuration.support_ssl.value.trim() === "true" ? true : false;
-    this.hostProtocol = this.supportSSL ? "https://" : "http://";
+    this.hasCertificate = this.configuration.hasCertificate;
+    
+    if ((this.host.trim().slice(0,5)=='http:') || (this.host.trim().slice(0,5)=='https')) {
+      this.hostProtocol = "";
+    } else if (this.hasCertificate) {
+      this.hostProtocol = "https://";
+    } else {
+      this.hostProtocol = "http://";
+    }
     process.env.NODE_TLS_REJECT_UNAUTHORIZED = this.validAPIGWCert;
   }
 
@@ -59,6 +67,7 @@ export default class OtpService {
         returnValue = response.data.code;
       })
       .catch(function (error) {
+        console.log(error);
         returnValue = error;
       });
 
@@ -66,12 +75,17 @@ export default class OtpService {
   }
 
   public async createOtp(otpInstance: IOtp) {
+    console.log(1);  
     // bind tenant ID
     otpInstance.tenantId = this.tenantId;
 
     try {
+      console.log('createOTP');
+      
       return await this.db.OtpModel.createOtp(otpInstance);
     } catch (e) {
+      console.log(e);
+
       return e;
     }
   }
