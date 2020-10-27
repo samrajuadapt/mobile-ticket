@@ -1,6 +1,6 @@
 {
   "name": "mobile-ticket",
-  "version": "1.10.0-internal",
+  "version": "1.10.1-internal",
   "license": "MIT",
   "angular-cli": {},
   "scripts": {
