@@ -203,7 +203,7 @@ export class OtpPinComponent implements OnInit {
               this.alertDialogService.activate(res);
             });
             this.pin = "";
-            this.leftTime = this.counterTime;
+            this.processTime();
             this.showTimer = true;
             this.timer();
           } else {
@@ -290,6 +290,8 @@ export class OtpPinComponent implements OnInit {
                       xhr && xhr.getAllResponseHeaders()
                     ) === "8042"
                   ) {
+                    this.processTime();
+                    this.timer();
                     this.translate
                       .get("error_codes.error_8042")
                       .subscribe((res: string) => {
