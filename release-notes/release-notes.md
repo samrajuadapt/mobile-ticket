@@ -40,9 +40,9 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
-<h2>Version 1.10.1-internal</h2>
+<h2>Version 1.10.0</h2>
 
-**Date: 2020-10-27**
+**Date: 2020-10-29**
  
 **Build number: 2**
 
@@ -100,7 +100,7 @@ This document describes the new features, bug corrections, known issues and reco
     "description": "database connection URL"
   }
 ```
-Connection string can be either cloud database connection or local database connection. Please read the deployment guide for available options for the database and more information with regard to OTP configurations.
+OTP feature needs a valid MongoDB database and the connection string needs to be provided for the "db_connection_string" parameter as mentioned above. The database can setup as a local MongoDB database, a MongoDB hosted on a cloud like AWS (https://docs.aws.amazon.com/quickstart/latest/mongodb/welcome.html), a global cloud database service like Atlas (https://www.mongodb.com/cloud/atlas), or can be run as a docker container. Please read the deployment guide for more information regarding this.
 
 ----------
 
