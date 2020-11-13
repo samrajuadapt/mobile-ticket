@@ -44,6 +44,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   public title2: string;
   public isMeetingAvailable: boolean;
   private eventSub: Subscription;
+  public redirectUrlLoading: boolean;
 
   @ViewChild('ticketNumberComponent') ticketNumberComponent;
   @ViewChild('queueComponent') queueComponent;
@@ -63,6 +64,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     this.isUrlVisitLoading = true;
     this.visitState = new VisitState();
     this.isMeetingAvailable = false;
+    this.redirectUrlLoading = false;
 
     this.router.routeReuseStrategy.shouldReuseRoute = function(){
       return false;
@@ -274,14 +276,21 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   }
 
   openCustomerFeedback(branchId, visitId) {
+    this.redirectUrlLoading = true;
     if (this.isTicketEndedOrDeleted === true && this.isAfterCalled) {
       let customerFeedBackUrl = this.config.getConfig('customer_feedback');
       if (new Util().isValidUrl(customerFeedBackUrl)){
         if (customerFeedBackUrl && customerFeedBackUrl.length > 0) {
           customerFeedBackUrl = customerFeedBackUrl + '?' + 'b=' + branchId + '&' + 'v=' + visitId;
           window.location.href = customerFeedBackUrl;
+        } else {
+          this.redirectUrlLoading = false;
         }
+      } else {
+        this.redirectUrlLoading = false;
       }
+    } else {
+      this.redirectUrlLoading = false;
     }
   }
 

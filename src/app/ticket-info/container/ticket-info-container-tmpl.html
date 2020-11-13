@@ -37,7 +37,7 @@
       [ngClass]="{'ticket-container-rtl' : isRtl, 'ticket-container' : true, 'ticket-container-center' : isVisitCall, 'expand-view-ticket': isTicketEndedOrDeleted}">
       <app-ticket #ticketNumberComponent [isTicketEndedOrDeleted]="isTicketEndedOrDeleted" [isAfterCalled]="isAfterCalled"></app-ticket>
     </div>
-    <div [hidden]="isVisitCall && !isVisitRecycled" [ngClass]="{'button-container-rtl' : isRtl, 'button-container' : true, 'expand-view-btn': isTicketEndedOrDeleted}">
+    <div [hidden]="isVisitCall && !isVisitRecycled || redirectUrlLoading" [ngClass]="{'button-container-rtl' : isRtl, 'button-container' : true, 'expand-view-btn': isTicketEndedOrDeleted}">
       <app-visit-cancel #cancelVisitComponent [isUrlAccessedTicket]='isUrlAccessedTicket' [isTicketEndedOrDeleted]="isTicketEndedOrDeleted"></app-visit-cancel>
     </div>
     <div [hidden]="!isVisitCall || !isMeetingAvailable" [ngClass]="{'button-container-rtl' : isRtl, 'button-container' : true, 'expand-view-btn': isTicketEndedOrDeleted}">

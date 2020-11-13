@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { Util } from './../util/util'
 import { TranslateService } from 'ng2-translate';
 import { AlertDialogService } from '../shared/alert-dialog/alert-dialog.service';
+import { RetryService } from '../shared/retry.service';
 
 declare var MobileTicketAPI: any;
 declare var ga: Function;
@@ -35,9 +36,10 @@ export class AppointmentComponent implements OnInit {
   public isNotFound = false;
   private arriveAppRetried = false;
   public isRtl: boolean;
+  public showNetWorkError: boolean = false;
 
   constructor(private config: Config, public router: Router, private translate: TranslateService,
-    private alertDialogService: AlertDialogService) {
+    private alertDialogService: AlertDialogService, private retryService: RetryService,) {
   }
 
   ngOnInit() {
@@ -95,8 +97,18 @@ export class AppointmentComponent implements OnInit {
         }
       },
         (xhr, status, errorMessage) => {
-          // do something
-        });
+          this.showNetWorkError = true
+          this.retryService.retry(() => {
+           
+              MobileTicketAPI.findAppointment(this.app.publicId, (response) => { 
+                this.retryService.abortRetry();
+                this.showNetWorkError = false;
+              },
+              (xhr, status, errorMessage) => { 
+    
+              });
+            });
+           });         
     }
   }
 

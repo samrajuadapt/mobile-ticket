@@ -8,7 +8,9 @@
     </div>
     <div class="col-xs-1 col-xxs"></div>
   </div>
-  
+  <div class="row" [hidden]="!showNetWorkError">
+    <app-network-message></app-network-message>
+  </div>  
   <div class="appointment-row text-center " *ngIf="!isNotFound">    
       <span class="sub-heading-text-2 custom text-color sub-heading-text-2-margin">{{ 'appointment.subHeadingTwo' | translate }}</span>    
   </div>
