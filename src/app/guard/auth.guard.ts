@@ -135,12 +135,12 @@ export class AuthGuard implements CanActivate {
             } else if (this.config.getConfig('branch_schedule') === 'enable') {
                 let branchId = route.queryParams['branch'];
                 let serviceId;
-                if (url.startsWith('/branches/')) {
-                    branchId = route.url[1].path;
-                } else if (route.url.length === 4 && route.url[1].path
+                if (route.url.length === 4 && route.url[1].path
                     && route.url[2].path === ('services') && route.url[3].path) {
                         branchId = route.url[1].path;
                         serviceId = route.url[3].path;
+                } else if (url.startsWith('/branches/')) {
+                    branchId = route.url[1].path;
                 } else if (url.startsWith('/services')) {
                     const selectedBranch = MobileTicketAPI.getSelectedBranch();
                     branchId = selectedBranch ? selectedBranch.id : undefined;

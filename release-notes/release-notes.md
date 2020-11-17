@@ -40,6 +40,20 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
+<h2>Version 1.10.1 - Internal</h2>
+
+**Date: 2020-11-17**
+ 
+**Build number: 1**
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-457** | **It is still possible to get a ticket for a closed service when direct url to the service is used.** |
+
+----------
+
 <h2>Version 1.10.0</h2>
 
 **Date: 2020-10-29**
