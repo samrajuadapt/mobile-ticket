@@ -7,6 +7,7 @@ import { LocationService } from '../util/location';
 import { TranslateService } from 'ng2-translate';
 import 'rxjs/add/operator/map';
 import { AlertDialogService } from "../shared/alert-dialog/alert-dialog.service";
+import { RetryService } from '../shared/retry.service';
 
 declare var MobileTicketAPI: any;
 
@@ -20,7 +21,7 @@ export class BranchService {
   private singleBranch: boolean = false;
 
 
-  constructor(private config: Config, private currentLocation: LocationService, private translate: TranslateService, private alertDialogService: AlertDialogService) {
+  constructor(private config: Config, private retryService: RetryService, private currentLocation: LocationService, private translate: TranslateService, private alertDialogService: AlertDialogService) {
     this.translate.get('branch.btn_text_separator').subscribe((separator: string) => {
       this.btnTextSeparator = separator;
     });
@@ -76,7 +77,18 @@ export class BranchService {
         });
       },
       () => {
+        this.retryService.retry(() => { 
+          MobileTicketAPI.getBranchesNearBy(customerPosition.latitude, customerPosition.longitude, radius,
+            (branchList: any) => {
+              this.retryService.abortRetry();
+              this.convertToBranchEntities(branchList, customerPosition, (modifyBranchList) => {
+                onBrancheListFetch(modifyBranchList);
+              });
+            },
+            () => { 
 
+            })
+        });
       });
   }
 

@@ -109,6 +109,7 @@ export class BranchesComponent implements AfterViewInit {
     }
     else {
       this.showBranchList = false;
+      this.showLoader = false;
     }
     // If there is distance in branch, then stort by distance
     if(!this.branches[0].distance) {
