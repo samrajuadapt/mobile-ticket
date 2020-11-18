@@ -44,13 +44,16 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2020-11-17**
  
-**Build number: 1**
+**Build number: 2**
 
 <h3>Bug fixes</h3>
 
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-457** | **It is still possible to get a ticket for a closed service when direct url to the service is used.** |
+| **MOB-384** | **Nothing happens when user try to arrive an appointment while API_GW or Orchestra is down.** |
+| **MOB-418** | **Thankyou page appear for short moment before user redirect to customer feedback page.** |
+| **MOB-422** | **Loading icon hangs forever when there is no branch nearby.** |
 
 ----------
 
