@@ -105,9 +105,13 @@ export class OtpController {
                   return res.status(500);
                 });
             }
+          } else {
+            return res.sendStatus(201);
           }
         })
         .catch((error) => {
+          console.log(error);
+          
           return res.status(500);
         });
     } else {
@@ -143,9 +147,13 @@ export class OtpController {
         .findByPhone(phone)
         .then(async (result) => {
           const otp_ = result[0];
+          const now = Date.now();
+          const updatedAt = Date.parse(otp_.lastUpdated);
+          const timeDif = Math.ceil((now - updatedAt) / 1000);
           return res.json({
             phoneNumber: otp_.phoneNumber,
             lastUpdated: otp_.lastUpdated,
+            timeDif: timeDif,
           });
         })
         .catch((error) => {
@@ -203,5 +211,18 @@ export class OtpController {
     } else {
       return res.sendStatus(400);
     }
+  }
+
+  public async validateTID(req: Request, res: Response) {
+    await this.otpService
+      .checkTID()
+      .then(async (result) => {
+        return res.json({
+          tenantID: result,
+        });
+      })
+      .catch((error) => {
+        return res.sendStatus(500);
+      });
   }
 }

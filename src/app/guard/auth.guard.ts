@@ -13,6 +13,7 @@ import { BranchOpenHoursValidator } from '../util/branch-open-hours-validator'
 import { ServiceService } from '../service/service.service';
 import { BranchScheduleService } from '../shared/branch-schedule.service';
 import { TicketInfoService } from '../ticket-info/ticket-info.service';
+
 declare var System: any;
 declare var MobileTicketAPI: any;
 declare var ga: Function;
@@ -95,7 +96,7 @@ export class AuthGuard implements CanActivate {
         MobileTicketAPI.resetCurrentVisitStatus();
     
         this.router.navigate(['unauthorized']);
-      }
+    }
 
     checkBrowserSupport() {
         let util = new Util()
@@ -256,11 +257,9 @@ export class AuthGuard implements CanActivate {
                                 return;
                             }
                             let isCustomerDataEnabled = this.config.getConfig('customer_data');
+                            let isOTPEnabled = this.config.getConfig('otp_service');
                             if (isCustomerDataEnabled === 'enable') {
                                 MobileTicketAPI.setBranchSelection(branchEntity);
-
-
-
                                 this.serviceService.fetchServices((serviceList: Array<ServiceEntity>, error: boolean) => {
                                     if (error) {
                                         this.isNoSuchVisit = true;
@@ -282,6 +281,33 @@ export class AuthGuard implements CanActivate {
                                         } else {
                                             MobileTicketAPI.setServiceSelection(sEntity);
                                             this.router.navigate(['customer_data']);
+                                            resolve(false);
+                                        }
+                                    }
+                                });
+                            } else if (isOTPEnabled === 'enable') {
+                                MobileTicketAPI.setBranchSelection(branchEntity);
+                                this.serviceService.fetchServices((serviceList: Array<ServiceEntity>, error: boolean) => {
+                                    if (error) {
+                                        this.isNoSuchVisit = true;
+                                        this.router.navigate(['no_visit']);
+                                        resolve(false);
+                                    } else {
+                                        let serviceFound = false;
+                                        serviceList.forEach((service) => {
+                                            if (service.id === sEntity.id) {
+                                                serviceFound = true;
+                                                sEntity.name = service.name;
+                                                return;
+                                            }
+                                        });
+                                        if (!serviceFound) {
+                                            this.isNoSuchVisit = true;
+                                            this.router.navigate(['no_visit']);
+                                            resolve(false);
+                                        } else {
+                                            MobileTicketAPI.setServiceSelection(sEntity);
+                                            this.router.navigate(['otp_number']);
                                             resolve(false);
                                         }
                                     }
@@ -550,7 +576,8 @@ export class AuthGuard implements CanActivate {
                 if ((visitInfo && visitInfo !== null)) {
                     this.router.navigate(['ticket']);
                     resolve(false);
-                } else if (this.prevUrl.startsWith('/customer_data') || this.prevUrl.startsWith('/services')) {
+                } else if (this.prevUrl.startsWith('/customer_data') || this.prevUrl.startsWith('/services') || 
+                this.prevUrl.startsWith('/branches') || this.prevUrl.startsWith('/otp_number')) {
                     if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
                         this.router.navigate(['open_hours']);
                         resolve(false);
@@ -578,7 +605,7 @@ export class AuthGuard implements CanActivate {
                 if ((visitInfo && visitInfo !== null)) {
                     this.router.navigate(['ticket']);
                     resolve(false);
-                } else if (this.prevUrl.startsWith('/otp_number')) {
+                } else if (this.prevUrl.startsWith('/otp_number') || this.prevUrl.startsWith('/otp_pin')) {
                     if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
                         this.router.navigate(['open_hours']);
                         resolve(false);

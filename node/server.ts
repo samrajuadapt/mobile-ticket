@@ -496,36 +496,51 @@ app.use("/MobileTicket/BranchSchedule/*", apiBranchScheduleProxy);
 // MT service
 let env = process.argv[2] || 'prod';
 let otpService = "disable";
+let tenantID = "";
 let userConfigFile = "./src/app/config/config.json";
+let mtConfigFile = "mt-service/src/config/config.json"
 if (env=='dev') {
 	userConfigFile = "../src/app/config/config.json";	
 }
 const userConfiguration = JSON.parse(fs.readFileSync(userConfigFile, "utf8"));
+const mtConfiguration = JSON.parse(fs.readFileSync(mtConfigFile, "utf8"));
 otpService = userConfiguration.otp_service.value;
+tenantID = mtConfiguration.tenant_id.value;
 
-if (otpService == 'enable') {
-	console.log('MT service is running');
-	const otpRoutes: OtpRoutes = new OtpRoutes();
-	app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
-	otpRoutes.route(app);
-	connectDB();
+if (otpService == 'enable') {	
+	if (!(tenantID.trim().length > 0)) {
+		console.log('Tenant ID is required, server needs to be restarted with `Tenant ID`');
+		process.exit(0);
+	} else {
+		console.log('MT service is running');
+		const otpRoutes: OtpRoutes = new OtpRoutes();
+		app.use(bodyParser.json());
+		app.use(bodyParser.urlencoded({ extended: true }));
+		otpRoutes.route(app);
+		connectDB();
+		startServer();
+	}
+} else {
+	startServer();
 }
 
-if (supportSSL) {
-	const httpsServer = https.createServer(credentials, app);
-	httpsServer.listen(sslPort,  () => {
-		const listenAddress = httpsServer.address()['address'];
-		const listenPort = httpsServer.address()['port'];
-
-		console.log("Mobile Ticket app listening at https://%s:%s over SSL", listenAddress, listenPort);
+function startServer() {
+	if (supportSSL) {
+		const httpsServer = https.createServer(credentials, app);
+		httpsServer.listen(sslPort,  () => {
+			const listenAddress = httpsServer.address()['address'];
+			const listenPort = httpsServer.address()['port'];
+	
+			console.log("Mobile Ticket app listening at https://%s:%s over SSL", listenAddress, listenPort);
+		});
+	} else{
+		const server = app.listen(port, () => {  // port the mobileTicket will listen to.
+		const listenAddress = server.address()['address'];
+		const listenPort = server.address()['port'];
+	
+		console.log("Mobile Ticket app listening at http://%s:%s", listenAddress, listenPort);
 	});
-} else{
-	const server = app.listen(port, () => {  // port the mobileTicket will listen to.
-	const listenAddress = server.address()['address'];
-	const listenPort = server.address()['port'];
-
-	console.log("Mobile Ticket app listening at http://%s:%s", listenAddress, listenPort);
-});
+	}
 }
+
 

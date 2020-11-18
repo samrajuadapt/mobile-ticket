@@ -1,11 +1,10 @@
 import { LocationStrategy } from "@angular/common";
-import { Component, EventEmitter, HostListener, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, HostListener, OnDestroy, OnInit, Output } from "@angular/core";
 import { Router } from "@angular/router";
 import { AlertDialogService } from "../../shared/alert-dialog/alert-dialog.service";
 import { RetryService } from "../../shared/retry.service";
 import { Util } from "../../util/util";
 import { TranslateService } from "ng2-translate";
-import { time } from "console";
 
 declare var MobileTicketAPI: any;
 declare var ga: Function;
@@ -15,7 +14,7 @@ declare var ga: Function;
   templateUrl: "./otp-pin.component.html",
   styleUrls: ["./otp-pin.component.css"],
 })
-export class OtpPinComponent implements OnInit {
+export class OtpPinComponent implements OnInit, OnDestroy {
   public pin: string = "";
   public pinError: boolean;
   public leftTime: number;
@@ -56,6 +55,9 @@ export class OtpPinComponent implements OnInit {
     });
     this.util = new Util();
   }
+  ngOnDestroy(): void {
+    clearInterval(this.clock);
+  }
 
   @HostListener("document:visibilitychange", ["$event"])
   visibilitychange() {
@@ -79,26 +81,30 @@ export class OtpPinComponent implements OnInit {
   }
 
   ngOnInit() {
+    clearInterval(this.clock);
     this.pinError = false;
     this.processTime();
-    this.showTimer = true;
-    this.timer();
   }
 
   public processTime() {
+    this.showLoader = true;
+    this.showTimer = false;
+    clearInterval(this.clock);
     MobileTicketAPI.getOTPTime(
       MobileTicketAPI.getEnteredOtpPhoneNum(),
       (data) => {
-        const now = Date.now();
-        const updatedAt = Date.parse(data.lastUpdated);
-        const timeDif = Math.ceil((now - updatedAt) / 1000);
+        const timeDif = data.timeDif;
         if (timeDif <= this.counterTime) {
           this.leftTime = this.counterTime - timeDif;
           if (this.leftTime <= this.counterTime - 10) {
             this.showResend();
           }
+          this.showLoader = false;
+          this.showTimer = true;
+          this.timer();
         } else {
           this.timeUp();
+          this.showLoader = false;
         }
       },
       (err) => {
@@ -113,9 +119,9 @@ export class OtpPinComponent implements OnInit {
       }
     );
   }
+  
 
-  public timer() {
-    // this.showTimer = true;
+  public async timer() {
     this.clock = setInterval(() => {
       if (this.showTimer) {
         let minutes = Math.floor(this.leftTime / 60);
@@ -204,8 +210,8 @@ export class OtpPinComponent implements OnInit {
             });
             this.pin = "";
             this.processTime();
-            this.showTimer = true;
-            this.timer();
+            // this.showTimer = true;
+            // this.timer();
           } else {
             this.showLoader = false;
             this.pin = "";
@@ -291,7 +297,7 @@ export class OtpPinComponent implements OnInit {
                     ) === "8042"
                   ) {
                     this.processTime();
-                    this.timer();
+                    // this.timer();
                     this.translate
                       .get("error_codes.error_8042")
                       .subscribe((res: string) => {
@@ -329,6 +335,15 @@ export class OtpPinComponent implements OnInit {
                   }
                 }
               );
+            } else if (data == "Created") {
+              this.showLoader = false;
+              this.translate
+                .get("otp.tryAgain")
+                .subscribe((res: string) => {
+                  this.alertDialogService.activate(res);
+                  MobileTicketAPI.setOtpPhoneNumber("");
+                  this.router.navigate(["branches"]);
+                });
             } else {
               this.showLoader = false;
               if (data.tries < 3) {
@@ -341,8 +356,9 @@ export class OtpPinComponent implements OnInit {
                 const timeDif = Math.ceil((Date.now() - clickTime) / 1000);
                 this.leftTime = this.leftTime - timeDif;
                 if (this.leftTime > 0) {
-                  this.timer();
-                  this.showTimer = true;
+                  // this.timer();
+                  // this.showTimer = true;
+                  this.processTime();
                 } else {
                   this.timeUp();
                 }

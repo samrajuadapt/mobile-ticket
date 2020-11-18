@@ -146,6 +146,8 @@
     "lockedPhone": "You've exceeded maximum number of attempts. Please wait 10 minutes",
     "pinResend": "The PIN will be resent",
     "smsText": "Your one time password is 0000. Please use this to continue your mobile ticket.",
-    "havePIN": "You already have a PIN"
+    "havePIN": "You already have a PIN",
+    "tryAgain": "Please try again",
+    "requireTID": "Tenant ID is required"
   }
 }

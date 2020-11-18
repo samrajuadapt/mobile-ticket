@@ -2913,6 +2913,27 @@ var MobileTicketAPI = (function () {
         onError(null, null, e.message);
       }
     },
+    validateTID: function (onSuccess, onError) {
+      try {
+        var MT_SERVICE_CHECK_TID = MT_SERVICE + "/otp/validateTID";
+
+        $.ajax({
+          type: "POST",
+          contentType: 'application/json',
+          url: MT_SERVICE_CHECK_TID,
+          success: function (data) {
+            if (data != undefined) {
+              onSuccess(data);
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            onError(xhr, status, errorMsg);
+          }
+        });
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
     lockNumber: function (phone, lockType, onSuccess, onError) {
       try {
         var MT_SERVICE_LOCK_NUMBER = MT_SERVICE + "/otp/lock";

@@ -188,4 +188,12 @@ export default class OtpService {
     }
     return returnVal;
   }
+
+  public async checkTID() {
+    let returnVal = false;
+    if (this.tenantId.trim().length > 0) {
+      returnVal = true;
+    }
+    return returnVal;
+  }
 }
