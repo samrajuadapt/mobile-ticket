@@ -43,7 +43,7 @@ export class BranchScheduleService {
     }
 
     getServiceStatus(serviceId, data) {
-        const serviceData = data ? data.find(service => service.id === serviceId) : undefined;
+        const serviceData = data ? data.find(service => service.id === +serviceId) : undefined;
         return (data === undefined || serviceData && serviceData.status === 1) ? true : false;
     }
 
