@@ -7,6 +7,7 @@ import { TranslateService, TranslateModule, TranslateLoader, TranslateStaticLoad
 import { Http, Response, ResponseOptions,  XHRBackend, HttpModule  } from '@angular/http';
 import { MockBackend, MockConnection } from "@angular/http/testing";
 import { Injector }    from '@angular/core';
+import { RetryService } from '../shared/retry.service';
 
 const mockBackendResponse = (connection: MockConnection, response: string) => {
     connection.mockRespond(new Response(new ResponseOptions({body: response})));
@@ -16,6 +17,7 @@ describe('BranchService', () => {
   let injector: Injector;
   let backend: any;
   let translate: TranslateService;
+  let retry: RetryService
   let connection: MockConnection;
   beforeEach(async(() => {
 
@@ -55,7 +57,7 @@ describe('BranchService', () => {
 
 
   beforeEach(() => {
-    branchListService = new BranchService(null, null, translate, null)
+    branchListService = new BranchService(null, retry ,null, translate, null)
   });
 
   it('Should create a PositionEntity', async(() => {

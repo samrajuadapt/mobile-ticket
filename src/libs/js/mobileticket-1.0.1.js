@@ -3170,6 +3170,8 @@ var MobileTicketAPI = (function () {
           success: function (visitsData) {
             if (visitsData != undefined && visitsData.parameterMap && visitsData.parameterMap.userId) {
               onSuccess(visitsData.parameterMap.userId);
+            } else {
+              onSuccess(null);
             }
           },
           error: function (xhr, status, errorMsg) {

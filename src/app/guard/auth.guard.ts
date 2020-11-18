@@ -34,7 +34,7 @@ export class AuthGuard implements CanActivate {
 
     constructor(private router: Router, private activatedRoute: ActivatedRoute, private branchSrvc: BranchService,
         private serviceSrvc: ServiceService, private alertDialogService: AlertDialogService,
-        private translate: TranslateService, private config: Config,public ticketService: TicketInfoService,
+        private translate: TranslateService, private config: Config, public ticketService: TicketInfoService,
         private branchScheduleService: BranchScheduleService, private openHourValidator: BranchOpenHoursValidator) {
         this.branchService = branchSrvc;
         this.serviceService = serviceSrvc;
@@ -66,7 +66,7 @@ export class AuthGuard implements CanActivate {
         );
     }
 
-    
+
 
     checkOpenHours(resolve) {
         if (this.config.getConfig('branch_schedule') !== 'enable') {
@@ -94,7 +94,7 @@ export class AuthGuard implements CanActivate {
         MobileTicketAPI.clearLocalStorage();
         MobileTicketAPI.resetAllVars();
         MobileTicketAPI.resetCurrentVisitStatus();
-    
+
         this.router.navigate(['unauthorized']);
     }
 
@@ -109,7 +109,7 @@ export class AuthGuard implements CanActivate {
             if (browser.name === 'chrome' || browser.name === 'safari' || browser.name === 'ios'
                 || browser.name === 'opera' || browser.name === 'crios' || browser.name === 'firefox'
                 || browser.name === 'fxios' || browser.name === 'edge' || browser.name === 'edgios') {
-                    return true;
+                return true;
             } else {
                 return false;
             }
@@ -138,8 +138,8 @@ export class AuthGuard implements CanActivate {
                 let serviceId;
                 if (route.url.length === 4 && route.url[1].path
                     && route.url[2].path === ('services') && route.url[3].path) {
-                        branchId = route.url[1].path;
-                        serviceId = route.url[3].path;
+                    branchId = route.url[1].path;
+                    serviceId = route.url[3].path;
                 } else if (url.startsWith('/branches/')) {
                     branchId = route.url[1].path;
                 } else if (url.startsWith('/services')) {
@@ -149,7 +149,7 @@ export class AuthGuard implements CanActivate {
 
                 if (branchId) {
                     const _thisObj = this;
-                    this.branchScheduleService.checkAvailability(branchId, serviceId, function(status){
+                    this.branchScheduleService.checkAvailability(branchId, serviceId, function (status) {
                         if (status) {
                             _thisObj.processRoute(state, route, resolve);
                         } else {
@@ -315,7 +315,7 @@ export class AuthGuard implements CanActivate {
                             } else {
                                 // Creating ticket
                                 let isDeviceBounded = this.config.getConfig('block_other_browsers');
-                                
+
                                 if (isDeviceBounded === 'enable') {
                                     System.import('fingerprintjs2').then(Fingerprint2 => {
                                         let that = this;
@@ -464,7 +464,7 @@ export class AuthGuard implements CanActivate {
                     });
             }
 
-        } else if (url.startsWith('/ticket') && (branchId && visitId && checksum) ) {
+        } else if (url.startsWith('/ticket') && (branchId && visitId && checksum)) {
             let isDeviceBounded = this.config.getConfig('block_other_browsers');
             if (visitInfo && visitInfo !== null) {
                 let alertMsg = '';
@@ -482,51 +482,54 @@ export class AuthGuard implements CanActivate {
                 let branchId = route.queryParams['branch'];
                 let visitId = route.queryParams['visit'];
                 let checksum = route.queryParams['checksum'];
-                console.log(visitInfo);
-                this.ticketService.getBranchInformation(branchId, (success: boolean) => { 
+                this.ticketService.getBranchInformation(branchId, (success: boolean) => {
                     if (!success) {
                         this.router.navigate(['branches']);
                         resolve(false);
-                      } else {
-                    MobileTicketAPI.setVisit(branchId, 0, visitId, checksum);
-                    MobileTicketAPI.getCustomParameters(
+                    } else {
+                        MobileTicketAPI.setVisit(branchId, 0, visitId, checksum);
+                        MobileTicketAPI.getCustomParameters(
                             (visit: any) => {
-                                System.import('fingerprintjs2').then(Fingerprint2 => {
-                                    let that = this;
-                                    Fingerprint2.getPromise({
-                                        excludes: {
-                                            availableScreenResolution: true,
-                                            adBlock: true,
-                                            enumerateDevices: true
-                                        }
-                                    }).then(function (components) {
-                                        let values = components.map(function (component) { return component.value });
-                                        let murmur = Fingerprint2.x64hash128(values.join(''), 31);
-                                        console.log(murmur);
-                                        if (visit === murmur) {
-                                            resolve(true);
-                                        } else {
-                                            that.redirectToUnautherized();
+                                if (visit) {
+                                    System.import('fingerprintjs2').then(Fingerprint2 => {
+                                        let that = this;
+                                        Fingerprint2.getPromise({
+                                            excludes: {
+                                                availableScreenResolution: true,
+                                                adBlock: true,
+                                                enumerateDevices: true
+                                            }
+                                        }).then(function (components) {
+                                            let values = components.map(function (component) { return component.value });
+                                            let murmur = Fingerprint2.x64hash128(values.join(''), 31);
+                                            console.log(murmur);
+                                            if (visit === murmur) {
+                                                resolve(true);
+                                            } else {
+                                                that.redirectToUnautherized();
+                                                resolve(false);
+                                            }
+                                        })
+                                    },
+                                        (xhr, status, msg) => {
+                                            this.router.navigate(['no_visit']);
                                             resolve(false);
-                                        }
-                                    })
-                                },
-                                    (xhr, status, msg) => {
-                                        this.router.navigate(['no_visit']);
-                                        resolve(false);
-                                    });
+                                        });
+                                } else {
+                                    resolve(true);
+                                }
                             });
-                        }
+                    }
                 });
             }
-            
-            else{
+
+            else {
                 resolve(true);
-                
+
             }
 
         } else if (url.startsWith('/ticket') && ((visitInfo !== null && visitInfo)
-         && visitInfo.branchId && visitInfo.visitId && visitInfo.checksum) ) {
+            && visitInfo.branchId && visitInfo.visitId && visitInfo.checksum)) {
             resolve(true);
         } else if (visitInfo) {
             MobileTicketAPI.getVisitStatus(
@@ -549,7 +552,7 @@ export class AuthGuard implements CanActivate {
                 this.router.navigate(['ticket']);
                 resolve(false);
             } else if (this.prevUrl.startsWith('/services') ||
-            this.prevUrl === '/' || this.prevUrl.startsWith('/branches') || this.prevUrl.startsWith('/privacy_policy')
+                this.prevUrl === '/' || this.prevUrl.startsWith('/branches') || this.prevUrl.startsWith('/privacy_policy')
                 || this.prevUrl.startsWith('/customer_data')) {
                 if (!this.openHourValidator.openHoursValid()) {
                     this.router.navigate(['open_hours']);
@@ -573,52 +576,52 @@ export class AuthGuard implements CanActivate {
                 }
             }
         } else if (url.startsWith('/otp_number')) {
-                if ((visitInfo && visitInfo !== null)) {
-                    this.router.navigate(['ticket']);
-                    resolve(false);
-                } else if (this.prevUrl.startsWith('/customer_data') || this.prevUrl.startsWith('/services') || 
+            if ((visitInfo && visitInfo !== null)) {
+                this.router.navigate(['ticket']);
+                resolve(false);
+            } else if (this.prevUrl.startsWith('/customer_data') || this.prevUrl.startsWith('/services') ||
                 this.prevUrl.startsWith('/branches') || this.prevUrl.startsWith('/otp_number')) {
-                    if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
-                        this.router.navigate(['open_hours']);
-                        resolve(false);
-                    } else {
-                        if (this.checkCreateTicketOption(resolve)) {
-                            return;
-                        }
-                        resolve(true);
-                    }
-                } else if (this.prevUrl.startsWith('/otp_pin')) {
-                    if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
-                        this.router.navigate(['open_hours']);
-                        resolve(false);
-                    } else {
-                        if (this.checkCreateTicketOption(resolve)) {
-                            return;
-                        }
-                        resolve(true);
-                    }
-                } else {
-                    this.router.navigate(['/branches']);
+                if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+                    this.router.navigate(['open_hours']);
                     resolve(false);
+                } else {
+                    if (this.checkCreateTicketOption(resolve)) {
+                        return;
+                    }
+                    resolve(true);
                 }
+            } else if (this.prevUrl.startsWith('/otp_pin')) {
+                if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+                    this.router.navigate(['open_hours']);
+                    resolve(false);
+                } else {
+                    if (this.checkCreateTicketOption(resolve)) {
+                        return;
+                    }
+                    resolve(true);
+                }
+            } else {
+                this.router.navigate(['/branches']);
+                resolve(false);
+            }
         } else if (url.startsWith('/otp_pin')) {
-                if ((visitInfo && visitInfo !== null)) {
-                    this.router.navigate(['ticket']);
+            if ((visitInfo && visitInfo !== null)) {
+                this.router.navigate(['ticket']);
+                resolve(false);
+            } else if (this.prevUrl.startsWith('/otp_number') || this.prevUrl.startsWith('/otp_pin')) {
+                if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
+                    this.router.navigate(['open_hours']);
                     resolve(false);
-                } else if (this.prevUrl.startsWith('/otp_number') || this.prevUrl.startsWith('/otp_pin')) {
-                    if (!(new BranchOpenHoursValidator(this.config)).openHoursValid()) {
-                        this.router.navigate(['open_hours']);
-                        resolve(false);
-                    } else {
-                        if (this.checkCreateTicketOption(resolve)) {
-                            return;
-                        }
-                        resolve(true);
-                    }
                 } else {
-                    this.router.navigate(['/branches']);
-                    resolve(false);
+                    if (this.checkCreateTicketOption(resolve)) {
+                        return;
+                    }
+                    resolve(true);
                 }
+            } else {
+                this.router.navigate(['/branches']);
+                resolve(false);
+            }
         } else {
             this.router.navigate(['/branches']);
             resolve(false);
@@ -626,7 +629,7 @@ export class AuthGuard implements CanActivate {
 
         if (!(this.prevUrl.startsWith('/branches') && url.startsWith('/ticket'))) {
             this.prevUrl = url;
-        } 
-        
+        }
+
     }
 }
