@@ -146,15 +146,21 @@ export class OtpController {
       await this.otpService
         .findByPhone(phone)
         .then(async (result) => {
-          const otp_ = result[0];
-          const now = Date.now();
-          const updatedAt = Date.parse(otp_.lastUpdated);
-          const timeDif = Math.ceil((now - updatedAt) / 1000);
-          return res.json({
-            phoneNumber: otp_.phoneNumber,
-            lastUpdated: otp_.lastUpdated,
-            timeDif: timeDif,
-          });
+          if (result.length == 1) {
+            const otp_ = result[0];
+            const now = Date.now();
+            const updatedAt = Date.parse(otp_.lastUpdated);
+            const timeDif = Math.ceil((now - updatedAt) / 1000);
+            return res.json({
+              phoneNumber: otp_.phoneNumber,
+              lastUpdated: otp_.lastUpdated,
+              timeDif: timeDif,
+            });
+          } else {
+            return res.json({
+              timeDif: 'expired'
+            });
+          }  
         })
         .catch((error) => {
           return res.status(500);
