@@ -5,7 +5,9 @@ import { TicketEntity } from '../entities/ticket.entity';
 import { AppointmentEntity } from '../entities/appointment.entity';
 import { Config } from '../config/config';
 import { Router } from '@angular/router';
-
+import { GpsPositionCalculator } from '../util/gps-distance-calculator';
+import { LocationService } from '../util/location';
+import { PositionEntity } from '../entities/position.entity';
 import { Util } from './../util/util'
 import { TranslateService } from 'ng2-translate';
 import { AlertDialogService } from '../shared/alert-dialog/alert-dialog.service';
@@ -37,9 +39,10 @@ export class AppointmentComponent implements OnInit {
   private arriveAppRetried = false;
   public isRtl: boolean;
   public showNetWorkError: boolean = false;
+  public currentPosition: PositionEntity;
 
   constructor(private config: Config, public router: Router, private translate: TranslateService,
-    private alertDialogService: AlertDialogService, private retryService: RetryService,) {
+    private alertDialogService: AlertDialogService, private retryService: RetryService, private currentLocation: LocationService) {
   }
 
   ngOnInit() {
@@ -77,39 +80,69 @@ export class AppointmentComponent implements OnInit {
         });
       });
     } else {
-      MobileTicketAPI.findEntrypointId(this.app.branchId, (response) => {
-        if (response.length > 0) {
-          let entryPointId = response[0].id;
-          MobileTicketAPI.arriveAppointment(this.app.branchId, entryPointId, this.app.qpId, this.app.notes, (response) => {
-            this.ticket = response;
-            this.router.navigate(['ticket']);
-          },
-            (xhr, status, errorMessage) => {
-              console.log(errorMessage);
-              if (!this.arriveAppRetried) {
-                this.fetchAppointment().then(() => {
-                  this.app = MobileTicketAPI.getAppointment();
-                  this.isInvalid = this.isAppointmentInvalid();
-                  this.arriveAppRetried = true;
-                });
-              }
+      let radius = +(this.config.getConfig('appointment_arrive_radius'));
+      if (location.protocol === 'https:' && radius > 0) {
+        this.currentLocation.watchCurrentPosition((currentPosition) => {
+          this.currentPosition = new PositionEntity(currentPosition.coords.latitude, currentPosition.coords.longitude);
+          let calculator = new GpsPositionCalculator(this.config);
+          let distance = calculator.getRawDiatance(this.currentPosition.latitude,
+      this.currentPosition.longitude, this.branchEntity.position.latitude, this.branchEntity.position.longitude);
+      this.currentLocation.removeWatcher();
+          if ((distance * 1000) > radius) {
+            let alertMsg = '';
+            this.translate.get('appointment.notInRange').subscribe((res: string) => {
+              alertMsg = res;
+              this.alertDialogService.activate(alertMsg);
             });
-        }
-      },
-        (xhr, status, errorMessage) => {
-          this.showNetWorkError = true
-          this.retryService.retry(() => {
-           
-              MobileTicketAPI.findAppointment(this.app.publicId, (response) => { 
-                this.retryService.abortRetry();
-                this.showNetWorkError = false;
-              },
-              (xhr, status, errorMessage) => { 
-    
-              });
-            });
-           });         
+          } else {
+            this.invokeArriveAppointment();
+          }
+        }, (error) => {
+          let alertMsg = '';
+          this.translate.get('appointment.positionPermission').subscribe((res: string) => {
+            alertMsg = res;
+            this.alertDialogService.activate(alertMsg);
+          });
+          this.currentLocation.removeWatcher();
+        });
+      } else {
+        this.invokeArriveAppointment();
+      }
     }
+  }
+
+  invokeArriveAppointment() {
+    MobileTicketAPI.findEntrypointId(this.app.branchId, (response) => {
+      if (response.length > 0) {
+        let entryPointId = response[0].id;
+        MobileTicketAPI.arriveAppointment(this.app.branchId, entryPointId, this.app.qpId, this.app.notes, (response) => {
+          this.ticket = response;
+          this.router.navigate(['ticket']);
+        },
+          (xhr, status, errorMessage) => {
+            console.log(errorMessage);
+            if (!this.arriveAppRetried) {
+              this.fetchAppointment().then(() => {
+                this.app = MobileTicketAPI.getAppointment();
+                this.isInvalid = this.isAppointmentInvalid();
+                this.arriveAppRetried = true;
+              });
+            }
+          });
+      }
+    },
+      (xhr, status, errorMessage) => {
+        this.showNetWorkError = true
+        this.retryService.retry(() => {
+            MobileTicketAPI.findAppointment(this.app.publicId, (response) => { 
+              this.retryService.abortRetry();
+              this.showNetWorkError = false;
+            },
+            (xhr, status, errorMessage) => { 
+
+            });
+          });
+         });
   }
 
   private async fetchAppointment() {
@@ -147,11 +180,11 @@ export class AppointmentComponent implements OnInit {
   private getBranch() {
     if (this.app.branchId !== undefined) {
       MobileTicketAPI.getBranchInfoById(this.app.branchId, (res) => {
-        let branchEntity: BranchEntity;
-        branchEntity = new BranchEntity();
-        branchEntity.id = res.id;
-        branchEntity.name = res.name;
-        MobileTicketAPI.setBranchSelection(branchEntity);
+        this.branchEntity = new BranchEntity();
+        this.branchEntity.id = res.id;
+        this.branchEntity.name = res.name;
+        this.branchEntity.position = new PositionEntity(res.latitude, res.longitude);
+        MobileTicketAPI.setBranchSelection(this.branchEntity);
       });
     }
   }

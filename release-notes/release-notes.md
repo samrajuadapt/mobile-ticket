@@ -42,9 +42,15 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h2>Version 1.10.1 - Internal</h2>
 
-**Date: 2020-11-17**
+**Date: 2020-11-19**
  
-**Build number: 2**
+**Build number: 3**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-434** | **Enforced geo-fence** |
 
 <h3>Bug fixes</h3>
 

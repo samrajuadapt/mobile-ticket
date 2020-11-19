@@ -1,3 +1,5 @@
+import { PositionEntity } from "./position.entity";
+
 export class BranchEntity {
    id: string;
    name: string = '';
@@ -5,4 +7,5 @@ export class BranchEntity {
    distance: string;
    rawDistance: number;
    enabled: boolean;
+   position: PositionEntity;
 }
