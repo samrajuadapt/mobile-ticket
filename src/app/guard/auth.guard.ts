@@ -518,6 +518,10 @@ export class AuthGuard implements CanActivate {
                                 } else {
                                     resolve(true);
                                 }
+                            }, 
+                            (error) => {
+                                resolve(false);
+                                this.router.navigate(['branches']);
                             });
                     }
                 });

@@ -3175,6 +3175,8 @@ var MobileTicketAPI = (function () {
             }
           },
           error: function (xhr, status, errorMsg) {
+            clearLocalStorage();
+            resetAllVars();
             onError(xhr, status, errorMsg);
           }
         });
