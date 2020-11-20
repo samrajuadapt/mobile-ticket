@@ -60,6 +60,9 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-384** | **Nothing happens when user try to arrive an appointment while API_GW or Orchestra is down.** |
 | **MOB-418** | **Thankyou page appear for short moment before user redirect to customer feedback page.** |
 | **MOB-422** | **Loading icon hangs forever when there is no branch nearby.** |
+| **MOB-432** | **Validate tenant_id.** |
+| **MOB-415** | **OTP implementation : MongoDB - Show validation message for DB errors.** |
+| **MOB-456** | **OPT functionality is not working for create visit url while customer_data is disabled.** |
 
 ----------
 
