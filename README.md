@@ -250,6 +250,10 @@ project directory
         "value": "2147483647",
         "description": "Radius to include branches within (in meters)"
     },
+    "appointment_arrive_radius": {
+        "value": "2147483647",
+        "description": "Radius to arrive appointmment within (in meters)"
+    },
     "version": {
         "value": "1.0.0.2",
         "description": "MobileTicket version"

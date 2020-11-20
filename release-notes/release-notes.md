@@ -40,11 +40,11 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
-<h2>Version 1.10.1 - Internal</h2>
+<h2>Version 1.11.0 - Internal</h2>
 
 **Date: 2020-11-19**
  
-**Build number: 3**
+**Build number: 1**
 
 <h3>Stories</h3>
 

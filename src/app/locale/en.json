@@ -90,8 +90,8 @@
      "date" : "Date:",
      "tooEearly" : "You arrived too early for your appointment. You can only ",
      "arriveBtnText" : "Arrive",
-     "notInRange" : "Yor are not in the correct location. Please check your location and try again.",
-     "positionPermission" : "Location Services required for arrvie your appointment, please enable Location Services and try again.",
+     "notInRange" : "Sorry, you are too far from the branch. Get closer to the branch and Try again.",
+     "positionPermission" : "If you want to Arrive Appointments, please enable Location Services.",
      "error" : {
        "date" : "Your appointment is booked for another day. Please come back on the date of your appointment.",
        "status" : "Your appointment has already been arrived.",
