@@ -204,6 +204,7 @@ html, body {margin: 0; height: 100%; overflow: hidden}
 .custom-phone-card {
   height: calc(100vh - 16em) !important;
   overflow: auto;
+  overflow-x: hidden;
 }
 .secondary-btn:hover {
   background: rgba(255, 255, 255, 0.2);

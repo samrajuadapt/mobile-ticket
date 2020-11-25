@@ -44,7 +44,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2020-11-19**
  
-**Build number: 1**
+**Build number: 2**
 
 <h3>Stories</h3>
 
@@ -63,6 +63,8 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-432** | **Validate tenant_id.** |
 | **MOB-415** | **OTP implementation : MongoDB - Show validation message for DB errors.** |
 | **MOB-456** | **OPT functionality is not working for create visit url while customer_data is disabled.** |
+| **MOB-421** | **Improve the description of "customer_feedback" setting.** |
+| **MOB-428** | **Firefox only > horizontal scroll bars appear with form validation messages.** |
 
 ----------
 

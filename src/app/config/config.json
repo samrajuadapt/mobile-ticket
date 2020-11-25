@@ -13,7 +13,7 @@
   },
   "customer_feedback": {
     "value": "",
-    "description": "URL to redirect to when visit is ended."
+    "description": "URL to redirect when a visit is ended, starting with http:// or https://."
   },
   "ga_track_id": {
     "value": "",
