@@ -201,11 +201,20 @@ html, body {margin: 0; height: 100%; overflow: hidden}
 .privcay-container-bottom {
   margin: 30px;
 }
+
 .custom-phone-card {
-  height: calc(100vh - 16em) !important;
+  height: calc(100vh - 20em) !important;
   overflow: auto;
   overflow-x: hidden;
 }
+
+@media only screen and (max-height: 800px) { 
+  .custom-phone-card {
+    height: calc(100vh - 16em) !important;
+    overflow: auto;
+  }
+}
+
 .secondary-btn:hover {
   background: rgba(255, 255, 255, 0.2);
 }

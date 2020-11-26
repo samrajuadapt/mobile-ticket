@@ -8,8 +8,8 @@ import { SortPipe } from '../../util/sort.pipe';
 import { PlatformLocation } from '@angular/common'
 import { ActivatedRoute } from '@angular/router';
 import { Util } from './../../util/util';
-import {BranchOpenHoursValidator} from '../../util/branch-open-hours-validator';
-import {Config} from '../../config/config'
+import { BranchOpenHoursValidator } from '../../util/branch-open-hours-validator';
+import { Config } from '../../config/config'
 
 declare var MobileTicketAPI: any;
 
@@ -49,20 +49,20 @@ export class BranchesComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    if(this.branchOpenCheck()){
-          this.loadData(this.branchService, this.retryService);
-          this.isBranchOpen.emit(true);
-      }else{
-          this.router.navigate(['open_hours']);
-      }
+    if (this.branchOpenCheck()) {
+      this.loadData(this.branchService, this.retryService);
+      this.isBranchOpen.emit(true);
+    } else {
+      this.router.navigate(['open_hours']);
+    }
   }
 
-  ngAfterViewChecked(){
+  ngAfterViewChecked() {
 
   }
 
-  public branchOpenCheck(){
-     return this.openHourValidator.openHoursValid();
+  public branchOpenCheck() {
+    return this.openHourValidator.openHoursValid();
   }
 
   public loadData(branchService: BranchService, retryService: RetryService) {
@@ -100,10 +100,10 @@ export class BranchesComponent implements AfterViewInit {
     let branchListCntr = 0;
     if (branchList.length > 0) {
       this.showBranchList = true;
-      if(branchList.length == 1){
+      if (branchList.length == 1) {
         MobileTicketAPI.setBranchSelection(branchList[0]);
         // if (!this.isRedirectedFromServices){
-          this.router.navigate(['services']);
+        this.router.navigate(['services']);
         // }
       }
     }
@@ -112,13 +112,16 @@ export class BranchesComponent implements AfterViewInit {
       this.showLoader = false;
     }
     // If there is distance in branch, then stort by distance
-    if(!this.branches[0].distance) {
-      new Util().sortArrayCaseInsensitive(branchList, "name", "asc");
-    }else{
-      new Util().sortArrayCaseInsensitive(branchList, "rawDistance", "asc", 1000);
+    if (this.branches[0]) {
+      if (!this.branches[0].distance) {
+        new Util().sortArrayCaseInsensitive(branchList, "name", "asc");
+      } else {
+        new Util().sortArrayCaseInsensitive(branchList, "rawDistance", "asc", 1000);
+      }
+      this.showLoader = false;
+      this.startLoading.emit(false);
     }
-    this.showLoader = false;
-    this.startLoading.emit(false);
+
   }
 
   public reloadData() {
