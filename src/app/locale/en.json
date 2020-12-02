@@ -43,7 +43,9 @@
     "notFound": "Sorry something went wrong,",
     "onGoingVisit": "Sorry, There is an ongoing visit. Please close it before proceed",
     "clickHere": "Click here",
-    "loadBranches": "to start over"
+    "loadBranches": "to start over",
+    "notInRange" : "Sorry, you are too far from the branch. Get closer to the branch and Try again.",
+    "positionPermission" : "If you want to create a visit, please enable Location Services."
   },
   "error_codes": {
     "error_8042": "Line is full. Please try again later."

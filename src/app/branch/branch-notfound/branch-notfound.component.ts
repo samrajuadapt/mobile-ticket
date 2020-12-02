@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { TranslateService } from 'ng2-translate';
 
 @Component({
@@ -9,15 +9,29 @@ import { TranslateService } from 'ng2-translate';
 })
 export class BranchNotfoundComponent implements OnInit {
 
-  constructor(public router: Router, private translate: TranslateService) { 
+  public branchId: number;
+  public serviceId: number;
+  public isLocationPermission: boolean;
+
+  constructor(public router: Router, private translate: TranslateService, private activatedRoute: ActivatedRoute) { 
 
   }
 
   ngOnInit() {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.branchId = params['branchId'];
+      this.serviceId = params['serviceId'];
+      this.isLocationPermission = params['locationPermission'] === 'true' ? true : false;
+      console.log(this.isLocationPermission)
+    });
   }
 
   public reloadData() {
-    this.router.navigate(['branches']);
+    if (this.serviceId && this.branchId) {
+      this.router.navigate(['branches', this.branchId, 'services', this.serviceId]);
+    } else {
+      this.router.navigate(['branches']);
+    }
   }
 
 

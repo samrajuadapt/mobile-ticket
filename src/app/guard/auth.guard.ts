@@ -9,7 +9,8 @@ import { BranchEntity } from '../entities/branch.entity';
 import { AppointmentEntity } from '../entities/appointment.entity';
 import { AlertDialogService } from '../shared/alert-dialog/alert-dialog.service';
 import { Config } from '../config/config';
-import { BranchOpenHoursValidator } from '../util/branch-open-hours-validator'
+import { BranchOpenHoursValidator } from '../util/branch-open-hours-validator';
+import { LocationValidator } from '../util/location-validator'
 import { ServiceService } from '../service/service.service';
 import { BranchScheduleService } from '../shared/branch-schedule.service';
 import { TicketInfoService } from '../ticket-info/ticket-info.service';
@@ -35,7 +36,8 @@ export class AuthGuard implements CanActivate {
     constructor(private router: Router, private activatedRoute: ActivatedRoute, private branchSrvc: BranchService,
         private serviceSrvc: ServiceService, private alertDialogService: AlertDialogService,
         private translate: TranslateService, private config: Config, public ticketService: TicketInfoService,
-        private branchScheduleService: BranchScheduleService, private openHourValidator: BranchOpenHoursValidator) {
+        private branchScheduleService: BranchScheduleService, private locationValidator: LocationValidator,
+        private openHourValidator: BranchOpenHoursValidator) {
         this.branchService = branchSrvc;
         this.serviceService = serviceSrvc;
     }
@@ -160,6 +162,21 @@ export class AuthGuard implements CanActivate {
                 } else {
                     this.processRoute(state, route, resolve);
                 }
+            } else if (route.url.length === 4 && route.url[1].path
+                && route.url[2].path === ('services') && route.url[3].path) {
+                    let branchId = route.url[1].path;
+                    let serviceId = route.url[3].path;
+                    const _thisObj = this;
+                    this.locationValidator.isInLocation(branchId, function (status, isLocationPermission) {
+                        if (status) {
+                            _thisObj.processRoute(state, route, resolve);
+                        } else {
+                            _thisObj.isNoSuchBranch = true;
+                            _thisObj.router.navigate(['no_branch'], { queryParams: {branchId: branchId, serviceId: serviceId,
+                                 locationPermission: isLocationPermission ? 'true' : 'false'}});
+                            resolve(false);
+                        }
+                    });
             } else {
                 this.processRoute(state, route, resolve);
             }
