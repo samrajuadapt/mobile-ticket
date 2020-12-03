@@ -29,6 +29,8 @@ export class BranchNotfoundComponent implements OnInit {
   public reloadData() {
     if (this.serviceId && this.branchId) {
       this.router.navigate(['branches', this.branchId, 'services', this.serviceId]);
+    } else if (this.branchId) {
+      this.router.navigate(['branches', this.branchId]);
     } else {
       this.router.navigate(['branches']);
     }

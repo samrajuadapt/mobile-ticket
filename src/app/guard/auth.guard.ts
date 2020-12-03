@@ -177,6 +177,20 @@ export class AuthGuard implements CanActivate {
                             resolve(false);
                         }
                     });
+            } else if (route.url.length === 2 && route.url[1].path
+                && route.url[0].path === ('branches')) {
+                    let branchId = route.url[1].path;
+                    const _thisObj = this;
+                    this.locationValidator.isInLocation(branchId, function (status, isLocationPermission) {
+                        if (status) {
+                            _thisObj.processRoute(state, route, resolve);
+                        } else {
+                            _thisObj.isNoSuchBranch = true;
+                            _thisObj.router.navigate(['no_branch'], { queryParams: {branchId: branchId,
+                                 locationPermission: isLocationPermission ? 'true' : 'false'}});
+                            resolve(false);
+                        }
+                    });
             } else {
                 this.processRoute(state, route, resolve);
             }
