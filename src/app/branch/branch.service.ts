@@ -19,6 +19,7 @@ export class BranchService {
   public currentPosition: PositionEntity;
   public btnTextSeparator: string = ","; // Default character
   private singleBranch: boolean = false;
+  private PositionErrorShowedOnce: boolean = false;
 
 
   constructor(private config: Config, private retryService: RetryService, private currentLocation: LocationService, private translate: TranslateService, private alertDialogService: AlertDialogService) {
@@ -142,7 +143,7 @@ export class BranchService {
   }
 
   getBranches(onBrancheListReceived): void {
-    if (location.protocol === 'https:') {
+    // if (location.protocol === 'https:') {
       this.currentLocation.watchCurrentPosition((currentPosition) => {
         this.currentPosition = new PositionEntity(currentPosition.coords.latitude, currentPosition.coords.longitude)
         let radius = this.config.getConfig('branch_radius');
@@ -152,30 +153,43 @@ export class BranchService {
         })
       }, (error) => {
         var alertMsg = "";
-        this.translate.get('branch.positionPermission').subscribe((res: string) => {
-          alertMsg = res;
-          this.alertDialogService.activate(alertMsg).then(res => {
-            MobileTicketAPI.getAllBranches((branchList) => {
-              this.convertToBranchEntities(branchList, undefined, (modifyBranchList) => {
-                onBrancheListReceived(modifyBranchList, false, true);
+        if (!this.PositionErrorShowedOnce) {
+          this.PositionErrorShowedOnce = true
+          this.translate.get('branch.positionPermission').subscribe((res: string) => {
+            alertMsg = res;
+            this.alertDialogService.activate(alertMsg).then(res => {
+              MobileTicketAPI.getAllBranches((branchList) => {
+                this.convertToBranchEntities(branchList, undefined, (modifyBranchList) => {
+                  onBrancheListReceived(modifyBranchList, false, true);
+                });
+              }, () => {
+                onBrancheListReceived(null, true, false);
+                this.currentLocation.removeWatcher();
               });
-            }, () => {
-              onBrancheListReceived(null, true, false);
-              this.currentLocation.removeWatcher();
             });
           });
-        });
+        } else {
+          MobileTicketAPI.getAllBranches((branchList) => {
+            this.convertToBranchEntities(branchList, undefined, (modifyBranchList) => {
+              onBrancheListReceived(modifyBranchList, false, true);
+            });
+          }, () => {
+            onBrancheListReceived(null, true, false);
+            this.currentLocation.removeWatcher();
+          });
+        }
+    
       });
-    }
-    else {
-      MobileTicketAPI.getAllBranches((branchList) => {
-        this.convertToBranchEntities(branchList, undefined, (modifyBranchList) => {
-          onBrancheListReceived(modifyBranchList, false, true);
-        });
-      }, () => {
-        onBrancheListReceived(null, true, false)
-      })
-    }
+    // }
+    // else {
+    //   MobileTicketAPI.getAllBranches((branchList) => {
+    //     this.convertToBranchEntities(branchList, undefined, (modifyBranchList) => {
+    //       onBrancheListReceived(modifyBranchList, false, true);
+    //     });
+    //   }, () => {
+    //     onBrancheListReceived(null, true, false)
+    //   })
+    // }
   }
 
   setBranchAddresses(branchList, entities: Array<BranchEntity>, onUpdateList) {
