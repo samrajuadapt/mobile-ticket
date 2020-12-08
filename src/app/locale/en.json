@@ -18,7 +18,8 @@
     "accentBtnText": "Get in line",
     "selectService": "Please select a service at",
     "defaultTitle": "Mobile Ticket",
-    "waiting": "Waiting"
+    "waiting": "Waiting",
+    "noSelectedServices": "Please select a service"
   },
   "ticketInfo": {
     "leaveVisitConfirmMsg": "Would you like to leave the line?",

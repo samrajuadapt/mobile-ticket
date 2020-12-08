@@ -25,7 +25,7 @@
         </div>
         <div class="phone-num-input-container">
           <input class="phone-num-input" type="text" placeholder="{{'otp.pin_placeholder' | translate}}"
-            [(ngModel)]="pin" (change)="onPinChanged()" (keyup.enter)="pinContinue()"
+            [(ngModel)]="pin" (change)="onPinChanged()" (keyup.enter)="pinContinue()" maxlength="8"
             (keyup)="onPhoneNumberEnter($event)" >
           <div class="phone-num-error" *ngIf="pinError"> {{'otp.pinError' | translate}}</div>
         </div>
