@@ -19,46 +19,30 @@ export class LocationValidator {
     public isInLocation(branchId, success) {
         let radius = +(this.config.getConfig('branch_radius'));
         if (location.protocol === 'https:' && radius > 0) {
-            const _thisObj = this;
-            this.getBranchEntity(branchId, function(branchEntity){
-                if (branchEntity === null) {
-                    success(true);
-                } else {
-                    _thisObj.currentLocation.watchCurrentPosition((currentPosition) => {
-                        _thisObj.currentPosition = new PositionEntity(currentPosition.coords.latitude, currentPosition.coords.longitude);
-                        let calculator = new GpsPositionCalculator(_thisObj.config);
-                        let distance = calculator.getRawDiatance(_thisObj.currentPosition.latitude,
-                        _thisObj.currentPosition.longitude, branchEntity.position.latitude, branchEntity.position.longitude);
-                        _thisObj.currentLocation.removeWatcher();
-                        if ((distance * 1000) > radius) {
-                            success(false, true);
-                        } else {
-                            success(true);
-                        }
-                    }, (error) => {
-                        success(false, false);
-                        _thisObj.currentLocation.removeWatcher();
-                    });
-                }
+            this.currentLocation.watchCurrentPosition((currentPosition) => {
+                this.currentLocation.removeWatcher();
+                this.currentPosition = new PositionEntity(currentPosition.coords.latitude, currentPosition.coords.longitude);
+                this.isNearBranch(branchId, this.currentPosition, radius, function(val){
+                    success(val, true);
+                });
+            }, (error) => {
+                success(false, false);
+                this.currentLocation.removeWatcher();
             });
       } else {
           success(true);
       }
     }
 
-    private getBranchEntity(branchId, callBack) {
+    private isNearBranch(branchId, customerPosition, radius, callBack) {
         const successCallBack = function(res){
-            let branchEntity = new BranchEntity();
-            branchEntity.id = res.id;
-            branchEntity.name = res.name;
-            branchEntity.position = new PositionEntity(res.latitude, res.longitude);
-            MobileTicketAPI.setBranchSelection(branchEntity);
-            callBack(branchEntity);
+            const branch = res.find(branchObj => branchObj.id === +branchId);
+            callBack(branch ? true : false);
         }
         const errorCallBack = function(error){
-            callBack(null);
+            callBack(false);
         }
 
-        MobileTicketAPI.getBranchInfoById(branchId, successCallBack, errorCallBack);
+        MobileTicketAPI.getBranchesNearBy(customerPosition.latitude, customerPosition.longitude, radius, successCallBack, errorCallBack);
     }
 }
