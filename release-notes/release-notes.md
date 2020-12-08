@@ -44,7 +44,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2020-12-03**
  
-**Build number: 3**
+**Build number: 6**
 
 <h3>Stories</h3>
 
@@ -65,6 +65,9 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-456** | **OPT functionality is not working for create visit url while customer_data is disabled.** |
 | **MOB-421** | **Improve the description of "customer_feedback" setting.** |
 | **MOB-428** | **Firefox only > horizontal scroll bars appear with form validation messages.** |
+| **MOB-430** | **Send Informationâ€ button is too low on the high resolution devices issue fixed.** |
+| **MOB-471** | **Console errors fixed in branch loading.** |
+| **MOB-425** | **Location Service robustness issue fixed.** |
 | **MOB-494** | **Restrict passcode field to eight characters/digits.** |
 | **MOB-492** | **Show a message if no service selected.** |
 
