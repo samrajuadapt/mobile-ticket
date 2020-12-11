@@ -29,6 +29,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
   private clickResend: boolean = false;
   private clickSubmit: boolean = false;
   private util;
+  public direction;
 
   @Output()
   showNetorkErrorEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -54,6 +55,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
       this.smsText = res;
     });
     this.util = new Util();
+    this.direction = document.dir;
   }
   ngOnDestroy(): void {
     clearInterval(this.clock);

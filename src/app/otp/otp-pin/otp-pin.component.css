@@ -224,8 +224,17 @@ html, body {margin: 0; height: 100%; overflow: hidden}
   justify-content: space-between;
 }
 .otp-timer {
-  direction: ltr;
   float: right;
+  min-width: 52px;
+  align-self: flex-end; 
+}
+.otp-timer-ltr{ 
+  padding-left: 10px;
+  padding-right: 0px;
+}
+.otp-timer-rtl{ 
+  padding-left: 0px;
+  padding-right: 10px;
 }
 .disable {
   opacity: 0.4;

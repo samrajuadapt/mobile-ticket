@@ -143,7 +143,7 @@ export class BranchService {
   }
 
   getBranches(onBrancheListReceived): void {
-    // if (location.protocol === 'https:') {
+    if (location.protocol === 'https:') {
       this.currentLocation.watchCurrentPosition((currentPosition) => {
         this.currentPosition = new PositionEntity(currentPosition.coords.latitude, currentPosition.coords.longitude)
         let radius = this.config.getConfig('branch_radius');
@@ -180,16 +180,16 @@ export class BranchService {
         }
     
       });
-    // }
-    // else {
-    //   MobileTicketAPI.getAllBranches((branchList) => {
-    //     this.convertToBranchEntities(branchList, undefined, (modifyBranchList) => {
-    //       onBrancheListReceived(modifyBranchList, false, true);
-    //     });
-    //   }, () => {
-    //     onBrancheListReceived(null, true, false)
-    //   })
-    // }
+    }
+    else {
+      MobileTicketAPI.getAllBranches((branchList) => {
+        this.convertToBranchEntities(branchList, undefined, (modifyBranchList) => {
+          onBrancheListReceived(modifyBranchList, false, true);
+        });
+      }, () => {
+        onBrancheListReceived(null, true, false)
+      })
+    }
   }
 
   setBranchAddresses(branchList, entities: Array<BranchEntity>, onUpdateList) {
