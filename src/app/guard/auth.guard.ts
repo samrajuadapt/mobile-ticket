@@ -135,7 +135,7 @@ export class AuthGuard implements CanActivate {
             } else if (this.isNoSuchVisit && url.startsWith('/no_visit')) {
                 this.isNoSuchVisit = false;
                 resolve(true);
-            } else if (this.config.getConfig('branch_schedule') === 'enable') {
+            } else if (this.config.getConfig('branch_schedule') === 'enable' && !route.queryParams['checksum'])  {
                 let branchId = route.queryParams['branch'];
                 let serviceId;
                 if (route.url.length === 4 && route.url[1].path
@@ -151,6 +151,7 @@ export class AuthGuard implements CanActivate {
 
                 if (branchId) {
                     const _thisObj = this;
+                    console.log(route.url)
                     this.branchScheduleService.checkAvailability(branchId, serviceId, function (status) {
                         if (status) {
                             _thisObj.processRoute(state, route, resolve);

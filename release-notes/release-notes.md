@@ -70,6 +70,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-425** | **Location Service robustness issue fixed.** |
 | **MOB-494** | **Restrict passcode field to eight characters/digits.** |
 | **MOB-492** | **Show a message if no service selected.** |
+| **MOB-501** | **Not able to use link from create/call notification if all services are disabled.** |
 
 ----------
 
