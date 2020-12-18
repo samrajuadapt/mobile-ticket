@@ -72,8 +72,6 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-492** | **Show a message if no service selected.** |
 | **MOB-501** | **Not able to use link from create/call notification if all services are disabled.** |
 | **MOB-498** | **Mobile Tickets can be created during branch closed time issue fixed.** |
-| **MOB-492** | **Show a message if no service selected.** |
-| **MOB-494** | **Restrict passcode field to eight characters/digits.** |
 | **MOB-496** | **OTP timer gets separated when having a long heading.** |
 | **MOB-497** | **Set "Service screen timeout" to its default value.** |
 
