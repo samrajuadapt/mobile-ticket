@@ -40,11 +40,11 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
-<h2>Version 1.11.0 - Internal</h2>
+<h2> Version 1.11.0 </h2>
 
-**Date: 2020-12-03**
+**Date: 2020-12-18**
  
-**Build number: 6**
+**Build number: 7**
 
 <h3>Stories</h3>
 
@@ -65,12 +65,13 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-456** | **OPT functionality is not working for create visit url while customer_data is disabled.** |
 | **MOB-421** | **Improve the description of "customer_feedback" setting.** |
 | **MOB-428** | **Firefox only > horizontal scroll bars appear with form validation messages.** |
-| **MOB-430** | **Send Informationâ€ button is too low on the high resolution devices issue fixed.** |
+| **MOB-430** | **Send Information button is too low on the high resolution devices issue fixed.** |
 | **MOB-471** | **Console errors fixed in branch loading.** |
 | **MOB-425** | **Location Service robustness issue fixed.** |
 | **MOB-494** | **Restrict passcode field to eight characters/digits.** |
 | **MOB-492** | **Show a message if no service selected.** |
 | **MOB-501** | **Not able to use link from create/call notification if all services are disabled.** |
+| **MOB-498** | **Mobile Tickets can be created during branch closed time issue fixed.** |
 
 ----------
 

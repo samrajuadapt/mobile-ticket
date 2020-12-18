@@ -71,9 +71,7 @@ export class AuthGuard implements CanActivate {
 
 
     checkOpenHours(resolve) {
-        if (this.config.getConfig('branch_schedule') !== 'enable') {
-            return false;
-        } else if (!this.openHourValidator.openHoursValid()) {
+       if (!this.openHourValidator.openHoursValid()) {
             this.router.navigate(['open_hours']);
             resolve(false);
             return true;
@@ -452,7 +450,7 @@ export class AuthGuard implements CanActivate {
                     resolve(true);
                 }
             }
-        } else if (url.startsWith('/appointment')) {
+        } else if (url.startsWith('/appointment')) { // if an appointment
             if (visitInfo && visitInfo !== null) {
                 let alertMsg = '';
                 this.translate.get('visit.onGoingVisit').subscribe((res: string) => {
@@ -496,7 +494,7 @@ export class AuthGuard implements CanActivate {
                     });
             }
 
-        } else if (url.startsWith('/ticket') && (branchId && visitId && checksum)) {
+        } else if (url.startsWith('/ticket') && (branchId && visitId && checksum)) { // if ticket is from view ticket url
             let isDeviceBounded = this.config.getConfig('block_other_browsers');
             if (visitInfo && visitInfo !== null) {
                 let alertMsg = '';
