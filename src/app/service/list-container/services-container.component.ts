@@ -27,6 +27,7 @@ export class ServicesContainerComponent implements OnInit {
     private _showNetWorkError = false;
     private _isServiceListLoaded: boolean;
     private isTakeTicketClickedOnce: boolean;
+    public showLoader = false;
 
     constructor(private branchService: BranchService, private serviceService: ServiceService, public router: Router,
         private translate: TranslateService, private retryService: RetryService, private alertDialogService: AlertDialogService,
@@ -166,6 +167,7 @@ export class ServicesContainerComponent implements OnInit {
     }
 
     public createTicket() {
+        this.showLoader = true;
         MobileTicketAPI.createVisit(
             (visitInfo) => {
                 ga('send', {
@@ -174,11 +176,12 @@ export class ServicesContainerComponent implements OnInit {
                     eventAction: 'create',
                     eventLabel: 'vist-create'
                 });
-
+                this.showLoader = false;
                 this.router.navigate(['ticket']);
                 this.isTakeTicketClickedOnce = false;
             },
             (xhr, status, errorMessage) => {
+                this.showLoader = false;
                 let util = new Util();
                 this.isTakeTicketClickedOnce = false;
                 if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "8042") {
@@ -187,6 +190,10 @@ export class ServicesContainerComponent implements OnInit {
                     });
                 } else if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "11000") {
                     this.translate.get('ticketInfo.visitAppRemoved').subscribe((res: string) => {
+                        this.alertDialogService.activate(res);
+                    });
+                } else if (errorMessage === 'Gateway Timeout') {
+                    this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
                         this.alertDialogService.activate(res);
                     });
                 } else {

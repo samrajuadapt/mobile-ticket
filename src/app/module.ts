@@ -60,6 +60,7 @@ import { OtpPinComponent } from './otp/otp-pin/otp-pin.component';
 import { BranchScheduleService } from './shared/branch-schedule.service'
 import { BranchOpenHoursValidator } from './util/branch-open-hours-validator';
 import { LocationValidator } from './util/location-validator';
+import { TicketLoaderComponent } from './ticket-loader/ticket-loader.component';
 
 declare var MobileTicketAPI:any;
 
@@ -71,7 +72,7 @@ declare var MobileTicketAPI:any;
     QueueComponent, VisitCancelComponent, QueueItemComponent, SortPipe,
     ConnectivityMessageComponent, VisitNotfoundComponent, BranchNotfoundComponent, ConfirmDialogComponent, AlertDialogComponent,
     BranchOpenHoursComponent, OpenHourItemComponent, AppointmentComponent, CutomerPhoneComponent,PrivacyPolicyComponent, CustomerDataComponent,
-    CookieContainerComponent,CookieConsentDialogComponent,UnautherizedComponent, OtpPhoneNumberComponent, OtpPinComponent
+    CookieContainerComponent,CookieConsentDialogComponent,UnautherizedComponent, OtpPhoneNumberComponent, OtpPinComponent, TicketLoaderComponent
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@ import { IOtp, IOtpDocument } from "../data-module/types/otp.type";
 import { Request, Response } from "express";
 import axios from "axios";
 import * as fs from "fs";
+import { OtpModel } from "../data-module/models/otp.model";
 
 export default class OtpService {
   private db = connectDB();
@@ -78,7 +79,7 @@ export default class OtpService {
     otpInstance.tenantId = this.tenantId;
 
     try {
-      return await this.db.OtpModel.createOtp(otpInstance);
+      return await OtpModel.createOtp(otpInstance);
     } catch (e) {
       return e;
     }
@@ -87,7 +88,7 @@ export default class OtpService {
   public async findByPhone(phone: string) {
     const tenantId = this.tenantId;
     try {
-      return await this.db.OtpModel.findByPhoneNumber(tenantId, phone);
+      return await OtpModel.findByPhoneNumber(tenantId, phone);
     } catch (e) {
       return e;
     }
@@ -95,7 +96,7 @@ export default class OtpService {
   public async deleteOtp(phone: string) {
     const tenantId = this.tenantId;
     try {
-      return await this.db.OtpModel.deleteOne({tenantId: tenantId, phoneNumber: phone});
+      return await OtpModel.deleteOne({tenantId: tenantId, phoneNumber: phone});
     } catch (e) {
       return e;
     }
@@ -106,7 +107,7 @@ export default class OtpService {
     let returnVal = 0;
 
     try {
-      await this.db.OtpModel.updateOne(
+      await OtpModel.updateOne(
         { tenantId: tenantId, phoneNumber: phone },
         { tries: tries }
       )
@@ -132,7 +133,7 @@ export default class OtpService {
     const newDate = new Date(curDate);
 
     try {
-      await this.db.OtpModel.updateOne(
+      await OtpModel.updateOne(
         { tenantId: tenantId, phoneNumber: phone },
         { locked: lock, lastUpdated: newDate }
       )
@@ -156,11 +157,11 @@ export default class OtpService {
     const newDate = new Date(curDate);
 
     try {
-      const otp = await this.db.OtpModel.findByPhoneNumber(tenantId, phone);
+      const otp = await OtpModel.findByPhoneNumber(tenantId, phone);
       const attempts = otp[0].attempts;
       if (attempts > 1) {
         //set lock
-        const a = await this.db.OtpModel.updateOne(
+        const a = await OtpModel.updateOne(
           { tenantId: tenantId, phoneNumber: phone },
           { locked: 2, lastUpdated: newDate, attempts: (attempts+1) }
         )
@@ -172,7 +173,7 @@ export default class OtpService {
           });
       } else {
         // increase attempt count
-        const a = await this.db.OtpModel.updateOne(
+        const a = await OtpModel.updateOne(
           { tenantId: tenantId, phoneNumber: phone },
           { lastUpdated: new Date(), attempts: (attempts+1), pin: _otp, tries: 0}
         )

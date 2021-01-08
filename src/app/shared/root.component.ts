@@ -8,13 +8,17 @@ declare var ga: Function;
   templateUrl: './root-tmpl.html'
 })
 export class RootComponent {
+  public ticketToken = 'disable';
+  public showLoader = true;
   constructor(private config: Config) {
     let track_id = config.getConfig('ga_track_id');
+    this.ticketToken = config.getConfig('ticket_token');
     let is_cookie_consent_enabled = config.getConfig('cookie_consent');
     const isCookieCosentAccepted = localStorage.getItem('cookie_consent');
     if (track_id && track_id !== '' && (isCookieCosentAccepted === 'true' || is_cookie_consent_enabled === 'disable')) {
       ga('create', track_id, 'auto');
       ga('send', 'pageview');
     }
+
   }
 }

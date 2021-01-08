@@ -5,6 +5,7 @@ import * as zlib from "zlib";
 import * as expressStaticGzip from "express-static-gzip";
 import * as fs from "fs";
 import * as https from "https";
+import * as http from "http";
 import * as path from "path";
 
 import * as helmet from "helmet";
@@ -14,9 +15,6 @@ import * as nocache  from "nocache";
 import * as nosniff  from "dont-sniff-mimetype";
 import * as frameguard  from "frameguard";
 import * as xssFilter  from "frameguard";
-
-import { OtpRoutes } from "./mt-service/src/routes/otp.routes";
-import { connectDB } from "./mt-service/src/data-module/database";
 import bodyParser = require("body-parser");
 
 const app: express.Application = express();
@@ -34,6 +32,7 @@ let tlsVersion = '';
 let hstsExpireTime = '63072000';
 let tlsversionSet = ['TLSv1_method', 'TLSv1_1_method', 'TLSv1_2_method'];
 let cipherSet = [];
+let jsonParser = bodyParser.json();
 
 const google_analytics = 'https://www.google-analytics.com';
 const bootstarp_cdn = 'https://maxcdn.bootstrapcdn.com';
@@ -245,6 +244,14 @@ const apiProxy = proxy(host, {
 	// ip and port off apigateway
 
 	proxyReqPathResolver: (req) => {
+		if ( ticketToken === "enable" && req.originalUrl.slice(-12) === "ticket/issue" ) {
+			if (req.body.token){
+				checkToken(req.body.token);
+			} else {
+				req.abort();
+			}
+				
+		}
 		return require('url').parse(req.originalUrl).path;
 	},
 	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
@@ -469,6 +476,40 @@ var apiBranchScheduleProxy = proxy(host, {
 	https: APIGWHasSSL
 });
 
+var ticketTokenProxy = function (req, res, next) {
+	if (ticketToken === "enable") {
+	  if (req.body.token) {
+		checkToken(req.body.token).then((status) => {
+		  switch (status) {
+			  case 200: {
+				  if(req.body.parameters){
+					delete req.body.token;
+				  }
+				  next();
+				  break;
+			  }
+			  case 208: {
+				  res.sendStatus(403);
+				  break;
+			  }
+			  case 500: {
+				  res.sendStatus(500);
+				  break;
+			  }
+			  default: {
+				  res.sendStatus(403);
+				  break;
+			  }
+		  }
+		});
+	  } else {
+		res.sendStatus(400);
+	  }
+	} else {
+	  next();
+	}
+  };
+
 const handleHeaders = (res) => {
 	if (isEmbedIFRAME === false) {
 		res.set('X-Frame-Options', "DENY");
@@ -488,6 +529,7 @@ app.use("/MobileTicket/MyAppointment/find/*", apiFindProxy);
 app.use("/MobileTicket/MyAppointment/findCentral/*", apiFindCentralProxy);
 app.use("/MobileTicket/MyAppointment/entrypoint/*", apiEntryPointProxy);
 app.use("/MobileTicket/MyAppointment/arrive/*", apiArriveProxy);
+app.use("/MobileTicket/services/:serviceID/branches/:branchID/ticket/*",jsonParser, ticketTokenProxy);
 app.use("/MobileTicket/services/*", apiProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
 app.use("/MobileTicket/MyMeeting/*", apiMeetingProxy);
@@ -496,6 +538,7 @@ app.use("/MobileTicket/BranchSchedule/*", apiBranchScheduleProxy);
 // MT service
 let env = process.argv[2] || 'prod';
 let otpService = "disable";
+let ticketToken = "disable";
 let tenantID = "";
 let userConfigFile = "./src/app/config/config.json";
 let mtConfigFile = "mt-service/src/config/config.json"
@@ -505,23 +548,80 @@ if (env=='dev') {
 const userConfiguration = JSON.parse(fs.readFileSync(userConfigFile, "utf8"));
 const mtConfiguration = JSON.parse(fs.readFileSync(mtConfigFile, "utf8"));
 otpService = userConfiguration.otp_service.value;
+ticketToken = userConfiguration.ticket_token.value;
 tenantID = mtConfiguration.tenant_id.value;
 
-if (otpService == 'enable') {	
-	if (!(tenantID.trim().length > 0)) {
-		console.log('Tenant ID is required, server needs to be restarted with `Tenant ID`');
-		process.exit(0);
-	} else {
-		console.log('MT service is running');
-		const otpRoutes: OtpRoutes = new OtpRoutes();
-		app.use(bodyParser.json());
-		app.use(bodyParser.urlencoded({ extended: true }));
-		otpRoutes.route(app);
-		connectDB();
-		startServer();
-	}
+const importRoutes = async (service: string) => {
+  switch (service) {
+    case "otp": {
+      const { OtpRoutes } = await import("./mt-service/src/routes/otp.routes");
+      const otpRoutes = new OtpRoutes();
+      otpRoutes.route(app);
+      break;
+    }
+    case "ticketToken": {
+      const { TicketTokenRoutes } = await import("./mt-service/src/routes/ticket-token.routes");
+      const ticketTokenRoutes = new TicketTokenRoutes();
+      ticketTokenRoutes.route(app);
+      break;
+    }
+  }
+};
+
+if (otpService === "enable" || ticketToken === "enable") {
+  if (!(tenantID.trim().length > 0)) {
+    console.log("Tenant ID is required, server needs to be restarted with `Tenant ID`");
+    process.exit(0);
+  } else {
+    app.use(bodyParser.json());
+	app.use(bodyParser.urlencoded({ extended: true }));
+	if (otpService === "enable") {
+		importRoutes('otp');
+  	}
+	if (ticketToken === "enable") {
+		importRoutes('ticketToken');
+  	}
+    startServer();
+  }
 } else {
-	startServer();
+  startServer();
+}
+
+async function checkToken(token) {
+
+    return await new Promise(function(resolve, reject) { 
+        var data = JSON.stringify({
+            token: token,
+        });
+        var MT_SERVICE_TOKEN_DELETE = "/MTService/token/delete";
+		
+        var options = {
+            hostname: "localhost",
+            port: supportSSL ? sslPort : port,
+            path: MT_SERVICE_TOKEN_DELETE,
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Content-Length": data.length,
+            },
+        };
+		if(supportSSL){
+			var tokenRequest = https.request(options, function (res) {
+				resolve(res.statusCode);
+			});
+		} else {
+			var tokenRequest = http.request(options, function (res) {
+				resolve(res.statusCode);
+			});
+		}
+		
+		tokenRequest.on("error", function (error) {
+			console.error('error :'+error);
+			resolve(500);
+		});
+		tokenRequest.write(data);
+		tokenRequest.end();
+    });
 }
 
 function startServer() {
@@ -530,14 +630,14 @@ function startServer() {
 		httpsServer.listen(sslPort,  () => {
 			const listenAddress = httpsServer.address()['address'];
 			const listenPort = httpsServer.address()['port'];
-	
+  			console.log("MT service is running");
 			console.log("Mobile Ticket app listening at https://%s:%s over SSL", listenAddress, listenPort);
 		});
 	} else{
 		const server = app.listen(port, () => {  // port the mobileTicket will listen to.
 		const listenAddress = server.address()['address'];
 		const listenPort = server.address()['port'];
-	
+		console.log("MT service is running");
 		console.log("Mobile Ticket app listening at http://%s:%s", listenAddress, listenPort);
 	});
 	}

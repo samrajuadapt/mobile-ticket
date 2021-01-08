@@ -102,6 +102,10 @@ export class CustomerDataComponent implements OnInit {
           this.translate.get('ticketInfo.visitAppRemoved').subscribe((res: string) => {
             this.alertDialogService.activate(res);
           });
+        } else if (errorMessage === 'Gateway Timeout') {
+          this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+              this.alertDialogService.activate(res);
+          });
         } else {
           this.showHideNetworkError(true);
           this.retryService.retry(() => {

@@ -32,6 +32,7 @@ export class CutomerPhoneComponent implements OnInit {
   private isTakeTicketClickedOnce: boolean;
   public isPrivacyEnable = 'disable';
   public activeConsentEnable = 'disable';
+  public showLoader = false;
 
   @Output()
   showNetorkErrorEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -147,6 +148,7 @@ export class CutomerPhoneComponent implements OnInit {
     if (OtpService === 'enable') {      
       this.router.navigate(['otp_number']);
     } else {
+      this.showLoader = true;
       MobileTicketAPI.createVisit(
         (visitInfo) => {
           ga('send', {
@@ -155,11 +157,12 @@ export class CutomerPhoneComponent implements OnInit {
             eventAction: 'create',
             eventLabel: 'vist-create'
           });
-  
+          this.showLoader = false;
           this.router.navigate(['ticket']);
           this.isTakeTicketClickedOnce = false;
         },
         (xhr, status, errorMessage) => {
+          this.showLoader = false;
           let util = new Util();
           this.isTakeTicketClickedOnce = false;
           if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "8042") {
@@ -170,8 +173,11 @@ export class CutomerPhoneComponent implements OnInit {
             this.translate.get('ticketInfo.visitAppRemoved').subscribe((res: string) => {
               this.alertDialogService.activate(res);
             });
-          }         
-          else {
+          } else if (errorMessage === 'Gateway Timeout') {
+            this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+                this.alertDialogService.activate(res);
+            });
+          } else {
             this.showHideNetworkError(true);
             this.retryService.retry(() => {
   

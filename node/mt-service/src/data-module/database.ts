@@ -1,5 +1,4 @@
 import * as Mongoose from "mongoose";
-import { OtpModel } from "./models/otp.model";
 import * as fs from "fs";
 
 
@@ -61,10 +60,6 @@ export const connectDB = () => {
     console.log("Error connecting to database");
     process.exit(1);
   });
-
-  return {
-    OtpModel,
-  };
 };
 
 export const disconnectDB = () => {

@@ -166,5 +166,9 @@
   "otp_service": {
     "value": "disable",
     "description": "Enable or disable OTP service"
+  },
+  "ticket_token": {
+    "value": "disable",
+    "description": "Enable or disable unique token for a ticket"
   }
 }

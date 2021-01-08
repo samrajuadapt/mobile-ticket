@@ -2557,6 +2557,7 @@ var MobileTicketAPI = (function () {
   var enteredOtpPhoneNum = '';
   var leftTime = undefined;
   var fingerprint = '';
+  var ticketToken = 'disable';
 
   var visitId = undefined;
   var queueId = undefined;
@@ -2702,6 +2703,10 @@ var MobileTicketAPI = (function () {
 
   function getFingerprint() {
     return MobileTicketAPI.fingerprint;
+  }
+
+  function getTicketToken() {
+    return MobileTicketAPI.ticketToken;
   }
 
   function getSelectedService() {
@@ -3088,6 +3093,8 @@ var MobileTicketAPI = (function () {
         var fingerPrint = getFingerprint();
         var jsonData = {};
 
+        
+
         if (fingerPrint) {
           jsonData.parameters = {};
           jsonData = { "parameters": {userId: fingerPrint}};
@@ -3108,24 +3115,60 @@ var MobileTicketAPI = (function () {
           CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + PARAMS + "/" + ISSUE+"?delay=0";
         }
 
-        $.ajax({
-          type: "POST",
-          dataType: "json",
-          data : JSON.stringify(jsonData),
-          contentType: 'application/json',
-          url: CREATE_TICKET_REST_API,
-          error: function (xhr, status, errorMsg) {
-            onError(xhr, status, errorMsg);
-          }
-
-        })
-          .done(function (data) {
-            if (data != undefined) {
-              MobileTicketAPI.visitInformation = data;
-              saveToLocalStorage();
-              onSuccess(data);
-            }
+        if (MobileTicketAPI.getTicketToken() === "enable") {
+          var MT_SERVICE_GET_TOKEN = MT_SERVICE + "/token/get";
+          jsonData.token = '';
+          $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: MT_SERVICE_GET_TOKEN,
+            success: function (data) {
+              jsonData.token = data.token;
+              $.ajax({
+                type: "POST",
+                dataType: "json",
+                data : JSON.stringify(jsonData),
+                contentType: 'application/json',
+                url: CREATE_TICKET_REST_API,
+                error: function (xhr, status, errorMsg) {
+                  onError(xhr, status, errorMsg);
+                }
+      
+              })
+                .done(function (data) {
+                  if (data != undefined) {
+                    MobileTicketAPI.visitInformation = data;
+                    saveToLocalStorage();
+                    onSuccess(data);
+                  }
+                });
+            },
+            error: function (xhr, status, errorMsg) {
+              onError(xhr, status, errorMsg);
+            },
           });
+        } else {
+          $.ajax({
+            type: "POST",
+            dataType: "json",
+            data : JSON.stringify(jsonData),
+            contentType: 'application/json',
+            url: CREATE_TICKET_REST_API,
+            error: function (xhr, status, errorMsg) {
+              onError(xhr, status, errorMsg);
+            }
+  
+          })
+            .done(function (data) {
+              if (data != undefined) {
+                MobileTicketAPI.visitInformation = data;
+                saveToLocalStorage();
+                onSuccess(data);
+              }
+            });
+        }
+
+        
       } catch (e) {
         onError(null, null, e.message);
       }
@@ -3395,6 +3438,12 @@ var MobileTicketAPI = (function () {
     },
     getFingerprint: function () {
       return getFingerprint();
+    },
+    setTicketToken: function (status) {
+      MobileTicketAPI.ticketToken = status;
+    },
+    getTicketToken: function () {
+      return getTicketToken();
     },
     getSelectedBranch: function () {
       return getSelectedBranch();

@@ -258,7 +258,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
           MobileTicketAPI.getEnteredOtpPhoneNum(),
           (data) => {
             if (data == "OK") {
-              this.showLoader = false;
+              this.showLoader = true;
               // createVisit
               MobileTicketAPI.createVisit(
                 (visitInfo) => {
@@ -268,6 +268,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
                     eventAction: "create",
                     eventLabel: "vist-create",
                   });
+                  this.showLoader = false;
                   clearInterval(this.clock);
                   this.showTimer = false;
 
@@ -291,6 +292,8 @@ export class OtpPinComponent implements OnInit, OnDestroy {
                   // this.isTakeTicketClickedOnce = false;
                 },
                 (xhr, status, errorMessage) => {
+                  this.showLoader = false;
+                  this.showLoader = false;
                   let util = new Util();
                   // this.isTakeTicketClickedOnce = false;
                   if (
@@ -315,6 +318,10 @@ export class OtpPinComponent implements OnInit, OnDestroy {
                       .subscribe((res: string) => {
                         this.alertDialogService.activate(res);
                       });
+                  } else if (errorMessage === 'Gateway Timeout') {
+                    this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+                        this.alertDialogService.activate(res);
+                    });
                   } else {
                     this.showHideNetworkError(true);
                     this.retryService.retry(() => {

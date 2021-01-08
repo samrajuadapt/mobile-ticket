@@ -40,32 +40,14 @@ export class AuthGuard implements CanActivate {
         private openHourValidator: BranchOpenHoursValidator) {
         this.branchService = branchSrvc;
         this.serviceService = serviceSrvc;
+        MobileTicketAPI.setTicketToken(this.config.getConfig('ticket_token')); 
     }
 
     createTicket(bEntity: BranchEntity, sEntity: ServiceEntity, resolve) {
         MobileTicketAPI.setServiceSelection(sEntity);
         MobileTicketAPI.setBranchSelection(bEntity);
-
-        MobileTicketAPI.createVisit((vstInfo) => {
-            ga('send', {
-                hitType: 'event',
-                eventCategory: 'visit',
-                eventAction: 'create',
-                eventLabel: 'vist-create'
-            });
-            this.router.navigate(['ticket']);
-            resolve(false);
-
-        },
-            (xhr, status, errorMessage) => {
-                this.isNoSuchVisitDirectToBranch = true;
-                this.directedBranch = bEntity;
-                this.isNoSuchVisit = true;
-                MobileTicketAPI.resetAllVars();
-                this.router.navigate(['no_visit']);
-                resolve(false);
-            }
-        );
+        this.router.navigate(['ticket_loading']);
+        resolve(false);
     }
 
 

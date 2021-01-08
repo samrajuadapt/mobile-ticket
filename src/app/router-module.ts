@@ -19,6 +19,7 @@ import { CookieContainerComponent } from './cookie-container/cookie-container.co
 import { UnautherizedComponent } from './ticket-info/unautherized/unautherized.component';
 import { OtpPinComponent } from './otp/otp-pin/otp-pin.component';
 import { OtpPhoneNumberComponent } from './otp/otp-phone-number/otp-phone-number.component';
+import { TicketLoaderComponent } from './ticket-loader/ticket-loader.component';
 
 export const router: Routes = [
     
@@ -36,6 +37,7 @@ export const router: Routes = [
     { path: 'no_branch', component: BranchNotfoundComponent, canActivate: [AuthGuard] },
     { path: 'unauthorized', component: UnautherizedComponent },
     { path: 'ticket', component: TicketInfoContainerComponent, canActivate: [AuthGuard], canDeactivate: [VisitCancelLeavelineGuard]},    
+    { path: 'ticket_loading', component: TicketLoaderComponent},    
     { path: '**', component: TicketInfoContainerComponent, canActivate: [AuthGuard] },
     
 ];
