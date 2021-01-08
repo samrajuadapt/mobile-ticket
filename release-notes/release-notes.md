@@ -55,6 +55,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 | **Id** | **Release notes** |
 | --- | --- |
+| **MOB-509** | **Date format issue when the year is set to YY** |
 
 ----------
 

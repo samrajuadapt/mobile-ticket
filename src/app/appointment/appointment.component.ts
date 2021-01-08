@@ -38,7 +38,7 @@ export class AppointmentComponent implements OnInit {
   public isNotFound = false;
   private arriveAppRetried = false;
   public isRtl: boolean;
-  public showNetWorkError: boolean = false;
+  public showNetWorkError = false;
   public currentPosition: PositionEntity;
 
   constructor(private config: Config, public router: Router, private translate: TranslateService,
@@ -134,11 +134,11 @@ export class AppointmentComponent implements OnInit {
       (xhr, status, errorMessage) => {
         this.showNetWorkError = true
         this.retryService.retry(() => {
-            MobileTicketAPI.findAppointment(this.app.publicId, (response) => { 
+            MobileTicketAPI.findAppointment(this.app.publicId, (response) => {
               this.retryService.abortRetry();
               this.showNetWorkError = false;
             },
-            (xhr, status, errorMessage) => { 
+            (xhr, status, errorMessage) => {
 
             });
           });
@@ -296,7 +296,7 @@ export class AppointmentComponent implements OnInit {
     formatted = formatted.replace('DD', day);
     formatted = formatted.replace('MM', month);
     formatted = formatted.replace('YYYY', date.getFullYear());
-    formatted = formatted.replace('YY', date.getYear());
+    formatted = formatted.replace('YY', String(date.getFullYear()).substr(2));
 
     return formatted;
   }
