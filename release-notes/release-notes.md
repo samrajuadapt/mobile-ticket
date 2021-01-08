@@ -39,6 +39,24 @@ This document describes the new features, bug corrections, known issues and reco
 
 ----------
 -->
+<h2>Version 1.12.0 - Internal</h2>
+
+**Date: 2021-01-08**
+ 
+**Build number: 1**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-508** | **Prevent replay attacks in MT** |
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+
+----------
 
 <h2> Version 1.11.0 </h2>
 
