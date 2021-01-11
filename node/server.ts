@@ -548,7 +548,7 @@ if (env=='dev') {
 const userConfiguration = JSON.parse(fs.readFileSync(userConfigFile, "utf8"));
 const mtConfiguration = JSON.parse(fs.readFileSync(mtConfigFile, "utf8"));
 otpService = userConfiguration.otp_service.value;
-ticketToken = userConfiguration.ticket_token.value;
+ticketToken = userConfiguration.create_ticket_token.value;
 tenantID = mtConfiguration.tenant_id.value;
 
 const importRoutes = async (service: string) => {

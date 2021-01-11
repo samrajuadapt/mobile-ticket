@@ -355,7 +355,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
                 });
             } else {
               this.showLoader = false;
-              if (data.tries < 3) {
+              if (data.tries < 3 && data.attempts < 3) {
                 let alertMSg = this.invalidOTP;
                 const remainingTries = 3 - data.tries;
                 alertMSg = alertMSg.replace("#", remainingTries.toString());
@@ -371,6 +371,17 @@ export class OtpPinComponent implements OnInit, OnDestroy {
                 } else {
                   this.timeUp();
                 }
+              } else if (data.attempts > 2) {
+                this.showLoader = false;
+                this.showTimer = false;
+                clearInterval(this.clock);
+                this.pin = "";
+                this.translate
+                  .get("otp.pleaseWait")
+                  .subscribe((res: string) => {
+                    this.alertDialogService.activate(res);
+                    this.router.navigate(["otp_number"]);
+                  });
               } else {
                 this.showLoader = true;
                 clearInterval(this.clock);

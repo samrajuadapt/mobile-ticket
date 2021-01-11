@@ -40,7 +40,7 @@ export class AuthGuard implements CanActivate {
         private openHourValidator: BranchOpenHoursValidator) {
         this.branchService = branchSrvc;
         this.serviceService = serviceSrvc;
-        MobileTicketAPI.setTicketToken(this.config.getConfig('ticket_token')); 
+        MobileTicketAPI.setTicketToken(this.config.getConfig('create_ticket_token')); 
     }
 
     createTicket(bEntity: BranchEntity, sEntity: ServiceEntity, resolve) {
