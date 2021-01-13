@@ -22,6 +22,7 @@ This is a web application that has been developed using Angular4 and the develop
 - [Remote serving for customers](#remote-serving-for-customers)
 - [Branch schedule](#branch-schedule)
 - [One time password](#one-time-password)
+- [Create tikcet token](#create-ticket-token)
 - [Cookie consent](#cookie-consent)
 
 ## Installation
@@ -345,7 +346,11 @@ project directory
     "otp_service": {
         "value": "disable",
         "description": "Enable or disable OTP service"
-    }
+    },
+    "create_ticket_token": {
+	    "value": "disable",
+	    "description": "Enable or disable unique token for a ticket"
+  }
 }
 ```
 #### Configuring the branch open hours
@@ -759,6 +764,10 @@ MobileTicketAPI.checkOTP(pin, phoneNumber)
 ```js
 MobileTicketAPI.lockNumber(phoneNumber, lockType)
 ```
+
+```js
+MobileTicketAPI.lockNumber(phoneNumber, lockType)
+```
      
 ## Creating a Build
 Install grunt command line interpreter by running following command.
@@ -896,5 +905,9 @@ Also have to set the `tenant ID` for the client application which is also stored
 ### `API backend`
 This feature requires a backend which is located in `node` folder. When you run the application in `development` environment you should run the api additionally using `npm run start:dev` command. To build this in `development` environment you can use `npm run build` command.
 
+## Create ticket token
+This feature can be enabled by `create_tikcet_token` parameter in the `config.json` and it will be secured the application from replay attacks. When the feature is enabled, it will be generated a unique token for each ticket. Before enable this feature make sure you have configured the `Database` as in the document.
+
 ## Cookie consent
 Mobile Ticket can be configured to add an interactive cookie permission popup to get the consent of the user before using any cookies. This can be enabled by `cookie_consent` attribute in the `config.json`. If it is `enabled`, then the user will be able to see a popup when landing the mobile ticket application. Cookie consent text has been stored in `cookie-LANG.html` which is stored in `locale/cookie-consent-files` directory. Browsers will pick the relevant message depending on the browser language. If `cookie_consent` is enabled, then cookies will be used only for google analytics after accepting the consent.
+

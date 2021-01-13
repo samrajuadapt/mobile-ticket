@@ -43,7 +43,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2021-01-08**
  
-**Build number: 1**
+**Build number: 2**
 
 <h3>Stories</h3>
 
@@ -56,6 +56,20 @@ This document describes the new features, bug corrections, known issues and reco
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-509** | **Date format issue when the year is set to YY** |
+| **MOB-512** | **OTP validation for multiple resend attempts by replaying the request** |
+
+<h3>Upgrade Instructions</h3>
+- When upgrading from a previous version, following should be considered.
+
+1. 'create_ticket_token' parameter needs to be added to config.json
+
+```
+"create_ticket_token": {
+    "value": "enable",
+    "description": "Enable or disable unique token for a ticket"
+  }
+```
+"Create ticket token" feature needs a valid MongoDB database and the connection string needs to be provided for the "db_connection_string" parameter and "tenant_id" as mentioned in the previous upgrade. The database can setup as a local MongoDB database, a MongoDB hosted on a cloud like AWS (https://docs.aws.amazon.com/quickstart/latest/mongodb/welcome.html), a global cloud database service like Atlas (https://www.mongodb.com/cloud/atlas), or can be run as a docker container. Please read the deployment guide for more information regarding this.
 
 ----------
 
