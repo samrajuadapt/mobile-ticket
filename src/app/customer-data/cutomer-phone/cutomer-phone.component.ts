@@ -111,7 +111,8 @@ export class CutomerPhoneComponent implements OnInit {
   createVisit() {
     if (!this.isTakeTicketClickedOnce) {
       this.isTakeTicketClickedOnce = true;
-      if (MobileTicketAPI.getCurrentVisit()) {
+      let visitInfo = MobileTicketAPI.getCurrentVisit();
+      if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
         this.router.navigate(['ticket']);
       }
       else {

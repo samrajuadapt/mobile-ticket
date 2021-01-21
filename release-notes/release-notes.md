@@ -74,6 +74,20 @@ This document describes the new features, bug corrections, known issues and reco
 
 ----------
 
+<h2> Version 1.11.1 </h2>
+
+**Date: 2021-01-21**
+ 
+**Build number: 5**
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **00000000** | **DMV view ticket URL leave the line not allowed to view anymore tickets because of the local storage visit validation fixed.** |
+
+----------
+
 <h2> Version 1.11.0 </h2>
 
 **Date: 2020-12-18**

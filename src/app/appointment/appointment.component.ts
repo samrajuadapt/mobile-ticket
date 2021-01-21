@@ -69,7 +69,7 @@ export class AppointmentComponent implements OnInit {
 
   onArriveAppointment() {
     let visitInfo = MobileTicketAPI.getCurrentVisit();
-    if (visitInfo && visitInfo != null) {
+    if (visitInfo && visitInfo != null && visitInfo.visitStatus !== "DELETE") {
       let alertMsg = '';
       this.translate.get('visit.onGoingVisit').subscribe((res: string) => {
         alertMsg = res;

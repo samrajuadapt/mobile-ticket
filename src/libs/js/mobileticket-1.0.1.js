@@ -2640,6 +2640,7 @@ var MobileTicketAPI = (function () {
     var branch = MobileTicketAPI.selectedBranch;
     var service = MobileTicketAPI.selectedService;
     var visit = MobileTicketAPI.visitInformation;
+    visit.visitStatus = "CREATE";
     var meetingUrl = MobileTicketAPI.meetingUrl;
 
     if (branch != undefined) {
@@ -2661,6 +2662,12 @@ var MobileTicketAPI = (function () {
     localStorage.removeItem('service');
     localStorage.removeItem('visit');
     localStorage.removeItem('meetingUrl');
+  }
+
+  function updateCurrentVisitStatus() {
+    var visit = getCurrentVisit();
+    visit.visitStatus = "DELETE";
+    addToLocalStorage('visit', JSON.stringify(visit), 0.5);
   }
 
   function resetAllVars() {
@@ -3468,6 +3475,9 @@ var MobileTicketAPI = (function () {
     },
     clearLocalStorage: function () {
       clearLocalStorage();
+    },
+    updateCurrentVisitStatus: function () {
+      updateCurrentVisitStatus();
     },
     resetAllVars: function () {
       resetAllVars();

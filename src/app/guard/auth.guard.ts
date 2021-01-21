@@ -205,7 +205,7 @@ export class AuthGuard implements CanActivate {
                 let id = route.url[1].path;
                 this.branchService.getBranchById(+id, (branchEntity: BranchEntity, isError: boolean, errorCode: string) => {
                     if (!isError) {
-                        if (visitInfo) {
+                        if (visitInfo && visitInfo.visitStatus !== "DELETE") {
                             let alertMsg = '';
                             this.translate.get('visit.onGoingVisit').subscribe((res: string) => {
                                 alertMsg = res;
@@ -251,7 +251,7 @@ export class AuthGuard implements CanActivate {
 
                 this.branchService.getBranchById(+bEntity.id, (branchEntity: BranchEntity, isError: boolean, errorCode: string) => {
                     if (!isError) {
-                        if (visitInfo) {
+                        if (visitInfo && visitInfo.visitStatus !== "DELETE") {
                             let alertMsg = '';
                             this.translate.get('visit.onGoingVisit').subscribe((res: string) => {
                                 alertMsg = res;
@@ -391,10 +391,10 @@ export class AuthGuard implements CanActivate {
                 this.isNoSuchVisit = true;
                 this.router.navigate(['no_visit']);
                 resolve(false);
-            } else if (visitInfo && this.router.url === '/ticket') {
+            } else if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE"  && this.router.url === '/ticket') {
                 this.router.navigate(['/ticket']);
                 resolve(false);
-            } else if (visitInfo) {
+            } else if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
                 this.router.navigate(['/ticket']);
                 resolve(false);
             } else {
@@ -406,7 +406,7 @@ export class AuthGuard implements CanActivate {
 
 
         } else if (url.startsWith('/services')) {
-            if ((visitInfo && visitInfo !== null)) {
+            if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
                 this.router.navigate(['ticket']);
                 resolve(false);
             } else if ((this.prevUrl.startsWith('/branches') ||
@@ -433,7 +433,7 @@ export class AuthGuard implements CanActivate {
                 }
             }
         } else if (url.startsWith('/appointment')) { // if an appointment
-            if (visitInfo && visitInfo !== null) {
+            if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
                 let alertMsg = '';
                 this.translate.get('visit.onGoingVisit').subscribe((res: string) => {
                     alertMsg = res;
@@ -478,7 +478,10 @@ export class AuthGuard implements CanActivate {
 
         } else if (url.startsWith('/ticket') && (branchId && visitId && checksum)) { // if ticket is from view ticket url
             let isDeviceBounded = this.config.getConfig('block_other_browsers');
-            if (visitInfo && visitInfo !== null) {
+            let isSameTicket = visitInfo && visitInfo !== null &&
+             visitInfo.visitStatus !== "DELETE" && visitInfo.branchId === branchId &&
+              visitInfo.checksum === checksum && visitInfo.visitId === visitId ? true : false;
+            if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE" && !isSameTicket) {
                 let alertMsg = '';
                 this.translate.get('visit.onGoingVisit').subscribe((res: string) => {
                     alertMsg = res;
@@ -490,7 +493,10 @@ export class AuthGuard implements CanActivate {
                     });
                 });
 
-            } else if (isDeviceBounded === 'enable') {
+            } else if (visitInfo && visitInfo !== null && visitInfo.visitStatus === "DELETE") {
+                resolve(true);
+            }
+             else if (isDeviceBounded === 'enable') {
                 let branchId = route.queryParams['branch'];
                 let visitId = route.queryParams['visit'];
                 let checksum = route.queryParams['checksum'];
@@ -547,7 +553,7 @@ export class AuthGuard implements CanActivate {
         } else if (url.startsWith('/ticket') && ((visitInfo !== null && visitInfo)
             && visitInfo.branchId && visitInfo.visitId && visitInfo.checksum)) {
             resolve(true);
-        } else if (visitInfo) {
+        } else if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
             MobileTicketAPI.getVisitStatus(
                 (visitObj: any) => {
                     if (visitObj.status === 'CALLED' || visitObj.visitPosition !== null) {
@@ -564,7 +570,7 @@ export class AuthGuard implements CanActivate {
                 }
             );
         } else if (url.startsWith('/customer_data')) {
-            if ((visitInfo && visitInfo !== null)) {
+            if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
                 this.router.navigate(['ticket']);
                 resolve(false);
             } else if (this.prevUrl.startsWith('/services') ||
@@ -592,7 +598,7 @@ export class AuthGuard implements CanActivate {
                 }
             }
         } else if (url.startsWith('/otp_number')) {
-            if ((visitInfo && visitInfo !== null)) {
+            if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
                 this.router.navigate(['ticket']);
                 resolve(false);
             } else if (this.prevUrl.startsWith('/customer_data') || this.prevUrl.startsWith('/services') ||
@@ -621,7 +627,7 @@ export class AuthGuard implements CanActivate {
                 resolve(false);
             }
         } else if (url.startsWith('/otp_pin')) {
-            if ((visitInfo && visitInfo !== null)) {
+            if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
                 this.router.navigate(['ticket']);
                 resolve(false);
             } else if (this.prevUrl.startsWith('/otp_number') || this.prevUrl.startsWith('/otp_pin')) {
