@@ -241,6 +241,8 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
 
       if (!this.isUrlAccessedTicket) {
         MobileTicketAPI.clearLocalStorage();
+      } else {
+        MobileTicketAPI.updateCurrentVisitStatus();
       }
       MobileTicketAPI.resetAllVars();
       this.isTicketEndedOrDeleted = true;
@@ -260,6 +262,8 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
 
       if (!this.isUrlAccessedTicket) {
         MobileTicketAPI.clearLocalStorage();
+      } else {
+        MobileTicketAPI.updateCurrentVisitStatus();
       }
       MobileTicketAPI.resetAllVars();
       this.isTicketEndedOrDeleted = true;
@@ -332,7 +336,8 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
      * branch id in multiple tab scenario,
      * reset vars to fetch branchId from cache
      */
-    if (!this.isUrlAccessedTicket && MobileTicketAPI.getCurrentVisit()) {
+    let visitInfo = MobileTicketAPI.getCurrentVisit();
+    if (!this.isUrlAccessedTicket && visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
       if (MobileTicketAPI.getCurrentVisit().branchId !== MobileTicketAPI.getSelectedBranch().id) {
         MobileTicketAPI.resetAllVars();
       }

@@ -51,6 +51,8 @@ export class VisitCancelComponent {
       () => {
         if (!this.isUrlAccessedTicket) {
           MobileTicketAPI.clearLocalStorage();
+        } else {
+          MobileTicketAPI.updateCurrentVisitStatus();
         }
         MobileTicketAPI.resetAllVars();
         this.router.navigate(['**']);
@@ -99,6 +101,8 @@ export class VisitCancelComponent {
           () => {
             if (!this.isUrlAccessedTicket) {
               MobileTicketAPI.clearLocalStorage();
+            } else {
+              MobileTicketAPI.updateCurrentVisitStatus();
             }
             MobileTicketAPI.resetAllVars();
             // 168477572 : Always route to thank you page
