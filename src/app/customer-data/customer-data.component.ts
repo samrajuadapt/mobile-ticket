@@ -50,7 +50,8 @@ export class CustomerDataComponent implements OnInit {
   createVisit() {
     if (!this.isTakeTicketClickedOnce) {
       this.isTakeTicketClickedOnce = true;
-      if (MobileTicketAPI.getCurrentVisit()) {
+      let visitInfo = MobileTicketAPI.getCurrentVisit();
+      if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
         this.router.navigate(['ticket']);
       } else {
         let isDeviceBounded = this.config.getConfig('block_other_browsers');

@@ -77,7 +77,20 @@ export class QueueComponent implements OnInit, OnDestroy {
         let branchId = queryParams['branch'];
         let visitId = queryParams['visit'];
         let checksum = queryParams['checksum'];
-        if (branchId && visitId && checksum) {
+        let visitInfo = MobileTicketAPI.getCurrentVisit();
+        let isSameTicket = visitInfo && visitInfo !== null &&
+             visitInfo.visitStatus === "DELETE" && visitInfo.branchId === branchId &&
+              visitInfo.checksum === checksum && visitInfo.visitId === visitId ? true : false;
+        if (visitInfo && visitInfo.visitStatus === "DELETE" && branchId && visitId && checksum && isSameTicket) {
+          this.isTicketEndedOrDeleted = true;
+          this.onUrlVisitLoading.emit(false);
+          let queueInfo: QueueEntity = new QueueEntity();
+          queueInfo.status = '';
+          queueInfo.visitPosition = null;
+          this.onUrlAccessedTicket.emit(true);
+          this.onVisitStatusUpdate.emit(queueInfo);
+        }
+        else if (branchId && visitId && checksum) {
           this.onUrlVisitLoading.emit(true);
           this.ticketService.getBranchInformation(branchId, (success: boolean) => {
             if (!success) {

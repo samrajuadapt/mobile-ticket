@@ -112,7 +112,8 @@ export class ServicesContainerComponent implements OnInit {
         let OtpService = this.config.getConfig('otp_service');   
         let isDeviceBounded  =  this.config.getConfig('block_other_browsers');
         if (!this.isTakeTicketClickedOnce) {
-            if (MobileTicketAPI.getCurrentVisit()) {
+            let visitInfo = MobileTicketAPI.getCurrentVisit();
+            if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
                 this.serviceService.stopBranchRedirectionCountDown();
                 this.serviceService.stopServiceFetchTimer();
                 this.router.navigate(['ticket']);
