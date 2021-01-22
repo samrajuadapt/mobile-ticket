@@ -10,7 +10,10 @@
   "license": "ISC",
   "devDependencies": {},
   "dependencies": {
+    "del": "^6.0.0",
     "gulp": "^4.0.2",
-    "del": "^6.0.0"
+    "jsonfile": "^6.1.0",
+    "lodash": "^4.17.20",
+    "yargs": "^16.2.0"
   }
 }

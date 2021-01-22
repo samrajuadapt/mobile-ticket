@@ -3,9 +3,10 @@ const del = require('del');
 const _ = require('lodash');
 const jsonfile = require('jsonfile');
 const path = require('path');
-var argv = require('yargs').argv;
+const argv = require('yargs').argv;
 let srcPath;
 let destPath;
+const DELETE_KEY = 'marked_to_remove';
 
 srcPath = argv.src || process.cwd();
 destPath = argv.dest;
@@ -60,7 +61,7 @@ async function updateProxyConfig() {
         _.forEach(srcFile, function (value, key) {
             if (!(_.has(destFile, key))) {
                 _.set(destFile, key, value)
-            } else if (value['value'] == 'delete') {
+            } else if (value['value'] == DELETE_KEY) {
                 _.unset(destFile, key);
             }
         });
@@ -75,7 +76,7 @@ async function updateConfig() {
         _.forEach(srcFile, function (value, key) {
             if (!(_.has(destFile, key))) {
                 _.set(destFile, key, value)
-            } else if (value['value'] == 'delete') {
+            } else if (value['value'] == DELETE_KEY) {
                 _.unset(destFile, key);
             }
         });
@@ -90,21 +91,21 @@ async function updateLocale() {
         _.forEach(srcFile, function (rootValue, rootKey) {
             if (!(_.has(destFile, rootKey))) {
                 _.set(destFile, rootKey, rootValue);
-            } else if (rootValue == 'delete') {
+            } else if (rootValue == DELETE_KEY) {
                 _.unset(destFile, rootKey);
             }
             else {
                 _.forEach(rootValue, function (levelOneValue, levelOneKey) {
                     if (!(_.has(destFile[rootKey], levelOneKey))) {
                         _.set(destFile[rootKey], levelOneKey, levelOneValue);
-                    } else if (levelOneValue == 'delete') {
+                    } else if (levelOneValue == DELETE_KEY) {
                         _.unset(destFile[rootKey], levelOneKey);
                     }
                     else {
                         _.forEach(levelOneValue, function (levelTwoValue, levelTwoKey) {
                             if (!(_.has(destFile[rootKey][levelOneKey], levelTwoKey))) {
                                 _.set(destFile[rootKey][levelOneKey], levelTwoKey, levelTwoValue);
-                            } else if (levelTwoValue == 'delete') {
+                            } else if (levelTwoValue == DELETE_KEY) {
                                 _.unset(destFile[rootKey][levelOneKey], levelTwoKey);
                             }
                             else {
@@ -119,5 +120,12 @@ async function updateLocale() {
     }
 }
 
-exports.upgrade = series(cleanForUpgrade, copyForUpgrade, updateProxyConfig, updateConfig, updateLocale);
+async function updateResources() {
+    if (srcPath && destPath) {
+        return src(['./src/app/resources/*'], { cwd: srcPath })
+        .pipe(dest('./src/app/resources/', { cwd: destPath, overwrite: false }));
+    }
+}
+
+exports.upgrade = series(cleanForUpgrade, copyForUpgrade, updateProxyConfig, updateConfig, updateLocale, updateResources);
 exports.install = series(cleanForInstall, copyForInstall);
