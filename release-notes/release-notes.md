@@ -41,15 +41,16 @@ This document describes the new features, bug corrections, known issues and reco
 -->
 <h2>Version 1.12.0 - Internal</h2>
 
-**Date: 2021-01-08**
+**Date: 2021-01-21**
  
-**Build number: 2**
+**Build number: 3**
 
 <h3>Stories</h3>
 
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-508** | **Prevent replay attacks in MT** |
+| **MOB-504** | **improve upgrade procedure** |
 
 <h3>Bug fixes</h3>
 
