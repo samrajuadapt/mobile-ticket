@@ -23,14 +23,14 @@ async function cleanForUpgrade() {
             '!./proxy-config.json'
         ], { force: true, cwd: destPath });
     } else {
-        return console.log("plese set the dest value to continue");
+        return console.log("please set the dest value to continue");
 
     }
 }
 
 async function copyForUpgrade() {
     if (srcPath && destPath) {
-        return src(['./**/*', '!./upgrade-helper', '!./upgrade-helper/*'], { cwd: srcPath })
+        return src(['./**/*', '!./upgrade-helper', '!./upgrade-helper/**/*'], { cwd: srcPath })
             .pipe(dest('./', { cwd: destPath, overwrite: false }));
     }
 }
@@ -41,14 +41,14 @@ async function cleanForInstall() {
             './*'
         ], { force: true, cwd: destPath });
     } else {
-        console.log("plese set the dest value to continue");
+        console.log("please set the dest value to continue");
         return;
     }
 }
 
 async function copyForInstall() {
     if (srcPath && destPath) {
-        return src(['./**/*', '!./upgrade-helper', '!./upgrade-helper/*'], { cwd: srcPath })
+        return src(['./**/*', '!./upgrade-helper', '!./upgrade-helper/**/*'], { cwd: srcPath })
             .pipe(dest('./', { cwd: destPath }));
     }
 }
@@ -59,13 +59,13 @@ async function updateProxyConfig() {
         const srcFile = jsonfile.readFileSync(path.join(srcPath, '/proxy-config.json'));
         const destFile = jsonfile.readFileSync(path.join(destPath, '/proxy-config.json'));
         _.forEach(srcFile, function (value, key) {
-            if (!(_.has(destFile, key))) {
+            if (value != DELETE_KEY && !(_.has(destFile, key))) {
                 _.set(destFile, key, value)
-            } else if (value['value'] == DELETE_KEY) {
+            } else if (value == DELETE_KEY) {
                 _.unset(destFile, key);
             }
         });
-        jsonfile.writeFileSync(path.join(destPath, '/proxy-config.json'), destFile);
+        jsonfile.writeFileSync(path.join(destPath, '/proxy-config.json'), destFile, { spaces: 2, EOL: '\r\n' });
     }
 }
 
@@ -74,13 +74,13 @@ async function updateConfig() {
         const srcFile = jsonfile.readFileSync(path.join(srcPath, '/src/app/config/config.json'));
         const destFile = jsonfile.readFileSync(path.join(destPath, '/src/app/config/config.json'));
         _.forEach(srcFile, function (value, key) {
-            if (!(_.has(destFile, key))) {
+            if (value != DELETE_KEY && !(_.has(destFile, key))) {
                 _.set(destFile, key, value)
-            } else if (value['value'] == DELETE_KEY) {
+            } else if (value == DELETE_KEY) {
                 _.unset(destFile, key);
             }
         });
-        jsonfile.writeFileSync(path.join(destPath, '/src/app/config/config.json'), destFile);
+        jsonfile.writeFileSync(path.join(destPath, '/src/app/config/config.json'), destFile, { spaces: 2, EOL: '\r\n' });
     }
 }
 
@@ -89,21 +89,21 @@ async function updateLocale() {
         const srcFile = jsonfile.readFileSync(path.join(srcPath, '/src/app/locale/en.json'));
         const destFile = jsonfile.readFileSync(path.join(destPath, '/src/app/locale/en.json'));
         _.forEach(srcFile, function (rootValue, rootKey) {
-            if (!(_.has(destFile, rootKey))) {
+            if (rootValue != DELETE_KEY && !(_.has(destFile, rootKey))) {
                 _.set(destFile, rootKey, rootValue);
             } else if (rootValue == DELETE_KEY) {
                 _.unset(destFile, rootKey);
             }
             else {
                 _.forEach(rootValue, function (levelOneValue, levelOneKey) {
-                    if (!(_.has(destFile[rootKey], levelOneKey))) {
+                    if (levelOneValue != DELETE_KEY && !(_.has(destFile[rootKey], levelOneKey))) {
                         _.set(destFile[rootKey], levelOneKey, levelOneValue);
                     } else if (levelOneValue == DELETE_KEY) {
                         _.unset(destFile[rootKey], levelOneKey);
                     }
                     else {
                         _.forEach(levelOneValue, function (levelTwoValue, levelTwoKey) {
-                            if (!(_.has(destFile[rootKey][levelOneKey], levelTwoKey))) {
+                            if (levelTwoValue != DELETE_KEY && !(_.has(destFile[rootKey][levelOneKey], levelTwoKey))) {
                                 _.set(destFile[rootKey][levelOneKey], levelTwoKey, levelTwoValue);
                             } else if (levelTwoValue == DELETE_KEY) {
                                 _.unset(destFile[rootKey][levelOneKey], levelTwoKey);
@@ -116,7 +116,7 @@ async function updateLocale() {
                 });
             }
         });
-        jsonfile.writeFileSync(path.join(destPath, '/src/app/locale/en.json'), destFile);
+        jsonfile.writeFileSync(path.join(destPath, '/src/app/locale/en.json'), destFile, { spaces: 2, EOL: '\r\n' });
     }
 }
 
