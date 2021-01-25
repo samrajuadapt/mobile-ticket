@@ -41,9 +41,9 @@ This document describes the new features, bug corrections, known issues and reco
 -->
 <h2>Version 1.12.0 - Internal</h2>
 
-**Date: 2021-01-21**
+**Date: 2021-01-25**
  
-**Build number: 3**
+**Build number: 4**
 
 <h3>Stories</h3>
 
@@ -51,6 +51,7 @@ This document describes the new features, bug corrections, known issues and reco
 | --- | --- |
 | **MOB-508** | **Prevent replay attacks in MT** |
 | **MOB-504** | **improve upgrade procedure** |
+| **MOB-426** | **Never show "Get New Ticket" button in the thankyou page when user open a ticket which is NOT created via MT** |
 
 <h3>Bug fixes</h3>
 

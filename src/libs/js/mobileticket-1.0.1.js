@@ -3363,8 +3363,8 @@ var MobileTicketAPI = (function () {
           MobileTicketAPI.visitInformation = {};
           // Adding some additional fields because the return values here are different from the 
           // response of the mobile ticket api when creating a ticket
-          MobileTicketAPI.visitInformation.branchId = branchId;
-          MobileTicketAPI.visitInformation.visitId = data.id;
+          MobileTicketAPI.visitInformation.branchId = branchId.toString();
+          MobileTicketAPI.visitInformation.visitId = data.id.toString();
           MobileTicketAPI.visitInformation.ticketNumber = data.ticketId;
           MobileTicketAPI.visitInformation.queueId = data.parameterMap.startQueueOrigId;
           MobileTicketAPI.visitInformation.serviceId = data.currentVisitService.serviceId;
