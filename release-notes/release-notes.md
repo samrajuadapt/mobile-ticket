@@ -41,9 +41,9 @@ This document describes the new features, bug corrections, known issues and reco
 -->
 <h2>Version 1.12.0 - Internal</h2>
 
-**Date: 2021-01-25**
+**Date: 2021-01-28**
  
-**Build number: 4**
+**Build number: 5**
 
 <h3>Stories</h3>
 

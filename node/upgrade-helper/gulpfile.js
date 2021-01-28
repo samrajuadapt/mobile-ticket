@@ -64,12 +64,12 @@ async function updateProxyConfig() {
         const srcFile = jsonfile.readFileSync(path.join(srcPath, '/proxy-config.json'));
         const destFile = jsonfile.readFileSync(path.join(destPath, '/proxy-config.json'));
         _.forEach(srcFile, function (value, key) {
-            if (value != DELETE_KEY && !(_.has(destFile, key))) {
+            if (value['value'] != DELETE_KEY && !(_.has(destFile, key))) {
                 _.set(destFile, key, value);
                 console.log('new key "' + key + '" added');
-            } else if (value == DELETE_KEY && _.has(destFile, key)) {
+            } else if (value['value'] == DELETE_KEY && _.has(destFile, key)) {
                 _.unset(destFile, key);
-                console.log('key "' + key + '" deleted');
+                console.log('key "' + key + '" removed');
 
             }
         });
@@ -83,12 +83,12 @@ async function updateServiceConfig() {
         const srcFile = jsonfile.readFileSync(path.join(srcPath, '/mt-service/src/config/config.json'));
         const destFile = jsonfile.readFileSync(path.join(destPath, '/mt-service/src/config/config.json'));
         _.forEach(srcFile, function (value, key) {
-            if (value != DELETE_KEY && !(_.has(destFile, key))) {
+            if (value['value'] != DELETE_KEY && !(_.has(destFile, key))) {
                 _.set(destFile, key, value);
                 console.log('new key "' + key + '" added');
-            } else if (value == DELETE_KEY && _.has(destFile, key)) {
+            } else if (value['value'] == DELETE_KEY && _.has(destFile, key)) {
                 _.unset(destFile, key);
-                console.log('key "' + key + '" deleted');
+                console.log('key "' + key + '" removed');
             }
         });
         jsonfile.writeFileSync(path.join(destPath, '/mt-service/src/config/config.json'), destFile, { spaces: 2, EOL: '\r\n' });
@@ -100,12 +100,12 @@ async function updateConfig() {
         const srcFile = jsonfile.readFileSync(path.join(srcPath, '/src/app/config/config.json'));
         const destFile = jsonfile.readFileSync(path.join(destPath, '/src/app/config/config.json'));
         _.forEach(srcFile, function (value, key) {
-            if (value != DELETE_KEY && !(_.has(destFile, key))) {
+            if (value['value'] != DELETE_KEY && !(_.has(destFile, key))) {
                 _.set(destFile, key, value);
                 console.log('new key "' + key + '" added');
-            } else if (value == DELETE_KEY && _.has(destFile, key)) {
+            } else if (value['value'] == DELETE_KEY && _.has(destFile, key)) {
                 _.unset(destFile, key);
-                console.log('key "' + key + '" deleted');
+                console.log('key "' + key + '" removed');
             }
         });
         jsonfile.writeFileSync(path.join(destPath, '/src/app/config/config.json'), destFile, { spaces: 2, EOL: '\r\n' });
@@ -116,42 +116,23 @@ async function updateLocale() {
     if (srcPath && destPath) {
         const srcFile = jsonfile.readFileSync(path.join(srcPath, '/src/app/locale/en.json'));
         const destFile = jsonfile.readFileSync(path.join(destPath, '/src/app/locale/en.json'));
-        _.forEach(srcFile, function (rootValue, rootKey) {
-            if (rootValue != DELETE_KEY && !(_.has(destFile, rootKey))) {
-                _.set(destFile, rootKey, rootValue);
-                console.log('new key "' + rootKey + '" added');
-            } else if (rootValue == DELETE_KEY && _.has(destFile, rootKey)) {
-                _.unset(destFile, rootKey);
-                console.log('key "' + rootKey + '" deleted');
-            }
-            else {
-                _.forEach(rootValue, function (levelOneValue, levelOneKey) {
-                    if (levelOneValue != DELETE_KEY && !(_.has(destFile[rootKey], levelOneKey))) {
-                        _.set(destFile[rootKey], levelOneKey, levelOneValue);
-                        console.log('new key "' + levelOneKey + '" added');
-                    } else if (levelOneValue == DELETE_KEY && _.has(destFile, levelOneKey)) {
-                        _.unset(destFile[rootKey], levelOneKey);
-                        console.log('key "' + levelOneKey + '" deleted');
-                    }
-                    else {
-                        _.forEach(levelOneValue, function (levelTwoValue, levelTwoKey) {
-                            if (levelTwoValue != DELETE_KEY && !(_.has(destFile[rootKey][levelOneKey], levelTwoKey))) {
-                                _.set(destFile[rootKey][levelOneKey], levelTwoKey, levelTwoValue);
-                                console.log('new key "' + levelTwoKey + '" added');
-                            } else if (levelTwoValue == DELETE_KEY && _.has(destFile, levelTwoKey)) {
-                                _.unset(destFile[rootKey][levelOneKey], levelTwoKey);
-                                console.log('key "' + levelTwoKey + '" deleted');
-                            }
-                            else {
-                                //this is deep enough for now
-                            }
-                        });
-                    }
-                });
-            }
-        });
+        recurUpdateLocale(srcFile, destFile);
         jsonfile.writeFileSync(path.join(destPath, '/src/app/locale/en.json'), destFile, { spaces: 2, EOL: '\r\n' });
     }
+}
+
+function recurUpdateLocale(srcVal, destVal) {
+    _.forEach(srcVal, function (value, key) {
+        if (value != DELETE_KEY && !(_.has(destVal, key))) {
+            _.set(destVal, key, value);
+            console.log('new key "' + key + '" added');
+        } else if (value == DELETE_KEY && _.has(destVal, key)) {
+            _.unset(destVal, key);
+            console.log('key "' + key + '" removed');
+        } else if (_.isObject(value)) {
+            recurUpdateLocale(value, destVal[key]);
+        }
+    });
 }
 
 async function updateResources() {
