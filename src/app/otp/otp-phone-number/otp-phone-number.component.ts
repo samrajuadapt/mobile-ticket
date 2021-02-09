@@ -20,6 +20,10 @@ export class OtpPhoneNumberComponent implements OnInit {
   public counterTime: number = 180;
   private _showNetWorkError = false;
   private smsText: string;
+  public seperateCountryCode = false;
+  public changeCountry = false;
+  public submitClicked = false;
+  public countryCodePrefix: string;
   @Output()
   showNetorkErrorEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
 
@@ -43,9 +47,16 @@ export class OtpPhoneNumberComponent implements OnInit {
 
   ngOnInit() {    
     this.countryCode = this.config.getConfig("country_code");
-    if (this.countryCode === "") {
-      this.countryCode = "+";
+    if (this.countryCode.match(/^[A-Za-z]+$/)) {
+      this.seperateCountryCode = true;
+    } else {
+      if (this.countryCode === "") {
+        this.countryCode = "+";
+      }
     }
+    // if (this.countryCode === "") {
+    //   this.countryCode = "+";
+    // }
 
     this.phoneNumber = MobileTicketAPI.getEnteredOtpPhoneNum()
       ? MobileTicketAPI.getEnteredOtpPhoneNum()
@@ -81,6 +92,7 @@ export class OtpPhoneNumberComponent implements OnInit {
 
   onPhoneNumberChanged() {
     this.phoneNumberError = false;
+    this.submitClicked = false;
   }
 
   phoneNumContinue() {    
@@ -179,5 +191,49 @@ export class OtpPhoneNumberComponent implements OnInit {
   @HostListener('window:beforeunload',['$event'])
   showMessage($event) { 
     $event.returnValue='Your data will be lost!';
+  }
+
+  telInputObject(obj){
+    obj.setCountry(this.countryCode);
+  }
+
+  hasError(e){
+    console.log(e);
+    this.phoneNumberError = e ? false:true;
+    
+    if(this.submitClicked){
+      this.phoneNumberError = e ? false:true;
+    }
+  }
+
+  getNumber(e){
+    this.phoneNumber = e;
+    // this.phoneNumContinue();
+
+    if(this.submitClicked){ 
+      this.phoneNumContinue();
+    }
+  }
+
+  onCountryChange(e){
+    this.phoneNumberError = false;
+    this.submitClicked = false;
+  }
+
+  submitByBtn(e){
+    if(this.phoneNumber.length === 0){
+      this.phoneNumberError = true;
+    }
+    this.submitClicked = true;
+    if(!this.phoneNumberError){
+      this.phoneNumContinue();
+    }
+    // e.target.blur();
+  }
+
+  submitByKey(e){
+    if(e.code === 'Enter'){
+      this.submitClicked = true; 
+    }
   }
 }

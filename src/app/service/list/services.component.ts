@@ -107,7 +107,7 @@ export class ServicesComponent implements AfterViewInit {
   }
 
   processListShadow() {
-    if ((document.getElementsByClassName('table-child-list')[0].clientHeight +
+    if ((document.getElementsByClassName('table-child-list')[0] && document.getElementsByClassName('table-child-list')[0].clientHeight +
       document.getElementsByClassName('table-child-list')[0].scrollTop
       >= document.getElementsByClassName('table-child-list')[0].scrollHeight - 5)) {
       this.showListShadow = false;

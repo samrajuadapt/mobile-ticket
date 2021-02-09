@@ -61,7 +61,7 @@ import { BranchScheduleService } from './shared/branch-schedule.service'
 import { BranchOpenHoursValidator } from './util/branch-open-hours-validator';
 import { LocationValidator } from './util/location-validator';
 import { TicketLoaderComponent } from './ticket-loader/ticket-loader.component';
-
+import {Ng2TelInputModule} from 'ng2-tel-input';
 declare var MobileTicketAPI:any;
 
 
@@ -84,7 +84,8 @@ declare var MobileTicketAPI:any;
       provide: TranslateLoader,
       useFactory: translateStaticLoader,
       deps: [Http]
-    })
+    }),
+    Ng2TelInputModule
   ],
   providers: [BranchService, ServiceService, TicketInfoService, AuthGuard, ConfirmDialogService, AlertDialogService,
     VisitCancelLeavelineGuard, RetryService, Locale, LocationService, SortPipe, CustomerDataGuard,

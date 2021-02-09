@@ -1,6 +1,6 @@
 {
   "apigw_ip_port": {
-    "value": "10.2.3.88:9090",
+    "value": "localhost:9090",
     "description": "API Gateway - host address"
   },
   "local_webserver_port": {
@@ -8,7 +8,7 @@
     "description": "Local webserver port"
   },
   "auth_token": {
-    "value": "nosecrets",
+    "value": "1234",
     "description": "Mobile API user - authentication token"
   },
   "local_webserver_ssl_port": {
@@ -16,11 +16,11 @@
     "description": "Local webserver HTTPS port"
   },
   "support_ssl": {
-    "value": "true",
+    "value": "false",
     "description": "Flag indicating server supports SSL.Should have a valid public key and certificate in 'sslcert' folder "
   },
   "gateway_has_certificate": {
-    "value": "true",
+    "value": "false",
     "description": "Flag indicating the API gateway is configured to run on HTTPS"
   },
   "gateway_certificate_is_valid": {

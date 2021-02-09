@@ -20,9 +20,10 @@
       "prefix": "app",
       "mobile": false,
       "styles": [
+        "../node_modules/intl-tel-input/build/css/intlTelInput.css",
         "styles.css"
       ],
-      "scripts": [],
+      "scripts": ["../node_modules/intl-tel-input/build/js/intlTelInput.min.js"],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

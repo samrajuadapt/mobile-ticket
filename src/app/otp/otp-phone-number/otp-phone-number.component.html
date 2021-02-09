@@ -20,7 +20,19 @@
           <input class="phone-num-input" type="text" placeholder="  {{'customer_info.phone_placeholder' | translate}}"
             [(ngModel)]="phoneNumber" (change)="onPhoneNumberChanged()" (keyup.enter)="phoneNumContinue()"
             (focusin)="phoneNumberFeildFocused()" (focusout)="phoneNumberFeildUnfocused()"
-            (keyup)="onPhoneNumberEnter($event)" >
+            (keyup)="onPhoneNumberEnter($event)" *ngIf="!seperateCountryCode">
+
+            <input type="text" id="input-x" style="min-width: 150%;color: #000;letter-spacing: .8px;"
+              ng2TelInput
+              [ng2TelInputOptions]="{initialCountry: 'lk'}"
+              (intlTelInputObject)="telInputObject($event)"
+              (hasError)="hasError($event)"
+              (ng2TelOutput)="getNumber($event)"
+              (keydown.enter)="submitByKey($event);$event.target.blur()"
+              (keyup)="onPhoneNumberChanged()"
+              (countryChange)="onCountryChange($event)"
+              *ngIf="seperateCountryCode"
+              [(ngModel)]="phoneNumber"/>
           <!-- <div class="phone-num-display"> {{phoneNumber}}
           </div> -->
           <div class="phone-num-error" *ngIf="phoneNumberError"> {{'otp.phoneNumberError' | translate}}</div>
@@ -60,7 +72,7 @@
     <footer class="qm-footer">
       <div class="center-text">
         <div
-          class="send_button custom btn-text-color accent-bg-color" [class.disabled]="true" (click)="phoneNumContinue()">
+          class="send_button custom btn-text-color accent-bg-color" [class.disabled]="true" (click)="seperateCountryCode? submitByBtn($event):phoneNumContinue()">
           {{'otp.getOTP' | translate}}
         </div>
       </div>

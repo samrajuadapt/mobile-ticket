@@ -540,7 +540,7 @@ let env = process.argv[2] || 'prod';
 let otpService = "disable";
 let ticketToken = "disable";
 let tenantID = "";
-let userConfigFile = "./src/app/config/config.json";
+let userConfigFile = "../src/app/config/config.json";
 let mtConfigFile = "mt-service/src/config/config.json"
 if (env=='dev') {
 	userConfigFile = "../src/app/config/config.json";	

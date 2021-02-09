@@ -29,10 +29,14 @@ export class CutomerPhoneComponent implements OnInit {
   private _showNetWorkError = false;
   public documentDir: string;
   public countryCode: string;
+  public countryCodePrefix: string;
   private isTakeTicketClickedOnce: boolean;
   public isPrivacyEnable = 'disable';
   public activeConsentEnable = 'disable';
   public showLoader = false;
+  public seperateCountryCode = false;
+  public changeCountry = false;
+  public submitClicked = false;
 
   @Output()
   showNetorkErrorEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -46,9 +50,13 @@ export class CutomerPhoneComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.countryCode = this.config.getConfig('country_code');
-    if (this.countryCode === '') {
-      this.countryCode = '+';
+    this.countryCode = this.config.getConfig("country_code");
+    if (this.countryCode.match(/^[A-Za-z]+$/)) {
+      this.seperateCountryCode = true;
+    } else {
+      if (this.countryCode === "") {
+        this.countryCode = "+";
+      }
     }
 
     this.phoneNumberError = false;
@@ -67,9 +75,7 @@ export class CutomerPhoneComponent implements OnInit {
 
   // Press continue button for phone number
   phoneNumContinue() {
-
-    // router 
-
+  
     if (this.phoneNumber.match(/^\(?\+?\d?[-\s()0-9]{6,}$/) && this.phoneNumber !== this.countryCode) {
       let isPrivacyAgreed = localStorage.getItem('privacy_agreed');
       MobileTicketAPI.setPhoneNumber(this.phoneNumber);
@@ -87,8 +93,10 @@ export class CutomerPhoneComponent implements OnInit {
   // Change phone number input feild
   onPhoneNumberChanged() {
     this.phoneNumberError = false;
+    // this.changeCountry = false;
+    this.submitClicked = false;
   }
-  private onPhoneNumberEnter(event) {
+  onPhoneNumberEnter(event) {
     // console.log(event.keycode);
     if (this.phoneNumberError && event.keyCode !== 13) {
       if (this.phoneNumber.trim() !== '') {
@@ -228,4 +236,47 @@ export class CutomerPhoneComponent implements OnInit {
     return this._showNetWorkError;
   }
 
+  telInputObject(obj){
+    obj.setCountry(this.countryCode);
+  }
+
+  hasError(e){
+    console.log(e);
+    this.phoneNumberError = e ? false:true;
+    
+    if(this.submitClicked){
+      this.phoneNumberError = e ? false:true;
+    }
+  }
+
+  getNumber(e){
+    this.phoneNumber = e;
+    // this.phoneNumContinue();
+
+    if(this.submitClicked){ 
+      this.phoneNumContinue();
+    }
+  }
+
+  onCountryChange(e){
+    this.phoneNumberError = false;
+    this.submitClicked = false;
+  }
+
+  submitByBtn(e){
+    if(this.phoneNumber.length === 0){
+      this.phoneNumberError = true;
+    }
+    this.submitClicked = true;
+    if(!this.phoneNumberError){
+      this.phoneNumContinue();
+    }
+    // e.target.blur();
+  }
+
+  submitByKey(e){
+    if(e.code === 'Enter'){
+      this.submitClicked = true; 
+    }
+  }
 }
