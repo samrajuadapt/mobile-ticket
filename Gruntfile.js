@@ -51,6 +51,7 @@ module.exports = function (grunt) {
           { expand: true, src: ['src/app/theme/*'], dest: 'dist/src/app/theme', filter: 'isFile', flatten: true },
           { expand: true, src: ['src/libs/css/*'], dest: 'dist/src/libs/css/', filter: 'isFile', flatten: true },
           { expand: true, src: ['src/libs/js/*'], dest: 'dist/src/libs/js/', filter: 'isFile', flatten: true },
+          { expand: true, src: ['src/libs/img/*'], dest: 'dist/src/img/', filter: 'isFile', flatten: true },
         ]
       },
       mt_service: {
@@ -90,7 +91,8 @@ module.exports = function (grunt) {
       pre: {
         files: {
           'dist/src/libs/js/mt.bundle.min.js': ['dist/src/libs/js/mobileticket-*.js'],
-          'dist/src/libs/js/analytics.bundle.min.js': ['dist/src/libs/js/analytics.min.js']
+          'dist/src/libs/js/analytics.bundle.min.js': ['dist/src/libs/js/analytics.min.js'],
+          'dist/src/libs/js/intlTelInput.bundle.min.js': ['dist/src/libs/js/intlTelInput.min.js']
         }
       },
       post: {
@@ -124,7 +126,7 @@ module.exports = function (grunt) {
     },
     concat: {
       js: {
-        src: ['node_modules/reflect-metadata/Reflect.js', 'node_modules/systemjs/dist/system.src.js', 'dist/src/libs/js/analytics.bundle.min.js', 'dist/src/libs/js/mt.bundle.min.js', 'aot/dist/src/build.js'],
+        src: ['node_modules/reflect-metadata/Reflect.js', 'node_modules/systemjs/dist/system.src.js','dist/src/libs/js/intlTelInput.bundle.min.js', 'dist/src/libs/js/analytics.bundle.min.js', 'dist/src/libs/js/mt.bundle.min.js', 'aot/dist/src/build.js'],
         dest: 'dist/src/bundle.js'
       },
       css: {
@@ -155,7 +157,15 @@ module.exports = function (grunt) {
               replacement: ''
             },
             {
+              pattern: /<link rel="stylesheet" href="libs\/css\/intlTelInput\.css">/g,
+              replacement: ''
+            },
+            {
               pattern: /<script async type="text\/javascript" src="libs\/js\/analytics\.min\.js"><\/script>/g,
+              replacement: ''
+            },
+            {
+              pattern: /<script type="text\/javascript" src="libs\/js\/intlTelInput\.min\.js"><\/script>/g,
               replacement: ''
             },
             {

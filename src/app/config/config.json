@@ -136,7 +136,7 @@
     "description": "System of units which measures the distance to the branch. Can be metric (km or m), imperial (mi), auto (depending on the browser locale)"
   },
   "customer_data": {
-    "value": "enable",
+    "value": "disable",
     "description": "Enable or disable customer access to enter customer phone number using mobile ticket UI, 'on = enable', 'off = disable'"
   },
   "privacy_policy": {
@@ -152,7 +152,7 @@
     "description": "URL of privacy policy information starting with http:// or https://. If value is null privacy policy information will get from the property file."
   },
   "country_code": {
-    "value": "lk",
+    "value": "",
     "description": "Define the country code for phone number. If value is null no country code will be added. Can be either 'ISO alpha-2 format' or 'International phone number format'. Country code will be separated if any nonnumerical code is defined."
   },
   "queue_poll_retry": {
@@ -164,7 +164,7 @@
     "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
   },
   "otp_service": {
-    "value": "enable",
+    "value": "disable",
     "description": "Enable or disable OTP service"
   },
   "create_ticket_token": {

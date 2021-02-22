@@ -36,6 +36,7 @@ let jsonParser = bodyParser.json();
 
 const google_analytics = 'https://www.google-analytics.com';
 const bootstarp_cdn = 'https://maxcdn.bootstrapcdn.com';
+const countrycode_css = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/16.0.1/js/utils.js';
 
 // Enable packet compression of each response
 app.use(compression({level: zlib.Z_BEST_COMPRESSION, strategy: zlib.Z_DEFAULT_STRATEGY}));
@@ -85,10 +86,11 @@ app.use(xssFilter());
 app.use(csp({
 	directives: {
 	defaultSrc: ["'self'"],
-	scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'",google_analytics ],
+	scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'",google_analytics,countrycode_css ],
+	// phoneScriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'",countrycode_css ],
 	styleSrc: ["'self'", "'unsafe-inline'",bootstarp_cdn],
 	fontSrc: ["'self'", 'data:',bootstarp_cdn],
-	imgSrc: ["'self'", 'data:', google_analytics],
+	imgSrc: ["'self'", 'data:', google_analytics,countrycode_css],
 	sandbox: ['allow-forms', 'allow-scripts', 'allow-same-origin', 'allow-popups'],
 	reportUri: '/report-violation',
 	objectSrc: ["'none'"]
@@ -540,7 +542,7 @@ let env = process.argv[2] || 'prod';
 let otpService = "disable";
 let ticketToken = "disable";
 let tenantID = "";
-let userConfigFile = "../src/app/config/config.json";
+let userConfigFile = "./src/app/config/config.json";
 let mtConfigFile = "mt-service/src/config/config.json"
 if (env=='dev') {
 	userConfigFile = "../src/app/config/config.json";	
