@@ -51,6 +51,13 @@ html, body {margin: 0; height: 100%; overflow: hidden}
     font-size: 16px;
     margin: 0 -15px;
 }
+.phone-num-input_ {
+  caret-color: #bc0e3d;
+  color: rgba(0, 0, 0, 0.82);
+  width: 100%;
+  font-size: 16px; 
+  margin: 0 -15px;
+}
 .phone-num-input-container {
     margin: 14px 10px;
     flex-grow: 1;

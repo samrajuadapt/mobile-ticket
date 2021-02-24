@@ -50,7 +50,7 @@ export class CutomerPhoneComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.countryCode = this.config.getConfig("country_code");
+    this.countryCode = this.config.getConfig("country_code").trim();
     if (this.countryCode.match(/^[A-Za-z]+$/)) {
       this.seperateCountryCode = true;
     } else {
@@ -260,7 +260,8 @@ export class CutomerPhoneComponent implements OnInit {
 
   onCountryChange(e){
     this.phoneNumberError = false;
-    this.submitClicked = false;
+    this.submitClicked = false;    
+    MobileTicketAPI.setCountryFlag(e.iso2);
   }
 
   submitByBtn(e){

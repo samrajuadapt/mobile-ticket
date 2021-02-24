@@ -46,7 +46,7 @@ export class OtpPhoneNumberComponent implements OnInit {
   }
 
   ngOnInit() {    
-    this.countryCode = this.config.getConfig("country_code");
+    this.countryCode = this.config.getConfig("country_code").trim();
     if (this.countryCode.match(/^[A-Za-z]+$/)) {
       this.seperateCountryCode = true;
     } else {
@@ -54,9 +54,6 @@ export class OtpPhoneNumberComponent implements OnInit {
         this.countryCode = "+";
       }
     }
-    // if (this.countryCode === "") {
-    //   this.countryCode = "+";
-    // }
 
     this.phoneNumber = MobileTicketAPI.getEnteredOtpPhoneNum()
       ? MobileTicketAPI.getEnteredOtpPhoneNum()
@@ -194,7 +191,11 @@ export class OtpPhoneNumberComponent implements OnInit {
   }
 
   telInputObject(obj){
-    obj.setCountry(this.countryCode);
+    if(MobileTicketAPI.getCountryFlag() !== undefined){
+      obj.setCountry(MobileTicketAPI.getCountryFlag());
+    } else { 
+      obj.setCountry(this.countryCode);
+    }
   }
 
   hasError(e){

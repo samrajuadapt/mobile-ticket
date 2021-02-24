@@ -52,6 +52,12 @@
     max-height: 200px;
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch; }
+  @media (min-width: 500px) {
+    [dir="rtl"] .iti__country-list {   
+      margin-right: -355px !important; } }
+  [dir="rtl"] .iti__arrow {
+    margin-right: 5px;
+  }
     .iti__country-list--dropup {
       bottom: 100%;
       margin-bottom: -1px; }

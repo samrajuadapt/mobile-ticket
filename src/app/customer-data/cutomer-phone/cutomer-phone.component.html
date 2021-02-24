@@ -17,7 +17,7 @@
             (focusin)="phoneNumberFeildFocused()" (focusout)="phoneNumberFeildUnfocused()"
             (keyup)="onPhoneNumberEnter($event)" *ngIf="!seperateCountryCode && phoneSectionState === phoneSectionStates.INITIAL">
             
-          <input type="text" id="input-x" style="min-width: 150%;color: #000;letter-spacing: .8px;"
+          <input type="text" class="phone-num-input_" 
             ng2TelInput
             [ng2TelInputOptions]="{initialCountry: 'lk'}"
             (intlTelInputObject)="telInputObject($event)"
@@ -31,7 +31,7 @@
             
           <div class="phone-num-display" *ngIf="phoneSectionState === phoneSectionStates.EDIT_PHONE"> {{phoneNumber}}
           </div>
-          <div class="phone-num-error" *ngIf="phoneNumberError"> {{'customer_info.phoneNumberError' | translate}}</div>
+          <div class="phone-num-error" [ngStyle]="{'margin':seperateCountryCode ? '0' : '0 -15px' }" *ngIf="phoneNumberError"> {{'customer_info.phoneNumberError' | translate}}</div>
         </div>
         <div class="phone-container-icon">
           <!-- EDIT ICON -->

@@ -2558,6 +2558,7 @@ var MobileTicketAPI = (function () {
   var leftTime = undefined;
   var fingerprint = '';
   var ticketToken = 'disable';
+  var countryFlag = '';
 
   var visitId = undefined;
   var queueId = undefined;
@@ -2603,7 +2604,7 @@ var MobileTicketAPI = (function () {
   $.ajaxSetup({
     beforeSend: function (xhr) {
       xhr.setRequestHeader("Accept", "application/json");
-      xhr.setRequestHeader("auth-token", "d0516eee-a32d-11e5-bf7f-feff819cdc9f"); //Change the api token with your one      
+      xhr.setRequestHeader("auth-token", "1234"); //Change the api token with your one      
     }
   });
 
@@ -2714,6 +2715,10 @@ var MobileTicketAPI = (function () {
 
   function getTicketToken() {
     return MobileTicketAPI.ticketToken;
+  }
+
+  function getCountryFlag() {
+    return MobileTicketAPI.countryFlag;
   }
 
   function getSelectedService() {
@@ -3451,6 +3456,12 @@ var MobileTicketAPI = (function () {
     },
     getTicketToken: function () {
       return getTicketToken();
+    },
+    setCountryFlag: function (country) {
+      MobileTicketAPI.countryFlag = country;
+    },
+    getCountryFlag: function () {
+      return getCountryFlag();
     },
     getSelectedBranch: function () {
       return getSelectedBranch();
