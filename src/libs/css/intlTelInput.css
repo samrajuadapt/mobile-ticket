@@ -55,6 +55,9 @@
   @media (min-width: 500px) {
     [dir="rtl"] .iti__country-list {   
       margin-right: -355px !important; } }
+@media (min-width: 500px) {
+    .iti__country-list {   
+      margin-left: -61px !important; } }
   [dir="rtl"] .iti__arrow {
     margin-right: 5px;
   }

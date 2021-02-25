@@ -241,7 +241,6 @@ export class CutomerPhoneComponent implements OnInit {
   }
 
   hasError(e){
-    console.log(e);
     this.phoneNumberError = e ? false:true;
     
     if(this.submitClicked){

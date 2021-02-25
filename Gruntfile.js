@@ -92,7 +92,8 @@ module.exports = function (grunt) {
         files: {
           'dist/src/libs/js/mt.bundle.min.js': ['dist/src/libs/js/mobileticket-*.js'],
           'dist/src/libs/js/analytics.bundle.min.js': ['dist/src/libs/js/analytics.min.js'],
-          'dist/src/libs/js/intlTelInput.bundle.min.js': ['dist/src/libs/js/intlTelInput.min.js']
+          'dist/src/libs/js/intlTelInput.bundle.min.js': ['dist/src/libs/js/intlTelInput.min.js'],
+          'dist/src/libs/js/utils.js': ['dist/src/libs/js/utils.js']
         }
       },
       post: {
@@ -126,7 +127,7 @@ module.exports = function (grunt) {
     },
     concat: {
       js: {
-        src: ['node_modules/reflect-metadata/Reflect.js', 'node_modules/systemjs/dist/system.src.js','dist/src/libs/js/intlTelInput.bundle.min.js', 'dist/src/libs/js/analytics.bundle.min.js', 'dist/src/libs/js/mt.bundle.min.js', 'aot/dist/src/build.js'],
+        src: ['node_modules/reflect-metadata/Reflect.js', 'node_modules/systemjs/dist/system.src.js','dist/src/libs/js/intlTelInput.bundle.min.js', 'dist/src/libs/js/utils.js', 'dist/src/libs/js/analytics.bundle.min.js', 'dist/src/libs/js/mt.bundle.min.js', 'aot/dist/src/build.js'],
         dest: 'dist/src/bundle.js'
       },
       css: {
@@ -166,6 +167,10 @@ module.exports = function (grunt) {
             },
             {
               pattern: /<script type="text\/javascript" src="libs\/js\/intlTelInput\.min\.js"><\/script>/g,
+              replacement: ''
+            },
+            {
+              pattern: /<script type="text\/javascript" src="libs\/js\/utils\.js"><\/script>/g,
               replacement: ''
             },
             {
