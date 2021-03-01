@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { QueueEntity } from '../../entities/queue.entity';
 import { Util } from '../../util/util';
 import { BranchEntity } from '../../entities/branch.entity';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import { Config } from '../../config/config';
 import { TicketInfoService } from '../ticket-info.service';
 import { VisitState } from '../../util/visit.state';
@@ -46,9 +46,9 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   private eventSub: Subscription;
   public redirectUrlLoading: boolean;
 
-  @ViewChild('ticketNumberComponent') ticketNumberComponent;
-  @ViewChild('queueComponent') queueComponent;
-  @ViewChild('cancelVisitComponent') cancelVisitComponent;
+  @ViewChild('ticketNumberComponent', {static: true}) ticketNumberComponent;
+  @ViewChild('queueComponent', {static: true}) queueComponent;
+  @ViewChild('cancelVisitComponent', {static: true}) cancelVisitComponent;
 
   constructor(private ticketService: TicketInfoService, public router: Router, private translate: TranslateService,
     private config: Config, private activatedRoute: ActivatedRoute) {

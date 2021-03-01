@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ServiceEntity } from '../entities/service.entity';
-import 'rxjs/add/operator/map';
-import { TranslateService } from 'ng2-translate';
+// import 'rxjs/add/operator/map';
+import { TranslateService } from '@ngx-translate/core';
 import { Config } from '../config/config';
 import { BranchScheduleService } from '../shared/branch-schedule.service';
 

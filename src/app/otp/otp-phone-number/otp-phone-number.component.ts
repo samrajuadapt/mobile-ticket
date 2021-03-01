@@ -2,7 +2,7 @@ import { LocationStrategy } from "@angular/common";
 import { Component, EventEmitter, HostListener, OnInit, Output } from "@angular/core";
 import { Router } from "@angular/router";
 import { AlertDialogService } from "../../shared/alert-dialog/alert-dialog.service";
-import { TranslateService } from "ng2-translate";
+import { TranslateService } from "@ngx-translate/core";
 import { Config } from "../../config/config";
 
 declare var MobileTicketAPI: any;

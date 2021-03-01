@@ -9,7 +9,7 @@ import { GpsPositionCalculator } from '../util/gps-distance-calculator';
 import { LocationService } from '../util/location';
 import { PositionEntity } from '../entities/position.entity';
 import { Util } from './../util/util'
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import { AlertDialogService } from '../shared/alert-dialog/alert-dialog.service';
 import { RetryService } from '../shared/retry.service';
 
@@ -147,7 +147,7 @@ export class AppointmentComponent implements OnInit {
   }
 
   private async fetchAppointment() {
-    return await new Promise((resolve) => {
+    return await new Promise((resolve,) => {
       let aEntity = new AppointmentEntity();
       MobileTicketAPI.findAppointment(this.app.publicId, (response) => {
         aEntity.publicId = this.app.publicId;
@@ -163,18 +163,18 @@ export class AppointmentComponent implements OnInit {
             aEntity.endTime = response2.endTime;
             aEntity.notes = response2.properties.notes;
             MobileTicketAPI.setAppointment(aEntity);
-            resolve();
+            resolve(null);
           },
           (xhr, status, errorMessage) => {
             aEntity.status = 'NOTFOUND';
             MobileTicketAPI.setAppointment(aEntity);
-            resolve();
+            resolve(null);
           });
       },
         (xhr, status, errorMessage) => {
           aEntity.status = 'NOTFOUND';
           MobileTicketAPI.setAppointment(aEntity);
-          resolve();
+          resolve(null);
         });
     });
   }

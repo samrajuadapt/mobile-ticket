@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanDeactivate, ActivatedRoute, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import { TicketInfoContainerComponent } from '../container/ticket-info-container.component';
 import { ConfirmDialogService } from "../../shared/confirm-dialog/confirm-dialog.service";
 

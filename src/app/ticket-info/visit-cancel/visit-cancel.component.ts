@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import { Util } from '../../util/util';
 import { PlatformLocation } from '@angular/common';
 import { ConfirmDialogService } from "../../shared/confirm-dialog/confirm-dialog.service";

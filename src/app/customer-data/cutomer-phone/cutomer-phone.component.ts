@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { TicketEntity } from '../../entities/ticket.entity';
 import { Router } from '@angular/router';
 import { Util } from '../../util/util';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import { RetryService } from '../../shared/retry.service';
 import { AlertDialogService } from '../../shared/alert-dialog/alert-dialog.service';
 import { Config } from '../../config/config';
@@ -126,7 +126,7 @@ export class CutomerPhoneComponent implements OnInit {
       else {
         let isDeviceBounded = this.config.getConfig('block_other_browsers');
         if (isDeviceBounded === 'enable') {
-          System.import('fingerprintjs2').then(Fingerprint2 => {
+          import('fingerprintjs2').then(Fingerprint2 => {
             var that = this;
             Fingerprint2.getPromise({
               excludes: {

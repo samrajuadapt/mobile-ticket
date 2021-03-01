@@ -1,8 +1,10 @@
+import { Injectable } from "@angular/core";
 
 var watchId;
 var broadcastPosition;
 var broadcastError;
 
+@Injectable()
 export class LocationService {
 
     watchCurrentPosition(successCallback, errorCallbcak){

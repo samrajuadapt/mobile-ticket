@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router, ActivatedRoute, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import { Util } from '../util/util';
 import { ServiceEntity } from '../entities/service.entity';
 import { BranchService } from '../branch/branch.service';
@@ -187,7 +187,7 @@ export class AuthGuard implements CanActivate {
         let appointmentId = route.queryParams['appId'];
         if (url.startsWith('/branches/') || url.endsWith('/branches') || url.endsWith('/branches;redirect=true')) {
             /**
-             * for qr-code format: http://XXXX/branches/{branchId}
+             * for qr-code format: System.import://XXXX/branches/{branchId}
              * Redirect user to services page for specific branchId
              */
             if (this.isNoSuchVisitDirectToBranch) {
@@ -240,7 +240,7 @@ export class AuthGuard implements CanActivate {
                 });
             }
             /**
-             * for qr-code format: http://XXXX/branches/{branchId}/services/{serviceId}
+             * for qr-code format: System.://XXXX/branches/{branchId}/services/{serviceId}
              * Redirect user to ticket screen by creating a visit for the given branchId & serviceId
              */
             else if (route.url.length === 4 && route.url[1].path && route.url[2].path === ('services') && route.url[3].path) {
@@ -329,7 +329,7 @@ export class AuthGuard implements CanActivate {
                                 let isDeviceBounded = this.config.getConfig('block_other_browsers');
 
                                 if (isDeviceBounded === 'enable') {
-                                    System.import('fingerprintjs2').then(Fingerprint2 => {
+                                    import('fingerprintjs2').then(Fingerprint2 => {
                                         let that = this;
 
                                         Fingerprint2.getPromise({
@@ -349,7 +349,7 @@ export class AuthGuard implements CanActivate {
                                     // Creating ticket
                                     let isDeviceBounded = this.config.getConfig('block_other_browsers');
                                     if (isDeviceBounded === 'enable') {
-                                        System.import('fingerprintjs2').then(Fingerprint2 => {
+                                        import('fingerprintjs2').then(Fingerprint2 => {
                                             let that = this;
 
                                             Fingerprint2.getPromise({
@@ -509,7 +509,7 @@ export class AuthGuard implements CanActivate {
                         MobileTicketAPI.getCustomParameters(
                             (visit: any) => {
                                 if (visit) {
-                                    System.import('fingerprintjs2').then(Fingerprint2 => {
+                                    import('fingerprintjs2').then(Fingerprint2 => {
                                         let that = this;
                                         Fingerprint2.getPromise({
                                             excludes: {
@@ -528,11 +528,7 @@ export class AuthGuard implements CanActivate {
                                                 resolve(false);
                                             }
                                         })
-                                    },
-                                        (xhr, status, msg) => {
-                                            this.router.navigate(['no_visit']);
-                                            resolve(false);
-                                        });
+                                    },);
                                 } else {
                                     resolve(true);
                                 }

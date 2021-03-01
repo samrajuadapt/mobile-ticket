@@ -4,7 +4,7 @@ import { Router } from "@angular/router";
 import { AlertDialogService } from "../../shared/alert-dialog/alert-dialog.service";
 import { RetryService } from "../../shared/retry.service";
 import { Util } from "../../util/util";
-import { TranslateService } from "ng2-translate";
+import { TranslateService } from "@ngx-translate/core";
 
 declare var MobileTicketAPI: any;
 declare var ga: Function;

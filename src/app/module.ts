@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {HttpModule, Http} from '@angular/http';
+// import {HttpModule, Http} from '@angular/http';
 import {Router} from '@angular/router';
 import {BranchesComponent} from './branch/list/branches.component';
 import {BranchesContainerComponent} from './branch/list-container/branches-container.component';
@@ -11,7 +11,7 @@ import {ServicesComponent} from './service/list/services.component';
 import {ServicesContainerComponent} from './service/list-container/services-container.component';
 import {ServiceComponent} from './service/list-item/service.component';
 import {ServiceService} from './service/service.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 import {FrameLayoutComponent} from './shared/frame-layout/frame-layout.component';
 import {NotSupportComponent} from './shared/not-support/not-support.component';
@@ -30,7 +30,8 @@ import {SortPipe} from './util/sort.pipe';
 import {Config} from './config/config';
 import {Locale} from './locale/locale';
 import {LocationService} from './util/location';
-import {TranslateModule, TranslateStaticLoader, TranslateLoader} from 'ng2-translate';
+import {TranslateModule, TranslateLoader} from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 import {ConnectivityMessageComponent} from './shared/connectivity-message/connectivity-message.component';
 
@@ -77,13 +78,15 @@ declare var MobileTicketAPI:any;
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    // HttpModule,
     HttpClientModule,
     QmRouterModule,
     TranslateModule.forRoot({
+      loader: {
       provide: TranslateLoader,
       useFactory: translateStaticLoader,
-      deps: [Http]
+      deps: [HttpClient]
+      }
     }),
     Ng2TelInputModule
   ],
@@ -119,8 +122,8 @@ export class AppModule {
   }
 }
 
-export function translateStaticLoader(http:Http) {
-  return new TranslateStaticLoader(http, './app/locale', '.json')
+export function translateStaticLoader(http:HttpClient) {
+  return new TranslateHttpLoader(http, './app/locale/', '.json')
 }
 
 export function configuration (config:Config) { 

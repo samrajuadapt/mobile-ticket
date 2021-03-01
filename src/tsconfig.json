@@ -2,17 +2,31 @@
   "compilerOptions": {
     "baseUrl": "",
     "declaration": false,
+    "downlevelIteration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es6", "dom"],
+    "lib": ["es2017", "dom"],
     "mapRoot": "./",
-    "module": "es6",
+    "module": "esnext",
     "moduleResolution": "node",
     "outDir": "../dist/out-tsc",
     "sourceMap": true,
     "target": "es5",
     "typeRoots": [
       "../node_modules/@types"
-    ]
-  }
+    ],
+    "skipLibCheck": true
+  },
+  "angularCompilerOptions": {
+    "enableIvy" : false,
+    }
+,
+  "files": [
+    "main.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts",
+    "polyfills.ts"
+  ]
+  
 }

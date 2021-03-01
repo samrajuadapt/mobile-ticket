@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import { Config } from '../../config/config';
 import { BranchOpenHoursValidator } from '../../util/branch-open-hours-validator'
 import { Router } from '@angular/router';

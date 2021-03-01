@@ -4,8 +4,8 @@ import { PositionEntity } from '../entities/position.entity';
 import { GpsPositionCalculator } from '../util/gps-distance-calculator';
 import { Config } from '../config/config';
 import { LocationService } from '../util/location';
-import { TranslateService } from 'ng2-translate';
-import 'rxjs/add/operator/map';
+import { TranslateService } from '@ngx-translate/core';
+// import 'rxjs/add/map';
 import { AlertDialogService } from "../shared/alert-dialog/alert-dialog.service";
 import { RetryService } from '../shared/retry.service';
 

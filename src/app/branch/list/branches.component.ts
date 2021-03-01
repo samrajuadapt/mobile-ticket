@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { BranchService } from '../branch.service';
 import { BranchEntity } from '../../entities/branch.entity';
 import { Router } from '@angular/router';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import { RetryService } from '../../shared/retry.service';
 import { SortPipe } from '../../util/sort.pipe';
 import { PlatformLocation } from '@angular/common'

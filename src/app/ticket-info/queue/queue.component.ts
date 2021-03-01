@@ -1,13 +1,13 @@
 import { Component, OnInit, OnDestroy, Output, Input, EventEmitter } from '@angular/core';
 import { QueueEntity } from '../../entities/queue.entity';
 import { TicketInfoService } from '../ticket-info.service';
-import { Observable } from 'rxjs/Rx';
-import { Subscription } from 'rxjs';
-import { TimerObservable } from 'rxjs/observable/TimerObservable';
+// import { Observable } from 'rxjs/Rx';
+import { Subscription,timer } from 'rxjs';
+// import { timer } from 'rxjs/observable/TimerObservable';
 import { RetryService } from '../../shared/retry.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { BranchEntity } from '../../entities/branch.entity';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import { VisitState } from '../../util/visit.state';
 import { Util } from '../../util/util';
 import { Config } from '../../config/config';
@@ -161,10 +161,10 @@ export class QueueComponent implements OnInit, OnDestroy {
 
   public initPollTimer(visitPosition, ticketService: TicketInfoService) {
     if (visitPosition > 5) {
-      this.timer = TimerObservable.create(1000, 5000);
+      this.timer = timer(1000, 5000);
     }
     if (visitPosition <= 5) {
-      this.timer = TimerObservable.create(1000, 1000);
+      this.timer = timer(1000, 1000);
     }
     this.subscription = this.timer.subscribe(visitPosition => {
       this.queuePoll(visitPosition, ticketService, false);
@@ -255,10 +255,10 @@ export class QueueComponent implements OnInit, OnDestroy {
       this.doUnsubscribeForPolling();
 
       if (visitPosition > 5) {
-        this.timer = TimerObservable.create(5000, 5000);
+        this.timer = timer(5000, 5000);
       }
       if (visitPosition <= 5) {
-        this.timer = TimerObservable.create(1000, 1000);
+        this.timer = timer(1000, 1000);
       }
       this.doSubscribeForPolling();
     }

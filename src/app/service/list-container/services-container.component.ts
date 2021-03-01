@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BranchService } from '../../branch/branch.service';
 import { Router } from '@angular/router';
-import { TranslateService } from 'ng2-translate';
+import { TranslateService } from '@ngx-translate/core';
 import { ServiceEntity } from '../../entities/service.entity';
 import { ServiceService } from '../service.service';
 import { RetryService } from '../../shared/retry.service';
@@ -141,7 +141,7 @@ export class ServicesContainerComponent implements OnInit {
                         this.router.navigate(['otp_number']);
                     } else {
                         if ( isDeviceBounded === 'enable') {
-                            System.import('fingerprintjs2').then(Fingerprint2 => {
+                            import('fingerprintjs2').then(Fingerprint2 => {
                                 var that = this;
                                 Fingerprint2.getPromise({
                                   excludes: {

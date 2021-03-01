@@ -1,7 +1,7 @@
 import {OnInit, Component} from '@angular/core';
 
 import {ConfirmDialogService} from "./confirm-dialog.service";
-import {TranslateService} from "ng2-translate/index";
+import {TranslateService} from "@ngx-translate/core";
 
 const KEY_ESC = 27;
 // left: 37, up: 38, right: 39, down: 40,
@@ -159,7 +159,7 @@ export class ConfirmDialogComponent implements OnInit {
     if (window.addEventListener) // older FF
       window.addEventListener('DOMMouseScroll', this.preventDefault, false);
     window.onwheel = this.preventDefault; // modern standard
-    window.onmousewheel = document.onmousewheel = this.preventDefault; // older browsers, IE
+    window.onmousewheel = document.onwheel = this.preventDefault; // older browsers, IE
     window.ontouchmove = this.preventDefault; // mobile
     document.onkeydown = this.preventDefaultForScrollKeys;
   }
@@ -167,7 +167,7 @@ export class ConfirmDialogComponent implements OnInit {
   enableScroll() {
     if (window.removeEventListener)
       window.removeEventListener('DOMMouseScroll', this.preventDefault, false);
-    window.onmousewheel = document.onmousewheel = null;
+    window.onmousewheel = document.onwheel = null;
     window.onwheel = null;
     window.ontouchmove = null;
     document.onkeydown = null;
