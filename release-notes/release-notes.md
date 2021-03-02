@@ -39,9 +39,9 @@ This document describes the new features, bug corrections, known issues and reco
 
 ----------
 -->
-<h2>Version 1.12.0 - Internal</h2>
+<h2>Version 1.12.0</h2>
 
-**Date: 2021-02-25**
+**Date: 2021-03-02**
  
 **Build number: 6**
 
