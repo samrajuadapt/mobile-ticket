@@ -22,10 +22,10 @@ module.exports = function (grunt) {
         }
       },
       ngbuild_development: {
-        command: 'ng build --dev'
+        command: 'ng build'
       },
       ngbuild_production: {
-        command: '"./node_modules/.bin/ngc" -p tsconfig-aot.json && "./node_modules/.bin/rollup" -c rollup-config.js'
+        command: 'ng build --prod'
       },
       mt_build: {
         command: [
@@ -61,14 +61,9 @@ module.exports = function (grunt) {
       },
       prod: {
         files: [
-          { expand: true, src: ['src/index.html', 'src/favicon.ico', 'src/styles.css'], dest: 'dist/src/', filter: 'isFile', flatten: true },
-          { expand: true, src: ['node_modules/core-js/client/shim.min.js', 'node_modules/zone.js/dist/zone.js',    'node_modules/fingerprintjs2/fingerprint2.js'], dest: 'dist/src/', filter: 'isFile', flatten: true},
+          // { expand: true, src: ['src/index.html', 'src/favicon.ico', 'src/styles.css'], dest: 'dist/src/', filter: 'isFile', flatten: true },
+          // { expand: true, src: ['node_modules/core-js/client/shim.min.js', 'node_modules/zone.js/dist/zone.js',    'node_modules/fingerprintjs2/fingerprint2.js'], dest: 'dist/src/', filter: 'isFile', flatten: true},
           { expand: true, src: ['release-notes/**'], dest: 'dist/'}
-        ]
-      },
-      aot_script: {
-        files: [
-          { expand: true, src: ['aot-script/main-aot.ts'], dest: 'src/', filter: 'isFile', flatten: true }
         ]
       },
       proxy_files: {
@@ -88,19 +83,19 @@ module.exports = function (grunt) {
           dead_code: true
         }
       },
-      pre: {
-        files: {
-          'dist/src/libs/js/mt.bundle.min.js': ['dist/src/libs/js/mobileticket-*.js'],
-          'dist/src/libs/js/analytics.bundle.min.js': ['dist/src/libs/js/analytics.min.js'],
-          'dist/src/libs/js/intlTelInput.bundle.min.js': ['dist/src/libs/js/intlTelInput.min.js'],
-          'dist/src/libs/js/utils.js': ['dist/src/libs/js/utils.js']
-        }
-      },
-      post: {
-        files: {
-          'dist/src/bundle.min.js': ['dist/src/bundle.js']
-        }
-      },
+      // pre: {
+      //   files: {
+      //     'dist/src/libs/js/mt.bundle.min.js': ['dist/src/libs/js/mobileticket-*.js'],
+      //     'dist/src/libs/js/analytics.bundle.min.js': ['dist/src/libs/js/analytics.min.js'],
+      //     // 'dist/src/libs/js/intlTelInput.bundle.min.js': ['dist/src/libs/js/intlTelInput.min.js'],
+      //     // 'dist/src/bundle.min.js': ['dist/src/bundle.js']
+      //   }
+      // },
+      // post: {
+      //   files: {
+      //     'dist/src/bundle.min.js': ['dist/src/bundle.js']
+      //   }
+      // },
       mt_service: {
         files: [{
           expand: true,
@@ -127,7 +122,8 @@ module.exports = function (grunt) {
     },
     concat: {
       js: {
-        src: ['node_modules/reflect-metadata/Reflect.js', 'node_modules/systemjs/dist/system.src.js','dist/src/libs/js/intlTelInput.bundle.min.js', 'dist/src/libs/js/utils.js', 'dist/src/libs/js/analytics.bundle.min.js', 'dist/src/libs/js/mt.bundle.min.js', 'aot/dist/src/build.js'],
+        src: ['node_modules/reflect-metadata/Reflect.js', 'node_modules/systemjs/dist/system.src.js', 'dist/src/libs/js/analytics.bundle.min.js', 'dist/src/libs/js/mobileticket-*.js', 
+        'dist/src/main.*.js', 'dist/src/polyfills-*.js', 'dist/src/runtime.*.js'],
         dest: 'dist/src/bundle.js'
       },
       css: {
@@ -138,9 +134,10 @@ module.exports = function (grunt) {
     clean: {
       options: { force: true },
       start: ["dist/"],
-      folder: ['aot'],
+      folders: ['dist/app', 'dist/assets', 'dist/libs'],
       folder_v2: ['dist/src/libs'],
-      contents: ["dist/src/bundle.css", "dist/src/bundle.js", "dist/src/styles.css", "dist/src/3rdpartylicenses.txt", "dist/3rdpartylicenses.txt", "dist/src/bundle.min.css", "dist/src/bundle.min.js", "src/main-aot.ts"],
+      contents: ["dist/src/bundle.css", "dist/src/bundle.js", "dist/src/styles.css", "dist/src/3rdpartylicenses.txt", "dist/3rdpartylicenses.txt", "dist/src/bundle.min.css", "dist/src/bundle.min.js", 
+        "dist/src/main.*.js","dist/src/styles.*.css","dist/src/runtime.*.js",'dist/src/polyfills.*.js', 'dist/src/polyfills-es5.*.js'],
       end: ['dist/*.js', 'dist/*.css', 'dist/*.gz', 'dist/*.map', 'dist/*.html', 'dist/*.ico'],
       git_hub_files: ['<%= build.githubFolder %>/*.*', '!<%= build.githubFolder %>/.git', '!<%= build.githubFolder %>/.gitignore'],
       other_lang_files: ['<%= build.githubFolder %>/src/app/locale/*.json', '!<%= build.githubFolder %>/src/app/locale/en.json'],
@@ -162,7 +159,7 @@ module.exports = function (grunt) {
               replacement: ''
             },
             {
-              pattern: /<script async type="text\/javascript" src="libs\/js\/analytics\.min\.js"><\/script>/g,
+              pattern: /<script async="" type="text\/javascript" src="libs\/js\/analytics\.min\.js"><\/script>/g,
               replacement: ''
             },
             {
@@ -171,6 +168,18 @@ module.exports = function (grunt) {
             },
             {
               pattern: /<script type="text\/javascript" src="libs\/js\/utils\.js"><\/script>/g,
+              replacement: ''
+            },
+            {
+              pattern: /<link rel="stylesheet" href="styles\..*\.css">/g,
+              replacement: ''
+            },
+            {
+              pattern: /<script src="runtime\..*\.js" .*><\/script>/g,
+              replacement: ''
+            },
+            {
+              pattern: /<script src="polyfills-es5\..*\.js" .*><\/script>/g,
               replacement: ''
             },
             {
@@ -185,14 +194,16 @@ module.exports = function (grunt) {
               pattern: /<!-- AOT-TREESHAKE-BUNDLE-CSS -->/g,
               replacement: '<link href=\'zip/bundle.min.css\' rel=\'stylesheet\'>'
             },
-            {
-              pattern: /<!-- PROD-SHIM-MIN-JS -->/g,
-              replacement: '<script type=\'text/javascript\' src=\'shim.min.js\'></script>'
-            },
-            {
-              pattern: /<!-- PROD-ZONE-JS -->/g,
-              replacement: '<script type=\'text/javascript\' src=\'zone.js\'></script>' 
-            }
+
+           
+            // {
+            //   pattern: /<!-- PROD-SHIM-MIN-JS -->/g,
+            //   replacement: '<script type=\'text/javascript\' src=\'shim.min.js\'></script>'
+            // },
+            // {
+            //   pattern: /<!-- PROD-ZONE-JS -->/g,
+            //   replacement: '<script type=\'text/javascript\' src=\'zone.js\'></script>' 
+            // }
           ]
         }
       }
@@ -203,8 +214,8 @@ module.exports = function (grunt) {
           mode: 'gzip'
         },
         files: [
-          { expand: true, cwd: 'dist/src/', src: ['bundle.min.js'], dest: 'dist/src/zip', ext: '.min.js.gz' },
-          { expand: true, cwd: 'dist/src/', src: ['bundle.min.css'], dest: 'dist/src/zip', ext: '.min.css.gz' }
+          { expand: true, cwd: 'dist/src/', src: ['bundle.js'], dest: 'dist/src/zip', ext: '.min.js.gz' },
+          { expand: true, cwd: 'dist/src/', src: ['bundle.css'], dest: 'dist/src/zip', ext: '.min.css.gz' }
         ]
       },
       utt_ms_teams: {
@@ -376,7 +387,9 @@ module.exports = function (grunt) {
     console.log("\t remote_deploy - Build production release and deploy the zip file to specified location/server. \n");
   });
 
-  grunt.registerTask('build_development', ['clean:start', 'shell:ngbuild_development:command', 'copy:common', 'clean:end', 'clean:folder', 'copy:proxy_files']);
-  grunt.registerTask('build_production', ['clean:start', 'updateVersion', 'copy:aot_script', 'shell:ngbuild_production:command', 'shell:mt_build:command', 'copy:common', 'copy:prod', 'copy:mt_service', 'uglify:pre', 'concat', 'string-replace', 'uglify:post','uglify:mt_service','cssmin', 'imagemin', 'compress', 'htmlmin', 'clean:end', 'clean:folder', 'clean:folder_v2','clean:contents', 'copy:proxy_files', 'shell:mt_clean:command', 'zip']);
+  grunt.registerTask('build_development', ['clean:start', 'shell:ngbuild_development:command', 'copy:common','copy:mt_service', 'clean:end', 'clean:folder', 'copy:proxy_files']);
+  grunt.registerTask('build_production', ['clean:start', 'updateVersion', 'shell:ngbuild_production:command', 'shell:mt_build:command', 'copy:common', 'copy:prod' ,'copy:mt_service', 'uglify:mt_service','cssmin', 'concat', 'string-replace','imagemin', 'compress', 'htmlmin', 'clean:end','clean:contents', 'clean:folders', 'clean:folder_v2', 'copy:proxy_files', 'shell:mt_clean:command', 'zip']);
+  // grunt.registerTask('build_production', ['clean:start', 'updateVersion', 'copy:aot_script', 'shell:ngbuild_production:command', 'shell:mt_build:command', 'copy:common', 'copy:prod', 'copy:mt_service', 'uglify:pre', 'concat', 'string-replace', 'uglify:post','uglify:mt_service','cssmin', 'imagemin', 'compress', 'htmlmin', 'clean:end', 'clean:folders', 'clean:folder_v2','clean:contents', 'copy:proxy_files', 'shell:mt_clean:command', 'zip']);
   grunt.registerTask('remote_deploy', ['clean:start', 'copy:aot_script', 'shell:ngbuild_production:command', 'copy:common', 'copy:prod', 'uglify:pre', 'concat', 'string-replace', 'uglify:post', 'cssmin', 'imagemin', 'compress', 'htmlmin', 'clean:end', 'clean:folder', 'clean:folder_v2','clean:contents', 'copy:proxy_files', 'zip', 'sftp:deploy']);
+  // grunt.registerTask('test', ['string-replace']);
 };

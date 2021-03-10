@@ -30,7 +30,7 @@ export class CookieContainerComponent implements OnInit {
   }
   ngOnInit() {
     const defaultPath = "app/locale/cookie-consent-files/cookie-en-US.html";
-    const addedPath =  `app/locale/cookie-consent-files/cookie-${navigator.language}.html`;  
+    const addedPath =  "app/locale/cookie-consent-files/cookie-" + navigator.language + '.html';  
     const cookieDescription = document.getElementById('cookie-content');
     this.http.get(addedPath, { responseType: "text" }).subscribe(
       data => {

@@ -24,7 +24,8 @@
               "src/app"
             ],
             "allowedCommonJsDependencies": [
-              "lodash"
+              "lodash","fingerprintjs2"
+              
   
           ],
             "styles": [
