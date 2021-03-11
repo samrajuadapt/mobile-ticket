@@ -51,6 +51,7 @@ module.exports = function (grunt) {
           { expand: true, src: ['src/app/theme/*'], dest: 'dist/src/app/theme', filter: 'isFile', flatten: true },
           { expand: true, src: ['src/libs/css/*'], dest: 'dist/src/libs/css/', filter: 'isFile', flatten: true },
           { expand: true, src: ['src/libs/js/*'], dest: 'dist/src/libs/js/', filter: 'isFile', flatten: true },
+          { expand: true, src: ['src/libs/js/intlTelInput.min.js'], dest: 'dist/src/', filter: 'isFile', flatten: true },
           { expand: true, src: ['src/libs/img/*'], dest: 'dist/src/img/', filter: 'isFile', flatten: true },
         ]
       },
@@ -123,7 +124,7 @@ module.exports = function (grunt) {
     concat: {
       js: {
         src: ['node_modules/reflect-metadata/Reflect.js', 'node_modules/systemjs/dist/system.src.js', 'dist/src/libs/js/analytics.bundle.min.js', 'dist/src/libs/js/mobileticket-*.js', 
-        'dist/src/main.*.js', 'dist/src/polyfills-*.js', 'dist/src/runtime.*.js'],
+        'dist/src/libs/js/utils.js', 'dist/src/main.*.js', 'dist/src/polyfills-*.js', 'dist/src/runtime.*.js'],
         dest: 'dist/src/bundle.js'
       },
       css: {
@@ -164,7 +165,7 @@ module.exports = function (grunt) {
             },
             {
               pattern: /<script type="text\/javascript" src="libs\/js\/intlTelInput\.min\.js"><\/script>/g,
-              replacement: ''
+              replacement: '<script type="text/javascript" src="intlTelInput.min.js"></script>'
             },
             {
               pattern: /<script type="text\/javascript" src="libs\/js\/utils\.js"><\/script>/g,
