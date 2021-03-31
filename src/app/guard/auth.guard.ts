@@ -268,9 +268,10 @@ export class AuthGuard implements CanActivate {
                             if (this.checkCreateTicketOption(resolve)) {
                                 return;
                             }
-                            let isCustomerDataEnabled = this.config.getConfig('customer_data');
+                            let isCustomerPhoneNumDataEnabled = this.config.getConfig('customer_data').phone_number.value; 
+                            let isCustomeIdDataEnabled = this.config.getConfig('customer_data').customerId.value; 
                             let isOTPEnabled = this.config.getConfig('otp_service');
-                            if (isCustomerDataEnabled === 'enable') {
+                            if (isCustomerPhoneNumDataEnabled === 'enable' || isCustomeIdDataEnabled === 'enable') {
                                 MobileTicketAPI.setBranchSelection(branchEntity);
                                 this.serviceService.fetchServices((serviceList: Array<ServiceEntity>, error: boolean) => {
                                     if (error) {

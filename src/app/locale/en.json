@@ -105,6 +105,7 @@
    },
    "customer_info" : {
     "phoneNumber" : "Phone number",
+    "customerId" : "Customer Id",
     "editPhoneNumber" : "Edit phone number",
     "phoneNumberError" : "Please enter vaild phone number",
     "vistInfoTitle" : "By adding phone number you get:",
@@ -120,6 +121,8 @@
     "selectedService": "Selected service",
     "skipAndGetInLine": "Skip this",
     "phone_placeholder": "Enter your phone number",
+    "id_placeholder": "Enter customer Id",
+    "id_details": "You can enter your customer id to get more details about your service",
     "send": "Send information"
   },
   "pricacy_policy" : { 

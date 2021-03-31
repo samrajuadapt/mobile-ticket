@@ -8,7 +8,7 @@
     "description": "Radius to arrive appointmment within (in meters)"
   },
   "version": {
-    "value": "1.12.0",
+    "value": "1.13.0",
     "description": "MobileTicket version [depricated key. version in package.json and release notes instead]"
   },
   "customer_feedback": {
@@ -136,8 +136,19 @@
     "description": "System of units which measures the distance to the branch. Can be metric (km or m), imperial (mi), auto (depending on the browser locale)"
   },
   "customer_data": {
-    "value": "disable",
-    "description": "Enable or disable customer access to enter customer phone number using mobile ticket UI, 'on = enable', 'off = disable'"
+    "value": { 
+      "phone_number":
+         {
+           "value": "disable",
+           "description": "Enable or disable customer phone number feild in customer data section, 'on = enable', 'off = disable'"
+          },
+      "customerId":
+         {
+          "value": "disable",
+          "description": "Enable or disable customer id feild in customer data section, 'on = enable', 'off = disable'"
+         }
+    },
+    "description": "Enable or disable customer id or phone number in customer area. If both are disabled customer data section will be hidden"
   },
   "privacy_policy": {
     "value": "disable",

@@ -39,6 +39,27 @@ This document describes the new features, bug corrections, known issues and reco
 
 ----------
 -->
+
+<h2>Version 1.13.0</h2>
+
+**Date: 2021-03-11**
+ 
+**Build number: 6**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-309** | **Angular version updated to v11** |
+
+
+<h3>Bug fixes</h3>
+
+
+<h3>Upgrade Instructions</h3>
+
+
+```
 <h2>Version 1.12.0</h2>
 
 **Date: 2021-03-02**

@@ -22,7 +22,7 @@ This is a web application that has been developed using Angular4 and the develop
 - [Remote serving for customers](#remote-serving-for-customers)
 - [Branch schedule](#branch-schedule)
 - [One time password](#one-time-password)
-- [Create tikcet token](#create-ticket-token)
+- [Create ticket token](#create-ticket-token)
 - [Cookie consent](#cookie-consent)
 
 ## Installation
@@ -724,6 +724,10 @@ Set the phone number selection.
 ```js
 MobileTicketAPI.setPhoneNumber(phoneNumber)
 ```
+Set the customerId selection.
+```js
+MobileTicketAPI.setCustomerId(customerId)
+```
 Fetch the branch set via MobileTicketAPI.setBranchSelection(branch)
 ```js
 MobileTicketAPI.getSelectedBranch()
@@ -735,6 +739,10 @@ MobileTicketAPI.getSelectedService()
 Fetch the phone number set via MobileTicketAPI.setPhoneNumber(phoneNumber)
 ```js
 MobileTicketAPI.getEnteredPhoneNum()
+```
+Fetch the customerId set via MobileTicketAPI.setCustomerId(customerId)
+```js
+MobileTicketAPI.getEnteredCustomerId()
 ```
 Fetch the currently created visit
 ```js
@@ -829,11 +837,11 @@ Note:
 
 
 ## Customer data
-Mobile Ticket can be configured to accept customer phone number as a part of accepting customer data when creating a ticket. To enable accepting customer data, `customer_data` attribute in `config.json` needs to be switched on. 
+Mobile Ticket can be configured to accept customer phone number as a part of accepting customer data when creating a ticket. To enable accepting customer data, `customer_data` attribute in `config.json` needs to be switched on. `phone number` section enable the cutomer phone number feild and `customer id` enable entering id or token specific to customer. so it can be found in counter application by enabling `custom2` feild visibility.
 
 As a part of accepting customer phone number, it is configurable whether privacy policy needs to be applied or not. Privacy policy can be applied by switching on the `privacy_policy` attribute. By default, privacy policy text in translation file will be applied. This text can be customized, and also inline CSS styling can be used. An external privacy policy link can be used instead of using the default privacy policy. In this case the link to the privacy policy statement should be specified in `privacy_policy_link` attribute in `config.json`. If `active_consent` attribute set to enable user need an actively involvement to accept privacy policy by pressing a button.
 
-Default phone number input text mask which is `+46 XX XXX XX XX` can be changed by using the `phone_placeholder` attribute in translation file. Country code can be specified by `country_code` attribute in `config.json`.
+Default phone number input text mask which is `+46 XX XXX XX XX` can be changed by using the `phone_placeholder` attribute in translation file. Country code can be specified by `country_code` attribute in `config.json`. Further country code can be entered in ISO format to enable contry selection with flags.
 
 
 ## Remote serving for customers

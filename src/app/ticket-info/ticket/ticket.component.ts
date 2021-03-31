@@ -237,7 +237,7 @@ export class TicketComponent implements OnInit {
       output = row1 + '|' + row2;
     }
     else {
-      output = row1 + row2;
+      output = row1 +  ' ' + row2;
     }
 
     if (isDash) {
@@ -256,7 +256,7 @@ export class TicketComponent implements OnInit {
                 output = this.replaceAt(output, j + 1, '-');
               }
               else {
-                output = [output.slice(0, j + 1), '-', output.slice(j + 1)].join('');
+                output = [output.slice(0, j), '-', output.slice(j)].join('');
               }
             }
             else {

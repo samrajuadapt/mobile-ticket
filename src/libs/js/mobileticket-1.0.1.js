@@ -2554,6 +2554,7 @@ var MobileTicketAPI = (function () {
   var branches = [];
   var services = [];
   var enteredPhoneNum = '';
+  var enteredCustomerId = '';
   var enteredOtpPhoneNum = '';
   var leftTime = undefined;
   var fingerprint = '';
@@ -2604,7 +2605,7 @@ var MobileTicketAPI = (function () {
   $.ajaxSetup({
     beforeSend: function (xhr) {
       xhr.setRequestHeader("Accept", "application/json");
-      xhr.setRequestHeader("auth-token", "1234"); //Change the api token with your one      
+      xhr.setRequestHeader("auth-token", "d0516eee-a32d-11e5-bf7f-feff819cdc9f"); //Change the api token with your one      
     }
   });
 
@@ -2696,9 +2697,15 @@ var MobileTicketAPI = (function () {
   function removePhoneNumber() {
     MobileTicketAPI.enteredPhoneNum = '';
   }
+  function removeCustomerId() {
+    MobileTicketAPI.enteredCustomerId = '';
+  }
 
   function getEnteredPhoneNum() {
     return MobileTicketAPI.enteredPhoneNum;
+  }
+  function getEnteredCustomerId() {
+    return MobileTicketAPI.enteredCustomerId;
   }
 
   function getEnteredOtpPhoneNum() {
@@ -3102,29 +3109,31 @@ var MobileTicketAPI = (function () {
         var branch = getSelectedBranch();
         var service = getSelectedService();
         var enteredPhoneNum = getEnteredPhoneNum();
+        var enteredCustomerId = getEnteredCustomerId();
         var fingerPrint = getFingerprint();
         var jsonData = {};
 
         
-
-        if (fingerPrint) {
+        if (enteredPhoneNum && enteredPhoneNum.length > 0 || enteredCustomerId && enteredCustomerId.length > 0 || fingerPrint) {
           jsonData.parameters = {};
-          jsonData = { "parameters": {userId: fingerPrint}};
+          
+           if (fingerPrint) {
+            jsonData.parameters. userId = fingerPrint
+            // jsonData = { "parameters": {phoneNumber: enteredPhoneNum, primaryCustomerPhoneNumber: enteredPhoneNum, userId: fingerPrint}};
+           }
+           if (enteredPhoneNum && enteredPhoneNum.length > 0) {
+            jsonData.parameters. phoneNumber = enteredPhoneNum;
+            jsonData.parameters. primaryCustomerPhoneNumber = enteredPhoneNum;
+            // jsonData = { "parameters": {phoneNumber: enteredPhoneNum, primaryCustomerPhoneNumber: enteredPhoneNum}};
+           } 
+           if (enteredCustomerId && enteredCustomerId.length > 0) {
+            jsonData.parameters.custom2 = enteredCustomerId;
+           }
+          removePhoneNumber('');
+          removeCustomerId('');
           CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + PARAMS + "/" + ISSUE+"?delay=0";
         } else {
-          var CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + ISSUE;
-        }
-
-        if ((enteredPhoneNum && enteredPhoneNum.length > 0)) {
-          jsonData.parameters = {};
-           if (fingerPrint) {
-            jsonData = { "parameters": {phoneNumber: enteredPhoneNum, primaryCustomerPhoneNumber: enteredPhoneNum, userId: fingerPrint}};
-           } else {
-            jsonData = { "parameters": {phoneNumber: enteredPhoneNum, primaryCustomerPhoneNumber: enteredPhoneNum}};
-           }
-        
-          removePhoneNumber('');
-          CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + PARAMS + "/" + ISSUE+"?delay=0";
+          CREATE_TICKET_REST_API = MOBILE_TICKET + "/" + SERVICES + "/" + service.id + "/" + BRANCHES + "/" + branch.id + "/" + TICKET + "/" + ISSUE;
         }
 
         if (MobileTicketAPI.getTicketToken() === "enable") {
@@ -3430,6 +3439,9 @@ var MobileTicketAPI = (function () {
     setPhoneNumber: function (phone) {
       MobileTicketAPI.enteredPhoneNum = phone;
     },
+    setCustomerId: function (id) {
+      MobileTicketAPI.enteredCustomerId = id;
+    },
     setOtpPhoneNumber: function (phone) {
       MobileTicketAPI.enteredOtpPhoneNum = phone;
     },
@@ -3444,6 +3456,9 @@ var MobileTicketAPI = (function () {
     },
     getEnteredPhoneNum: function () {
       return getEnteredPhoneNum();
+    },
+    getEnteredCustomerId: function () {
+      return getEnteredCustomerId();
     },
     setFingerprint: function (fingerprint) {
       MobileTicketAPI.fingerprint = fingerprint;

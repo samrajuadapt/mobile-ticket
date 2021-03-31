@@ -47,7 +47,6 @@ import {AlertDialogService} from "./shared/alert-dialog/alert-dialog.service";
 import {BranchOpenHoursComponent} from "./shared/branch-open-hours/branch-open-hours.component";
 import {OpenHourItemComponent} from "./shared/branch-open-hours/item/open-hour-item.component";
 import {AppointmentComponent} from "./appointment/appointment.component";
-import {CutomerPhoneComponent} from "./customer-data/cutomer-phone/cutomer-phone.component";
 import {PrivacyPolicyComponent} from "./privacy-policy/privacy-policy.component";
 import {CookieContainerComponent} from "./cookie-container/cookie-container.component";
 import {CookieConsentDialogComponent} from "./cookie-container/cookie-consent-dialog/cookie-consent-dialog.component";
@@ -72,7 +71,7 @@ declare var MobileTicketAPI:any;
     RootComponent, RoutingComponents, FrameLayoutComponent, TicketComponent, NotSupportComponent,
     QueueComponent, VisitCancelComponent, QueueItemComponent, SortPipe,
     ConnectivityMessageComponent, VisitNotfoundComponent, BranchNotfoundComponent, ConfirmDialogComponent, AlertDialogComponent,
-    BranchOpenHoursComponent, OpenHourItemComponent, AppointmentComponent, CutomerPhoneComponent,PrivacyPolicyComponent, CustomerDataComponent,
+    BranchOpenHoursComponent, OpenHourItemComponent, AppointmentComponent,PrivacyPolicyComponent, CustomerDataComponent,
     CookieContainerComponent,CookieConsentDialogComponent,UnautherizedComponent, OtpPhoneNumberComponent, OtpPinComponent, TicketLoaderComponent
   ],
   imports: [
