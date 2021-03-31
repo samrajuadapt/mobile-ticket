@@ -36,8 +36,3 @@ secret.json
 #System Files
 .DS_Store
 Thumbs.db
-
-#aot compilation
-/src/**/*.js
-/src/**/*.map
-/aot
