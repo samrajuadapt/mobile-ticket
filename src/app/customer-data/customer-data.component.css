@@ -231,12 +231,19 @@
     font-size: 16px
    }
 .privcay-container-bottom {
-  margin: 30px;
+  margin: 30px 0;
 }
 .qm-customer-id-details {
   background-color: white;
   padding: 10px;
   border-top:2px solid #bc0e3d;
+}
+
+.customer-id-error {
+  font-size: 12px;
+  color: red;
+  background: white;
+  padding: 0 10px;
 }
 .custom-phone-card {
   overflow-x: hidden;

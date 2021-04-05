@@ -224,11 +224,18 @@
             </div>
           </div>
         </div>
-        <div class="qm-customer-id" *ngIf="isCustomerIdEnabled && phoneSectionState === phoneSectionStates.INITIAL">
-          <div class="phone-num-text"> {{'customer_info.customerId' | translate}} </div>
-          <input type="text" class="customer-id-input" [(ngModel)]="customerId" placeholder="{{'customer_info.id_placeholder' | translate}}" > 
-          <div class="qm-customer-id-details">
-            {{'customer_info.id_details' | translate}}
+        <div *ngIf="!showLoader">
+          <div class="qm-customer-id" *ngIf="isCustomerIdEnabled && phoneSectionState === phoneSectionStates.INITIAL">
+            <div class="phone-num-text"> {{'customer_info.customerId' | translate}} </div>
+            <input type="text" class="customer-id-input" [(ngModel)]="customerId" (change)="onCustomerIdChanged()"
+              (keyup)="onCustomerIdChanged()" placeholder="{{'customer_info.id_placeholder' | translate}}">
+            <div class="customer-id-error" *ngIf="customerIdError"> {{'customer_info.customerIdError' | translate}}
+            </div>
+            <div class="customer-id-error" *ngIf="customerIdMaxError"> {{'customer_info.customerIdMaxError' |
+              translate}}</div>
+            <div class="qm-customer-id-details">
+              {{'customer_info.id_details' | translate}}
+            </div>
           </div>
         </div>
       </div>

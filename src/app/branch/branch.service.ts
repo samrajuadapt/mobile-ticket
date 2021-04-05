@@ -143,7 +143,8 @@ export class BranchService {
   }
 
   getBranches(onBrancheListReceived): void {
-    if (location.protocol === 'https:') {
+    let geoFencing = this.config.getConfig('geo_fencing') === 'enable' ? true : false;
+    if (location.protocol === 'https:' && geoFencing) {
       this.currentLocation.watchCurrentPosition((currentPosition) => {
         this.currentPosition = new PositionEntity(currentPosition.coords.latitude, currentPosition.coords.longitude)
         let radius = this.config.getConfig('branch_radius');

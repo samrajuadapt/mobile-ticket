@@ -5,11 +5,15 @@
   },
   "appointment_arrive_radius": {
     "value": "2147483647",
-    "description": "Radius to arrive appointmment within (in meters)"
+    "description": "Radius to arrive appointment within (in meters)"
+  },
+  "geo_fencing": {
+    "value": "enable",
+    "description": "Enable or disable geofencing on landing pages, 'on = enable', 'off = disable'. geofencing will only work on https protocol. if geofencing disabled, branch radius and appointment radius will be discarded"
   },
   "version": {
     "value": "1.13.0",
-    "description": "MobileTicket version [depricated key. version in package.json and release notes instead]"
+    "description": "MobileTicket version [depreciated key. version in package.json and release notes instead]"
   },
   "customer_feedback": {
     "value": "",
@@ -136,17 +140,15 @@
     "description": "System of units which measures the distance to the branch. Can be metric (km or m), imperial (mi), auto (depending on the browser locale)"
   },
   "customer_data": {
-    "value": { 
-      "phone_number":
-         {
-           "value": "disable",
-           "description": "Enable or disable customer phone number feild in customer data section, 'on = enable', 'off = disable'"
-          },
-      "customerId":
-         {
-          "value": "disable",
-          "description": "Enable or disable customer id feild in customer data section, 'on = enable', 'off = disable'"
-         }
+    "value": {
+      "phone_number": {
+        "value": "disable",
+        "description": "Enable or disable customer phone number field in customer data section, 'on = enable', 'off = disable'"
+      },
+      "customerId": {
+        "value": "disable",
+        "description": "Enable or disable customer id field in customer data section, 'on = enable', 'off = disable'"
+      }
     },
     "description": "Enable or disable customer id or phone number in customer area. If both are disabled customer data section will be hidden"
   },
