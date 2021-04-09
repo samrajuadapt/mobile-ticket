@@ -42,7 +42,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h2>Version 1.13.0</h2>
 
-**Date: 2021-03-11**
+**Date: 2021-04-09**
  
 **Build number: 6**
 
@@ -51,15 +51,37 @@ This document describes the new features, bug corrections, known issues and reco
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-309** | **Angular version updated to v11** |
-
+| **MOB-526** | **Enter customer infomation in ticket** |
+| **MOB-558** | **Geo-fencing Configurable*** |
 
 <h3>Bug fixes</h3>
 
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-557** | **Long service names are rendered incorrectly** |
 
 <h3>Upgrade Instructions</h3>
 
+- When upgrading from a previous version, 'customer_data' parameter needs to be added to config.json.
 
 ```
+ "customer_data": {
+    "value": {
+      "phone_number": {
+        "value": "disable",
+        "description": "Enable or disable customer phone number field in customer data section, 'on = enable', 'off = disable'"
+      },
+      "customerId": {
+        "value": "disable",
+        "description": "Enable or disable customer id field in customer data section, 'on = enable', 'off = disable'"
+      }
+    },
+    "description": "Enable or disable customer id or phone number in customer area. If both are disabled customer data section will be hidden"
+  }
+```
+
+----------
+
 <h2>Version 1.12.0</h2>
 
 **Date: 2021-03-02**

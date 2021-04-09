@@ -105,10 +105,10 @@
    },
    "customer_info" : {
     "phoneNumber" : "Phone number",
-    "customerId" : "Customer Id",
+    "customerId" : "Customer ID",
     "editPhoneNumber" : "Edit phone number",
     "phoneNumberError" : "Please enter a valid phone number",
-    "customerIdError" : "Please enter a valid customer Id",
+    "customerIdError" : "Please enter a valid customer ID",
     "customerIdMaxError" : "Only 255 characters are allowed",
     "vistInfoTitle" : "By adding phone number you get:",
     "firstAdvantageByEnteringPhone" : "1. Ticket on SMS that is safer than browser",
@@ -123,8 +123,8 @@
     "selectedService": "Selected service",
     "skipAndGetInLine": "Skip this",
     "phone_placeholder": "Enter your phone number",
-    "id_placeholder": "Enter customer Id",
-    "id_details": "You can enter your customer Id to get more details about your service",
+    "id_placeholder": "Enter customer ID",
+    "id_details": "Please enter your customer ID",
     "send": "Send information"
   },
   "pricacy_policy" : { 
