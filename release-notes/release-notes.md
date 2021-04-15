@@ -39,7 +39,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 ----------
 -->
-<h2> Version 1.13.1 </h2>
+<h2> Version 1.11.1 </h2>
 
 **Date: 2021-04-15**
  
