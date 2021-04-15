@@ -447,7 +447,7 @@ var apiBranchScheduleProxy = proxy(host, {
 	// ip and port off apigateway
 
 	proxyReqPathResolver: (req) => {
-		var newUrl = req.originalUrl.replace("/MobileTicket/BranchSchedule/","/rest/servicepoint/");
+		var newUrl = req.originalUrl.replace("/MobileTicket/BranchSchedule/variables/scheduleStatus","/rest/servicepoint/variables/scheduleStatus");
 		return require('url').parse(newUrl).path;
 	},
 	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
