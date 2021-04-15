@@ -39,6 +39,19 @@ This document describes the new features, bug corrections, known issues and reco
 
 ----------
 -->
+<h2> Version 1.13.1 </h2>
+
+**Date: 2021-04-15**
+ 
+**Build number: 5**
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-575** | **Restrict REST methods exposed from mobile ticket.** |
+
+----------
 
 <h2>Version 1.13.0</h2>
 
