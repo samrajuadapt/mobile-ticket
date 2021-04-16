@@ -447,7 +447,7 @@ var apiBranchScheduleProxy = proxy(host, {
 	// ip and port off apigateway
 
 	proxyReqPathResolver: (req) => {
-		var newUrl = req.originalUrl.replace("/MobileTicket/BranchSchedule/variables/scheduleStatus","/rest/servicepoint/variables/scheduleStatus");
+		var newUrl = req.originalUrl.replace("/MobileTicket/BranchSchedule","/rest/servicepoint");
 		return require('url').parse(newUrl).path;
 	},
 	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
@@ -486,12 +486,12 @@ app.use("/geo/branches/*", apiProxy);
 app.use("/MobileTicket/branches/*", apiProxy);
 app.use("/MobileTicket/MyAppointment/find/*", apiFindProxy);
 app.use("/MobileTicket/MyAppointment/findCentral/*", apiFindCentralProxy);
-app.use("/MobileTicket/MyAppointment/entrypoint/*", apiEntryPointProxy);
-app.use("/MobileTicket/MyAppointment/arrive/*", apiArriveProxy);
+app.use("/MobileTicket/MyAppointment/entrypoint/branches/*/entryPoints/deviceTypes/SW_VISITAPP", apiEntryPointProxy);
+app.use("/MobileTicket/MyAppointment/arrive/branches/*/entryPoints/*/visits", apiArriveProxy);
 app.use("/MobileTicket/services/*", apiProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
 app.use("/MobileTicket/MyMeeting/*", apiMeetingProxy);
-app.use("/MobileTicket/BranchSchedule/*", apiBranchScheduleProxy);
+app.use("/MobileTicket/BranchSchedule/variables/*", apiBranchScheduleProxy);
 
 // MT service
 let env = process.argv[2] || 'prod';
