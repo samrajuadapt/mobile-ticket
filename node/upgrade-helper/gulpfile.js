@@ -6,7 +6,8 @@ const path = require('path');
 const argv = require('yargs').argv;
 let srcPath;
 let destPath;
-const DELETE_KEY = 'marked_to_remove';
+const DELETE_VAL = 'marked_to_remove';
+const VERSION_KEY = 'version';
 
 srcPath = argv.src || process.cwd();
 destPath = argv.dest;
@@ -28,7 +29,7 @@ async function cleanForUpgrade() {
             '!./mt-service/src/config',
         ], { force: true, cwd: destPath });
     } else {
-        return console.log("please set the dest value to continue");
+        return console.log("plese set the dest value to continue");
 
     }
 }
@@ -46,7 +47,7 @@ async function cleanForInstall() {
             './*'
         ], { force: true, cwd: destPath });
     } else {
-        console.log("please set the dest value to continue");
+        console.log("plese set the dest value to continue");
         return;
     }
 }
@@ -64,10 +65,10 @@ async function updateProxyConfig() {
         const srcFile = jsonfile.readFileSync(path.join(srcPath, '/proxy-config.json'));
         const destFile = jsonfile.readFileSync(path.join(destPath, '/proxy-config.json'));
         _.forEach(srcFile, function (value, key) {
-            if (value['value'] != DELETE_KEY && !(_.has(destFile, key))) {
+            if (value['value'] != DELETE_VAL && !(_.has(destFile, key))) {
                 _.set(destFile, key, value);
                 console.log('new key "' + key + '" added');
-            } else if (value['value'] == DELETE_KEY && _.has(destFile, key)) {
+            } else if (value['value'] == DELETE_VAL && _.has(destFile, key)) {
                 _.unset(destFile, key);
                 console.log('key "' + key + '" removed');
 
@@ -83,10 +84,10 @@ async function updateServiceConfig() {
         const srcFile = jsonfile.readFileSync(path.join(srcPath, '/mt-service/src/config/config.json'));
         const destFile = jsonfile.readFileSync(path.join(destPath, '/mt-service/src/config/config.json'));
         _.forEach(srcFile, function (value, key) {
-            if (value['value'] != DELETE_KEY && !(_.has(destFile, key))) {
+            if (value['value'] != DELETE_VAL && !(_.has(destFile, key))) {
                 _.set(destFile, key, value);
                 console.log('new key "' + key + '" added');
-            } else if (value['value'] == DELETE_KEY && _.has(destFile, key)) {
+            } else if (value['value'] == DELETE_VAL && _.has(destFile, key)) {
                 _.unset(destFile, key);
                 console.log('key "' + key + '" removed');
             }
@@ -100,10 +101,14 @@ async function updateConfig() {
         const srcFile = jsonfile.readFileSync(path.join(srcPath, '/src/app/config/config.json'));
         const destFile = jsonfile.readFileSync(path.join(destPath, '/src/app/config/config.json'));
         _.forEach(srcFile, function (value, key) {
-            if (value['value'] != DELETE_KEY && !(_.has(destFile, key))) {
+            //update the version value
+            if (key == VERSION_KEY) {
+                _.set(destFile, key, value);
+            }
+            if (value['value'] != DELETE_VAL && !(_.has(destFile, key))) {
                 _.set(destFile, key, value);
                 console.log('new key "' + key + '" added');
-            } else if (value['value'] == DELETE_KEY && _.has(destFile, key)) {
+            } else if (value['value'] == DELETE_VAL && _.has(destFile, key)) {
                 _.unset(destFile, key);
                 console.log('key "' + key + '" removed');
             }
@@ -123,10 +128,10 @@ async function updateLocale() {
 
 function recurUpdateLocale(srcVal, destVal) {
     _.forEach(srcVal, function (value, key) {
-        if (value != DELETE_KEY && !(_.has(destVal, key))) {
+        if (value != DELETE_VAL && !(_.has(destVal, key))) {
             _.set(destVal, key, value);
             console.log('new key "' + key + '" added');
-        } else if (value == DELETE_KEY && _.has(destVal, key)) {
+        } else if (value == DELETE_VAL && _.has(destVal, key)) {
             _.unset(destVal, key);
             console.log('key "' + key + '" removed');
         } else if (_.isObject(value)) {

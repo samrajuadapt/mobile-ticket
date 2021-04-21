@@ -39,6 +39,20 @@ This document describes the new features, bug corrections, known issues and reco
 
 ----------
 -->
+<h2> Version 1.13.2-Internal </h2>
+
+**Date: 2021-04-20**
+ 
+**Build number: 1**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-578** | **Update version value when doing an upgrade in mobile ticket** |
+
+----------
+
 <h2> Version 1.13.1 </h2>
 
 **Date: 2021-04-15**
