@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule, APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA} from '@angular/core';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 // import {HttpModule, Http} from '@angular/http';
 import {Router} from '@angular/router';
 import {BranchesComponent} from './branch/list/branches.component';
@@ -61,7 +61,8 @@ import { BranchScheduleService } from './shared/branch-schedule.service'
 import { BranchOpenHoursValidator } from './util/branch-open-hours-validator';
 import { LocationValidator } from './util/location-validator';
 import { TicketLoaderComponent } from './ticket-loader/ticket-loader.component';
-import {Ng2TelInputModule} from 'ng2-tel-input';
+import { NgxIntlTelInputModule } from 'ngx-intl-tel-input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 declare var MobileTicketAPI:any;
 
 
@@ -87,7 +88,10 @@ declare var MobileTicketAPI:any;
       deps: [HttpClient]
       }
     }),
-    Ng2TelInputModule
+    NgxIntlTelInputModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [BranchService, ServiceService, TicketInfoService, AuthGuard, ConfirmDialogService, AlertDialogService,
     VisitCancelLeavelineGuard, RetryService, Locale, LocationService, SortPipe, CustomerDataGuard,

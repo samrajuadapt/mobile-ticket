@@ -24,11 +24,11 @@
               "src/app"
             ],
             "allowedCommonJsDependencies": [
-              "lodash","fingerprintjs2"
-              
-  
-          ],
+              "lodash",
+              "fingerprintjs2"
+            ],
             "styles": [
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -82,6 +82,8 @@
             "karmaConfig": "./karma.conf.js",
             "scripts": [],
             "styles": [
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "./node_modules/ngx-bootstrap/datepicker/bs-datepicker.css",
               "src/styles.css"
             ],
             "assets": [

@@ -22,7 +22,7 @@
             (focusin)="phoneNumberFeildFocused()" (focusout)="phoneNumberFeildUnfocused()"
             (keyup)="onPhoneNumberEnter($event)" *ngIf="!seperateCountryCode">
 
-            <input type="text" class="phone-num-input_"
+            <!-- <input type="text" class="phone-num-input_"
               ng2TelInput
               [ng2TelInputOptions]="{initialCountry: 'lk'}"
               (intlTelInputObject)="telInputObject($event)"
@@ -32,7 +32,28 @@
               (keyup)="onPhoneNumberChanged()"
               (countryChange)="onCountryChange($event)"
               *ngIf="seperateCountryCode"
-              [(ngModel)]="phoneNumber"/>
+              [(ngModel)]="phoneNumber"/> -->
+
+              <form #f="ngForm" [formGroup]="phoneForm">
+                <ngx-intl-tel-input *ngIf="seperateCountryCode"
+                  class="phone-num-input_"
+                  [preferredCountries]="preferredCountries"
+                  [enableAutoCountrySelect]="false" 
+                  [enablePlaceholder]="true" 
+                  [searchCountryFlag]="true"
+                  [searchCountryField]="[SearchCountryField.Iso2, SearchCountryField.Name]"
+                  [selectFirstCountry]="true" 
+                  [selectedCountryISO]="selectedCountryISO"
+                  [maxLength]="15"  
+                  [phoneValidation]="true" 
+                  [separateDialCode]="true"
+                  [(ngModel)]="phoneNumberObject"
+                  (keyup.enter)="phoneNumContinue()"
+                  (click) = "dropDownClicked()"
+                  (keyup)="onPhoneNumberEnter($event)"
+                  name="phone" formControlName="phone">
+                </ngx-intl-tel-input>
+            </form>
           <!-- <div class="phone-num-display"> {{phoneNumber}}
           </div> -->
           <div class="phone-num-error" [ngStyle]="{'margin':seperateCountryCode ? '0' : '0 -15px' }" *ngIf="phoneNumberError"> {{'otp.phoneNumberError' | translate}}</div>
@@ -71,9 +92,10 @@
   <div *ngIf="!showLoader" class="table-child-footer">
     <footer class="qm-footer">
       <div class="center-text">
+        <!-- (click)="seperateCountryCode? submitByBtn($event):phoneNumContinue() -->
         <div
-          class="send_button custom btn-text-color accent-bg-color" [class.disabled]="true" (click)="seperateCountryCode? submitByBtn($event):phoneNumContinue()">
-          {{'otp.getOTP' | translate}}
+          class="send_button custom btn-text-color accent-bg-color" [class.disabled]="true" (click)="phoneNumContinue()">
+          {{'otp.getOTP' | translate}} 
         </div>
       </div>
     </footer>

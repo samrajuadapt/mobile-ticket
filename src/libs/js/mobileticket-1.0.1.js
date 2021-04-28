@@ -2554,8 +2554,10 @@ var MobileTicketAPI = (function () {
   var branches = [];
   var services = [];
   var enteredPhoneNum = '';
+  var enteredPhoneNumObj = {};
   var enteredCustomerId = '';
   var enteredOtpPhoneNum = '';
+  var enteredOtpPhoneNumObj = {};
   var leftTime = undefined;
   var fingerprint = '';
   var ticketToken = 'disable';
@@ -2697,6 +2699,9 @@ var MobileTicketAPI = (function () {
   function removePhoneNumber() {
     MobileTicketAPI.enteredPhoneNum = '';
   }
+  function removePhoneNumberObj() {
+    MobileTicketAPI.enteredPhoneNumObj = '';
+  }
   function removeCustomerId() {
     MobileTicketAPI.enteredCustomerId = '';
   }
@@ -2704,12 +2709,18 @@ var MobileTicketAPI = (function () {
   function getEnteredPhoneNum() {
     return MobileTicketAPI.enteredPhoneNum;
   }
+  function getEnteredPhoneNumObj() {
+    return MobileTicketAPI.enteredPhoneNumObj;
+  }
   function getEnteredCustomerId() {
     return MobileTicketAPI.enteredCustomerId;
   }
 
   function getEnteredOtpPhoneNum() {
     return MobileTicketAPI.enteredOtpPhoneNum;
+  }
+  function getEnteredOtpPhoneNumObj() {
+    return MobileTicketAPI.enteredOtpPhoneNumObj;
   }
 
   function getOTPleftTime() {
@@ -3439,11 +3450,17 @@ var MobileTicketAPI = (function () {
     setPhoneNumber: function (phone) {
       MobileTicketAPI.enteredPhoneNum = phone;
     },
+    setPhoneNumberObj: function (phoneObj) {
+      MobileTicketAPI.enteredPhoneNumObj = phoneObj;
+    },
     setCustomerId: function (id) {
       MobileTicketAPI.enteredCustomerId = id;
     },
     setOtpPhoneNumber: function (phone) {
       MobileTicketAPI.enteredOtpPhoneNum = phone;
+    },
+    setOtpPhoneNumberObj: function (obj) {
+      MobileTicketAPI.enteredOtpPhoneNumObj = obj;
     },
     setOTPleftTime: function (time) {
       MobileTicketAPI.leftTime = time;
@@ -3451,11 +3468,17 @@ var MobileTicketAPI = (function () {
     getEnteredOtpPhoneNum: function () {
       return getEnteredOtpPhoneNum();
     },
+    getEnteredOtpPhoneNumObj: function () {
+      return getEnteredOtpPhoneNumObj();
+    },
     getOTPleftTime: function () {
       return getOTPleftTime();
     },
     getEnteredPhoneNum: function () {
       return getEnteredPhoneNum();
+    },
+    getEnteredPhoneNumObj: function () {
+      return getEnteredPhoneNumObj();
     },
     getEnteredCustomerId: function () {
       return getEnteredCustomerId();

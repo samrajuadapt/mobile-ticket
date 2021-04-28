@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { BranchEntity } from '../entities/branch.entity';
 import { ServiceEntity } from '../entities/service.entity';
 import { TranslateService } from '@ngx-translate/core';
@@ -8,6 +8,8 @@ import { Config } from '../config/config';
 import { Router } from '@angular/router';
 import { Util } from '../util/util';
 import { TicketEntity } from '../entities/ticket.entity';
+import { CountryISO, SearchCountryField } from 'ngx-intl-tel-input';
+import { FormControl, FormGroup, NgControl, Validators } from '@angular/forms';
 declare var MobileTicketAPI: any;
 declare var ga: Function;
 
@@ -17,17 +19,22 @@ enum phoneSectionStates {
   EDIT_PHONE
 }
 
+export interface IPhoneNumberObject {
+  number: string;
+}
+
 @Component({
   selector: 'app-customer-data',
   templateUrl: './customer-data.component.html',
   styleUrls: ['./customer-data.component.css']
 })
-export class CustomerDataComponent implements OnInit {
+export class CustomerDataComponent implements OnInit, AfterViewInit {
   public selectedBranch: BranchEntity;
   public selectedService: ServiceEntity;
   private _showNetWorkError = false;
   private isTakeTicketClickedOnce: boolean;
   public phoneNumber: string;
+  public phoneNumberObject: any;
   public customerId: string;
   public phoneNumberError: boolean;
   public customerIdError: boolean;
@@ -37,6 +44,8 @@ export class CustomerDataComponent implements OnInit {
   public ticketEntity: TicketEntity;
   public documentDir: string;
   public countryCode: string;
+  public prefferedCountryCodeList: string[];
+  public prefferedCountries: string;
   public countryCodePrefix: string;
   public isPrivacyEnable = 'disable';
   public activeConsentEnable = 'disable';
@@ -46,6 +55,13 @@ export class CustomerDataComponent implements OnInit {
   public submitClicked = false;
   public isCustomerPhoneDataEnabled = false;
   public isCustomerIdEnabled = false;
+  public SearchCountryField = SearchCountryField;
+  public CountryISO = CountryISO;
+  public selectedCountryISO = '';
+  public preferredCountries: CountryISO[] = [CountryISO.SriLanka, CountryISO.Sweden];
+  phoneForm = new FormGroup({
+    phone: new FormControl(undefined, [Validators.required])
+  });
 
   constructor(
     private translate: TranslateService,
@@ -58,12 +74,24 @@ export class CustomerDataComponent implements OnInit {
   ngOnInit() {
     this.getSelectedBranch();
     this.getSelectedServices();
-    this.countryCode = this.config.getConfig("country_code").trim();
+    this.countryCode = this.config.getConfig('country_code').trim();
+    // prepare preffered country codes
+    this.prefferedCountries = this.config.getConfig('preffered_country_list');
+    this.prefferedCountryCodeList = this.prefferedCountries.split(',');
+    this.prefferedCountryCodeList = [...new Set(this.prefferedCountryCodeList)];
+    const countryCodeValues = Object.values(CountryISO);
+    this.prefferedCountryCodeList = this.prefferedCountryCodeList.filter(country => countryCodeValues.includes(country as CountryISO));
+
     if (this.countryCode.match(/^[A-Za-z]+$/)) {
+      if (countryCodeValues.includes(this.countryCode as CountryISO)) {
+        this.selectedCountryISO = this.countryCode;
+      } else {
+        this.selectedCountryISO = '';
+      }
       this.seperateCountryCode = true;
     } else {
-      if (this.countryCode === "") {
-        this.countryCode = "+";
+      if (this.countryCode === '') {
+        this.countryCode = '+';
       }
     }
 
@@ -86,15 +114,46 @@ export class CustomerDataComponent implements OnInit {
       this.documentDir = "rtl";
     }
   }
+  ngAfterViewInit() {
+    if (this.seperateCountryCode) {
+      const phoneContainer = document.getElementsByClassName('customer-phone__number-container');
+      for (const div of Object.keys(phoneContainer)) {
+        phoneContainer[div].style.cssText = 'height:66px';
+      }
+    }
+  }
+  dropDownClicked() {
+    const coutryDropDowns = document.getElementsByClassName('iti__country-list');
+    const divs = document.getElementsByClassName('iti-sdc-3');
+    const searchBox = document.getElementById('country-search-box');
+    if (searchBox) {
+      searchBox.style.cssText = 'padding: 6px 5px 6px 9px;font-size: 14px;';
+    }
+    if (document.dir === 'rtl') {
+      for (const dropDown of Object.keys(coutryDropDowns)) {
+        coutryDropDowns[dropDown].style.cssText = 'margin-left: 0px !important;margin-right: 0px !important;font-size: 10.85px;white-space:none !important';
+      }
+    } else {
+      for (const dropDown of Object.keys(coutryDropDowns)) {
+        coutryDropDowns[dropDown].style.cssText = 'margin-left: 0px !important;margin-right: 0px !important;font-size: larger;white-space:none !important';
+      }
+    }
+    for (const div of Object.keys(divs)) {
+      divs[div].style.cssText = 'position:fixed';
+    }
+  }
+
 
   // Press continue button for phone number
   CustomerInfoContinue() {
     // If customer phone data enabled
     if (this.isCustomerPhoneDataEnabled) {
+      this.setPhoneNumber();
       // is phone matches
-      if (this.phoneNumber.match(/^\(?\+?\d?[-\s()0-9]{6,}$/) && this.phoneNumber !== this.countryCode) {
+      if (this.phoneNumber.match(/^\(?\+?\d?[-\s()0-9]{6,}$/) && this.phoneNumber !== this.countryCode && !this.phoneNumberError) {
         let isPrivacyAgreed = localStorage.getItem('privacy_agreed');
         MobileTicketAPI.setPhoneNumber(this.phoneNumber);
+        if (this.seperateCountryCode) {MobileTicketAPI.setPhoneNumberObj(this.phoneNumberObject)}
         if (this.customerId.trim() !== '' && this.customerId.length > 255) {
           this.customerIdMaxError = true;
         } else {
@@ -109,47 +168,38 @@ export class CustomerDataComponent implements OnInit {
         }
 
     // phone not matching phone and no phone number
-    } else if (this.customerId.trim() !== '' && this.phoneNumber.trim() == '') {
+    } else if (this.customerId.trim() !== '' && this.phoneNumber.trim() === '') {
       if (this.customerId.length > 255) {
         this.customerIdMaxError = true;
       } else {
       MobileTicketAPI.setCustomerId(encodeURIComponent(this.customerId.toString().trim()));
       this.createVisit()
       }
-    }  
-    // if not matching phone and phone number exists
-    else {
+    } else { // if not matching phone and phone number exists
       this.phoneNumberError = true;
       if (this.customerId.length > 255) {
         this.customerIdError = true;
-      } else if (this.customerId.trim() === '' && this.phoneNumber.trim() == '') {
+      } else if (this.customerId.trim() === '' && this.phoneNumber.trim() === '') {
         this.customerIdError = true;
       }
-      
     }
-    }
-    // If customer phone data is disabled and only customer id is enabled
-    else if (this.customerId.trim() !== '') {
-      if (this.customerId.length > 255) {
-        this.customerIdMaxError = true;
-      } else {
-      MobileTicketAPI.setCustomerId(encodeURIComponent(this.customerId.toString().trim()));
-      this.createVisit()
-      }
-    }
-    // if no customer id
-    else {
+    } else if (this.customerId.trim() !== '') { // If customer phone data is disabled and only customer id is enabled
+        if (this.customerId.length > 255) {
+          this.customerIdMaxError = true;
+        } else {
+        MobileTicketAPI.setCustomerId(encodeURIComponent(this.customerId.toString().trim()));
+        this.createVisit()
+        }
+    } else { // if no customer id
       this.customerIdError = true;
     }
-   
-
   }
   // Change phone number input feild
   onPhoneNumberChanged() {
     this.phoneNumberError = false;
     this.customerIdError = false;
     // this.changeCountry = false;
-    this.submitClicked = false;
+    // this.submitClicked = false;
   }
   onCustomerIdChanged() {
     this.customerIdError = false;
@@ -157,7 +207,7 @@ export class CustomerDataComponent implements OnInit {
     this.customerIdMaxError = false;
   }
 
-  onCustomerIdChangedEnter(event){
+  onCustomerIdChangedEnter(event) {
     if (this.customerId && event.keyCode !== 13) {
       this.customerIdError = false;
       this.phoneNumberError = false;
@@ -165,13 +215,26 @@ export class CustomerDataComponent implements OnInit {
     }
   }
   onPhoneNumberEnter(event) {
-    // console.log(event.keycode);
+    this.setPhoneNumber();
+    if (this.seperateCountryCode) {
+      const error = document.getElementsByClassName('phone-num-error');
+      for (const div of Object.keys(error)) {
+        error[div].style.cssText = 'margin-top: 34px;margin-left: 0px;margin-right: 0px;';
+      }
+    }
     if (this.phoneNumberError && event.keyCode !== 13) {
       if (this.phoneNumber.trim() !== '') {
         this.customerIdError = false;
         this.phoneNumberError = false;
         this.customerIdMaxError = false;
       }
+    }
+  }
+
+  setPhoneNumber() {
+    if (this.seperateCountryCode && this.phoneNumberObject) {
+      this.phoneNumberError = !this.phoneForm.valid;
+      this.phoneNumber = this.phoneNumberObject.e164Number;
     }
   }
   // understood button pressed
@@ -183,12 +246,13 @@ export class CustomerDataComponent implements OnInit {
 
   skipAndcreateVisit() {
     MobileTicketAPI.setPhoneNumber('');
+    if (this.seperateCountryCode) {MobileTicketAPI.setPhoneNumberObj({})}
     if (this.customerId) {
       MobileTicketAPI.setCustomerId(encodeURIComponent(this.customerId.toString().trim()));
       this.createVisit()
     } else {
       this.createVisit();
-    }    
+    }
   }
 
 
@@ -235,8 +299,7 @@ export class CustomerDataComponent implements OnInit {
     let OtpService = this.config.getConfig('otp_service');
     if (OtpService === 'enable') {
       this.router.navigate(['otp_number']);
-    }
-    else {
+    } else {
       this.showLoader = true;
       MobileTicketAPI.createVisit(
         (visitInfo) => {
@@ -254,11 +317,11 @@ export class CustomerDataComponent implements OnInit {
           this.showLoader = false;
           let util = new Util();
           this.isTakeTicketClickedOnce = false;
-          if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "8042") {
+          if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === '8042') {
             this.translate.get('error_codes.error_8042').subscribe((res: string) => {
               this.alertDialogService.activate(res);
             });
-          } else if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "11000") {
+          } else if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === '11000') {
             this.translate.get('ticketInfo.visitAppRemoved').subscribe((res: string) => {
               this.alertDialogService.activate(res);
             });
@@ -278,7 +341,7 @@ export class CustomerDataComponent implements OnInit {
                   this.retryService.abortRetry();
                   this.showHideNetworkError(false);
                 }, () => {
-                  //Do nothing on error
+                  // Do nothing on error
                   this.router.navigate(['no_visit']);
                 });
             });
@@ -302,11 +365,12 @@ export class CustomerDataComponent implements OnInit {
     this._showNetWorkError = value;
   }
   privacyLinkButtonPressed() {
-    var isLink = this.config.getConfig('privacy_policy_link');
+    let isLink = this.config.getConfig('privacy_policy_link');
     if (isLink !== '') {
-      window.open(isLink, "_blank", '');
+      window.open(isLink, '_blank', '');
     } else {
       MobileTicketAPI.setPhoneNumber(this.phoneNumber);
+      if (this.seperateCountryCode) {MobileTicketAPI.setPhoneNumberObj(this.phoneNumberObject)}
       this.router.navigate(['privacy_policy']);
     }
   }
@@ -314,46 +378,44 @@ export class CustomerDataComponent implements OnInit {
     return this._showNetWorkError;
   }
 
-  telInputObject(obj){
-    obj.setCountry(this.countryCode);
-  }
+  // telInputObject(obj){
+  //   obj.setCountry(this.countryCode);
+  // }
 
-  hasError(e){
-    this.phoneNumberError = e ? false:true;
-    
-    if(this.submitClicked){
-      this.phoneNumberError = e ? false:true;
-    }
-  }
+  // hasError(e){
+  //   this.phoneNumberError = e ? false:true;
+  //   if(this.submitClicked){
+  //     this.phoneNumberError = e ? false:true;
+  //   }
+  // }
 
-  getNumber(e){
-    this.phoneNumber = e;
-    // this.phoneNumContinue();
+  // getNumber(e){
+  //   this.phoneNumber = e;
+  //   // this.phoneNumContinue();
 
-    if(this.submitClicked){ 
-      this.CustomerInfoContinue();
-    }
-  }
+  //   if(this.submitClicked){
+  //     this.CustomerInfoContinue();
+  //   }
+  // }
 
-  onCountryChange(e){
-    this.phoneNumberError = false;
-    this.submitClicked = false;    
-    MobileTicketAPI.setCountryFlag(e.iso2);
-  }
+  // onCountryChange(e){
+  //   this.phoneNumberError = false;
+  //   this.submitClicked = false;
+  //   MobileTicketAPI.setCountryFlag(e.iso2);
+  // }
 
-  submitByBtn(e){
-    this.submitClicked = true;
-    if(!this.phoneNumberError){
-      this.CustomerInfoContinue();
-    }
-    // e.target.blur();
-  }
+  // submitByBtn(e){
+  //   this.submitClicked = true;
+  //   if(!this.phoneNumberError){
+  //     this.CustomerInfoContinue();
+  //   }
+  //   // e.target.blur();
+  // }
 
-  submitByKey(e){
-    if(e.code === 'Enter'){
-      this.submitClicked = true; 
-    }
-  }
-  
+  // submitByKey(e){
+  //   if(e.code === 'Enter'){
+  //     this.submitClicked = true; 
+  //   }
+  // }
 
 }

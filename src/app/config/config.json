@@ -168,6 +168,10 @@
     "value": "",
     "description": "Define the country code for phone number. If value is null no country code will be added. Can be either 'ISO alpha-2 format' or 'International phone number format'. Country code will be separated if any nonnumerical code is defined."
   },
+  "preffered_country_list": {
+    "value": "",
+    "description": "Define the preffered country codes for dropdown in country code inputs. list of comma separated country codes is expected. Can be either 'ISO alpha-2 format' or 'International phone number format'."
+  },
   "queue_poll_retry": {
     "value": "1",
     "description": "Define how many times should retry the queue poll request."
