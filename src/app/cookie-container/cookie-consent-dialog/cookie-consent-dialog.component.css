@@ -10,6 +10,9 @@
     margin: auto;
     padding: 10px 0;
 }
+#cookies-container {
+    z-index: 9999;
+}
 .flex-container {
     display: flex;
 }

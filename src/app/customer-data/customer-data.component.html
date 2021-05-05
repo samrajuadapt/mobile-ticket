@@ -7,7 +7,7 @@
 
   <div [hidden]="showNetWorkError">
     <div class="row">
-      <div class="customer-data-container">
+      <div class="customer-data-container" id="customer-data-container">
         <div class="customer-phone" *ngIf="isCustomerPhoneDataEnabled">
           <div *ngIf="!showLoader" class="custom-phone-card">
             <!-- INITIAL AND EDIT PHONE SECTION -->
@@ -38,7 +38,7 @@
 
                   <form #f="ngForm" [formGroup]="phoneForm">
                       <ngx-intl-tel-input *ngIf="seperateCountryCode && phoneSectionState === phoneSectionStates.INITIAL"
-                        class="phone-num-input_"
+                        class="phone-num-input_" id="phoneNum"
                         [preferredCountries]="prefferedCountryCodeList"
                         [enableAutoCountrySelect]="false" 
                         [enablePlaceholder]="true" 

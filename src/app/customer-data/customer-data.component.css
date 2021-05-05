@@ -249,10 +249,15 @@
 }
 .custom-phone-card {
   overflow-x: hidden;
+  position: relative;
+  z-index: 999;
 }
 .customer-data-container {
   height: calc(100vh - 20em) !important;
   overflow: auto;
+}
+#phone {
+  font-size: 16px;
 }
 @media only screen and (max-height: 600px) { 
   .customer-data-container {

@@ -30,6 +30,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
   private clickSubmit: boolean = false;
   private util;
   public direction;
+  public seperateCountryCode = false;
 
   @Output()
   showNetorkErrorEvent: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -86,6 +87,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
     clearInterval(this.clock);
     this.pinError = false;
     this.processTime();
+    this.seperateCountryCode = MobileTicketAPI.getSeparateCountryCode();
   }
 
   public processTime() {
@@ -115,6 +117,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
           .subscribe((res: string) => {
             this.alertDialogService.activate(res);
             MobileTicketAPI.setOtpPhoneNumber("");
+            if (this.seperateCountryCode) { MobileTicketAPI.setOtpPhoneNumberObj({}) }
             this.pin = "";
             this.router.navigate(["branches"]);
           });
@@ -182,6 +185,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
           .subscribe((res: string) => {
             this.alertDialogService.activate(res);
             MobileTicketAPI.setOtpPhoneNumber("");
+            if (this.seperateCountryCode) { MobileTicketAPI.setOtpPhoneNumberObj({}) }
             this.pin = "";
             this.showLoader = false;
             this.router.navigate(["branches"]);
@@ -231,6 +235,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
               this.alertDialogService.activate(res);
               this.showLoader = false;
               MobileTicketAPI.setOtpPhoneNumber("");
+              if (this.seperateCountryCode) { MobileTicketAPI.setOtpPhoneNumberObj({}) }
               this.pin = "";
               clearInterval(this.clock);
               this.router.navigate(["branches"]);
@@ -277,6 +282,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
                     MobileTicketAPI.getEnteredOtpPhoneNum(),
                     (data) => {
                       MobileTicketAPI.setOtpPhoneNumber("");
+                      if (this.seperateCountryCode) { MobileTicketAPI.setOtpPhoneNumberObj({}) }
                     },
                     (err) => {
                       this.translate
@@ -284,6 +290,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
                         .subscribe((res: string) => {
                           this.alertDialogService.activate(res);
                           MobileTicketAPI.setOtpPhoneNumber("");
+                          if (this.seperateCountryCode) { MobileTicketAPI.setOtpPhoneNumberObj({}) }
                           this.router.navigate(["branches"]);
                         });
                     }
@@ -351,6 +358,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
                 .subscribe((res: string) => {
                   this.alertDialogService.activate(res);
                   MobileTicketAPI.setOtpPhoneNumber("");
+                  if (this.seperateCountryCode) { MobileTicketAPI.setOtpPhoneNumberObj({}) }
                   this.router.navigate(["branches"]);
                 });
             } else {
@@ -414,6 +422,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
                         this.showLoader = false;
                         this.showTimer = false;
                         MobileTicketAPI.setOtpPhoneNumber("");
+                        if (this.seperateCountryCode) { MobileTicketAPI.setOtpPhoneNumberObj({}) }
                         this.pin = "";
                         this.router.navigate(["branches"]);
                       });
@@ -432,6 +441,7 @@ export class OtpPinComponent implements OnInit, OnDestroy {
                 this.pin = "";
                 clearInterval(this.clock);
                 MobileTicketAPI.setOtpPhoneNumber("");
+                if (this.seperateCountryCode) { MobileTicketAPI.setOtpPhoneNumberObj({}) }
                 this.router.navigate(["branches"]);
               });
           }

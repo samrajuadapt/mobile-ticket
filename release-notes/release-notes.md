@@ -41,16 +41,27 @@ This document describes the new features, bug corrections, known issues and reco
 -->
 <h2> Version 1.13.2-Internal </h2>
 
-**Date: 2021-04-20**
+**Date: 2021-05-05**
  
-**Build number: 1**
+**Build number: 2**
 
 <h3>Stories</h3>
 
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-578** | **Update version value when doing an upgrade in mobile ticket** |
+| **MOB-552** | **Improving Mobile Ticket phone number with country code/flag** |
 
+<h3>Upgrade Instructions</h3>
+
+- When upgrading from a previous version, 'preferred_country_list' parameter needs to be added to config.json.
+
+```
+ "preferred_country_list": {
+    "value": "",
+    "description": "Define the preferred country codes for dropdown in country code inputs. list of comma separated country codes is expected. Should be 'ISO alpha-2 format'."
+  }
+```
 ----------
 
 <h2> Version 1.13.1 </h2>

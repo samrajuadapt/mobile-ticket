@@ -2555,6 +2555,7 @@ var MobileTicketAPI = (function () {
   var services = [];
   var enteredPhoneNum = '';
   var enteredPhoneNumObj = {};
+  var separateCountryCode = {};
   var enteredCustomerId = '';
   var enteredOtpPhoneNum = '';
   var enteredOtpPhoneNumObj = {};
@@ -2710,6 +2711,9 @@ var MobileTicketAPI = (function () {
     return MobileTicketAPI.enteredPhoneNum;
   }
   function getEnteredPhoneNumObj() {
+    return MobileTicketAPI.enteredPhoneNumObj;
+  }
+  function getSeparateCountryCode() {
     return MobileTicketAPI.enteredPhoneNumObj;
   }
   function getEnteredCustomerId() {
@@ -3453,6 +3457,9 @@ var MobileTicketAPI = (function () {
     setPhoneNumberObj: function (phoneObj) {
       MobileTicketAPI.enteredPhoneNumObj = phoneObj;
     },
+    setSeparateCountryCode: function (code) {
+      MobileTicketAPI.separateCountryCode = code;
+    },
     setCustomerId: function (id) {
       MobileTicketAPI.enteredCustomerId = id;
     },
@@ -3470,6 +3477,9 @@ var MobileTicketAPI = (function () {
     },
     getEnteredOtpPhoneNumObj: function () {
       return getEnteredOtpPhoneNumObj();
+    },
+    getSeparateCountryCode: function () {
+      return getSeparateCountryCode();
     },
     getOTPleftTime: function () {
       return getOTPleftTime();

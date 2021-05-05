@@ -30,7 +30,7 @@ export class OtpPhoneNumberComponent implements OnInit, AfterViewInit {
   public SearchCountryField = SearchCountryField;
   public CountryISO = CountryISO;
   public selectedCountryISO = '';
-  public preferredCountries: CountryISO[] = [CountryISO.SriLanka, CountryISO.Sweden];
+  public preferredCountries: CountryISO[] = [];
   phoneForm = new FormGroup({
     phone: new FormControl(undefined, [Validators.required])
   });
@@ -59,14 +59,10 @@ export class OtpPhoneNumberComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.countryCode = this.config.getConfig('country_code').trim();
-    // prepare preffered country codes
-    this.prefferedCountries = this.config.getConfig('preffered_country_list');
-    this.prefferedCountryCodeList = this.prefferedCountries.split(',');
-    this.prefferedCountryCodeList = [...new Set(this.prefferedCountryCodeList)];
     const countryCodeValues = Object.values(CountryISO);
-    this.prefferedCountryCodeList = this.prefferedCountryCodeList.filter(country => countryCodeValues.includes(country as CountryISO));
 
     if (this.countryCode.match(/^[A-Za-z]+$/)) {
+      this.countryCode = this.countryCode.toLowerCase();
       if (countryCodeValues.includes(this.countryCode as CountryISO)) {
         this.selectedCountryISO = this.countryCode;
       } else {
@@ -77,6 +73,18 @@ export class OtpPhoneNumberComponent implements OnInit, AfterViewInit {
       if (this.countryCode === '') {
         this.countryCode = '+';
       }
+    }
+
+    MobileTicketAPI.setSeparateCountryCode(this.seperateCountryCode);
+
+    // prepare preferred country codes
+    if (this.seperateCountryCode) {
+      this.prefferedCountries = this.config.getConfig('preferred_country_list');
+      this.prefferedCountryCodeList = this.prefferedCountries.split(',');
+      this.prefferedCountryCodeList = [...new Set(this.prefferedCountryCodeList)];
+      this.prefferedCountryCodeList = this.prefferedCountryCodeList.map(country => { return country.toLowerCase() });
+      this.prefferedCountryCodeList = this.prefferedCountryCodeList.filter(country =>
+        countryCodeValues.includes(country as CountryISO));
     }
 
     this.phoneNumber = MobileTicketAPI.getEnteredOtpPhoneNum()
@@ -91,7 +99,7 @@ export class OtpPhoneNumberComponent implements OnInit, AfterViewInit {
       ? MobileTicketAPI.getEnteredOtpPhoneNumObj()
       : MobileTicketAPI.getEnteredPhoneNumObj();
     }
-    if (this.phoneNumberObject) {
+    if (this.phoneNumberObject && this.phoneNumberObject.countryCode) {
       this.selectedCountryISO = this.phoneNumberObject.countryCode;
     }
 
@@ -107,26 +115,55 @@ export class OtpPhoneNumberComponent implements OnInit, AfterViewInit {
         phoneContainer[div].style.cssText = 'height:66px';
       }
     }
+    this.dropDownClicked();
   }
 
   dropDownClicked() {
     const coutryDropDowns = document.getElementsByClassName('iti__country-list');
-    const divs = document.getElementsByClassName('iti-sdc-3');
     const searchBox = document.getElementById('country-search-box');
+    const dataContainer = document.getElementById('customer-data-container');
+    const phoneInput = document.getElementById('phone');
+    const phoneNumber = document.getElementById('phoneNum');
+    const dropDownList = document.getElementsByClassName('dropdown-toggle');
+
     if (searchBox) {
       searchBox.style.cssText = 'padding: 6px 5px 6px 9px;font-size: 14px;';
     }
+    if (phoneInput) {
+      phoneInput.style.cssText = 'font-size: 16px;';
+    }
     if (document.dir === 'rtl') {
       for (const dropDown of Object.keys(coutryDropDowns)) {
-        coutryDropDowns[dropDown].style.cssText = 'margin-left: 0px !important;margin-right: 0px !important;font-size: 10.85px;white-space:none !important';
+        coutryDropDowns[dropDown].style.cssText =
+        'margin-left: 0px !important;margin-right: 0px !important;font-size: 10.85px;white-space:none !important;scrollbar-width: none;-ms-overflow-style: none;';
       }
     } else {
       for (const dropDown of Object.keys(coutryDropDowns)) {
-        coutryDropDowns[dropDown].style.cssText = 'margin-left: 0px !important;margin-right: 0px !important;font-size: larger;white-space:none !important';
+        coutryDropDowns[dropDown].style.cssText =
+        'margin-left: 0px !important;margin-right: 0px !important;font-size: larger;white-space:none !important;scrollbar-width: none;-ms-overflow-style: none;';
       }
     }
-    for (const div of Object.keys(divs)) {
-      divs[div].style.cssText = 'position:fixed';
+
+    let dropDownElement = null;
+    for (const div of Object.keys(dropDownList)) {
+      dropDownElement = dropDownList[div];
+      const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          if (mutation.attributeName === 'aria-expanded') {
+            if (dropDownList[div].getAttribute('aria-expanded') === 'true') {
+              phoneNumber.style.cssText = 'position:fixed';
+              dataContainer.style.cssText = 'overflow-y:hidden';
+            } else {
+              phoneNumber.style.cssText = 'position:unset';
+              dataContainer.style.cssText = 'overflow-y:auto';
+            }
+          }
+        });
+      });
+      observer.observe(dropDownElement, {
+        attributes: true,
+      });
+      break;
     }
   }
 
@@ -144,12 +181,6 @@ export class OtpPhoneNumberComponent implements OnInit, AfterViewInit {
 
   onPhoneNumberEnter(event) {
     this.setPhoneNumber();
-    if (this.seperateCountryCode) {
-      const error = document.getElementsByClassName('phone-num-error');
-      for (const div of Object.keys(error)) {
-        error[div].style.cssText = 'margin-top: 12px;';
-      }
-    }
     if (this.phoneNumberError && event.keyCode !== 13) {
       if (this.phoneNumber.trim() !== "") {
         this.phoneNumberError = false;
@@ -159,8 +190,12 @@ export class OtpPhoneNumberComponent implements OnInit, AfterViewInit {
 
   setPhoneNumber() {
     if (this.seperateCountryCode && this.phoneNumberObject) {
-      this.phoneNumberError = !this.phoneForm.valid;
       this.phoneNumber = this.phoneNumberObject.e164Number;
+      if (this.phoneNumber.length > 5) {
+        this.phoneNumberError = !this.phoneForm.valid;
+      }
+    } else if (this.seperateCountryCode) {
+      this.phoneNumber = '';
     }
   }
 

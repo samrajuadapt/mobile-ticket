@@ -34,10 +34,10 @@
               *ngIf="seperateCountryCode"
               [(ngModel)]="phoneNumber"/> -->
 
-              <form #f="ngForm" [formGroup]="phoneForm">
+              <form #f1="ngForm" [formGroup]="phoneForm">
                 <ngx-intl-tel-input *ngIf="seperateCountryCode"
-                  class="phone-num-input_"
-                  [preferredCountries]="preferredCountries"
+                  class="phone-num-input_" id="phoneNum"
+                  [preferredCountries]="prefferedCountryCodeList"
                   [enableAutoCountrySelect]="false" 
                   [enablePlaceholder]="true" 
                   [searchCountryFlag]="true"
@@ -56,7 +56,7 @@
             </form>
           <!-- <div class="phone-num-display"> {{phoneNumber}}
           </div> -->
-          <div class="phone-num-error" [ngStyle]="{'margin':seperateCountryCode ? '0' : '0 -15px' }" *ngIf="phoneNumberError"> {{'otp.phoneNumberError' | translate}}</div>
+          <div class="phone-num-error" [ngStyle]="{'margin': '0px -15px' }" *ngIf="phoneNumberError"> {{'otp.phoneNumberError' | translate}}</div>
         </div>
       </div>
     </div>

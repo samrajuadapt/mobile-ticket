@@ -206,12 +206,16 @@ html, body {margin: 0; height: 100%; overflow: hidden}
   height: calc(100vh - 20em) !important;
   overflow: auto;
   overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 @media only screen and (max-height: 800px) { 
   .custom-phone-card {
     height: calc(100vh - 16em) !important;
     overflow: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
 }
 

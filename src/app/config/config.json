@@ -84,7 +84,7 @@
       {
         "translation_key": "open_hours.week_day5",
         "from": "8:00",
-        "to": "23:00",
+        "to": "18:00",
         "description": "friday",
         "display_from": "8:00",
         "display_to": "18:00",
@@ -93,7 +93,7 @@
       {
         "translation_key": "open_hours.week_day6",
         "from": "8:00",
-        "to": "23:00",
+        "to": "18:00",
         "description": "saturday",
         "display_from": "8:00",
         "display_to": "18:00",
@@ -166,11 +166,11 @@
   },
   "country_code": {
     "value": "",
-    "description": "Define the country code for phone number. If value is null no country code will be added. Can be either 'ISO alpha-2 format' or 'International phone number format'. Country code will be separated if any nonnumerical code is defined."
+    "description": "Define the country code for phone number. If value is null, no country code will be added. Can be either 'ISO alpha-2 format' or 'International phone number format'. Country code will be separated if any nonnumerical code is defined."
   },
-  "preffered_country_list": {
+  "preferred_country_list": {
     "value": "",
-    "description": "Define the preffered country codes for dropdown in country code inputs. list of comma separated country codes is expected. Can be either 'ISO alpha-2 format' or 'International phone number format'."
+    "description": "Define the preferred country codes for dropdown in country code inputs. list of comma separated country codes is expected. Should be 'ISO alpha-2 format'."
   },
   "queue_poll_retry": {
     "value": "1",

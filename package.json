@@ -37,7 +37,6 @@
     "imagemin-optipng": "^8.0.0",
     "lodash-es": "^4.17.21",
     "ng2-bootstrap": "^1.1.16",
-    "ng2-tel-input": "^2.3.0",
     "ngx-bootstrap": "^6.2.0",
     "ngx-intl-tel-input": "^3.1.1",
     "nocache": "^2.1.0",
