@@ -39,11 +39,12 @@ This document describes the new features, bug corrections, known issues and reco
 
 ----------
 -->
-<h2> Version 1.13.2-Internal </h2>
 
-**Date: 2021-05-05**
+<h2> Version 1.14 internal </h2>
+
+**Date: 2021-05-07**
  
-**Build number: 3**
+**Build number: 5**
 
 <h3>Stories</h3>
 
@@ -52,16 +53,32 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-578** | **Update version value when doing an upgrade in mobile ticket** |
 | **MOB-552** | **Improving Mobile Ticket phone number with country code/flag** |
 | **MOB-576** | **Mobile ticket to arrive appointment based on external ID** |
+| **MOB-586** | **Customer entry of phone number mandatory.** |
 
 <h3>Upgrade Instructions</h3>
 
-- When upgrading from a previous version, 'preferred_country_list' parameter needs to be added to config.json.
+- When upgrading from a previous version, 'preferred_country_list' parameter needs to be added to config.json and 'customer_data' parameter description need to be updated.
 
 ```
  "preferred_country_list": {
     "value": "",
     "description": "Define the preferred country codes for dropdown in country code inputs. list of comma separated country codes is expected. Should be 'ISO alpha-2 format'."
   }
+```
+```
+  "customer_data": {
+    "value": {
+      "phone_number": {
+        "value": "disable",
+        "description": "Enable or disable customer phone number field in customer data section, 'enable => phone number feild is visible but not mandatory', 'disable => phone number feild is not visible' , 'mandatory => phone number feild is visible and mandatory'"
+      },
+      "customerId": {
+        "value": "disable",
+        "description": "Enable or disable customer id field in customer data section, 'on = enable', 'off = disable'"
+      }
+    },
+    "description": "Enable or disable customer id or phone number in customer area. If both are disabled customer data section will be hidden"
+  },
 ```
 - When upgrading from a previous version, API Gateway route needs to be added to application.yml.
 
@@ -70,7 +87,7 @@ This document describes the new features, bug corrections, known issues and reco
         path: /MobileTicket/MyAppointment/findCentral/external/*
         url: ${orchestra.central.url}/qsystem/rest/appointment/appointments/external
 ```
-----------
+---------- 
 
 <h2> Version 1.13.1 </h2>
 

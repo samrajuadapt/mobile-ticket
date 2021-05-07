@@ -134,7 +134,7 @@ export class ServicesContainerComponent implements OnInit {
                             clientId = '';
                         }
                     });
-                    if ( customerPhoneData === 'enable' || customerIdData === 'enable') {
+                    if ( (customerPhoneData === 'enable' || customerPhoneData === 'mandatory') || customerIdData === 'enable') {
                         MobileTicketAPI.setPhoneNumber('');
                         MobileTicketAPI.setCustomerId('');
                         this.router.navigate(['customer_data']);

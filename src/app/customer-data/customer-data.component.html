@@ -11,7 +11,7 @@
         <div class="customer-phone" *ngIf="isCustomerPhoneDataEnabled">
           <div *ngIf="!showLoader" class="custom-phone-card">
             <!-- INITIAL AND EDIT PHONE SECTION -->
-            <div class="phone-num-text"> {{'customer_info.phoneNumber' | translate}} </div>
+            <div class="phone-num-text"> {{'customer_info.phoneNumber' | translate}} <span *ngIf="isPhoneNumberMandatory">*</span> </div> 
             <div class="customer-phone__number-container"
               *ngIf="phoneSectionState === phoneSectionStates.INITIAL || phoneSectionState === phoneSectionStates.EDIT_PHONE ">
               <div class="phone-num">
@@ -270,7 +270,7 @@
             </div>
             <!-- (click)="seperateCountryCode? submitByBtn($event):CustomerInfoContinue()" -->
             <div
-              *ngIf="phoneSectionState === phoneSectionStates.INITIAL || phoneSectionState === phoneSectionStates.PRIVACY_POLICY"
+              *ngIf="(phoneSectionState === phoneSectionStates.INITIAL || phoneSectionState === phoneSectionStates.PRIVACY_POLICY) && isSkipVisible"
               class="send_button secondary-btn custom btn-text-color" (click)='skipAndcreateVisit()'>
               {{ 'customer_info.skipAndGetInLine' | translate }}
             </div>

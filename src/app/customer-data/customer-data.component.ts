@@ -63,6 +63,8 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
     phone: new FormControl(undefined, [Validators.required])
   });
   private errorDiv;
+  public isSkipVisible: boolean = true;
+  public isPhoneNumberMandatory: boolean;
 
   constructor(
     private translate: TranslateService,
@@ -111,8 +113,9 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
     this.customerId = MobileTicketAPI.getEnteredCustomerId() ? MobileTicketAPI.getEnteredCustomerId() : '';
     MobileTicketAPI.setPhoneNumber('');
     MobileTicketAPI.setCustomerId('');
-    this.isCustomerPhoneDataEnabled = this.config.getConfig('customer_data').phone_number.value === 'enable' ? true : false;
-    this.isCustomerIdEnabled =  this.config.getConfig('customer_data').customerId.value === 'enable' ? true : false;
+    this.isCustomerPhoneDataEnabled = (this.config.getConfig('customer_data').phone_number.value === 'enable' || this.config.getConfig('customer_data').phone_number.value === 'mandatory' )? true : false;   
+    this.isCustomerIdEnabled =  this.config.getConfig('customer_data').customerId.value === 'enable' ? true : false;  
+    this.isPhoneNumberMandatory =  this.config.getConfig('customer_data').phone_number.value === 'mandatory' ? true : false; 
     if (this.phoneNumber && (this.phoneNumber !== this.countryCode) && this.activeConsentEnable === 'enable') {
       this.phoneSectionState = phoneSectionStates.PRIVACY_POLICY;
     }
@@ -177,15 +180,24 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
       break;
     }
 
+    if (this.isCustomerPhoneDataEnabled && this.isPhoneNumberMandatory) {
+      this.isSkipVisible = false
+    } else {
+      this.isSkipVisible = true;
+    }
   }
 
 
   // Press continue button for phone number
   CustomerInfoContinue() {
+    if (this.isCustomerPhoneDataEnabled && this.isPhoneNumberMandatory && this.phoneNumber === '') {
+      this.translate.get('customer_info.phoneNumberIsMandatory').subscribe((res: string) => {
+        this.alertDialogService.activate(res);
+      });
+    }
     // If customer phone data enabled
-    if (this.isCustomerPhoneDataEnabled) {
+    else if (this.isCustomerPhoneDataEnabled) {
       this.setPhoneNumber();
-
       // is phone matches
       if (this.phoneNumber.match(/^\(?\+?\d?[-\s()0-9]{6,}$/) && this.phoneNumber !== this.countryCode && !this.phoneNumberError) {
         let isPrivacyAgreed = localStorage.getItem('privacy_agreed');
