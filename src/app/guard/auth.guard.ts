@@ -185,6 +185,7 @@ export class AuthGuard implements CanActivate {
         let visitId = route.queryParams['visit'];
         let checksum = route.queryParams['checksum'];
         let appointmentId = route.queryParams['appId'];
+        let appointmentExtId = route.queryParams['external'];
         if (url.startsWith('/branches/') || url.endsWith('/branches') || url.endsWith('/branches;redirect=true')) {
             /**
              * for qr-code format: System.import://XXXX/branches/{branchId}
@@ -448,33 +449,58 @@ export class AuthGuard implements CanActivate {
 
             } else {
                 this.aEntity = new AppointmentEntity();
-                MobileTicketAPI.findAppointment(appointmentId, (response) => {
-                    this.aEntity.publicId = appointmentId;
-                    this.aEntity.branchName = response.branch.name;
-                    this.aEntity.qpId = response.qpId;
-                    MobileTicketAPI.findCentralAppointment(response.qpId,
-                        (response2) => {
-                            this.aEntity.serviceId = response2.services[0].id;
-                            this.aEntity.serviceName = response2.services[0].name;
-                            this.aEntity.branchId = response2.branchId;
-                            this.aEntity.status = response2.status;
-                            this.aEntity.startTime = response2.startTime;
-                            this.aEntity.endTime = response2.endTime;
-                            this.aEntity.notes = response2.properties.notes;
+
+                if (appointmentExtId) {
+                    MobileTicketAPI.findAppointmentByExtId(appointmentExtId, (response1) => {
+                        if(response1 === 'No content') {
+                            this.aEntity.status = 'NOTFOUND';
                             MobileTicketAPI.setAppointment(this.aEntity);
                             resolve(true);
-                        },
+                        } else {
+                            this.aEntity.publicId = response1.properties.publicId;
+                            this.aEntity.qpId = response1.id;
+                            getAppointment(response1.id, this.aEntity);
+                        }     
+                    },
                         (xhr, status, errorMessage) => {
                             this.aEntity.status = 'NOTFOUND';
                             MobileTicketAPI.setAppointment(this.aEntity);
                             resolve(true);
                         });
-                },
-                    (xhr, status, errorMessage) => {
-                        this.aEntity.status = 'NOTFOUND';
-                        MobileTicketAPI.setAppointment(this.aEntity);
-                        resolve(true);
-                    });
+
+                } else {
+                    MobileTicketAPI.findAppointment(appointmentId, (response) => {
+                        this.aEntity.publicId = appointmentId;
+                        this.aEntity.branchName = response.branch.name;
+                        this.aEntity.qpId = response.qpId;
+                        getAppointment(response.qpId, this.aEntity);
+                    },
+                        (xhr, status, errorMessage) => {
+                            this.aEntity.status = 'NOTFOUND';
+                            MobileTicketAPI.setAppointment(this.aEntity);
+                            resolve(true);
+                        });
+                }
+
+                const getAppointment = (id: string, entity: any) => {
+                    MobileTicketAPI.findCentralAppointment(id,
+                            (response2) => {
+                                entity.serviceId = response2.services[0].id;
+                                entity.serviceName = response2.services[0].name;
+                                entity.branchId = response2.branchId;
+                                entity.status = response2.status;
+                                entity.startTime = response2.startTime;
+                                entity.endTime = response2.endTime;
+                                entity.notes = response2.properties.notes;
+                                MobileTicketAPI.setAppointment(entity);
+                                resolve(true);
+                            },
+                            (xhr, status, errorMessage) => {
+                                entity.status = 'NOTFOUND';
+                                MobileTicketAPI.setAppointment(entity);
+                                resolve(true);
+                            });
+                }
             }
 
         } else if (url.startsWith('/ticket') && (branchId && visitId && checksum)) { // if ticket is from view ticket url

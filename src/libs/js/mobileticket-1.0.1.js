@@ -2586,6 +2586,7 @@ var MobileTicketAPI = (function () {
   var PARAMS = 'params';
   var MYVISIT = "MyVisit";
   var MYAPPOINTMENT = "MyAppointment";
+  var EXTERNAL = "external/";
   var MY_CENTRAL_APPOINTMENT = "MyCentralAppointment";
   var ENTRYPOINT = "entrypoint";
   var FIND = "find";
@@ -3327,6 +3328,29 @@ var MobileTicketAPI = (function () {
           success: function (data) {            
             if (data != undefined) {              
               onSuccess(data.appointment);
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            onError(xhr, status, errorMsg);
+          }
+        });
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
+    findAppointmentByExtId: function(appointmentExtId, onSuccess, onError) {
+      try {
+        var a = 'external/' + appointmentExtId;
+        var CENTR_REST_API = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/findCentral/" + EXTERNAL + appointmentExtId;
+         $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: CENTR_REST_API,
+          success: function (data) {     
+            if (data != undefined) {          
+              onSuccess(data);
+            } else {
+              onSuccess('No content');
             }
           },
           error: function (xhr, status, errorMsg) {

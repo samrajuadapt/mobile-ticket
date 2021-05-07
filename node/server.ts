@@ -310,6 +310,44 @@ const apiFindProxy = proxy(host, {	// ip and port off apigateway
 		return JSON.stringify(newData);
 	}
 });
+const apiFindExtProxy = proxy(host, {	// ip and port off apigateway
+	proxyReqPathResolver: (req) => {
+		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/findCentral/external/","/rest/appointment/appointments/external/");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL,
+	userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+		if (proxyResData.toString('utf8')==='') {
+            return '';
+        }
+
+		const data = JSON.parse(proxyResData.toString('utf8'));
+		const newData:any = {};
+		newData.properties = {};
+		
+		if (data !== undefined) {
+			newData.id = data.id;
+			newData.properties.publicId = data.properties.publicId;
+		}
+		return JSON.stringify(newData);
+	}
+});
 
 const apiFindCentralProxy = proxy(host, {	// ip and port off apigateway
 	proxyReqPathResolver: (req) => {
@@ -528,6 +566,7 @@ const handleHeaders = (res) => {
 app.use("/geo/branches/*", apiProxy);
 app.use("/MobileTicket/branches/*", apiProxy);
 app.use("/MobileTicket/MyAppointment/find/*", apiFindProxy);
+app.use("/MobileTicket/MyAppointment/findCentral/external/*", apiFindExtProxy);
 app.use("/MobileTicket/MyAppointment/findCentral/*", apiFindCentralProxy);
 app.use("/MobileTicket/MyAppointment/entrypoint/branches/*/entryPoints/deviceTypes/SW_VISITAPP", apiEntryPointProxy);
 app.use("/MobileTicket/MyAppointment/arrive/branches/*/entryPoints/*/visits", apiArriveProxy);

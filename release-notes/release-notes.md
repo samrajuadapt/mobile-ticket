@@ -43,7 +43,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2021-05-05**
  
-**Build number: 2**
+**Build number: 3**
 
 <h3>Stories</h3>
 
@@ -51,6 +51,7 @@ This document describes the new features, bug corrections, known issues and reco
 | --- | --- |
 | **MOB-578** | **Update version value when doing an upgrade in mobile ticket** |
 | **MOB-552** | **Improving Mobile Ticket phone number with country code/flag** |
+| **MOB-576** | **Mobile ticket to arrive appointment based on external ID** |
 
 <h3>Upgrade Instructions</h3>
 
@@ -61,6 +62,13 @@ This document describes the new features, bug corrections, known issues and reco
     "value": "",
     "description": "Define the preferred country codes for dropdown in country code inputs. list of comma separated country codes is expected. Should be 'ISO alpha-2 format'."
   }
+```
+- When upgrading from a previous version, API Gateway route needs to be added to application.yml.
+
+```
+ central_appointment_ext_id:        
+        path: /MobileTicket/MyAppointment/findCentral/external/*
+        url: ${orchestra.central.url}/qsystem/rest/appointment/appointments/external
 ```
 ----------
 
