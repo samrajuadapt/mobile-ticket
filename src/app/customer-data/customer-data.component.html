@@ -62,6 +62,8 @@
                   </div>
                   <div class="phone-num-error" [ngStyle]="{'margin':seperateCountryCode ? '0' : '0 -15px' }"
                     *ngIf="phoneNumberError"> {{'customer_info.phoneNumberError' | translate}}</div>
+                    <div class="phone-num-error" [ngStyle]="{'margin':seperateCountryCode ? '0' : '0 -15px' }"
+                    *ngIf="PhoneNumberMandatoryError"> {{'customer_info.phoneNumberIsMandatory' | translate}}</div>
                 </div>
                 <div class="phone-container-icon">
                   <!-- EDIT ICON -->

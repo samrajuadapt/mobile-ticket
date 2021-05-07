@@ -70,7 +70,7 @@ This document describes the new features, bug corrections, known issues and reco
     "value": {
       "phone_number": {
         "value": "disable",
-        "description": "Enable or disable customer phone number field in customer data section, 'enable => phone number feild is visible but not mandatory', 'disable => phone number feild is not visible' , 'mandatory => phone number feild is visible and mandatory'"
+        "description": "Enable or disable customer phone number field in customer data section, 'enable => phone number field is visible but not mandatory', 'disable => phone number field is not visible' , 'mandatory => phone number field is visible and mandatory'"
       },
       "customerId": {
         "value": "disable",

@@ -37,6 +37,7 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
   public phoneNumberObject: any;
   public customerId: string;
   public phoneNumberError: boolean;
+  public PhoneNumberMandatoryError: boolean;
   public customerIdError: boolean;
   public customerIdMaxError: boolean;
   public phoneSectionState: phoneSectionStates;
@@ -104,6 +105,7 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
     }
 
     this.phoneNumberError = false;
+    this.PhoneNumberMandatoryError = false;
     this.customerIdError = false;
     this.customerIdMaxError = false;
     this.phoneSectionState = phoneSectionStates.INITIAL;
@@ -121,6 +123,12 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
     }
     if (document.dir === 'rtl') {
       this.documentDir = 'rtl';
+    }
+    
+    if (this.isCustomerPhoneDataEnabled && this.isPhoneNumberMandatory) {
+      this.isSkipVisible = false
+    } else {
+      this.isSkipVisible = true;
     }
   }
   ngAfterViewInit() {
@@ -180,23 +188,17 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
       break;
     }
 
-    if (this.isCustomerPhoneDataEnabled && this.isPhoneNumberMandatory) {
-      this.isSkipVisible = false
-    } else {
-      this.isSkipVisible = true;
-    }
   }
 
 
   // Press continue button for phone number
   CustomerInfoContinue() {
     if (this.isCustomerPhoneDataEnabled && this.isPhoneNumberMandatory && this.phoneNumber === '') {
-      this.translate.get('customer_info.phoneNumberIsMandatory').subscribe((res: string) => {
-        this.alertDialogService.activate(res);
-      });
+        this.PhoneNumberMandatoryError = true;
     }
     // If customer phone data enabled
     else if (this.isCustomerPhoneDataEnabled) {
+      this.PhoneNumberMandatoryError = false;
       this.setPhoneNumber();
       // is phone matches
       if (this.phoneNumber.match(/^\(?\+?\d?[-\s()0-9]{6,}$/) && this.phoneNumber !== this.countryCode && !this.phoneNumberError) {
@@ -247,6 +249,7 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
   onPhoneNumberChanged() {
     this.phoneNumberError = false;
     this.customerIdError = false;
+    this.PhoneNumberMandatoryError = false;
     // this.changeCountry = false;
     // this.submitClicked = false;
   }
@@ -270,6 +273,7 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
       if (this.phoneNumber.trim() !== '') {
         this.customerIdError = false;
         this.phoneNumberError = false;
+        this.PhoneNumberMandatoryError = false;
         this.customerIdMaxError = false;
       }
     }
