@@ -2768,6 +2768,7 @@ var MobileTicketAPI = (function () {
     visitStatus.queueId = data.queueId;
 
     visitStatus.servicePointName = data.servicePointName;
+    visitStatus.appointmentTime = data.appointmentTime;
     MobileTicketAPI.currentVisitStatus = visitStatus;
     return visitStatus;
   }

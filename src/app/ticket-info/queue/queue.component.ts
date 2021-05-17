@@ -48,6 +48,10 @@ export class QueueComponent implements OnInit, OnDestroy {
   private queueIdPrev: number = -1;
   private visitState: VisitState;
   public prevVisitState: string;
+  public showQueue: boolean;
+  public showAppTime: boolean;
+  public queueIsLoaded: boolean = true;
+  public appointmentTime: string;
 
   @Output() onUrlAccessedTicket: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() onTciketNmbrChange = new EventEmitter();
@@ -71,6 +75,18 @@ export class QueueComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.setRtlStyles();
+    if (this.config.getConfig('show_queue_position').trim() === 'enable') {
+      this.showQueue = true;
+    } else {
+      this.showQueue = false;
+    }
+    if (this.config.getConfig('show_appointment_time').trim() === 'enable') {
+      this.showAppTime = true;
+    } else {
+      this.showAppTime = false;
+    }
+
+    
     // subscribe to router event branchId=1&visitId=1&checksum=423434;
     this.routerSubscription = this.activatedRoute.queryParams.subscribe(
       (queryParams: any) => {
@@ -227,6 +243,11 @@ export class QueueComponent implements OnInit, OnDestroy {
 
   private onQueuePollSuccess(queueInfo: QueueEntity, ticketService: TicketInfoService): void {
     this.showHideNetworkError(false);
+    if (this.queueIsLoaded && MobileTicketAPI.getCurrentVisitStatus() && MobileTicketAPI.getCurrentVisitStatus().appointmentTime) {
+      let appStart = new Date(MobileTicketAPI.getCurrentVisitStatus().appointmentTime.replace('T', ' ').replace(/-/g, '/'));
+      this.appointmentTime = this.formatTime(appStart);
+      this.queueIsLoaded = false;
+    }
     this.prevWaitingVisits = this.waitingVisits;
     this.prevVisitPosition = this.visitPosition;
     this.visitPosition = queueInfo.visitPosition;
@@ -247,6 +268,71 @@ export class QueueComponent implements OnInit, OnDestroy {
         this.prevVisitPosition, this.prevUpperBound, this.prevLowerBound);
       this.updatePollTimer(this.visitPosition, ticketService);
     }
+  }
+
+  private formatTime(time) {
+
+
+    let formatted = '';
+    let format = this.config.getConfig('timeFormat');
+
+    let min = time.getMinutes() < 10 ? '0' + time.getMinutes() : time.getMinutes();
+    let hours = '';
+
+    if (format === 'HH:mm') {
+      hours = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
+      formatted = hours + ':' + min;
+    }
+
+    else if (format === 'hh:mm a') {
+      if (time.getHours() > 12) {
+        hours = (time.getHours() - 12) < 10 ? '0' + (time.getHours() - 12) : (time.getHours() - 12).toString();
+        formatted = hours + ':' + min;
+      }
+      else {
+        hours = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
+        formatted = hours + ':' + min;
+      }
+      if (time.getHours() > 11) {
+        formatted += ' pm';
+      } else {
+        formatted += ' am';
+      }
+    }
+    else if (format === 'hh:mm') {
+      if (time.getHours() > 12) {
+        hours = (time.getHours() - 12) < 10 ? '0' + (time.getHours() - 12) : (time.getHours() - 12).toString();
+      }
+      else {
+        hours = time.getHours() < 10 ? '0' + time.getHours() : time.getHours();
+      }
+      formatted = hours + ':' + min;
+    }
+    else if (format === 'h:mm') {
+      if (time.getHours() > 12) {
+        hours = '' + (time.getHours() - 12);
+      }
+      else {
+        hours = time.getHours();
+      }
+      formatted = hours + ':' + min;
+    }
+    else if (format === 'h:mm a') {
+      if (time.getHours() > 12) {
+        hours = '' + (time.getHours() - 12);
+        formatted = hours + ':' + min;
+      }
+      else {
+        hours = time.getHours();
+        formatted = hours + ':' + min;
+      }
+      if (time.getHours() > 11) {
+        formatted += ' pm';
+      } else {
+        formatted += ' am';
+      }
+    }
+    return formatted;
   }
 
   public updatePollTimer(visitPosition: number, ticketService: TicketInfoService) {
@@ -278,6 +364,10 @@ export class QueueComponent implements OnInit, OnDestroy {
   public doSubscribeForPolling() {
     if (this.subscription.closed === true) {
       this.subscription = this.timer.subscribe(visitPosition => this.queuePoll(visitPosition, this.ticketService, false));
+      // console.log(MobileTicketAPI.getCurrentVisitStatus());
+      if (!MobileTicketAPI.getCurrentVisitStatus()) {
+        console.log(MobileTicketAPI.getCurrentVisitStatus());
+      }
     }
   }
 

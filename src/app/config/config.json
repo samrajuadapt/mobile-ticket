@@ -115,6 +115,14 @@
     "value": "enable",
     "description": "Enable or disable access to create visits using the Mobile Ticket UI, 'on=enable', 'off=disable'"
   },
+  "show_queue_position": {
+    "value": "disable",
+    "description": "show queue and queue position in the ticket"
+  },
+  "show_appointment_time": {
+    "value": "enable",
+    "description": "show appointment time in the ticket"
+  },
   "show_number_of_waiting_customers": {
     "value": "enable",
     "description": " If this setting is enabled the number of waiting customers will appear in the service list, if disabled only service names are listed."

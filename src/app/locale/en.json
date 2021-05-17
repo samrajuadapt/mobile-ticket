@@ -38,7 +38,8 @@
     "visitAppRemoved": "No Entry Point of type SW_VISITAPP on branch, cannot create or delete visit",
     "btnOpenMeeting" : "Enter meeting",
     "loading" : "Your ticket is being loaded, this might take a moment",
-    "unauthorized" : "You are not authorized to open the ticket"
+    "unauthorized" : "You are not authorized to open the ticket",
+    "appointmentTime" : "Appointment time"
   },
   "visit": {
     "notFound": "Sorry something went wrong,",
