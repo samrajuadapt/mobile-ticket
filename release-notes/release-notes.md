@@ -55,6 +55,12 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-576** | **Mobile ticket to arrive appointment based on external ID** |
 | **MOB-586** | **Customer entry of phone number mandatory.** |
 
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-607** | **User navigate back to customer data page from privacy policy active consent page, if cookie concent popup open for the second time** |
+
 <h3>Upgrade Instructions</h3>
 
 - When upgrading from a previous version, 'preferred_country_list' parameter needs to be added to config.json and 'customer_data' parameter description need to be updated.

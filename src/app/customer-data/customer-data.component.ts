@@ -64,7 +64,7 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
     phone: new FormControl(undefined, [Validators.required])
   });
   private errorDiv;
-  public isSkipVisible: boolean = true;
+  public isSkipVisible = true;
   public isPhoneNumberMandatory: boolean;
 
   constructor(
@@ -113,18 +113,22 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
     this.activeConsentEnable = this.config.getConfig('active_consent');
     this.phoneNumber = MobileTicketAPI.getEnteredPhoneNum();
     this.customerId = MobileTicketAPI.getEnteredCustomerId() ? MobileTicketAPI.getEnteredCustomerId() : '';
-    MobileTicketAPI.setPhoneNumber('');
+
+
+    // commented due to MOB-607
+   // MobileTicketAPI.setPhoneNumber('');
     MobileTicketAPI.setCustomerId('');
-    this.isCustomerPhoneDataEnabled = (this.config.getConfig('customer_data').phone_number.value === 'enable' || this.config.getConfig('customer_data').phone_number.value === 'mandatory' )? true : false;   
-    this.isCustomerIdEnabled =  this.config.getConfig('customer_data').customerId.value === 'enable' ? true : false;  
-    this.isPhoneNumberMandatory =  this.config.getConfig('customer_data').phone_number.value === 'mandatory' ? true : false; 
+    this.isCustomerPhoneDataEnabled = (this.config.getConfig('customer_data').phone_number.value === 'enable' || this.config.getConfig('customer_data').phone_number.value === 'mandatory' ) ? true : false;
+    this.isCustomerIdEnabled =  this.config.getConfig('customer_data').customerId.value === 'enable' ? true : false;
+    this.isPhoneNumberMandatory =  this.config.getConfig('customer_data').phone_number.value === 'mandatory' ? true : false;
+
     if (this.phoneNumber && (this.phoneNumber !== this.countryCode) && this.activeConsentEnable === 'enable') {
       this.phoneSectionState = phoneSectionStates.PRIVACY_POLICY;
     }
     if (document.dir === 'rtl') {
       this.documentDir = 'rtl';
     }
-    
+
     if (this.isCustomerPhoneDataEnabled && this.isPhoneNumberMandatory) {
       this.isSkipVisible = false
     } else {
@@ -195,9 +199,7 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
   CustomerInfoContinue() {
     if (this.isCustomerPhoneDataEnabled && this.isPhoneNumberMandatory && this.phoneNumber === '') {
         this.PhoneNumberMandatoryError = true;
-    }
-    // If customer phone data enabled
-    else if (this.isCustomerPhoneDataEnabled) {
+    } else if (this.isCustomerPhoneDataEnabled) {
       this.PhoneNumberMandatoryError = false;
       this.setPhoneNumber();
       // is phone matches
@@ -320,13 +322,13 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
     if (!this.isTakeTicketClickedOnce) {
       this.isTakeTicketClickedOnce = true;
       let visitInfo = MobileTicketAPI.getCurrentVisit();
-      if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== "DELETE") {
+      if (visitInfo && visitInfo !== null && visitInfo.visitStatus !== 'DELETE') {
         this.router.navigate(['ticket']);
       } else {
         let isDeviceBounded = this.config.getConfig('block_other_browsers');
         if (isDeviceBounded === 'enable') {
           import('fingerprintjs2').then(Fingerprint2 => {
-            var that = this;
+            let that = this;
             Fingerprint2.getPromise({
               excludes: {
                 availableScreenResolution: true,
@@ -334,8 +336,8 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
                 enumerateDevices: true
               }
             }).then(function (components) {
-              var values = components.map(function (component) { return component.value });
-              var murmur = Fingerprint2.x64hash128(values.join(''), 31);
+              let values = components.map(function (component) { return component.value });
+              let murmur = Fingerprint2.x64hash128(values.join(''), 31);
               MobileTicketAPI.setFingerprint(murmur);
               that.createTicket();
             })
@@ -466,7 +468,7 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
 
   // submitByKey(e){
   //   if(e.code === 'Enter'){
-  //     this.submitClicked = true; 
+  //     this.submitClicked = true;
   //   }
   // }
 
