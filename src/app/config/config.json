@@ -116,11 +116,11 @@
     "description": "Enable or disable access to create visits using the Mobile Ticket UI, 'on=enable', 'off=disable'"
   },
   "show_queue_position": {
-    "value": "disable",
+    "value": "enable",
     "description": "show queue and queue position in the ticket"
   },
   "show_appointment_time": {
-    "value": "enable",
+    "value": "disable",
     "description": "show appointment time in the ticket"
   },
   "show_number_of_waiting_customers": {

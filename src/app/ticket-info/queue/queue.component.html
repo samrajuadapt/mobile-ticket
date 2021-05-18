@@ -1,9 +1,9 @@
 <div class="text-center queue-container" *ngIf="!isTicketEndedOrDeleted">
-  <div *ngIf="showAppTime && appointmentTime" style="color: aliceblue;line-height: 34px;display: grid;margin: 4px 0 10px 0px;">
-    <span style="font-size: 21px;font-family: 'Roboto-Regular';">{{ 'ticketInfo.appointmentTime' | translate }}</span>
-    <span style="font-size: 39px;font-family: 'Roboto-Bold';">{{appointmentTime}} </span> 
+  <div *ngIf="showAppTime && appointmentTime" class="queue-app">
+    <span class="queue-app-heading">{{ 'ticketInfo.appointmentTime' | translate }}</span>
+    <span class="queue-app-time">{{appointmentTime}} </span> 
   </div>
-  <div *ngIf="showQueue && !showAppTime">
+  <div *ngIf="showQueue && queueItems && !(appointmentTime && showAppTime)">
     <div [ngClass]="{'queue-heading-alignment-rtl' : isRtl, 'queue-heading-alignment' : true, 'queue-heading' : true, 'custom' : true, 'text-color' : true}">
       {{ 'ticketInfo.queueHeading' | translate }}
     </div>

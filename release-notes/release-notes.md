@@ -54,6 +54,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-552** | **Improving Mobile Ticket phone number with country code/flag** |
 | **MOB-576** | **Mobile ticket to arrive appointment based on external ID** |
 | **MOB-586** | **Customer entry of phone number mandatory.** |
+| **MOB-583** | **Ability to turn off place in line / queue.** |
 
 <h3>Bug fixes</h3>
 
@@ -64,14 +65,31 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h3>Upgrade Instructions</h3>
 
-- When upgrading from a previous version, 'preferred_country_list' parameter needs to be added to config.json and 'customer_data' parameter description need to be updated.
+- When upgrading from a previous version, following should be considered.
 
+1. 'preferred_country_list' parameter needs to be added to config.json
 ```
  "preferred_country_list": {
     "value": "",
     "description": "Define the preferred country codes for dropdown in country code inputs. list of comma separated country codes is expected. Should be 'ISO alpha-2 format'."
   }
 ```
+2. 'show_appointment_time' parameter needs to be added to config.json
+```
+ "show_appointment_time": {
+    "value": "disable",
+    "description": "show appointment time in the ticket"
+  }
+```
+3. 'show_queue_position' parameter needs to be added to config.json
+```
+ "show_queue_position": {
+    "value": "enable",
+    "description": "show queue and queue position in the ticket"
+  }
+
+```
+4.  'customer_data' parameter description needs to be updated
 ```
   "customer_data": {
     "value": {
@@ -87,7 +105,7 @@ This document describes the new features, bug corrections, known issues and reco
     "description": "Enable or disable customer id or phone number in customer area. If both are disabled customer data section will be hidden"
   },
 ```
-- When upgrading from a previous version, API Gateway route needs to be added to application.yml.
+5. When upgrading from a previous version, API Gateway route needs to be added to application.yml.
 
 ```
  central_appointment_ext_id:        
