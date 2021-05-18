@@ -103,8 +103,9 @@ export class OtpPhoneNumberComponent implements OnInit, AfterViewInit {
       this.selectedCountryISO = this.phoneNumberObject.countryCode;
     }
 
-    MobileTicketAPI.setOtpPhoneNumber('');
-    if (this.seperateCountryCode) { MobileTicketAPI.setOtpPhoneNumberObj({}) }
+    // commented due to MOB-616
+    // MobileTicketAPI.setOtpPhoneNumber('');
+    // if (this.seperateCountryCode) { MobileTicketAPI.setOtpPhoneNumberObj({}) }
     this.phoneNumberError = false;
   }
 
@@ -186,6 +187,10 @@ export class OtpPhoneNumberComponent implements OnInit, AfterViewInit {
         this.phoneNumberError = false;
       }
     }
+    MobileTicketAPI.setOtpPhoneNumber(this.phoneNumber);
+    if (this.seperateCountryCode) {
+       MobileTicketAPI.setOtpPhoneNumberObj(this.phoneNumberObject)
+      }
   }
 
   setPhoneNumber() {
@@ -202,6 +207,10 @@ export class OtpPhoneNumberComponent implements OnInit, AfterViewInit {
   onPhoneNumberChanged() {
     this.phoneNumberError = false;
     this.submitClicked = false;
+    MobileTicketAPI.setOtpPhoneNumber(this.phoneNumber);
+    if (this.seperateCountryCode) {
+       MobileTicketAPI.setOtpPhoneNumberObj(this.phoneNumberObject)
+      }
   }
 
   phoneNumContinue() {

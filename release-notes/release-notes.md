@@ -42,9 +42,9 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h2> Version 1.14 internal </h2>
 
-**Date: 2021-05-07**
+**Date: 2021-05-18**
  
-**Build number: 5**
+**Build number: 6**
 
 <h3>Stories</h3>
 
@@ -60,6 +60,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-607** | **User navigate back to customer data page from privacy policy active consent page, if cookie concent popup open for the second time** |
+| **MOB-616** | **Prefilled mobile no in OTP screen get cleared if user open & close cookie consent popup** |
 
 <h3>Upgrade Instructions</h3>
 
