@@ -95,7 +95,9 @@ export class OtpPhoneNumberComponent implements OnInit, AfterViewInit {
     }
 
     if (this.seperateCountryCode) {
-      this.phoneNumberObject = MobileTicketAPI.getEnteredOtpPhoneNumObj()
+      // added a sepcial check to verify whether empty object or null
+      this.phoneNumberObject = MobileTicketAPI.getEnteredOtpPhoneNumObj() &&
+       Object.keys(MobileTicketAPI.getEnteredOtpPhoneNumObj()).length !== 0
       ? MobileTicketAPI.getEnteredOtpPhoneNumObj()
       : MobileTicketAPI.getEnteredPhoneNumObj();
     }
