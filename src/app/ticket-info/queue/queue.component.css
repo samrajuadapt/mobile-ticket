@@ -53,14 +53,17 @@
   line-height: 34px;
   display: grid;
   margin: 4px 0 10px 0px;
+  font-family: 'Roboto-Regular';
 }
 .queue-app-heading {
   font-size: 21px;
-  font-family: 'Roboto-Regular';
+  line-height: 24px;
+  margin-bottom: 6px;
+  margin-top: 2px;
 }
 .queue-app-time {
   font-size: 39px;
-  font-family: 'Roboto-Bold';
+  font-weight: 700 !important;
 }
 
 /* Small phones */
