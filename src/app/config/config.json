@@ -117,11 +117,11 @@
   },
   "show_queue_position": {
     "value": "enable",
-    "description": "show queue and queue position in the ticket"
+    "description": "show or hide queue and queue position in the ticket"
   },
   "show_appointment_time": {
     "value": "disable",
-    "description": "show appointment time in the ticket"
+    "description": "show or hide appointment time in the appointment ticket. If both show_queue_position and show_appointment_time are enabled, only appointment time will be shown"
   },
   "show_number_of_waiting_customers": {
     "value": "enable",

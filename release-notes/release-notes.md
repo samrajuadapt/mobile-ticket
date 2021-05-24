@@ -40,9 +40,9 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
-<h2> Version 1.14.0-internal </h2>
+<h2> Version 1.14.0</h2>
 
-**Date: 2021-05-18**
+**Date: 2021-05-24**
  
 **Build number: 6**
 
