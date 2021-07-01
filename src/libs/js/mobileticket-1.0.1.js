@@ -3243,7 +3243,7 @@ var MobileTicketAPI = (function () {
         var checksum = getCurrentVisit().checksum;
         var branchIdVal = getCurrentVisit().branchId;
 
-        var VISIT_STATUS_REST = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/" + ENTRYPOINT + "/" + BRANCHES + "/" + branchIdVal + "/" + VISITS + "/" + visitIdVal + "?checksum=" + checksum;
+        var VISIT_STATUS_REST = MOBILE_TICKET + "/" + MYVISIT + "/" + ENTRYPOINT + "/" + BRANCHES + "/" + branchIdVal + "/" + VISITS + "/" + visitIdVal + "?checksum=" + checksum;
         $.ajax({
           type: "GET",
           dataType: "json",
