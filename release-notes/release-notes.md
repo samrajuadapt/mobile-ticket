@@ -40,6 +40,39 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
+<h2> Version 1.15.0 - Internal</h2>
+
+**Date: 2021-07-08**
+ 
+**Build number: 1**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-634** | **"Powered by Qmatic" in Mobile Ticket** |
+
+<h3>Upgrade Instructions</h3>
+
+- When upgrading from a previous version, following should be considered.
+
+1. 'footer' parameter needs to be added to config.json
+```
+ "footer": {
+    "value": {
+      "logo": {
+        "value": "disable",
+        "description": "show or hide the brand logo on the footer, enable = show, disable = hide"
+      },
+      "custom_text": {
+        "value": "",
+        "description": "show customize text on the footer, an empty value will hide the footer"
+      }
+    },
+    "description": "Show or hide footer of the mobile ticket"
+  }
+```
+---------- 
 <h2> Version 1.14.0</h2>
 
 **Date: 2021-05-24**

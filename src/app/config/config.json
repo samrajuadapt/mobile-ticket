@@ -195,5 +195,18 @@
   "create_ticket_token": {
     "value": "disable",
     "description": "Enable or disable unique token for a ticket"
+  },
+  "footer": {
+    "value": {
+      "logo": {
+        "value": "disable",
+        "description": "show or hide the brand logo on the footer, enable = show, disable = hide"
+      },
+      "custom_text": {
+        "value": "",
+        "description": "show customize text on the footer, an empty value will hide the footer"
+      }
+    },
+    "description": "Show or hide footer of the mobile ticket"
   }
 }

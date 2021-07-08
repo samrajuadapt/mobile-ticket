@@ -161,5 +161,8 @@
     "havePIN": "You already have a PIN",
     "tryAgain": "Please try again",
     "requireTID": "Tenant ID is required"
+  },
+  "footer" : {
+    "text": "Powered by"
   }
 }

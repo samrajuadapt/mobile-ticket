@@ -30,6 +30,16 @@
   content: url('../../app/resources/qmLogo.png') !important;
 }
 
+/* Edit to change color of footer */
+.custom.footer-bg-color {
+  background: #1a1c34 !important
+}
+
+/* Edit to change footer logo */
+.custom.footer-logo {
+  content: url('../../app/resources/brand_logo.png') !important;
+}
+
 /* Edit to change logo background */
 .custom.logo-bg-color {
   background: transparent !important;
