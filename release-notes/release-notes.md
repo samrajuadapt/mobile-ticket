@@ -44,13 +44,14 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2021-07-08**
  
-**Build number: 1**
+**Build number: 2**
 
 <h3>Stories</h3>
 
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-634** | **"Powered by Qmatic" in Mobile Ticket** |
+| **MOB-649** | **Text above ticket is not shown if the visit is called by a hardware device** |
 
 <h3>Upgrade Instructions</h3>
 

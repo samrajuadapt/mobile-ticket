@@ -42,6 +42,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   private tmpVisitId: number;
   public title1: string;
   public title2: string;
+  public title3: string;
   public isMeetingAvailable: boolean;
   private eventSub: Subscription;
   public redirectUrlLoading: boolean;
@@ -105,6 +106,9 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       this.translate.get('ticketInfo.ticketReady').subscribe((res: string) => {
         this.title2 = res;
       });
+    });
+    this.translate.get('ticketInfo.ticketReadyWithNoName').subscribe((res: string) => {
+      this.title3 = res;
     });
   }
 
@@ -298,11 +302,15 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateVisitCallMsg(firstName: string, servicePointName: string, lastName: string, ) {
-    if (firstName !== null && firstName !== '' && servicePointName !== '') {
+  updateVisitCallMsg(firstName: string, servicePointName: string, lastName: string) {
+    if (servicePointName !== '') {
       this.visitCallMsgOne = this.title1;
-      this.visitCallMsg = this.title2.replace('{firstName}', firstName );
-	  this.visitCallMsg = this.visitCallMsg.replace('{lastName}', lastName );
+      if(firstName !== null && firstName !== '') {
+        this.visitCallMsg = this.title2.replace('{firstName}', firstName );
+        this.visitCallMsg = this.visitCallMsg.replace('{lastName}', lastName );
+      } else {
+        this.visitCallMsg = this.title3;
+      }
       this.visitCallMsgThree = servicePointName;
       if (this.ticketNumberComponent && !this.isTicketFlashed) {
         this.isTicketFlashed = true;
