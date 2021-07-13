@@ -160,6 +160,23 @@
     },
     "description": "Enable or disable customer id or phone number in customer area. If both are disabled customer data section will be hidden"
   },
+  "delay_visit": {
+    "value": {
+      "availability": {
+        "value": "enable",
+        "description": "Enable or disable whether customer need to create or update visit with delay"
+      },
+      "time_slot": {
+        "value": [
+          5,
+          10,
+          15
+        ],
+        "description": "Define delay time slots (minutes)"
+      }
+    },
+    "description": "Enable or disable whether customer need to create or update visit with delay"
+  },
   "privacy_policy": {
     "value": "disable",
     "description": "Enable or disable privacy policy when sending phone number, 'on = enable', 'off = disable'"

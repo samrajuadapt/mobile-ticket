@@ -37,6 +37,9 @@
         <div class="accent-btn custom accent-bg-color btn-text-color" (click)='onTakeTicket()'>
           {{ 'service.accentBtnText' | translate }}
         </div>
+        <div *ngIf="getDelayVisitAvailability()" class="accent-btn custom accent-bg-color btn-text-color btn-margin-extend" (click)='onDelayTicket()'>
+          {{ 'service.delayVisitBtnText' | translate }}
+        </div>
       </div>
     </footer>
   </div>

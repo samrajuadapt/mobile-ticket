@@ -1,0 +1,13 @@
+.tick-container-rtl{
+  position: absolute;
+  left: 18px;
+  top: 28%;
+}
+
+@media (max-width: 450px) {
+  .tick-container-rtl{
+    position: absolute;
+    left: 1.5em;
+    top: 34%
+  }
+}

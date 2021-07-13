@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { BranchesContainerComponent } from './branch/list-container/branches-container.component';
 import { ServicesContainerComponent } from './service/list-container/services-container.component';
+import { DelayContainerComponent } from './delay/list-container/delay-container.component';
 import { TicketInfoContainerComponent } from './ticket-info/container/ticket-info-container.component';
 import { VisitNotfoundComponent } from './ticket-info/visit-notfound/visit-notfound.component';
 import { VisitCancelLeavelineGuard } from './ticket-info/visit-cancel/visit-cancel.leaveline.guard';
@@ -27,6 +28,7 @@ export const router: Routes = [
     { path: 'appointment', component: AppointmentComponent, canActivate: [AuthGuard] },
     { path: 'branches', component: BranchesContainerComponent, canActivate: [AuthGuard] },
     { path: 'services', component: ServicesContainerComponent, canActivate: [AuthGuard] },
+    { path: 'delays', component: DelayContainerComponent },
     { path: 'no_visit', component: VisitNotfoundComponent, canActivate: [AuthGuard] },
     { path: 'privacy_policy', component: PrivacyPolicyComponent,  canActivate: [CustomerDataGuard] },
     { path: 'cookie_consent', component: CookieContainerComponent},
@@ -55,4 +57,4 @@ export const router: Routes = [
 )
 
 export class QmRouterModule { }
-export const RoutingComponents = [BranchesContainerComponent, ServicesContainerComponent, TicketInfoContainerComponent, AppointmentComponent];
+export const RoutingComponents = [BranchesContainerComponent, ServicesContainerComponent, DelayContainerComponent, TicketInfoContainerComponent, AppointmentComponent];

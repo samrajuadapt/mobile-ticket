@@ -1,0 +1,4 @@
+<div class="delay-list-container">
+   <delay-service [name]="delay.time" [entity]="delay" [selected]="delay.selected"
+    (onSelection)='resetSelections($event)' *ngFor="let delay of delays"></delay-service>
+</div>

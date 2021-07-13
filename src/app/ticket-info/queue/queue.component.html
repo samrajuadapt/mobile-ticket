@@ -20,6 +20,10 @@
     </div>
     <div *ngIf="visitRecycleMsg"  class="center-text recycle-heading custom text-color" [ngClass]="{'queue-body-rtl' : isRtl}">{{ visitRecycleMsg }}</div>
   </div>
+  <div *ngIf="showDelay" class="queue-app">
+    <span class="queue-app-heading">{{ 'ticketInfo.delayHeading' | translate }}</span>
+    <span class="queue-app-time">{{ expireTime }} </span> 
+  </div>
 </div>
   <div [innerHTML]="'ticketInfo.ticketEndHeading' | translate" id="ticketEndHeading" *ngIf="isTicketEndedOrDeleted" class="center-text sub-heading-text-2 custom text-color queue-end"></div>
   <div [innerHTML]="'ticketInfo.welcomeback' | translate" id ="welcomeback" *ngIf="isTicketEndedOrDeleted" class="center-text sub-heading-text-2 custom text-color"></div>

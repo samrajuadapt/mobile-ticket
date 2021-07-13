@@ -13,6 +13,11 @@ import {ServiceComponent} from './service/list-item/service.component';
 import {ServiceService} from './service/service.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 
+import {DelaysComponent} from './delay/list/delay.component';
+import {DelayContainerComponent} from './delay/list-container/delay-container.component';
+import {DelayComponent} from './delay/list-item/delay.component';
+import {DelayService} from './delay/delay.service';
+
 import {FrameLayoutComponent} from './shared/frame-layout/frame-layout.component';
 import {NotSupportComponent} from './shared/not-support/not-support.component';
 import {TicketInfoContainerComponent} from './ticket-info/container/ticket-info-container.component';
@@ -68,7 +73,7 @@ declare var MobileTicketAPI:any;
 
 @NgModule({
   declarations: [
-    BranchesComponent, BranchComponent, ServicesComponent, ServiceComponent,
+    BranchesComponent, BranchComponent, ServicesComponent, ServiceComponent, DelaysComponent, DelayComponent,
     RootComponent, RoutingComponents, FrameLayoutComponent, TicketComponent, NotSupportComponent,
     QueueComponent, VisitCancelComponent, QueueItemComponent, SortPipe,
     ConnectivityMessageComponent, VisitNotfoundComponent, BranchNotfoundComponent, ConfirmDialogComponent, AlertDialogComponent,
@@ -93,7 +98,7 @@ declare var MobileTicketAPI:any;
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [BranchService, ServiceService, TicketInfoService, AuthGuard, ConfirmDialogService, AlertDialogService,
+  providers: [BranchService, ServiceService, DelayService, TicketInfoService, AuthGuard, ConfirmDialogService, AlertDialogService,
     VisitCancelLeavelineGuard, RetryService, Locale, LocationService, SortPipe, CustomerDataGuard,
     Config, BranchScheduleService, BranchOpenHoursValidator, LocationValidator,
     {provide: APP_INITIALIZER, useFactory: configuration, deps: [Config], multi: true}

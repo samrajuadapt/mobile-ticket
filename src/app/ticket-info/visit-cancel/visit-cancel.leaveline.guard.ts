@@ -21,8 +21,9 @@ export class VisitCancelLeavelineGuard implements CanDeactivate<TicketInfoContai
             return true;
         } else if (nextState.url === '/cookie_consent') {
             return true;
-        }
-        else if (nextState.url === '/unauthorized') {
+        } else if (nextState.url === '/delays') {
+            return true;
+        } else if (nextState.url === '/unauthorized') {
             return true;
         }  else if (nextState.url === '/branches') {
             return true;
