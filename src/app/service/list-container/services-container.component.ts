@@ -124,7 +124,7 @@ export class ServicesContainerComponent implements OnInit {
             });
         }
         
-        if (this.config.getConfig('branch_schedule') === 'enable') {
+        else if (this.config.getConfig('branch_schedule') === 'enable') {
             const _thisObj = this;
             const selectedBranch = MobileTicketAPI.getSelectedBranch();
             const branchId = selectedBranch ? selectedBranch.id : undefined;

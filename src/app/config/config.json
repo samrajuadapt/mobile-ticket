@@ -168,9 +168,9 @@
       },
       "time_slot": {
         "value": [
-          5,
           10,
-          15
+          45,
+          60
         ],
         "description": "Define delay time slots (minutes)"
       }
