@@ -25,7 +25,7 @@ export class DelayContainerComponent implements OnInit {
     public showListShadow;
     public selectedDelay: any;
     private _showNetWorkError = false;
-    private _isServiceListLoaded: boolean;
+    public isDelayListEmpty: boolean = false;
     private isTakeTicketClickedOnce: boolean;
     public showLoader = false;
 
@@ -33,7 +33,6 @@ export class DelayContainerComponent implements OnInit {
         private translate: TranslateService, private retryService: RetryService, private alertDialogService: AlertDialogService,
         private config: Config, private openHourValidator: BranchOpenHoursValidator, private branchScheduleService: BranchScheduleService) {
 
-        this._isServiceListLoaded = false;
         serviceService.registerCountDownCompleteCallback(() => {
             this.router.navigate(['branches', { redirect: true }]);
             MobileTicketAPI.setServiceSelection(undefined);
@@ -55,10 +54,6 @@ export class DelayContainerComponent implements OnInit {
 
     get showNetWorkError(): boolean { 
         return this._showNetWorkError; 
-    }
-
-    get isServiceListLoaded(): boolean { 
-        return this._isServiceListLoaded; 
     }
 
     ngOnInit() {
@@ -93,14 +88,9 @@ export class DelayContainerComponent implements OnInit {
         this.selectedDelay = selectedDelay;
     }
 
-    getDelayVisitAvailability() {
-        let delayStatus = this.config.getConfig('delay_visit').availability.value;
-        if (delayStatus === 'enable') {
-          return true;
-        } else {
-          return false;
-        }
-      }
+    setDelayListEmpty(value: boolean) {
+        this.isDelayListEmpty = true;
+    }
 
     onCancelDelay() {
         let visitInfo = MobileTicketAPI.getCurrentVisit();
@@ -249,10 +239,6 @@ export class DelayContainerComponent implements OnInit {
                 }
             }
         );
-    }
-
-    public onServiceListLoaded() {
-        this._isServiceListLoaded = true;
     }
 
 

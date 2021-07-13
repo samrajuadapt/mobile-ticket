@@ -18,9 +18,11 @@
     "accentBtnText": "Get in line",
     "delayVisitBtnText": "Set call time",
     "cancelBtnText": "Cancel",
+    "okButtonText": "Ok",
     "continueBtnText": "Continue",
     "selectService": "Please select a service at",
     "selectDelay": "Please select a delay",
+    "noDelaysAvailable": "Sorry, there are no available delays",
     "defaultTitle": "Mobile Ticket",
     "waiting": "Waiting",
     "noSelectedServices": "Please select a service"

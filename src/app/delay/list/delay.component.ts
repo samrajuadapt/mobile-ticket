@@ -20,7 +20,7 @@ export class DelaysComponent implements AfterViewInit {
   @Output() onServiceListHeightUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() onDelaySelection: EventEmitter<any> = new EventEmitter<any>();
   @Output() onShowHideServiceFetchError = new EventEmitter<boolean>();
-  @Output() onServiceListLoaded = new EventEmitter<boolean>();
+  @Output() onDelayListEmpty: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private serviceService: DelayService, private retryService: RetryService, private router: Router,
               private config: Config, private openHourValidator: BranchOpenHoursValidator) {
@@ -29,16 +29,25 @@ export class DelaysComponent implements AfterViewInit {
   }
 
   private onListLoaded() {
-    this.onServiceListLoaded.emit(true);
+    
     //this.setSelectedService(MobileTicketAPI.getSelectedService());
   }
 
-  private setDelayList() {
+  setDelayList() {
     let delayList = this.config.getConfig('delay_visit').time_slot.value;
     delayList.forEach(element => {
       let obj = {"time" : element, "selected" : false }
-      this.delays.push(obj);
+      if (this.openHourValidator.openHourValidForDelay(element)) {
+        this.delays.push(obj);
+      }
     });
+    if (this.delays.length === 0) {
+      var _thisObj = this;
+      setTimeout(() => {
+        _thisObj.onDelayListEmpty.emit(true);
+      }, 1000);
+      
+    }
     this.initListShadow();
   }
 
