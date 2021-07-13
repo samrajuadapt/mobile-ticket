@@ -49,9 +49,13 @@ export class QueueComponent implements OnInit, OnDestroy {
   private visitState: VisitState;
   public prevVisitState: string;
   public showQueue: boolean;
+  public showDelay: boolean =  false;
   public showAppTime: boolean;
   public queueIsLoaded: boolean = true;
   public appointmentTime: string;
+  public expireTime: string;
+  public delayTimeOut: any;
+  public delayExpireTime: string;
 
   @Output() onUrlAccessedTicket: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() onTciketNmbrChange = new EventEmitter();
@@ -123,6 +127,7 @@ export class QueueComponent implements OnInit, OnDestroy {
                 this.onBranchUpdate.emit();
                 this.onTciketNmbrChange.emit();
                 this.onServiceNameUpdate.emit(MobileTicketAPI.getCurrentVisitStatus().currentServiceName);
+                this.checkDelay();
                 this.initPollTimer(this.visitPosition, this.ticketService);
 
                 ga('send', {
@@ -151,9 +156,53 @@ export class QueueComponent implements OnInit, OnDestroy {
           this.queueId = MobileTicketAPI.getCurrentVisit().queueId;
           this.checksum = MobileTicketAPI.getCurrentVisit().checksum;
           // MobileTicketAPI.setVisit(this.branchId, this.queueId, this.visitId);
+          this.checkDelay();
           this.initPollTimer(this.visitPosition, this.ticketService);
         }
       });
+  }
+
+  public checkDelay() {
+    if (MobileTicketAPI.getCurrentVisit().appointmentId !== null) {
+      var _thisObj = this;
+      MobileTicketAPI.getDelayInfo(this.branchId, this.visitId, function(){
+        _thisObj.setDelayView();
+      });
+    }
+  }
+
+
+  public setDelayView() {
+    let delayTime = this.getDelayTime();
+    if (delayTime > 0) {
+      this.showDelayTime();
+      var _thisObj = this;
+      if(this.delayTimeOut){
+        clearTimeout(this.delayTimeOut);
+      }
+      this.delayTimeOut = setTimeout(function(){
+        _thisObj.hideDelayTime();
+      }, delayTime);
+    }
+  }
+
+
+  public getDelayTime() {
+    let delay = MobileTicketAPI.getCurrentDelayInfo();
+    if (delay === null || (delay && delay.delayExpirySeconds === undefined)) {
+      return 0;
+    }
+    let currentTimeStamp = Date.now();
+    let fetchTime = delay.branchCurrentTime.split(':');
+    var createTime = new Date();
+    let createTimeStamp  = createTime.setHours(fetchTime[0], fetchTime[1], fetchTime[2]);
+    let delayTime = delay.delayExpirySeconds * 1000;
+    this.delayExpireTime = delay.delayExpirySeconds;
+    if (createTimeStamp === undefined || (createTimeStamp + delayTime) < currentTimeStamp) {
+      return 0;
+    } else {
+      return  (createTimeStamp + delayTime) - currentTimeStamp;
+    }
   }
 
   public onVisitRecycled(isRecyled) {
@@ -353,6 +402,10 @@ export class QueueComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.doUnsubscribeForPolling();
     this.routerSubscription.unsubscribe();
+
+    if(this.delayTimeOut){
+      clearTimeout(this.delayTimeOut);
+    }
   }
 
   public doUnsubscribeForPolling() {
@@ -369,6 +422,42 @@ export class QueueComponent implements OnInit, OnDestroy {
         console.log(MobileTicketAPI.getCurrentVisitStatus());
       }
     }
+  }
+
+  public showDelayTime() {
+    this.prepareDelayTime();
+    this.showQueue = false;
+    this.showAppTime = false;
+    this.showDelay  = true;
+  }
+
+  public hideDelayTime() {
+    this.showDelay  = false;
+    MobileTicketAPI.resetDelayInfo();
+    if (this.config.getConfig('show_queue_position').trim() === 'enable') {
+      this.showQueue = true;
+    } 
+    if (this.config.getConfig('show_appointment_time').trim() === 'enable') {
+      this.showAppTime = true;
+    }
+  }
+
+  public prepareDelayTime() {
+    var _thisObj = this;
+    var x = setInterval(function() {
+    
+      var distance = _thisObj.getDelayTime();
+    
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+      _thisObj.expireTime = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
+ 
+      if (distance < 0) {
+        clearInterval(x);
+      }
+    }, 1000);
   }
 
   setRtlStyles() {

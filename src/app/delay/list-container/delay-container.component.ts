@@ -3,7 +3,7 @@ import { BranchService } from '../../branch/branch.service';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ServiceEntity } from '../../entities/service.entity';
-import { ServiceService } from '../service.service';
+import { DelayService } from '../delay.service';
 import { RetryService } from '../../shared/retry.service';
 import { Util } from '../../util/util';
 import { NavigationExtras } from '@angular/router';
@@ -15,21 +15,21 @@ declare var MobileTicketAPI: any;
 declare var ga: Function;
 
 @Component({
-    selector: 'app-services-container',
-    templateUrl: './services-container-tmpl.html',
-    styleUrls: ['./services-container.css']
+    selector: 'delay-services-container',
+    templateUrl: './delay-container-tmpl.html',
+    styleUrls: ['./delay-container.css']
 })
 
-export class ServicesContainerComponent implements OnInit {
+export class DelayContainerComponent implements OnInit {
     public subHeadingTwo;
     public showListShadow;
-    public selectedServiceId: number;
+    public selectedDelay: any;
     private _showNetWorkError = false;
     private _isServiceListLoaded: boolean;
     private isTakeTicketClickedOnce: boolean;
     public showLoader = false;
 
-    constructor(private branchService: BranchService, private serviceService: ServiceService, public router: Router,
+    constructor(private branchService: BranchService, private serviceService: DelayService, public router: Router,
         private translate: TranslateService, private retryService: RetryService, private alertDialogService: AlertDialogService,
         private config: Config, private openHourValidator: BranchOpenHoursValidator, private branchScheduleService: BranchScheduleService) {
 
@@ -62,12 +62,23 @@ export class ServicesContainerComponent implements OnInit {
     }
 
     ngOnInit() {
-        MobileTicketAPI.setServiceSelection(undefined);
         this.scrollPageToTop();
+        this.getEntryPoint();
     }
 
     scrollPageToTop() {
         window.scrollTo(0, 0);
+    }
+
+    getEntryPoint() {
+        if (MobileTicketAPI.getEntryPointId() === undefined) {
+            MobileTicketAPI.findEntrypointId(MobileTicketAPI.getSelectedBranch().id, (response) => {
+            
+            },
+              (xhr, status, errorMessage) => {
+                
+              });
+        }
     }
 
     showHideNetworkError(value: boolean) {
@@ -78,8 +89,8 @@ export class ServicesContainerComponent implements OnInit {
         this.showListShadow = boolShowListShadow;
     }
 
-    saveSelectedService(selectedServiceId: number) {
-        this.selectedServiceId = selectedServiceId;
+    saveSelectedDelay(selectedDelay: any) {
+        this.selectedDelay = selectedDelay;
     }
 
     getDelayVisitAvailability() {
@@ -91,54 +102,30 @@ export class ServicesContainerComponent implements OnInit {
         }
       }
 
-    onTakeTicket() {
-
-        if(!this.selectedServiceId){
-            this.translate.get('service.noSelectedServices').subscribe((res: string) => {
-                this.alertDialogService.activate(res);
-            });
-        }
-        
-        if (this.config.getConfig('branch_schedule') === 'enable') {
-            const _thisObj = this;
-            const selectedBranch = MobileTicketAPI.getSelectedBranch();
-            const branchId = selectedBranch ? selectedBranch.id : undefined;
-            this.branchScheduleService.checkAvailability(branchId, this.selectedServiceId, function(status){
-                if (status) {
-                    _thisObj.takeTicket();
-                } else {
-                    _thisObj.router.navigate(['open_hours']);
-                }
-            });
-        } else if (!this.openHourValidator.openHoursValid()) {
-            this.router.navigate(['open_hours']);
-        } else {
-            this.takeTicket();
-        }
+    onCancelDelay() {
+        let visitInfo = MobileTicketAPI.getCurrentVisit();
+            if (visitInfo) {
+                this.router.navigate(['ticket']);
+            } else {
+                this.router.navigate(['services']);
+            }
     }
 
-    private onDelayTicket() {
-        if(!this.selectedServiceId){
-            this.translate.get('service.noSelectedServices').subscribe((res: string) => {
+    onTakeTicket() {
+        if(!this.selectedDelay){
+            this.translate.get('service.selectDelay').subscribe((res: string) => {
                 this.alertDialogService.activate(res);
             });
         }
         
-        if (this.config.getConfig('branch_schedule') === 'enable') {
-            const _thisObj = this;
-            const selectedBranch = MobileTicketAPI.getSelectedBranch();
-            const branchId = selectedBranch ? selectedBranch.id : undefined;
-            this.branchScheduleService.checkAvailability(branchId, this.selectedServiceId, function(status){
-                if (status) {
-                    _thisObj.router.navigate(['delays']);
-                } else {
-                    _thisObj.router.navigate(['open_hours']);
-                }
-            });
-        } else if (!this.openHourValidator.openHoursValid()) {
-            this.router.navigate(['open_hours']);
-        } else {
-            this.router.navigate(['delays']);
+        else {
+            MobileTicketAPI.setDelayTime(this.selectedDelay.time * 60);
+            let visitInfo = MobileTicketAPI.getCurrentVisit();
+            if (visitInfo) {
+                this.delayTicket();
+            } else {
+                this.takeTicket();
+            }
         }
     }
 
@@ -155,7 +142,7 @@ export class ServicesContainerComponent implements OnInit {
                 this.router.navigate(['ticket']);
             }
             else {
-                if (this.selectedServiceId) {
+                if (1 === 1) {
                     this.serviceService.stopBranchRedirectionCountDown();
                     this.serviceService.stopServiceFetchTimer();
                     this.isTakeTicketClickedOnce = true;
@@ -201,6 +188,17 @@ export class ServicesContainerComponent implements OnInit {
                 }
             }
         }
+    }
+
+    public delayTicket(){
+        MobileTicketAPI.delayVisit((visitInfo) => {
+            console.log(visitInfo);
+            this.showLoader = false;
+            this.router.navigate(['ticket']);
+            this.isTakeTicketClickedOnce = false;
+          }, (xhr, status, errorMessage) => {
+      
+          });
     }
 
     public createTicket() {

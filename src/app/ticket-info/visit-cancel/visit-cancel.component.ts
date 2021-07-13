@@ -21,18 +21,31 @@ export class VisitCancelComponent {
   @Input() isVisitCall: boolean;
 
   public btnTitleLeaveLine: string;
+  public btnTitleChangeDelay: string;
+  public btnTitleDelayVisit: string;
+  public btnTitleArrive: string;
   public btnTitleNewTicket: string;
   public btnTitleOpenMeeting: string;
   public confirmMsg: string;
   public currentHash;
   public visitCancelled: boolean = false;
   public visitCancelledViaBtn: boolean = false;
+  public delayInfo: any;
 
   constructor(location: PlatformLocation, private config: Config,
      public router: Router, private translate: TranslateService,
      private confirmDialogService: ConfirmDialogService, private alertDialogService: AlertDialogService) {
     this.translate.get('ticketInfo.btnTitleLeaveLine').subscribe((res: string) => {
       this.btnTitleLeaveLine = res;
+    });
+    this.translate.get('ticketInfo.btnTitleArrive').subscribe((res: string) => {
+      this.btnTitleArrive = res;
+    });
+    this.translate.get('ticketInfo.btnTitleChangeDelay').subscribe((res: string) => {
+      this.btnTitleChangeDelay = res;
+    });
+    this.translate.get('service.delayVisitBtnText').subscribe((res: string) => {
+      this.btnTitleDelayVisit = res;
     });
     this.translate.get('ticketInfo.btnTitleNewTicket').subscribe((res: string) => {
       this.btnTitleNewTicket = res;
@@ -43,6 +56,23 @@ export class VisitCancelComponent {
     this.translate.get('ticketInfo.btnOpenMeeting').subscribe((res: string) => {
       this.btnTitleOpenMeeting = res;
     });
+  }
+
+  public getDelayTime() {
+    let delay = MobileTicketAPI.getCurrentDelayInfo();
+    if (delay === null || (delay && delay.delayExpirySeconds === undefined)) {
+      return 0;
+    }
+    let currentTimeStamp = Date.now();
+    let fetchTime = delay.branchCurrentTime.split(':');
+    var createTime = new Date();
+    let createTimeStamp  = createTime.setHours(fetchTime[0], fetchTime[1], fetchTime[2]);
+    let delayTime = delay.delayExpirySeconds * 1000;
+    if (createTimeStamp === undefined || (createTimeStamp + delayTime) < currentTimeStamp) {
+      return 0;
+    } else {
+      return  (createTimeStamp + delayTime) - currentTimeStamp;
+    }
   }
 
   public cancelVisitViaBrowserBack() {
@@ -145,8 +175,97 @@ export class VisitCancelComponent {
       return false;
     }
   }
+
+  getDelayVisitAvailability() {
+    let delayStatus = this.config.getConfig('delay_visit').availability.value;
+    if (delayStatus === 'enable' && MobileTicketAPI.getCurrentVisit() && MobileTicketAPI.getCurrentVisit().appointmentId !== null) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
   openMeeting () {
     window.open(MobileTicketAPI.meetingUrl);
+  }
+
+  // onArrviceButtonClick() {
+  //   MobileTicketAPI.delayVisit((visitInfo) => {
+  //     console.log(visitInfo);
+  //   }, (xhr, status, errorMessage) => {
+
+  //   }, 0);
+  // }
+
+  onDelayButtonClick() {
+    this.router.navigate(['delays']);
+    // this.showLoader = true;
+    //     MobileTicketAPI.createVisit(
+    //         (visitInfo) => {
+    //             ga('send', {
+    //                 hitType: 'event',
+    //                 eventCategory: 'visit',
+    //                 eventAction: 'create',
+    //                 eventLabel: 'vist-create'
+    //             });
+    //             this.showLoader = false;
+    //             this.router.navigate(['ticket']);
+    //             this.isTakeTicketClickedOnce = false;
+    //         },
+    //         (xhr, status, errorMessage) => {
+    //             this.showLoader = false;
+    //             let util = new Util();
+    //             this.isTakeTicketClickedOnce = false;
+    //             if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "8042") {
+    //                 this.translate.get('error_codes.error_8042').subscribe((res: string) => {
+    //                     this.alertDialogService.activate(res);
+    //                 });
+    //             } else if (util.getStatusErrorCode(xhr && xhr.getAllResponseHeaders()) === "11000") {
+    //                 this.translate.get('ticketInfo.visitAppRemoved').subscribe((res: string) => {
+    //                     this.alertDialogService.activate(res);
+    //                 });
+    //             } else if (errorMessage === 'Gateway Timeout') {
+    //                 this.translate.get('connection.issue_with_connection').subscribe((res: string) => {
+    //                     this.alertDialogService.activate(res);
+    //                 });
+    //             } else {
+    //                 this.showHideNetworkError(true);
+    //                 this.retryService.retry(() => {
+
+    //                     /**
+    //                     * replace this function once #140741231 is done
+    //                     */
+    //                     MobileTicketAPI.getBranchesNearBy(0, 0, 2147483647,
+    //                         () => {
+    //                             this.retryService.abortRetry();
+    //                             this.showHideNetworkError(false);
+    //                         }, () => {
+    //                             //Do nothing on error
+    //                         });
+    //                 });
+    //             }
+    //         }, 60
+    //     );
+  }
+
+  onArriveButtonClick() {
+    MobileTicketAPI.setDelayTime(0);
+    if (MobileTicketAPI.getEntryPointId() === undefined) {
+      MobileTicketAPI.findEntrypointId(MobileTicketAPI.getSelectedBranch().id, (response) => {
+      
+      },
+        (xhr, status, errorMessage) => {
+          
+        });
+  }
+    MobileTicketAPI.delayVisit((visitInfo) => {
+      console.log(visitInfo);
+      
+      this.router.navigate(['ticket']);
+      
+    }, (xhr, status, errorMessage) => {
+
+    });
   }
 
   onButtonClick() {

@@ -527,6 +527,32 @@ const apiMeetingProxy = proxy(host, {
 	}
 });
 
+const apiDelayProxy = proxy(host, {
+	// ip and port off apigateway
+
+	proxyReqPathResolver: (req) => {
+		var newUrl = req.originalUrl.replace("/MobileTicket/DelayVisit/branches/","/rest/entrypoint/branches/");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL
+});
+
 var apiBranchScheduleProxy = proxy(host, {
 	// ip and port off apigateway
 
@@ -635,6 +661,8 @@ app.use("/MobileTicket/MyAppointment/entrypoint/branches/*/entryPoints/deviceTyp
 app.use("/MobileTicket/MyVisit/entrypoint/branches/*/visits/*", apiCustomParameterProxy);
 app.use("/MobileTicket/MyAppointment/arrive/branches/*/entryPoints/*/visits", apiArriveProxy);
 app.use("/MobileTicket/services/:serviceID/branches/:branchID/ticket/*",jsonParser, ticketTokenProxy);
+app.use("/MobileTicket/DelayVisit/branches/:branchID/queues/:queueId/visits", apiDelayProxy);
+app.use("/MobileTicket/DelayVisit/branches/:branchID/visits/:visitId", apiDelayProxy);
 app.use("/MobileTicket/services/*", apiProxy);
 app.use("/MobileTicket/MyVisit/LastEvent/*", apiEventProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);

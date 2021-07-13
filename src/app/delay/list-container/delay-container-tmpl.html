@@ -1,0 +1,31 @@
+<div class="table-container inner-margin-separator">
+
+  <div class="text-center table-child-heading-1">
+    <div class="center-text">
+      <span class="sub-heading-text-2 service-limit-label custom text-color">{{ 'service.selectDelay' | translate }}</span>
+    </div>
+  </div>
+
+  <div class="table-child-list">
+    <delay-services class="full-width" (onDelaySelection)='saveSelectedDelay($event)'
+                  (onServiceListHeightUpdate)='onServiceListHeightUpdate($event)'
+                  (onShowHideServiceFetchError)="showHideNetworkError($event);" (onServiceListLoaded)="onServiceListLoaded()"></delay-services>
+  </div>
+  <div class="table-child-shadow">
+    <div class="" [ngClass]="{'list-shadow' : true, 'list-show-hidden' : !showListShadow}">
+    </div>
+  </div>
+
+  <div class="table-child-footer">
+    <footer class="qm-footer">
+      <div class="center-text">
+        <div class="accent-btn custom accent-bg-color btn-text-color" (click)='onTakeTicket()'>
+          {{ 'service.continueBtnText' | translate }}
+        </div>
+        <div *ngIf="getDelayVisitAvailability()" class="accent-btn custom accent-bg-color btn-text-color btn-margin-extend" (click)='onCancelDelay()'>
+          {{ 'service.cancelBtnText' | translate }}
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>

@@ -1,4 +1,10 @@
 <div *ngIf='showButton()' [ngClass]="{'btn-margin': isTicketEndedOrDeleted, 'center-text': true}">
+  <div *ngIf="getDelayTime() > 0 && getDelayVisitAvailability() && !isTicketEndedOrDeleted && !isVisitCall" class="accent-btn accent-btn-side custom accent-bg-color btn-text-color btn-margin-extend" (click)='onArriveButtonClick()'>
+    {{ btnTitleArrive }}
+  </div>
+  <div *ngIf="getDelayVisitAvailability() && !isTicketEndedOrDeleted && !isVisitCall" class="accent-btn accent-btn-side custom accent-bg-color btn-text-color btn-margin-extend" (click)='onDelayButtonClick()'>
+    {{ getDelayTime() > 0 ? btnTitleChangeDelay : btnTitleDelayVisit }}
+  </div>
   <div class="accent-btn accent-btn-side custom accent-bg-color btn-text-color" (click)='onButtonClick()'>
     {{ getButtonTitle() }}
   </div>
