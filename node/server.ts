@@ -221,6 +221,12 @@ app.get('/privacy_policy$', (req, res) => {
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));
 });
 
+// Redirect all requests that start with delays and end, to index.html
+app.get('/delays$', (req, res) => {
+	res = handleHeaders(res);
+  	res.sendFile(path.join(__dirname + '/src', 'index.html'));
+});
+
 app.get('/cookie_consent$', (req, res) => {
 	res = handleHeaders(res);
   	res.sendFile(path.join(__dirname + '/src', 'index.html'));

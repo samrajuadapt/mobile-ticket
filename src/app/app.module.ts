@@ -57,6 +57,7 @@ import {CookieContainerComponent} from "./cookie-container/cookie-container.comp
 import {CookieConsentDialogComponent} from "./cookie-container/cookie-consent-dialog/cookie-consent-dialog.component";
 import {CustomerDataComponent} from "./customer-data/customer-data.component";
 import { CustomerDataGuard } from "./customer-data/customer-data-guard";
+import { DelayDataGuard } from "./delay/delay-data-guard";
 import { UnautherizedComponent } from "./ticket-info/unautherized/unautherized.component";
 import { OtpPhoneNumberComponent } from './otp/otp-phone-number/otp-phone-number.component';
 import { OtpPinComponent } from './otp/otp-pin/otp-pin.component';
@@ -100,7 +101,7 @@ declare var MobileTicketAPI:any;
   ],
   providers: [BranchService, ServiceService, DelayService, TicketInfoService, AuthGuard, ConfirmDialogService, AlertDialogService,
     VisitCancelLeavelineGuard, RetryService, Locale, LocationService, SortPipe, CustomerDataGuard,
-    Config, BranchScheduleService, BranchOpenHoursValidator, LocationValidator,
+    Config, BranchScheduleService, BranchOpenHoursValidator, LocationValidator, DelayDataGuard,
     {provide: APP_INITIALIZER, useFactory: configuration, deps: [Config], multi: true}
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
