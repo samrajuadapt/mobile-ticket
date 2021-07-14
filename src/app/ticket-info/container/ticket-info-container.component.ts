@@ -20,6 +20,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   public branchEntity: BranchEntity;
   public isTicketFlashed: boolean;
   public isTicketEndedOrDeleted: boolean;
+  public isDelayFuncAvailable: boolean;
   public isVisitCall: boolean;
   public isVisitRecycled: boolean;
   public visitCallMsg: string;
@@ -58,6 +59,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     private config: Config, private activatedRoute: ActivatedRoute) {
     this.isTicketFlashed = false;
     this.isTicketEndedOrDeleted = false;
+    this.isDelayFuncAvailable = false;
     this.isVisitCall = false;
     this.visitCallMsg = undefined;
     this.visitCallMsgOne = undefined;
@@ -214,6 +216,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   onVisitStatusUpdate(visitStatus: QueueEntity) {
     this.isVisitRecycled = false;
     this.updateBrowserTitle(visitStatus);
+    this.isDelayFuncAvailable = visitStatus.queueId && visitStatus.queueId > 0 ? true : false;
     if (visitStatus.status && visitStatus.status === this.visitState.CALLED) {
       this.prevVisitState = visitStatus.status;
       let currentEvent = MobileTicketAPI.getCurrentVisitStatus();

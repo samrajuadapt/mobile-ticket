@@ -17,6 +17,7 @@ declare var MobileTicketAPI: any;
 export class VisitCancelComponent {
 
   @Input() isTicketEndedOrDeleted: boolean;
+  @Input() isDelayFuncAvailable: boolean;
   @Input() isUrlAccessedTicket: boolean;
   @Input() isVisitCall: boolean;
 

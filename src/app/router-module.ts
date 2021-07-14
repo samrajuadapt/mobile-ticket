@@ -21,6 +21,7 @@ import { UnautherizedComponent } from './ticket-info/unautherized/unautherized.c
 import { OtpPinComponent } from './otp/otp-pin/otp-pin.component';
 import { OtpPhoneNumberComponent } from './otp/otp-phone-number/otp-phone-number.component';
 import { TicketLoaderComponent } from './ticket-loader/ticket-loader.component';
+import { DelayDataGuard } from './delay/delay-data-guard';
 
 export const router: Routes = [
     
@@ -28,7 +29,7 @@ export const router: Routes = [
     { path: 'appointment', component: AppointmentComponent, canActivate: [AuthGuard] },
     { path: 'branches', component: BranchesContainerComponent, canActivate: [AuthGuard] },
     { path: 'services', component: ServicesContainerComponent, canActivate: [AuthGuard] },
-    { path: 'delays', component: DelayContainerComponent },
+    { path: 'delays', component: DelayContainerComponent, canActivate:  [DelayDataGuard] },
     { path: 'no_visit', component: VisitNotfoundComponent, canActivate: [AuthGuard] },
     { path: 'privacy_policy', component: PrivacyPolicyComponent,  canActivate: [CustomerDataGuard] },
     { path: 'cookie_consent', component: CookieContainerComponent},
