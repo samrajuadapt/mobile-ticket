@@ -69,6 +69,7 @@ export class VisitCancelComponent {
     var createTime = new Date();
     let createTimeStamp  = createTime.setHours(fetchTime[0], fetchTime[1], fetchTime[2]);
     let delayTime = delay.delayExpirySeconds * 1000;
+    return delayTime;
     if (createTimeStamp === undefined || (createTimeStamp + delayTime) < currentTimeStamp) {
       return 0;
     } else {
@@ -253,12 +254,19 @@ export class VisitCancelComponent {
     MobileTicketAPI.setDelayTime(0);
     if (MobileTicketAPI.getEntryPointId() === undefined) {
       MobileTicketAPI.findEntrypointId(MobileTicketAPI.getSelectedBranch().id, (response) => {
-      
+
+        this.callDelayVisit();
       },
         (xhr, status, errorMessage) => {
           
         });
+  } else {
+    this.callDelayVisit();
   }
+    
+  }
+
+  callDelayVisit() {
     MobileTicketAPI.delayVisit((visitInfo) => {
       console.log(visitInfo);
       

@@ -198,6 +198,7 @@ export class QueueComponent implements OnInit, OnDestroy {
     let createTimeStamp  = createTime.setHours(fetchTime[0], fetchTime[1], fetchTime[2]);
     let delayTime = delay.delayExpirySeconds * 1000;
     this.delayExpireTime = delay.delayExpirySeconds;
+    return delayTime;
     if (createTimeStamp === undefined || (createTimeStamp + delayTime) < currentTimeStamp) {
       return 0;
     } else {
@@ -444,19 +445,21 @@ export class QueueComponent implements OnInit, OnDestroy {
 
   public prepareDelayTime() {
     var _thisObj = this;
+    var distance = _thisObj.getDelayTime() / 1000;
     var x = setInterval(function() {
     
-      var distance = _thisObj.getDelayTime();
+      //var distance = _thisObj.getDelayTime();
     
-      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      var hours = Math.floor((distance % (60 * 60 * 24)) / (60 * 60));
+      var minutes = Math.floor((distance % (60 * 60)) / (60));
+      var seconds = Math.floor((distance % (60)));
     
       _thisObj.expireTime = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
  
       if (distance < 0) {
         clearInterval(x);
       }
+      distance = distance - 1;
     }, 1000);
   }
 

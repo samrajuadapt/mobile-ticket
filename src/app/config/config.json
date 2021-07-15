@@ -75,7 +75,7 @@
       {
         "translation_key": "open_hours.week_day4",
         "from": "8:00",
-        "to": "18:00",
+        "to": "23:00",
         "description": "thursday",
         "display_from": "8:00",
         "display_to": "18:00",
@@ -168,9 +168,9 @@
       },
       "time_slot": {
         "value": [
-          0,
-          45,
-          60
+          15,
+          30,
+          45
         ],
         "description": "Define delay time slots (minutes)"
       }
@@ -202,7 +202,7 @@
     "description": "Define how many times should retry the queue poll request."
   },
   "block_other_browsers": {
-    "value": "disable",
+    "value": "enable",
     "description": "Enable or disable whether user allow to use/open the ticket in other devices apart from the created device. 'on = enable', 'off = disable'"
   },
   "otp_service": {
