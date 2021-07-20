@@ -24,6 +24,7 @@ This is a web application that has been developed using Angular4 and the develop
 - [One time password](#one-time-password)
 - [Create ticket token](#create-ticket-token)
 - [Cookie consent](#cookie-consent)
+- [Set delay](#set-delay)
 
 ## Installation
 BEFORE YOU INSTALL: please read the [prerequisites](#prerequisites)
@@ -96,6 +97,9 @@ For development one needs to add the following five routes to the application.ym
     sms_api:
       path: /rest/notification/**
       url: ${orchestra.central.url}/notification/
+    delay_visit:
+      path: /MobileTicket/DelayVisit/**
+      url: ${orchestra.central.url}/qsystem/rest/entrypoint
 ```
 #### Configuring the Proxy for Development Environment
 
@@ -347,6 +351,19 @@ project directory
         "value": "disable",
         "description": "Enable or disable OTP service"
     },
+    "delay_visit": {
+      "value": {
+        "availability": {
+          "value": "disable",
+          "description": "Enable or disable whether customer need to create or update visit with delay"
+        },
+        "time_slot": {
+          "value": [],
+          "description": "Define delay time slots (minutes)"
+        }
+    },
+    "description": "Enable or disable whether customer need to create or update visit with delay"
+  },
     "create_ticket_token": {
 	    "value": "disable",
 	    "description": "Enable or disable unique token for a ticket"
@@ -776,6 +793,19 @@ MobileTicketAPI.lockNumber(phoneNumber, lockType)
 ```js
 MobileTicketAPI.lockNumber(phoneNumber, lockType)
 ```
+
+```js
+MobileTicketAPI.resetDelayInfo()
+```
+
+```js
+MobileTicketAPI.getDelayTime()
+```
+
+```js
+MobileTicketAPI.getCurrentDelayInfo()
+```
+
      
 ## Creating a Build
 Install grunt command line interpreter by running following command.
@@ -918,4 +948,7 @@ This feature can be enabled by `create_tikcet_token` parameter in the `config.js
 
 ## Cookie consent
 Mobile Ticket can be configured to add an interactive cookie permission popup to get the consent of the user before using any cookies. This can be enabled by `cookie_consent` attribute in the `config.json`. If it is `enabled`, then the user will be able to see a popup when landing the mobile ticket application. Cookie consent text has been stored in `cookie-LANG.html` which is stored in `locale/cookie-consent-files` directory. Browsers will pick the relevant message depending on the browser language. If `cookie_consent` is enabled, then cookies will be used only for google analytics after accepting the consent.
+
+## Set delay
+Mobile Ticket can be configured to add an delay time for the visit. User can create or edit visit delay time and within the time period user not called. 
 

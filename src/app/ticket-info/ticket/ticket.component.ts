@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { LocationStrategy } from '@angular/common';
+import { Component, Input, OnInit, EventEmitter } from '@angular/core';
 import { BranchEntity } from '../../entities/branch.entity';
 import { ServiceEntity } from '../../entities/service.entity';
 import { TicketEntity } from '../../entities/ticket.entity';
@@ -27,7 +28,13 @@ export class TicketComponent implements OnInit {
   private flashCount: number = 0;
   private isIOS;
 
-  constructor() {
+  constructor(
+    private location: LocationStrategy
+  ) {
+    history.pushState(null, null, window.location.href);
+    this.location.onPopState(() => {
+      history.pushState(null, null, window.location.href);
+    });
   }
 
   ngOnInit() {
