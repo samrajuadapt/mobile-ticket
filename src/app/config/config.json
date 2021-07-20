@@ -163,15 +163,11 @@
   "delay_visit": {
     "value": {
       "availability": {
-        "value": "enable",
+        "value": "disable",
         "description": "Enable or disable whether customer need to create or update visit with delay"
       },
       "time_slot": {
-        "value": [
-          15,
-          30,
-          45
-        ],
+        "value": [],
         "description": "Define delay time slots (minutes)"
       }
     },

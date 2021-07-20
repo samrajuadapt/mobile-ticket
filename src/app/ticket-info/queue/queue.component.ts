@@ -192,18 +192,9 @@ export class QueueComponent implements OnInit, OnDestroy {
     if (delay === null || (delay && delay.delayExpirySeconds === undefined)) {
       return 0;
     }
-    let currentTimeStamp = Date.now();
-    let fetchTime = delay.branchCurrentTime.split(':');
-    var createTime = new Date();
-    let createTimeStamp  = createTime.setHours(fetchTime[0], fetchTime[1], fetchTime[2]);
     let delayTime = delay.delayExpirySeconds * 1000;
     this.delayExpireTime = delay.delayExpirySeconds;
     return delayTime;
-    if (createTimeStamp === undefined || (createTimeStamp + delayTime) < currentTimeStamp) {
-      return 0;
-    } else {
-      return  (createTimeStamp + delayTime) - currentTimeStamp;
-    }
   }
 
   public onVisitRecycled(isRecyled) {
