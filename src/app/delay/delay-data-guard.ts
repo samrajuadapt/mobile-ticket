@@ -16,11 +16,11 @@ export class DelayDataGuard implements CanActivate {
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     let visitInfo = MobileTicketAPI.getCurrentVisit();
     let selectedService = MobileTicketAPI.getSelectedService();
-    let delay = MobileTicketAPI.getCurrentDelayInfo();
+    let isUserPressDelay = MobileTicketAPI.getDelayViewAccess();
     if (visitInfo ===  null && selectedService ===  null) {
         this.router.navigate(['services']);
         return false;
-    } else if (visitInfo && delay === null) {
+    } else if (visitInfo && !isUserPressDelay) {
       this.router.navigate(['ticket']);
       return false;
     } else {

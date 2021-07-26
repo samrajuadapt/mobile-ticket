@@ -25,7 +25,8 @@
     "noDelaysAvailable": "Sorry, there are no available delays",
     "defaultTitle": "Mobile Ticket",
     "waiting": "Waiting",
-    "noSelectedServices": "Please select a service"
+    "noSelectedServices": "Please select a service",
+    "delayVisitIssue": "Sorry, something went wrong."
   },
   "ticketInfo": {
     "leaveVisitConfirmMsg": "Would you like to leave the line?",
