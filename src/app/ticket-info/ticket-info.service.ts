@@ -62,7 +62,7 @@ export class TicketInfoService {
     if (isVisitCacheUpdate === true) {
       MobileTicketAPI.getVisitStatus(
         (queueObj: any) => {
-          success(convertToQueueEntityCallback(queueObj), queueObj.ticketId);
+          success(convertToQueueEntityCallback(queueObj), queueObj.ticketId, queueObj.appointmentId);
         },
         (xhr, status, msg) => {
           if (xhr !== null && xhr.status === 404) {

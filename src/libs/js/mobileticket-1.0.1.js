@@ -2574,6 +2574,7 @@ var MobileTicketAPI = (function () {
   var currentVisitStatus = undefined;
   var meetingUrl = undefined;
   var delayInfo = undefined;
+  var isUserOpenDelay = false;
 
   var visitFromQR = false;
   //var VISIT_EVENT_NAME = "visitFromQR";
@@ -2652,7 +2653,6 @@ var MobileTicketAPI = (function () {
     var visit = MobileTicketAPI.visitInformation;
     visit.visitStatus = "CREATE";
     var meetingUrl = MobileTicketAPI.meetingUrl;
-    var delayInfo = MobileTicketAPI.delayInfo;
 
     if (branch != undefined) {
       addToLocalStorage('branch', JSON.stringify(branch), 0.005);
@@ -2666,9 +2666,6 @@ var MobileTicketAPI = (function () {
     if (meetingUrl != undefined) {
       addToLocalStorage('meetingUrl', JSON.stringify(meetingUrl), 0.5);
     }
-    if (delayInfo != undefined) {
-      addToLocalStorage('delayInfo', JSON.stringify(delayInfo), 0.5);
-    }
   }
 
   function clearLocalStorage() {
@@ -2676,12 +2673,10 @@ var MobileTicketAPI = (function () {
     localStorage.removeItem('service');
     localStorage.removeItem('visit');
     localStorage.removeItem('meetingUrl');
-    localStorage.removeItem('delayInfo');
   }
 
   function resetDelayInfo() {
     MobileTicketAPI.delayInfo = undefined;
-    localStorage.removeItem('delayInfo');
   }
 
   function updateCurrentVisitStatus() {
@@ -2780,7 +2775,7 @@ var MobileTicketAPI = (function () {
   }
 
   function getCurrentDelayInfo() {
-    return (MobileTicketAPI.delayInfo == undefined) ? JSON.parse(getFromLocalStorage("delayInfo")) : MobileTicketAPI.delayInfo;
+    return MobileTicketAPI.delayInfo;
   }
 
   function processVisitStatus(data) {
@@ -2797,6 +2792,7 @@ var MobileTicketAPI = (function () {
 
     visitStatus.servicePointName = data.servicePointName;
     visitStatus.appointmentTime = data.appointmentTime;
+    visitStatus.appointmentId = data.appointmentId;
     MobileTicketAPI.currentVisitStatus = visitStatus;
     return visitStatus;
   }
@@ -3598,12 +3594,9 @@ var MobileTicketAPI = (function () {
         success: function (data) {                  
           if (data != undefined) { 
             if (data.delayExpirySeconds !== undefined && data.delayed !== undefined && data.delayed) {                       
-              MobileTicketAPI.delayInfo =  {
-                "delayExpirySeconds" : data.delayExpirySeconds,
-                "branchCurrentTime" : data.branchCurrentTime
-              }
+              MobileTicketAPI.delayInfo = data.delayExpirySeconds;
             } else {
-              MobileTicketAPI.delayInfo = {};
+              MobileTicketAPI.delayInfo = null;
             }
           }
           onSuccess();
@@ -3613,7 +3606,7 @@ var MobileTicketAPI = (function () {
         }
       });    
     },
-    setVisit: function (branchId, queueId, visitId, checksum, ticketNumber) {
+    setVisit: function (branchId, queueId, visitId, checksum, ticketNumber, appointmentId) {
       MobileTicketAPI.visitId = visitId;
       MobileTicketAPI.queueId = queueId;
       MobileTicketAPI.branchId = branchId;
@@ -3624,8 +3617,8 @@ var MobileTicketAPI = (function () {
         checksum: checksum,
         queueId: queueId,
         visitId: visitId,
-        ticketNumber: ticketNumber
-
+        ticketNumber: ticketNumber,
+        appointmentId: appointmentId
       };
       MobileTicketAPI.visitInformation = data;
       saveToLocalStorage();
@@ -3746,6 +3739,12 @@ var MobileTicketAPI = (function () {
     },
     getCurrentDelayInfo: function() {
       return getCurrentDelayInfo();
+    },
+    openDelayView: function(flag) {
+      MobileTicketAPI.isUserOpenDelay = flag;
+    },
+    getDelayViewAccess: function() {
+      return MobileTicketAPI.isUserOpenDelay;
     },
     resetDelayInfo: function() {
       return resetDelayInfo()

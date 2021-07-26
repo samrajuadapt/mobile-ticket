@@ -61,10 +61,10 @@ export class VisitCancelComponent {
 
   public getDelayTime() {
     let delay = MobileTicketAPI.getCurrentDelayInfo();
-    if (delay === null || (delay && delay.delayExpirySeconds === undefined)) {
+    if (delay === null || delay === undefined) {
       return 0;
     }
-    let delayTime = delay.delayExpirySeconds * 1000;
+    let delayTime = delay * 1000;
     return delayTime;
   }
 
@@ -171,7 +171,7 @@ export class VisitCancelComponent {
 
   getDelayVisitAvailability() {
     let delayStatus = this.config.getConfig('delay_visit').availability.value;
-    if (delayStatus === 'enable' && MobileTicketAPI.getCurrentVisit() && MobileTicketAPI.getCurrentVisit().appointmentId !== null) {
+    if (delayStatus === 'enable' && MobileTicketAPI.getCurrentVisit() && (MobileTicketAPI.getCurrentVisit().appointmentId === null || MobileTicketAPI.getCurrentVisit().appointmentId === undefined)) {
       return true;
     } else {
       return false;
@@ -191,6 +191,7 @@ export class VisitCancelComponent {
   // }
 
   onDelayButtonClick() {
+    MobileTicketAPI.openDelayView(true);
     this.router.navigate(['delays']);
     // this.showLoader = true;
     //     MobileTicketAPI.createVisit(

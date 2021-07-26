@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, Input, HostListener, EventEmitter } from '@angular/core';
 import { QueueEntity } from '../../entities/queue.entity';
 import { TicketInfoService } from '../ticket-info.service';
 // import { Observable } from 'rxjs/Rx';
@@ -56,6 +56,8 @@ export class QueueComponent implements OnInit, OnDestroy {
   public expireTime: string;
   public delayTimeOut: any;
   public delayExpireTime: string;
+  private util;
+  public expireTimer: any;
 
   @Output() onUrlAccessedTicket: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() onTciketNmbrChange = new EventEmitter();
@@ -75,6 +77,7 @@ export class QueueComponent implements OnInit, OnDestroy {
     this.visitPosition = 0;
     this.isTicketEndedOrDeleted = false;
     this.visitState = new VisitState();
+    this.util = new Util();
   }
 
   ngOnInit() {
@@ -119,8 +122,8 @@ export class QueueComponent implements OnInit, OnDestroy {
             } else {
               // this.onBranchFetchSuccess(branch);
                 MobileTicketAPI.setVisit(branchId, 0, visitId, checksum);
-                this.ticketService.pollVisitStatus((queueInfo: QueueEntity, ticketId: any) => {
-                MobileTicketAPI.setVisit(branchId, 0, visitId, checksum, ticketId);
+                this.ticketService.pollVisitStatus((queueInfo: QueueEntity, ticketId: any, appointmentId: any) => {
+                MobileTicketAPI.setVisit(branchId, 0, visitId, checksum, ticketId, appointmentId);
                 this.onUrlVisitLoading.emit(false);
                 MobileTicketAPI.setServiceSelection({ name: MobileTicketAPI.getCurrentVisitStatus().currentServiceName });
                 this.onUrlAccessedTicket.emit(true);
@@ -163,9 +166,9 @@ export class QueueComponent implements OnInit, OnDestroy {
   }
 
   public checkDelay() {
-    if (MobileTicketAPI.getCurrentVisit().appointmentId !== null) {
+    if (MobileTicketAPI.getCurrentVisit().appointmentId === null ||  MobileTicketAPI.getCurrentVisit().appointmentId === undefined) {
       var _thisObj = this;
-      MobileTicketAPI.getDelayInfo(this.branchId, this.visitId, function(){
+      MobileTicketAPI.getDelayInfo(MobileTicketAPI.getCurrentVisit().branchId, MobileTicketAPI.getCurrentVisit().visitId, function(){
         _thisObj.setDelayView();
       });
     }
@@ -189,11 +192,11 @@ export class QueueComponent implements OnInit, OnDestroy {
 
   public getDelayTime() {
     let delay = MobileTicketAPI.getCurrentDelayInfo();
-    if (delay === null || (delay && delay.delayExpirySeconds === undefined)) {
+    if (delay === null || delay === undefined) {
       return 0;
     }
-    let delayTime = delay.delayExpirySeconds * 1000;
-    this.delayExpireTime = delay.delayExpirySeconds;
+    let delayTime = delay * 1000;
+    this.delayExpireTime = delay;
     return delayTime;
   }
 
@@ -434,10 +437,36 @@ export class QueueComponent implements OnInit, OnDestroy {
     }
   }
 
+  @HostListener("document:visibilitychange", ["$event"])
+  visibilitychange() {
+    if (!document.hidden) {
+      try {
+        let browser = this.util.getDetectBrowser(navigator.userAgent);
+        if (
+          /iPhone|iPad|iPod/i.test(
+            navigator.userAgent
+          ) ||
+          browser.name === "edgios" ||
+          browser.name === "fxios" ||
+          browser.name === "crios"
+        ) {
+          this.checkDelay();
+        } else {
+          this.checkDelay();
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  }
+
   public prepareDelayTime() {
     var _thisObj = this;
     var distance = _thisObj.getDelayTime() / 1000;
-    var x = setInterval(function() {
+    if (this.expireTimer){
+      clearInterval(this.expireTimer);
+    }
+    this.expireTimer = setInterval(function() {
     
       //var distance = _thisObj.getDelayTime();
     
@@ -448,7 +477,7 @@ export class QueueComponent implements OnInit, OnDestroy {
       _thisObj.expireTime = (hours < 10 ? "0" + hours : hours) + ":" + (minutes < 10 ? "0" + minutes : minutes) + ":" + (seconds < 10 ? "0" + seconds : seconds);
  
       if (distance < 0) {
-        clearInterval(x);
+        clearInterval(this.expireTimer);
       }
       distance = distance - 1;
     }, 1000);

@@ -65,6 +65,7 @@ export class DelayContainerComponent implements OnInit {
     ngOnInit() {
         this.scrollPageToTop();
         this.getEntryPoint();
+        MobileTicketAPI.openDelayView(false);
     }
 
     ngOnDestroy() {
@@ -198,7 +199,7 @@ export class DelayContainerComponent implements OnInit {
             this.router.navigate(['ticket']);
             this.isTakeTicketClickedOnce = false;
           }, (xhr, status, errorMessage) => {
-            this.translate.get('visit.notFound').subscribe((res: string) => {
+            this.translate.get('service.delayVisitIssue').subscribe((res: string) => {
                 this.alertDialogService.activate(res).then(res => {
                     this.router.navigate(['ticket']);
                   }, () => {
