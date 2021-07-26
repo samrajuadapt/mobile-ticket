@@ -3,7 +3,6 @@ import { BranchService } from '../../branch/branch.service';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { ServiceEntity } from '../../entities/service.entity';
-import { DelayService } from '../delay.service';
 import { RetryService } from '../../shared/retry.service';
 import { Util } from '../../util/util';
 import { NavigationExtras } from '@angular/router';
@@ -11,6 +10,7 @@ import { AlertDialogService } from "../../shared/alert-dialog/alert-dialog.servi
 import { Config} from '../../config/config';
 import {BranchOpenHoursValidator} from '../../util/branch-open-hours-validator'
 import { BranchScheduleService } from '../../shared/branch-schedule.service';
+import { ServiceService } from 'app/service/service.service';
 declare var MobileTicketAPI: any;
 declare var ga: Function;
 
@@ -28,28 +28,34 @@ export class DelayContainerComponent implements OnInit {
     public isDelayListEmpty: boolean = false;
     private isTakeTicketClickedOnce: boolean;
     public showLoader = false;
+    public timeout: any;
 
-    constructor(private branchService: BranchService, private serviceService: DelayService, public router: Router,
+    constructor(private branchService: BranchService, private serviceService: ServiceService, public router: Router,
         private translate: TranslateService, private retryService: RetryService, private alertDialogService: AlertDialogService,
         private config: Config, private openHourValidator: BranchOpenHoursValidator, private branchScheduleService: BranchScheduleService) {
 
-        serviceService.registerCountDownCompleteCallback(() => {
-            this.router.navigate(['branches', { redirect: true }]);
-            MobileTicketAPI.setServiceSelection(undefined);
-        }, branchService.isSingleBranch());
+        // serviceService.registerCountDownCompleteCallback(() => {
+        //     this.router.navigate(['branches', { redirect: true }]);
+        //     MobileTicketAPI.setServiceSelection(undefined);
+        // }, branchService.isSingleBranch());
 
-        if (branchService.getSelectedBranch() === null) {
-            this.router.navigate(['branches']);
-        }
-        else {
-            this.translate.get('service.defaultTitle').subscribe((res: string) => {
-                document.title = res;
-            });
+        // if (branchService.getSelectedBranch() === null) {
+        //     this.router.navigate(['branches']);
+        // }
+        // else {
+        //     this.translate.get('service.defaultTitle').subscribe((res: string) => {
+        //         document.title = res;
+        //     });
 
-            this.translate.get('service.selectService').subscribe((res: string) => {
-                this.subHeadingTwo = res + " " + branchService.getSelectedBranch() + ":";
-            });
-        }
+        //     this.translate.get('service.selectService').subscribe((res: string) => {
+        //         this.subHeadingTwo = res + " " + branchService.getSelectedBranch() + ":";
+        //     });
+        // }
+
+        var _thisObj = this;
+        this.timeout = setTimeout(function(){
+            _thisObj.onCancelDelay();
+        }, 30000);
     }
 
     get showNetWorkError(): boolean { 
@@ -59,6 +65,12 @@ export class DelayContainerComponent implements OnInit {
     ngOnInit() {
         this.scrollPageToTop();
         this.getEntryPoint();
+    }
+
+    ngOnDestroy() {
+        if (this.timeout){
+            clearTimeout(this.timeout);
+        }
     }
 
     scrollPageToTop() {
@@ -132,7 +144,7 @@ export class DelayContainerComponent implements OnInit {
                 this.router.navigate(['ticket']);
             }
             else {
-                if (1 === 1) {
+                
                     this.serviceService.stopBranchRedirectionCountDown();
                     this.serviceService.stopServiceFetchTimer();
                     this.isTakeTicketClickedOnce = true;
@@ -175,7 +187,6 @@ export class DelayContainerComponent implements OnInit {
                             this.createTicket();
                         }
                     }
-                }
             }
         }
     }
@@ -187,7 +198,13 @@ export class DelayContainerComponent implements OnInit {
             this.router.navigate(['ticket']);
             this.isTakeTicketClickedOnce = false;
           }, (xhr, status, errorMessage) => {
-      
+            this.translate.get('visit.notFound').subscribe((res: string) => {
+                this.alertDialogService.activate(res).then(res => {
+                    this.router.navigate(['ticket']);
+                  }, () => {
+          
+                  });
+            });
           });
     }
 

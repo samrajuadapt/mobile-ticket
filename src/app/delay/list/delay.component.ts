@@ -1,6 +1,5 @@
 import { Component, AfterViewInit, Input, HostListener, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { DelayService } from '../delay.service';
 import { ServiceEntity } from '../../entities/service.entity';
 import { RetryService } from '../../shared/retry.service';
 import { Util } from './../../util/util'
@@ -22,7 +21,7 @@ export class DelaysComponent implements AfterViewInit {
   @Output() onShowHideServiceFetchError = new EventEmitter<boolean>();
   @Output() onDelayListEmpty: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private serviceService: DelayService, private retryService: RetryService, private router: Router,
+  constructor(private retryService: RetryService, private router: Router,
               private config: Config, private openHourValidator: BranchOpenHoursValidator) {
     this.onShowHideServiceFetchError.emit(false);
     this.setDelayList();
