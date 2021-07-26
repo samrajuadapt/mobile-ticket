@@ -16,7 +16,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import {DelaysComponent} from './delay/list/delay.component';
 import {DelayContainerComponent} from './delay/list-container/delay-container.component';
 import {DelayComponent} from './delay/list-item/delay.component';
-import {DelayService} from './delay/delay.service';
 
 import {FrameLayoutComponent} from './shared/frame-layout/frame-layout.component';
 import {NotSupportComponent} from './shared/not-support/not-support.component';
@@ -99,7 +98,7 @@ declare var MobileTicketAPI:any;
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [BranchService, ServiceService, DelayService, TicketInfoService, AuthGuard, ConfirmDialogService, AlertDialogService,
+  providers: [BranchService, ServiceService, TicketInfoService, AuthGuard, ConfirmDialogService, AlertDialogService,
     VisitCancelLeavelineGuard, RetryService, Locale, LocationService, SortPipe, CustomerDataGuard,
     Config, BranchScheduleService, BranchOpenHoursValidator, LocationValidator, DelayDataGuard,
     {provide: APP_INITIALIZER, useFactory: configuration, deps: [Config], multi: true}
