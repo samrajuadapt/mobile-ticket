@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { ServiceEntity } from '../../entities/service.entity';
 import { TicketEntity } from '../../entities/ticket.entity';
 
@@ -19,12 +20,15 @@ export class DelayComponent implements OnInit {
   public isRtl: boolean;
   public time: string;
 
-  constructor() {
+  constructor(private translate: TranslateService) {
    }
 
   ngOnInit() {
     this.setRtlStyles();
-    this.time  = this.name + ' min';
+    this.translate.get("service.min").subscribe((res: string) => {
+      this.time  = this.name + ' ' +  res;
+    });
+    
   }
 
   onSelectDelay(delay) {

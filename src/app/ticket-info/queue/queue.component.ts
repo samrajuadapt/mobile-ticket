@@ -122,8 +122,8 @@ export class QueueComponent implements OnInit, OnDestroy {
             } else {
               // this.onBranchFetchSuccess(branch);
                 MobileTicketAPI.setVisit(branchId, 0, visitId, checksum);
-                this.ticketService.pollVisitStatus((queueInfo: QueueEntity, ticketId: any, appointmentId: any) => {
-                MobileTicketAPI.setVisit(branchId, 0, visitId, checksum, ticketId, appointmentId);
+                this.ticketService.pollVisitStatus((queueInfo: QueueEntity, ticketId: any, queueId: any, appointmentId: any) => {
+                MobileTicketAPI.setVisit(branchId, queueId, visitId, checksum, ticketId, appointmentId);
                 this.onUrlVisitLoading.emit(false);
                 MobileTicketAPI.setServiceSelection({ name: MobileTicketAPI.getCurrentVisitStatus().currentServiceName });
                 this.onUrlAccessedTicket.emit(true);

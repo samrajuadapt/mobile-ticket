@@ -26,7 +26,8 @@
     "defaultTitle": "Mobile Ticket",
     "waiting": "Waiting",
     "noSelectedServices": "Please select a service",
-    "delayVisitIssue": "Sorry, something went wrong."
+    "delayVisitIssue": "Sorry, something went wrong.",
+    "min": "min"
   },
   "ticketInfo": {
     "leaveVisitConfirmMsg": "Would you like to leave the line?",
