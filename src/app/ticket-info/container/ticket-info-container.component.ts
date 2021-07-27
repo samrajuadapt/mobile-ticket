@@ -46,6 +46,8 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   public isMeetingAvailable: boolean;
   private eventSub: Subscription;
   public redirectUrlLoading: boolean;
+  public showQueue: boolean;
+  public showAppTime: boolean;
 
   @ViewChild('ticketNumberComponent', {static: true}) ticketNumberComponent;
   @ViewChild('queueComponent', {static: true}) queueComponent;
@@ -89,6 +91,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       this.onVisitStatusUpdate(MobileTicketAPI.getCurrentVisitStatus());
     }
     */
+
   }
 
   ngOnInit() {
@@ -97,6 +100,17 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     this.loadNotificationSound();
     this.setRtlStyles();
     this.loadTranslations();
+
+    if (this.config.getConfig('show_queue_position').trim() === 'enable') {
+      this.showQueue = true;
+    } else {
+      this.showQueue = false;
+    }
+    if (this.config.getConfig('show_appointment_time').trim() === 'enable') {
+      this.showAppTime = true;
+    } else {
+      this.showAppTime = false;
+    }
 
   }
 
@@ -335,7 +349,16 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       });
 
     }
-    document.title = title;
+    let status = MobileTicketAPI.getCurrentVisitStatus();
+    let appTime = null;
+    if (status) {
+      appTime = status.appointmentTime;
+    } else {
+      appTime = null;
+    }
+    if (this.showQueue && (((appTime === null)) || !this.showAppTime && (appTime !== null))){
+      document.title = title;
+    } 
   }
 
   public getSelectedBranch() {

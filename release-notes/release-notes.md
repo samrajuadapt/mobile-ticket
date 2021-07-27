@@ -52,6 +52,7 @@ This document describes the new features, bug corrections, known issues and reco
 | --- | --- |
 | **MOB-634** | **"Powered by Qmatic" in Mobile Ticket** |
 | **MOB-649** | **Text above ticket is not shown if the visit is called by a hardware device** |
+| **MOB-663** | **User can see queue position in the <title> tag, even if the "show_queue_position" is disabled.** |
 
 <h3>Upgrade Instructions</h3>
 
