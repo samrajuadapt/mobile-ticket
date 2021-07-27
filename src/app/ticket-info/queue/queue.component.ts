@@ -451,8 +451,6 @@ export class QueueComponent implements OnInit, OnDestroy {
           browser.name === "crios"
         ) {
           this.checkDelay();
-        } else {
-          this.checkDelay();
         }
       } catch (e) {
         console.log(e);
