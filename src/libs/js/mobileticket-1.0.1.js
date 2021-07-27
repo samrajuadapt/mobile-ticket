@@ -3154,6 +3154,7 @@ var MobileTicketAPI = (function () {
         MobileTicketAPI.visitInformation = visit;
 
         resetDelayInfo();
+        MobileTicketAPI.setDelayTime(0);
         var jsonData = {};
 
         jsonData.fromBranchId = branch.id;
