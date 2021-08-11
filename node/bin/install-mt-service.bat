@@ -8,9 +8,14 @@ IF NOT EXIST "C:\Program Files\nodejs\node.exe" (
 echo "Error! cannot locate C:\Program Files\nodejs\node.exe"
  goto FAIL
 )
+
+call npm install --silent || goto FAIL
+
 nssm install "Qmatic Mobile Ticket" "C:\Program Files\nodejs\node.exe" || goto FAIL
 nssm set "Qmatic Mobile Ticket" AppDirectory "%CURRENT%\.." || goto FAIL
 nssm set "Qmatic Mobile Ticket" AppParameters "%CURRENT%\..\server.js" || goto FAIL
+nssm set "Qmatic Mobile Ticket" AppStdout "%CURRENT%\service.log"
+nssm set "Qmatic Mobile Ticket" AppStderr "%CURRENT%\service-error.log"
 nssm set "Qmatic Mobile Ticket" Start SERVICE_AUTO_START || goto FAIL
 nssm start "Qmatic Mobile Ticket" || goto FAIL
 

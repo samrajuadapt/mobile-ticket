@@ -55,6 +55,12 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-663** | **User can see queue position in the <title> tag, even if the "show_queue_position" is disabled.** |
 | **MOB-661** | **Network error message doesn't appear if "show_queue_position" is disabled.** |
 
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-668** | **windows server 2019 - Mobile Ticket cannot run as a service** |
+
 <h3>Upgrade Instructions</h3>
 
 - When upgrading from a previous version, following should be considered.
