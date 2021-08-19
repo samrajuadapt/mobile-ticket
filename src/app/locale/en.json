@@ -48,7 +48,7 @@
     "clickHere": "Click here",
     "loadBranches": "to start over",
     "notInRange" : "Sorry, you are too far from the branch. Get closer to the branch and Try again.",
-    "positionPermission" : "If you want to create a visit, please enable Location Services."
+    "positionPermission" : "If you want to create a visit, please enable Location Services &"
   },
   "error_codes": {
     "error_8042": "Line is full. Please try again later."
