@@ -112,6 +112,19 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       this.showAppTime = false;
     }
 
+    //events
+    if (MobileTicketAPI.getSelectedBranch().id && MobileTicketAPI.getCurrentVisit().visitId){
+      MobileTicketAPI.getVisitEvents(MobileTicketAPI.getSelectedBranch().id, MobileTicketAPI.getCurrentVisit().visitId, (res) => {
+        if (!res) {
+          var eventData = {'param': "MT_VISIT"};
+          var eventName = "OPEN_MT_VISIT";
+          
+          MobileTicketAPI.sendCustomStatEvent(MobileTicketAPI.getSelectedBranch().id, MobileTicketAPI.getCurrentVisit().visitId, eventName, eventData);
+        }
+        
+      });
+    }
+    
   }
 
   loadTranslations() {

@@ -2836,9 +2836,9 @@ var MobileTicketAPI = (function () {
     if(visitFromQR){    
       var eventData = {};
       //eventData.param = "QR";    
-      eventData.param = "MT_VISIT";
-      var eventName = VISIT_EVENT_NAME;
-      MobileTicketAPI.sendCustomStatEvent(branchId, visitId, eventName, eventData);
+      // eventData.param = "MT_VISIT";
+      // var eventName = VISIT_EVENT_NAME;
+      // MobileTicketAPI.sendCustomStatEvent(branchId, visitId, eventName, eventData);
     }
   }
 
@@ -3176,6 +3176,10 @@ var MobileTicketAPI = (function () {
                 .done(function (data) {
                   if (data != undefined) {
                     MobileTicketAPI.visitInformation = data;
+                    var eventData = {};
+                    var eventName = "CREATE_MT_VISIT";
+                    eventData.param = "MT_VISIT";
+                    MobileTicketAPI.sendCustomStatEvent(data.branchId, data.visitId, eventName, eventData);
                     saveToLocalStorage();
                     onSuccess(data);
                   }
@@ -3200,6 +3204,10 @@ var MobileTicketAPI = (function () {
             .done(function (data) {
               if (data != undefined) {
                 MobileTicketAPI.visitInformation = data;
+                var eventData = {};
+                var eventName = "CREATE_MT_VISIT";
+                eventData.param = "MT_VISIT";
+                MobileTicketAPI.sendCustomStatEvent(data.branchId, data.visitId, eventName, eventData);
                 saveToLocalStorage();
                 onSuccess(data);
               }
@@ -3234,6 +3242,42 @@ var MobileTicketAPI = (function () {
       } catch (e) {
         onError(null, null, e.message);
       }
+    },
+
+    getVisitEvents: function (branchId, visitId, onSuccess, onError) {
+      try {
+
+        var VISIT_STATUS_REST1 = MOBILE_TICKET + "/" + "MyVisit/LastEvent" + "/" + BRANCHES + "/" + branchId + "/" + VISITS + "/" + visitId + "/" + EVENTS;
+        $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: VISIT_STATUS_REST1,
+          success: function (visitEvents) {
+            if (visitEvents != undefined) {
+              var usedByMT = false;
+              for (let index = 0; index < visitEvents.length; index++) {
+                const event = visitEvents[index];
+                if(event.eventName==='VISIT_GENERIC' && event.parameterMap.genericVisitEvent==='CREATE_MT_VISIT'){
+                  usedByMT = true;
+                  break;
+                }
+                if(event.eventName==='VISIT_GENERIC' && event.parameterMap.genericVisitEvent==='OPEN_MT_VISIT'){
+                  usedByMT = true;
+                  break;
+                }
+              }
+              onSuccess(usedByMT);
+            }
+          },
+          error: function (xhr, status, errorMsg) {
+            onError(xhr, status, errorMsg);
+          }
+        });
+
+      } catch (e) {
+        onError(null, null, e.message);
+      }
+
     },
 
     getCustomParameters: function (onSuccess, onError) {
@@ -3425,6 +3469,10 @@ var MobileTicketAPI = (function () {
           MobileTicketAPI.visitInformation.serviceName = data.currentVisitService.serviceExternalName;
           MobileTicketAPI.visitInformation.clientId = "XXXX-XXXX-XXXX-XXXX-XXXX-XXXX-XXXX"
           MobileTicketAPI.visitInformation.checksum = data.checksum;
+          var eventData = {};
+          var eventName = "CREATE_MT_VISIT";
+          eventData.param = "MT_VISIT";
+          MobileTicketAPI.sendCustomStatEvent(branchId, data.id, eventName, eventData);
           saveToLocalStorage();
           onSuccess(data);
         }

@@ -552,6 +552,32 @@ var apiBranchScheduleProxy = proxy(host, {
 	https: APIGWHasSSL
 });
 
+var apiEventProxy = proxy(host, {
+	// ip and port off apigateway
+
+	proxyReqPathResolver: (req) => {
+		var newUrl = req.originalUrl.replace("/MobileTicket/MyVisit/LastEvent","/rest/servicepoint");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL
+});
+
 var ticketTokenProxy = function (req, res, next) {
 	if (ticketToken === "enable") {
 	  if (req.body.token) {
@@ -609,6 +635,7 @@ app.use("/MobileTicket/MyVisit/entrypoint/branches/*/visits/*", apiCustomParamet
 app.use("/MobileTicket/MyAppointment/arrive/branches/*/entryPoints/*/visits", apiArriveProxy);
 app.use("/MobileTicket/services/:serviceID/branches/:branchID/ticket/*",jsonParser, ticketTokenProxy);
 app.use("/MobileTicket/services/*", apiProxy);
+app.use("/MobileTicket/MyVisit/LastEvent/*", apiEventProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
 app.use("/MobileTicket/MyMeeting/*", apiMeetingProxy);
 app.use("/MobileTicket/BranchSchedule/variables/*", apiBranchScheduleProxy);

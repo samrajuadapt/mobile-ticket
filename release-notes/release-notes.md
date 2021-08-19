@@ -52,14 +52,15 @@ This document describes the new features, bug corrections, known issues and reco
 | --- | --- |
 | **MOB-634** | **"Powered by Qmatic" in Mobile Ticket** |
 | **MOB-649** | **Text above ticket is not shown if the visit is called by a hardware device** |
-| **MOB-663** | **User can see queue position in the <title> tag, even if the "show_queue_position" is disabled.** |
-| **MOB-661** | **Network error message doesn't appear if "show_queue_position" is disabled.** |
+| **MOB-648** | **Record all visits used Mobile Ticket application** |
 
 <h3>Bug fixes</h3>
 
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-668** | **windows server 2019 - Mobile Ticket cannot run as a service** |
+| **MOB-661** | **Network error message doesn't appear if "show_queue_position" is disabled.** |
+| **MOB-663** | **User can see queue position in the <title> tag, even if the "show_queue_position" is disabled.** |
 
 <h3>Upgrade Instructions</h3>
 
