@@ -1,7 +1,7 @@
 <div class="text-center queue-container" *ngIf="!isTicketEndedOrDeleted">
   <div *ngIf="showAppTime && appointmentTime" class="queue-app">
-    <span class="queue-app-heading">{{ 'ticketInfo.appointmentTime' | translate }}</span>
-    <span class="queue-app-time">{{appointmentTime}} </span> 
+    <span class="queue-app-heading custom text-color">{{ 'ticketInfo.appointmentTime' | translate }}</span>
+    <span class="queue-app-time custom text-color">{{appointmentTime}} </span> 
   </div>
   <div *ngIf="showQueue && queueItems && !(appointmentTime && showAppTime)">
     <div [ngClass]="{'queue-heading-alignment-rtl' : isRtl, 'queue-heading-alignment' : true, 'queue-heading' : true, 'custom' : true, 'text-color' : true}">

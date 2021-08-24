@@ -11,7 +11,7 @@
         <div class="customer-phone" *ngIf="isCustomerPhoneDataEnabled">
           <div *ngIf="!showLoader" class="custom-phone-card">
             <!-- INITIAL AND EDIT PHONE SECTION -->
-            <div class="phone-num-text"> {{'customer_info.phoneNumber' | translate}} <span *ngIf="isPhoneNumberMandatory">*</span> </div> 
+            <div class="phone-num-text custom text-color"> {{'customer_info.phoneNumber' | translate}} <span *ngIf="isPhoneNumberMandatory">*</span> </div> 
             <div class="customer-phone__number-container"
               *ngIf="phoneSectionState === phoneSectionStates.INITIAL || phoneSectionState === phoneSectionStates.EDIT_PHONE ">
               <div class="phone-num">
@@ -114,7 +114,7 @@
                         d="M5.58 3.334l.162.01h18.511c.599.014 1.18.207 1.666.555.471.426.742 1.031.745 1.666v13.881c.034.642-.242 1.261-.74 1.666-.427.47-1.032.738-1.667.74H7.964l-4.629 4.629V5.565c-.03-.589.252-1.15.741-1.48.38-.53 1.018-.813 1.666-.74zm-.024 1.862s0-.185-.185 0c-.185.184-.185.184-.185.37V22.04l1.482-1.477.555-.556h17.4c.185-.185.185-.185.185-.37V5.681c-.004-.12-.026-.143-.185-.301l-.069-.069c-.12-.116-.142-.116-.3-.116zm4.813 6.478v1.85H8.52v-1.85h1.85zm3.518 0v1.85h-1.666v-1.85h1.666zm3.702 0v1.85h-1.85v-1.85h1.85zm3.703 0v1.85H19.44v-1.85h1.85z" />
                     </svg>
                   </div>
-                  <div>
+                  <div class="custom text-color">
                     {{'customer_info.agreeDescription' | translate}} <span
                       class="privacy-policy-link custom link-text-color" id="privacy_element"
                       (click)="privacyLinkButtonPressed()"> {{'customer_info.privacyPolicy' | translate}}
@@ -249,7 +249,7 @@
         </div>
         <div *ngIf="!showLoader">
           <div class="qm-customer-id" *ngIf="isCustomerIdEnabled && phoneSectionState === phoneSectionStates.INITIAL">
-            <div class="phone-num-text"> {{'customer_info.customerId' | translate}} </div>
+            <div class="phone-num-text custom text-color"> {{'customer_info.customerId' | translate}} </div>
             <input type="text" class="customer-id-input" [(ngModel)]="customerId" (change)="onCustomerIdChanged()"
               (keyup)="onCustomerIdChanged()" placeholder="{{'customer_info.id_placeholder' | translate}}">
             <div class="customer-id-error" *ngIf="customerIdError"> {{'customer_info.customerIdError' | translate}}
