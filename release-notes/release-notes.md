@@ -51,13 +51,14 @@ This document describes the new features, bug corrections, known issues and reco
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-634** | **"Powered by Qmatic" in Mobile Ticket** |
-| **MOB-649** | **Text above ticket is not shown if the visit is called by a hardware device** |
-| **MOB-648** | **Record all visits used Mobile Ticket application** |
 
 <h3>Bug fixes</h3>
 
 | **Id** | **Release notes** |
 | --- | --- |
+| **MOB-616** | **Prefilled mobile no in OTP screen get cleared if user open & close cookie consent popup** |
+| **MOB-649** | **Text above ticket is not shown if the visit is called by a hardware device** |
+| **MOB-648** | **Record all visits used Mobile Ticket application** |
 | **MOB-668** | **windows server 2019 - Mobile Ticket cannot run as a service** |
 | **MOB-661** | **Network error message doesn't appear if "show_queue_position" is disabled.** |
 | **MOB-663** | **User can see queue position in the <title> tag, even if the "show_queue_position" is disabled.** |
