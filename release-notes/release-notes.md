@@ -51,7 +51,16 @@ This document describes the new features, bug corrections, known issues and reco
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-634** | **"Powered by Qmatic" in Mobile Ticket** |
+
+<h3>Bug fixes</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-616** | **Prefilled mobile no in OTP screen get cleared if user open & close cookie consent popup** |
 | **MOB-649** | **Text above ticket is not shown if the visit is called by a hardware device** |
+| **MOB-706** | **Call time delay - Text color should taken from theme-styles.css** |
+
+
 
 <h3>Upgrade Instructions</h3>
 
