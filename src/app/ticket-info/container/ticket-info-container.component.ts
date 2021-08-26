@@ -48,6 +48,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   public redirectUrlLoading: boolean;
   public showQueue: boolean;
   public showAppTime: boolean;
+  private checkedEvents: boolean = false;
 
   @ViewChild('ticketNumberComponent', {static: true}) ticketNumberComponent;
   @ViewChild('queueComponent', {static: true}) queueComponent;
@@ -112,19 +113,6 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
       this.showAppTime = false;
     }
 
-    //events
-    if (MobileTicketAPI.getSelectedBranch().id && MobileTicketAPI.getCurrentVisit().visitId){
-      MobileTicketAPI.getVisitEvents(MobileTicketAPI.getSelectedBranch().id, MobileTicketAPI.getCurrentVisit().visitId, (res) => {
-        if (!res) {
-          var eventData = {'param': "MT_VISIT"};
-          var eventName = "OPEN_MT_VISIT";
-          
-          MobileTicketAPI.sendCustomStatEvent(MobileTicketAPI.getSelectedBranch().id, MobileTicketAPI.getCurrentVisit().visitId, eventName, eventData);
-        }
-        
-      });
-    }
-    
   }
 
   loadTranslations() {
@@ -389,6 +377,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     if (MobileTicketAPI.getSelectedBranch() !== null) {
       this.branchEntity = MobileTicketAPI.getSelectedBranch();
     }
+    this.sendStatEvents();
   }
 
   public onBranchUpdate(event) {
@@ -405,5 +394,22 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
 
   applyTicketEndStyles() {
     this.isTicketEndPage = true;
+  }
+
+  async sendStatEvents() {
+    // stat events
+    if (MobileTicketAPI.getSelectedBranch() && MobileTicketAPI.getCurrentVisit() && 
+    MobileTicketAPI.getCurrentVisit().visitStatus !== "DELETE" && !this.checkedEvents){
+      await MobileTicketAPI.getVisitEvents(MobileTicketAPI.getSelectedBranch().id, MobileTicketAPI.getCurrentVisit().visitId, (res) => {
+        this.checkedEvents = true;
+        if (!res) {
+          var eventData = {'param': "MT_VISIT"};
+          var eventName = "OPEN_MT_VISIT";
+          
+          MobileTicketAPI.sendCustomStatEvent(MobileTicketAPI.getSelectedBranch().id, MobileTicketAPI.getCurrentVisit().visitId, eventName, eventData);
+        }
+        
+      });
+    }
   }
 }

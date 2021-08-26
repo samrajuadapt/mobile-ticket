@@ -3228,6 +3228,7 @@ var MobileTicketAPI = (function () {
           type: "POST",
           dataType: "json",
           contentType: 'application/json',
+          async: false,
           data: JSON.stringify(eventData),
           url: SEND_CUSTOM_EVENT_REST_API,
           success: function (data) {
@@ -3254,9 +3255,11 @@ var MobileTicketAPI = (function () {
           url: VISIT_STATUS_REST1,
           success: function (visitEvents) {
             if (visitEvents != undefined) {
-              var usedByMT = false;
+              var usedByMT = true;
+              
               for (let index = 0; index < visitEvents.length; index++) {
                 const event = visitEvents[index];
+                usedByMT = false;
                 if(event.eventName==='VISIT_GENERIC' && event.parameterMap.genericVisitEvent==='CREATE_MT_VISIT'){
                   usedByMT = true;
                   break;
