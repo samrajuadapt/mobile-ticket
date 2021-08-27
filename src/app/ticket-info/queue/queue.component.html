@@ -24,7 +24,7 @@
     'custom' : true, 'text-color' : true}" [hidden]="!showNetWorkError">
       <app-network-message></app-network-message>
  </div>
-  <div class="queue-app">
+  <div *ngIf="showDelay && expireTime && expireTime.length > 0" class="queue-app">
     <span class="queue-app-heading custom text-color">{{ 'ticketInfo.delayHeading' | translate }}</span>
     <span class="queue-app-time custom text-color">{{ expireTime }} </span>
   </div>
