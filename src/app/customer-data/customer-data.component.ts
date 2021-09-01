@@ -112,6 +112,12 @@ export class CustomerDataComponent implements OnInit, AfterViewInit {
     this.isPrivacyEnable = this.config.getConfig('privacy_policy');
     this.activeConsentEnable = this.config.getConfig('active_consent');
     this.phoneNumber = MobileTicketAPI.getEnteredPhoneNum();
+    try {
+      this.phoneNumber.trim();
+    } catch (error) { 
+      this.phoneNumber = MobileTicketAPI.setPhoneNumber('');
+      this.phoneNumber = MobileTicketAPI.getEnteredPhoneNum();
+    }
     this.customerId = MobileTicketAPI.getEnteredCustomerId() ? MobileTicketAPI.getEnteredCustomerId() : '';
 
 

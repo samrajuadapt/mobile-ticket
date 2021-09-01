@@ -63,6 +63,8 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-663** | **User can see queue position in the <title> tag, even if the "show_queue_position" is disabled.** |
 | **MOB-704** | **Direct link to branch without locationservices shows different error.** |
 | **MOB-705** | **Appointment Time - Text color should taken from theme-styles.css.** |
+| **MOB-710** | **Cannot create mobileTicket from direct ticket url when both phn no & customer info are enabled** |
+
 
 <h3>Upgrade Instructions</h3>
 
