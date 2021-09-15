@@ -20,10 +20,10 @@
     <footer class="qm-footer">
       <div class="center-text">
         <div *ngIf="!isDelayListEmpty" class="accent-btn custom accent-bg-color btn-text-color" (click)='onTakeTicket()'>
-          {{ 'service.continueBtnText' | translate }}
+          {{ 'service.delayOkButtonText' | translate }}
         </div>
         <div class="accent-btn custom accent-bg-color btn-text-color btn-margin-extend" (click)='onCancelDelay()'>
-          {{ (isDelayListEmpty ? 'service.okButtonText' : 'service.cancelBtnText') | translate }}
+          {{ (isDelayListEmpty ? 'service.okButtonText' : 'service.delayCancelBtnText') | translate }}
         </div>
       </div>
     </footer>

@@ -35,9 +35,9 @@
     <footer class="qm-footer" [hidden]="!isServiceListLoaded">
       <div class="center-text">
         <div class="accent-btn custom accent-bg-color btn-text-color" (click)='onTakeTicket()'>
-          {{ 'service.accentBtnText' | translate }}
+          {{ (getDelayVisitAvailability() ? 'service.accentBtnDleayText' : 'service.accentBtnText') | translate }}
         </div>
-        <div *ngIf="getDelayVisitAvailability()" class="accent-btn custom accent-bg-color btn-text-color btn-margin-extend" (click)='onDelayTicket()'>
+        <div *ngIf="getDelayVisitAvailability()" class="accent-btn custom accent-bg-color btn-text-color btn-margin-extend" style="font-size: 1.6em; line-height: 3em;" (click)='onDelayTicket()'>
           {{ 'service.delayVisitBtnText' | translate }}
         </div>
       </div>

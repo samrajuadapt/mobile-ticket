@@ -75,7 +75,7 @@
       {
         "translation_key": "open_hours.week_day4",
         "from": "8:00",
-        "to": "23:00",
+        "to": "18:00",
         "description": "thursday",
         "display_from": "8:00",
         "display_to": "18:00",

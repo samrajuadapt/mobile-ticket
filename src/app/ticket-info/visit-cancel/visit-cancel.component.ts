@@ -45,7 +45,7 @@ export class VisitCancelComponent {
     this.translate.get('ticketInfo.btnTitleChangeDelay').subscribe((res: string) => {
       this.btnTitleChangeDelay = res;
     });
-    this.translate.get('service.delayVisitBtnText').subscribe((res: string) => {
+    this.translate.get('ticketInfo.delayVisitBtnText').subscribe((res: string) => {
       this.btnTitleDelayVisit = res;
     });
     this.translate.get('ticketInfo.btnTitleNewTicket').subscribe((res: string) => {

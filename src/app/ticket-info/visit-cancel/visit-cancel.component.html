@@ -2,7 +2,7 @@
   <div *ngIf="getDelayTime() > 0 && isDelayFuncAvailable && getDelayVisitAvailability() && !isTicketEndedOrDeleted && !isVisitCall" class="accent-btn accent-btn-side custom accent-bg-color btn-text-color btn-margin-extend" (click)='onArriveButtonClick()'>
     {{ btnTitleArrive }}
   </div>
-  <div *ngIf="getDelayVisitAvailability() && isDelayFuncAvailable && !isTicketEndedOrDeleted && !isVisitCall" class="accent-btn accent-btn-side custom accent-bg-color btn-text-color btn-margin-extend" (click)='onDelayButtonClick()'>
+  <div *ngIf="getDelayVisitAvailability() && isDelayFuncAvailable && !isTicketEndedOrDeleted && !isVisitCall" class="accent-btn accent-btn-side custom accent-bg-color btn-text-color btn-margin-extend" [ngStyle]="{'font-size':getDelayTime() > 0 ? '1.7em' : '1.8em' }" (click)='onDelayButtonClick()'>
     {{ getDelayTime() > 0 ? btnTitleChangeDelay : btnTitleDelayVisit }}
   </div>
   <div class="accent-btn accent-btn-side custom accent-bg-color btn-text-color" (click)='onButtonClick()'>
