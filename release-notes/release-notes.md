@@ -64,7 +64,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-704** | **Direct link to branch without locationservices shows different error.** |
 | **MOB-705** | **Appointment Time - Text color should taken from theme-styles.css.** |
 | **MOB-710** | **Cannot create mobileTicket from direct ticket url when both phn no & customer info are enabled** |
-
+| **MOB-669** | **UI - Reduce the line height of button texts.** |
 
 <h3>Upgrade Instructions</h3>
 

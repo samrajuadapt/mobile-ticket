@@ -54,6 +54,7 @@ export class AppointmentComponent implements OnInit {
     }
     this.isIOS = util.isBrowseriOS(userAgent)
     this.app = MobileTicketAPI.getAppointment();
+    console.log(this.app);
     this.isInvalid = this.isAppointmentInvalid();
     this.getBranch();
     this.setRtlStyles();
@@ -116,7 +117,12 @@ export class AppointmentComponent implements OnInit {
     MobileTicketAPI.findEntrypointId(this.app.branchId, (response) => {
       if (response.length > 0) {
         let entryPointId = response[0].id;
-        MobileTicketAPI.arriveAppointment(this.app.branchId, entryPointId, this.app.qpId, this.app.notes, (response) => {
+        let selectedServicesWithPeopleServices = (this.app.custom && JSON.parse(this.app.custom).peopleServices) ? 
+        JSON.parse(this.app.custom).peopleServices : null;
+        let numberOfCustomers = (this.app.custom && JSON.parse(this.app.custom).numberOfCustomers) ? 
+        parseInt(JSON.parse(this.app.custom).numberOfCustomers) : null;
+        
+        MobileTicketAPI.arriveAppointment(this.app.branchId, entryPointId, this.app.qpId, this.app.notes, selectedServicesWithPeopleServices, numberOfCustomers, (response) => {
           this.ticket = response;
           this.router.navigate(['ticket'], { queryParams: {branch: this.app.branchId, visit: this.ticket.id,
             checksum: this.ticket.checksum}});
@@ -156,6 +162,7 @@ export class AppointmentComponent implements OnInit {
         aEntity.qpId = response.qpId;
         MobileTicketAPI.findCentralAppointment(response.qpId,
           (response2) => {
+            console.log(response2)
             aEntity.serviceId = response2.services[0].id;
             aEntity.serviceName = response2.services[0].name;
             aEntity.branchId = response2.branchId;

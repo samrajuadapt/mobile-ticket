@@ -11,4 +11,5 @@ export class AppointmentEntity {
   date: string = '';
   qpId: number;
   notes: string;
+  custom?: string;
 }

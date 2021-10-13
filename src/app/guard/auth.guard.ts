@@ -492,6 +492,7 @@ export class AuthGuard implements CanActivate {
                                 entity.startTime = response2.startTime;
                                 entity.endTime = response2.endTime;
                                 entity.notes = response2.properties.notes;
+                                entity.custom = response2.properties.custom;
                                 MobileTicketAPI.setAppointment(entity);
                                 resolve(true);
                             },

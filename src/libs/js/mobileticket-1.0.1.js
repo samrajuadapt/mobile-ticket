@@ -3441,12 +3441,18 @@ var MobileTicketAPI = (function () {
         }
       });    
     },
-    arriveAppointment: function(branchId, entryPointId, appointmentId, notes, onSuccess, onError) {
+    arriveAppointment: function(branchId, entryPointId, appointmentId, notes, peopleServices, numberOfCustomers, onSuccess, onError) {
       var ARRIVE_REST_API = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/" + ARRIVE +"/" + BRANCHES + "/" + branchId + "/entryPoints/" + entryPointId + "/" + VISITS;     
       eventData = {};
       eventData.appointmentId = appointmentId;
       eventData.parameters = {};
       eventData.parameters.custom1 = notes;
+      if (peopleServices) {
+        eventData.parameters.peopleServices = JSON.stringify(peopleServices);
+      }
+      if (numberOfCustomers) {
+        eventData.parameters.numberOfCustomers = numberOfCustomers;
+      }    
       $.ajax({
         type: "POST",
         dataType: "json",
