@@ -2603,8 +2603,9 @@ var MobileTicketAPI = (function () {
   var WAIT_INFO = "wait-info";
   var EVENTS = "events";
   var CURRENT_STATUS = "CurrentStatus";
-  var MYMEETING = "MyMeeting"
-  var BRANCH_SCHEDULE = "BranchSchedule"
+  var MYMEETING = "MyMeeting";
+  var BRANCH_SCHEDULE = "BranchSchedule";
+  var SERVICES_GROUPS = "servicesGroups/";
   var self = this;
 
   $(document).ajaxError(function (event, request, settings) {
@@ -3142,6 +3143,39 @@ var MobileTicketAPI = (function () {
           }
         });
       } catch (e) {
+        onError(null, null, e.message);
+      }
+    },
+    getServicesGroups: function(onSuccess, onError){
+      try{      
+        var SERVICES_GROUPS_API = MOBILE_TICKET + "/" + SERVICES_GROUPS;
+        $.ajax({
+          type: "GET",
+          dataType: "json",
+          url: SERVICES_GROUPS_API,
+          success: function(data){
+            if(data && data.value){
+              try{
+				        var groupsForMobile = JSON.parse(data.value).filter(function (g) {
+                  return g.types.includes("mobile");
+                });
+                onSuccess(groupsForMobile);
+              }catch(e){
+                onError(null, null, e.message);
+              }
+            }else{
+              onError(null, null, "Empty response body");
+            }
+          },
+          error: function(xhr, status, errorMsg){
+            if(xhr.status == 404) // If no service grouping is defined, then an empty list is returned
+              onSuccess([]);
+            else
+              onError(xhr, status, errorMsg);
+          }
+        });
+
+      }catch(e){
         onError(null, null, e.message);
       }
     },

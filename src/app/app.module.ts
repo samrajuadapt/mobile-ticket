@@ -8,6 +8,7 @@ import {BranchesContainerComponent} from './branch/list-container/branches-conta
 import {BranchComponent} from './branch/list-item/branch.component';
 import {BranchService} from './branch/branch.service';
 import {ServicesComponent} from './service/list/services.component';
+import {ServiceGroupItemComponent} from './service/group-item/group-item';
 import {ServicesContainerComponent} from './service/list-container/services-container.component';
 import {ServiceComponent} from './service/list-item/service.component';
 import {ServiceService} from './service/service.service';
@@ -73,7 +74,7 @@ declare var MobileTicketAPI:any;
 
 @NgModule({
   declarations: [
-    BranchesComponent, BranchComponent, ServicesComponent, ServiceComponent, DelaysComponent, DelayComponent,
+    BranchesComponent, BranchComponent, ServicesComponent, ServiceGroupItemComponent, ServiceComponent, DelaysComponent, DelayComponent,
     RootComponent, RoutingComponents, FrameLayoutComponent, TicketComponent, NotSupportComponent,
     QueueComponent, VisitCancelComponent, QueueItemComponent, SortPipe,
     ConnectivityMessageComponent, VisitNotfoundComponent, BranchNotfoundComponent, ConfirmDialogComponent, AlertDialogComponent,

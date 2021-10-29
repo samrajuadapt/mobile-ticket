@@ -4,6 +4,7 @@ import { ServiceEntity } from '../entities/service.entity';
 import { TranslateService } from '@ngx-translate/core';
 import { Config } from '../config/config';
 import { BranchScheduleService } from '../shared/branch-schedule.service';
+import { ServiceGroupEntity } from '../entities/service-group.entity';
 
 declare var MobileTicketAPI: any;
 
@@ -131,5 +132,27 @@ export class ServiceService {
     }, (error) => {
       onServiceRecieved(null, true);
     });
+  }
+
+  public getServicesGroups(callback: (args: [], args2: boolean) => void): void {
+    MobileTicketAPI.getServicesGroups(
+      (groups) => {
+        callback(groups.map(
+          g => this.convertToServiceGroupEntity(g)
+        ), false);
+      },
+      () => {
+        callback(null, true);
+      });
+  }
+
+  public convertToServiceGroupEntity(group): ServiceGroupEntity {
+    return {
+      id: group.id,
+      names: group.names,
+      selected: false,
+      serviceIds: group.services.map(s => s.id),
+      services: null
+    };
   }
 }

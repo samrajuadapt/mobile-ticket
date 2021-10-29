@@ -12,7 +12,7 @@
     "description": "Enable or disable geofencing on landing pages, 'on = enable', 'off = disable'. geofencing will only work on https protocol. if geofencing disabled, branch radius and appointment radius will be discarded"
   },
   "version": {
-    "value": "1.14.0-Internal",
+    "value": "1.15.0-Internal",
     "description": "MobileTicket version [depreciated key. version in package.json and release notes instead]"
   },
   "customer_feedback": {
@@ -172,6 +172,19 @@
       }
     },
     "description": "Enable or disable or define a time when customer need to create or update visit with delay"
+  },
+  "service_group": {
+    "value": {
+      "availability": {
+        "value": "disable",
+        "description": "Enable or disable service grouping, 'on = enable', 'off = disable'"
+      },
+      "single_selection": {
+        "value": "enable",
+        "description": "Enable or disable single service grouping selection, 'on = enable', 'off = disable'"
+      }
+    },
+    "description": "Enable or disable or define a single selection when services show as group"
   },
   "privacy_policy": {
     "value": "disable",

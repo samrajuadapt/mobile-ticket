@@ -1,4 +1,15 @@
 <div class="list-container">
-   <app-service [name]="service.name" [customersWaiting]="service.customersWaiting" [entity]="service" [selected]="service.selected"
-    (onSelection)='resetSelections($event)' *ngFor="let service of services"></app-service>
+    <div *ngIf="!isServiceGroupingEnabled;else groupedServices">
+        <app-service [name]="service.name" [customersWaiting]="service.customersWaiting" [entity]="service"
+            [selected]="service.selected" (onSelection)='resetSelections($event)' *ngFor="let service of services">
+        </app-service>
+    </div>
+
+
+    <ng-template #groupedServices>
+        <app-service-group-item [name]="groupName(group)" [services]="group.services" [isSelected]="group.selected" *ngFor="let group of servicesGroups" 
+            (onServiceSelection)="resetSelections($event)"  (onGroupSelection)="selectGroup(group)"
+        >
+        </app-service-group-item>
+    </ng-template>
 </div>

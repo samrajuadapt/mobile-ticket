@@ -611,6 +611,32 @@ var apiEventProxy = proxy(host, {
 	https: APIGWHasSSL
 });
 
+var apiServicesGroupsProxy = proxy(host, {
+	// ip and port off apigateway
+
+	proxyReqPathResolver: function (req) {
+		var newUrl = req.originalUrl.replace("/MobileTicket/servicesGroups","/rest/entrypoint/variables/servicesGroups");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL
+});
+
 var ticketTokenProxy = function (req, res, next) {
 	if (ticketToken === "enable") {
 	  if (req.body.token) {
@@ -674,6 +700,7 @@ app.use("/MobileTicket/MyVisit/LastEvent/*", apiEventProxy);
 app.use("/MobileTicket/MyVisit/*", apiProxy);
 app.use("/MobileTicket/MyMeeting/*", apiMeetingProxy);
 app.use("/MobileTicket/BranchSchedule/variables/*", apiBranchScheduleProxy);
+app.use("/MobileTicket/servicesGroups/*", apiServicesGroupsProxy);
 
 // MT service
 let env = process.argv[2] || 'prod';

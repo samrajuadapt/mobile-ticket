@@ -52,6 +52,7 @@ This document describes the new features, bug corrections, known issues and reco
 | --- | --- |
 | **MOB-634** | **"Powered by Qmatic" in Mobile Ticket** |
 | **MOB-642** | **Remote Queueing capability in Mobile Ticket** |
+| **MOB-730** | **Mobile Ticket - Service Grouping** |
 
 <h3>Bug fixes</h3>
 
@@ -86,6 +87,40 @@ This document describes the new features, bug corrections, known issues and reco
       }
     },
     "description": "Show or hide footer of the mobile ticket"
+  }
+```
+
+2. 'delay_visit' parameter needs to be added to config.json
+```
+ "delay_visit": {
+    "value": {
+      "availability": {
+        "value": "disable",
+        "description": "Enable or disable whether customer need to create or update visit with delay"
+      },
+      "time_slot": {
+        "value": [],
+        "description": "Define delay time slots (minutes)"
+      }
+    },
+    "description": "Enable or disable or define a time when customer need to create or update visit with delay"
+  }
+```
+
+3. 'service_group' parameter needs to be added to config.json
+```
+ "service_group": {
+    "value": {
+      "availability": {
+        "value": "enable",
+        "description": "Enable or disable service grouping, 'on = enable', 'off = disable'"
+      },
+      "single_selection": {
+        "value": "enable",
+        "description": "Enable or disable single service grouping selection, 'on = enable', 'off = disable'"
+      }
+    },
+    "description": "Enable or disable or define a single selection when services show as group"
   }
 ```
 ---------- 

@@ -1,0 +1,78 @@
+.flex-parent {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  align-items: center;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  width: calc(88vw + 8px - 100px) !important;
+  max-width: 256px;
+  justify-content: space-between;
+}
+
+
+.group-btn {
+  color: black;
+  height: calc(14vw + 8px) !important;
+  width: calc(88vw + 8px) !important;
+  max-height: 64px;
+  max-width: 356px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  position: relative;
+  background-color: #C1C1C1;
+  margin: 0 auto 5px auto;
+  border-radius: 3px;
+}
+
+.group-btn:hover {
+  opacity: 0.8;
+}
+
+.group-btn-active {
+  border-radius: 3px;
+}
+
+.group-name {
+  display: inline-flex;
+}
+
+.group-name>span {
+  margin: 0 auto;
+  font-family: Roboto-Regular;
+}
+
+.btn-text-container {
+  width: 100%;
+}
+
+div.btn-text {
+  font-size: 17px;
+  font-weight: 400;
+  vertical-align: super;
+}
+
+div.btn-text>span {
+  flex: 2;
+}
+
+
+/* Media Queries */
+@media (min-width: 450px) {
+  div.btn-text {
+    font-size: 17px;
+    font-weight: 400;
+    vertical-align: super;
+  }
+}

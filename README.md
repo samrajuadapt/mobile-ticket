@@ -25,6 +25,7 @@ This is a web application that has been developed using Angular4 and the develop
 - [Create ticket token](#create-ticket-token)
 - [Cookie consent](#cookie-consent)
 - [Set delay](#set-delay)
+- [Set service group](#set-service-group)
 
 ## Installation
 BEFORE YOU INSTALL: please read the [prerequisites](#prerequisites)
@@ -100,6 +101,9 @@ For development one needs to add the following five routes to the application.ym
     delay_visit:
       path: /MobileTicket/DelayVisit/**
       url: ${orchestra.central.url}/qsystem/rest/entrypoint
+    services_groups:
+       path: /MobileTicket/servicesGroups/**  
+       url: ${orchestra.central.url}/qsystem/rest/entrypoint/variables/servicesGroups
 ```
 #### Configuring the Proxy for Development Environment
 
@@ -363,6 +367,19 @@ project directory
         }
     },
     "description": "Enable or disable whether customer need to create or update visit with delay"
+  },
+  "service_group": {
+    "value": {
+      "availability": {
+        "value": "enable",
+        "description": "Enable or disable service grouping, 'on = enable', 'off = disable'"
+      },
+      "single_selection": {
+        "value": "enable",
+        "description": "Enable or disable single service grouping selection, 'on = enable', 'off = disable'"
+      }
+    },
+    "description": "Enable or disable or define a single selection when services show as group"
   },
     "create_ticket_token": {
 	    "value": "disable",
@@ -859,6 +876,9 @@ Css selector                           |   Css property | Description   | Exampl
 ```.custom.logo-bg-color         ```   |   background   | Edit to change app logo  |  transparent !important;
 ```.custom.link-text-color       ```   |   color        | Edit to change text color of links  |  #03996c !important;
 ```.custom.otp-timer-color       ```   |   color        | Edit to change text color of OTP timer  |  #d4152b !important;
+```.custom.group-btn-text-color  ```   |   color, fill  | Edit to change text and icon color  |  #000000 !important;
+```.custom.group-btn-color       ```   |   background   | Edit to change group button background color  |  #c1c1c1 !important;
+
 Note:
 
 * If you are specifying styles in this stylesheet, it will override the default styles.
@@ -951,4 +971,7 @@ Mobile Ticket can be configured to add an interactive cookie permission popup to
 
 ## Set delay
 Mobile Ticket can be configured to add an delay time for the visit. User can create or edit visit delay time and within the time period user not called. 
+
+## Set service group
+Fetch all service groups that are defined using the General Admin UI module. This will only return the groups that are related to mobile ticket.
 

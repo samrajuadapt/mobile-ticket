@@ -5,7 +5,9 @@ import { ServiceEntity } from '../../entities/service.entity';
 import { RetryService } from '../../shared/retry.service';
 import { Util } from './../../util/util'
 import { Config} from '../../config/config';
-import { BranchOpenHoursValidator} from '../../util/branch-open-hours-validator'
+import { BranchOpenHoursValidator} from '../../util/branch-open-hours-validator';
+import { ServiceGroupEntity } from '../../entities/service-group.entity';
+import { TranslateService } from '@ngx-translate/core';
 
 declare var MobileTicketAPI: any;
 
@@ -17,35 +19,66 @@ declare var MobileTicketAPI: any;
 export class ServicesComponent implements AfterViewInit {
   public services: Array<ServiceEntity>;
   public showListShadow: boolean;
+  public isServiceGroupingEnabled: boolean;
+  public isSingleGroup: boolean;
+  public servicesWithoutGroup: Array<ServiceEntity> = [];
+  public servicesGroups: Array<ServiceGroupEntity>;
+
+  private serviceGroupsLoaded = false;
+  private serviceListLoaded = false;
+
   @Output() onServiceListHeightUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() onServiceSelection: EventEmitter<number> = new EventEmitter<number>();
   @Output() onShowHideServiceFetchError = new EventEmitter<boolean>();
   @Output() onServiceListLoaded = new EventEmitter<boolean>();
 
   constructor(private serviceService: ServiceService, private retryService: RetryService, private router: Router,
-              private config: Config, private openHourValidator: BranchOpenHoursValidator) {
+              private config: Config, private openHourValidator: BranchOpenHoursValidator, private translate: TranslateService) {
     this.onShowHideServiceFetchError.emit(false);
+    this.isServiceGroupingEnabled = this.config.getConfig('service_group').availability.value == 'enable' ? true : false;
+    this.isSingleGroup = this.config.getConfig('service_group').single_selection.value == 'enable' ? true : false;
     serviceService.getServices((serviceList: Array<ServiceEntity>, error: boolean) => {
       if (error) {
         this.onShowHideServiceFetchError.emit(true);
         retryService.retry(() => {
           serviceService.getServices((serviceList: Array<ServiceEntity>, error: boolean) => {
             if (!error) {
+              this.serviceListLoaded = true;
               this.onServicesReceived(serviceList, serviceService)
               retryService.abortRetry();
-              this.onListLoaded();
+              if (this.serviceGroupsLoaded){
+                this.onListLoaded();
+              }
             }
           });
         });
       } else {
+        this.serviceListLoaded = true;
         this.onServicesReceived(serviceList, serviceService);
-        this.onListLoaded();
+        if (this.serviceGroupsLoaded){
+          this.onListLoaded();
+        }
       }
     });
+
+    if (this.isServiceGroupingEnabled) {
+      serviceService.getServicesGroups((groups: ServiceGroupEntity[], error: boolean) => {
+        this.serviceGroupsLoaded = true;
+        this.servicesGroups = groups || [];
+
+        if (this.serviceListLoaded)
+          this.onListLoaded();
+      });
+    }else{
+      this.serviceGroupsLoaded = true;
+    }
   }
 
   private onListLoaded() {
     this.onServiceListLoaded.emit(true);
+    if(this.isServiceGroupingEnabled){
+      this.groupServices();
+    }
     this.setSelectedService(MobileTicketAPI.getSelectedService());
   }
 
@@ -116,6 +149,49 @@ export class ServicesComponent implements AfterViewInit {
       this.showListShadow = true;
     }
     this.onServiceListHeightUpdate.emit(this.showListShadow);
+  }
+
+  groupServices() {
+    this.servicesWithoutGroup = this.services.slice(); 
+
+    this.servicesGroups.forEach(g => {
+      g.services = [];
+      g.serviceIds.forEach(serviceId => {
+        //We should not replace services with servicesWithoutGroup, because one service could be present in multiple groups
+        let service = this.services.find((service) => service.id == serviceId);
+        if (service) {
+          let index = this.servicesWithoutGroup.findIndex(s => s.id == service.id);
+          if(index >= 0)
+            this.servicesWithoutGroup.splice(index, 1);
+          g.services.push(service);
+        }
+      })
+    });
+  }
+
+  groupName(serviceGroup: ServiceGroupEntity){
+     let lang = this.translate.store.currentLang;
+     var names = serviceGroup.names;
+    if(names[lang])
+      return names[lang];
+    else if(names["en"])
+      return names["en"];
+    for(var key in names){
+      if(names[key])
+        return names[key];
+    }
+      
+    return serviceGroup.id;
+  }
+
+  selectGroup(selectedGroup: ServiceGroupEntity){
+    if(selectedGroup){
+      let newState = !selectedGroup.selected;
+      if(this.isSingleGroup){
+        this.servicesGroups.forEach(g => g.selected = false);
+      }
+      selectedGroup.selected = newState;
+    }
   }
 
 }
