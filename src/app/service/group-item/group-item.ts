@@ -30,7 +30,11 @@ export class ServiceGroupItemComponent {
 	}
 
 	public selectService(service: ServiceEntity){
-		this.onServiceSelection.emit(service);
+    	if (service.selected) {
+      		this.onServiceSelection.emit(service);
+    	} else {
+      		this.onServiceSelection.emit(undefined);
+    	}
 	}
 
 	setRtlStyles() {
