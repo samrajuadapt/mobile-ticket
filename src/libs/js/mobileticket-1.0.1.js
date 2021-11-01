@@ -2615,7 +2615,7 @@ var MobileTicketAPI = (function () {
   $.ajaxSetup({
     beforeSend: function (xhr) {
       xhr.setRequestHeader("Accept", "application/json");
-      xhr.setRequestHeader("auth-token", "1234"); //Change the api token with your one      
+      xhr.setRequestHeader("auth-token", "d0516eee-a32d-11e5-bf7f-feff819cdc9f"); //Change the api token with your one      
     }
   });
 
@@ -3523,6 +3523,22 @@ var MobileTicketAPI = (function () {
     },
     findCentralAppointment: function(qpId, onSuccess, onError) {
       var CENTR_REST_API = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/findCentral/" + qpId
+      $.ajax({
+        type: "GET",
+        dataType: "json",
+        url: CENTR_REST_API,
+        success: function (data) {                  
+          if (data != undefined) {                                  
+            onSuccess(data);
+          }
+        },
+        error: function (xhr, status, errorMsg) {
+          onError(xhr, status, errorMsg);
+        }
+      });    
+    },
+    findCentralAppointmentByEId: function(qpId, onSuccess, onError) {
+      var CENTR_REST_API = MOBILE_TICKET + "/" + MYAPPOINTMENT + "/findCentral/id/" + qpId
       $.ajax({
         type: "GET",
         dataType: "json",

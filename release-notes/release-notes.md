@@ -53,6 +53,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-634** | **"Powered by Qmatic" in Mobile Ticket** |
 | **MOB-642** | **Remote Queueing capability in Mobile Ticket** |
 | **MOB-730** | **Mobile Ticket - Service Grouping** |
+| **MOB-720** | **Security improvements related to appointment id** |
 
 <h3>Bug fixes</h3>
 

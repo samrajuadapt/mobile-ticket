@@ -14,6 +14,7 @@ import { LocationValidator } from '../util/location-validator'
 import { ServiceService } from '../service/service.service';
 import { BranchScheduleService } from '../shared/branch-schedule.service';
 import { TicketInfoService } from '../ticket-info/ticket-info.service';
+import { isDevMode } from '@angular/core';
 
 declare var System: any;
 declare var MobileTicketAPI: any;
@@ -473,7 +474,9 @@ export class AuthGuard implements CanActivate {
                         this.aEntity.publicId = appointmentId;
                         this.aEntity.branchName = response.branch.name;
                         this.aEntity.qpId = response.qpId;
+                        // if (isDevMode()) {
                         getAppointment(response.qpId, this.aEntity);
+                        // }
                     },
                         (xhr, status, errorMessage) => {
                             this.aEntity.status = 'NOTFOUND';
@@ -483,7 +486,9 @@ export class AuthGuard implements CanActivate {
                 }
 
                 const getAppointment = (id: string, entity: any) => {
-                    MobileTicketAPI.findCentralAppointment(id,
+                    if (!isDevMode()) {
+                        // production mode : encrypted id
+                        MobileTicketAPI.findCentralAppointmentByEId(id,
                             (response2) => {
                                 entity.serviceId = response2.services[0].id;
                                 entity.serviceName = response2.services[0].name;
@@ -501,6 +506,27 @@ export class AuthGuard implements CanActivate {
                                 MobileTicketAPI.setAppointment(entity);
                                 resolve(true);
                             });
+                    } else {
+                        MobileTicketAPI.findCentralAppointment(id,
+                            (response2) => {
+                                entity.serviceId = response2.services[0].id;
+                                entity.serviceName = response2.services[0].name;
+                                entity.branchId = response2.branchId;
+                                entity.status = response2.status;
+                                entity.startTime = response2.startTime;
+                                entity.endTime = response2.endTime;
+                                entity.notes = response2.properties.notes;
+                                entity.custom = response2.properties.custom;
+                                MobileTicketAPI.setAppointment(entity);
+                                resolve(true);
+                            },
+                            (xhr, status, errorMessage) => {
+                                entity.status = 'NOTFOUND';
+                                MobileTicketAPI.setAppointment(entity);
+                                resolve(true);
+                            });
+                    }
+                  
                 }
             }
 

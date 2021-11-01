@@ -308,7 +308,9 @@ const apiFindProxy = proxy(host, {	// ip and port off apigateway
 		const newData:any = {};
 		newData.appointment = {};
 		if (data.appointment !== undefined) {
-			newData.appointment.qpId = data.appointment.qpId
+			var CryptoJS = require("crypto-js");
+			var encryptedText = CryptoJS.AES.encrypt(data.appointment.qpId.toString(), authToken ).toString();
+			newData.appointment.qpId = encryptedText
 			newData.appointment.branch = data.appointment.branch;
 			newData.appointment.start = data.appointment.start;
 			newData.appointment.services = data.appointment.services;
@@ -342,13 +344,14 @@ const apiFindExtProxy = proxy(host, {	// ip and port off apigateway
 		if (proxyResData.toString('utf8')==='') {
             return '';
         }
-
 		const data = JSON.parse(proxyResData.toString('utf8'));
 		const newData:any = {};
 		newData.properties = {};
 		
 		if (data !== undefined) {
-			newData.id = data.id;
+			var CryptoJS = require("crypto-js");
+			var encryptedText = CryptoJS.AES.encrypt( data.id.toString(), authToken ).toString();
+			newData.id =  encryptedText
 			newData.properties.publicId = data.properties.publicId;
 		}
 		return JSON.stringify(newData);
@@ -358,6 +361,50 @@ const apiFindExtProxy = proxy(host, {	// ip and port off apigateway
 const apiFindCentralProxy = proxy(host, {	// ip and port off apigateway
 	proxyReqPathResolver: (req) => {
 		var newUrl = req.originalUrl.replace("/MobileTicket/MyAppointment/findCentral/","/rest/appointment/appointments/");
+		return require('url').parse(newUrl).path;
+	},
+	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
+		proxyReqOpts.headers['auth-token'] = authToken		// api_token for mobile user
+		proxyReqOpts.headers['Content-Type'] = 'application/json'
+		return proxyReqOpts;
+	},
+	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
+		if (isEmbedIFRAME === false) {
+			headers['X-Frame-Options'] = "DENY";
+		}
+		headers['Content-Security-Policy'] = "default-src \'self\'";
+	
+		if (supportSSL) {
+			headers['Strict-Transport-Security'] = "max-age=" + hstsExpireTime + "; includeSubDomains";
+		}
+		return headers;
+	},
+	https: APIGWHasSSL,
+	userResDecorator: (proxyRes, proxyResData, userReq, userRes) => {
+		let data = JSON.parse(proxyResData.toString('utf8'));
+		let newData:any = {};
+		if (data !== undefined) {
+			newData.services = data.services;
+			newData.status = data.status
+			newData.branchId = data.branchId;
+			newData.startTime = data.startTime;
+			newData.endTime = data.endTime;
+			newData.properties = {};
+			newData.properties.notes = data.properties.notes;
+			newData.properties.custom = data.properties.custom;
+		}
+		return JSON.stringify(newData);
+	}
+});
+
+
+const apiFindCentralByEIdProxy = proxy(host, {	// ip and port off apigateway
+	proxyReqPathResolver: (req) => {
+		// decode qpId
+		var CryptoJS = require("crypto-js");
+        var decrptedText = CryptoJS.AES.decrypt(req.originalUrl.split('findCentral/id/')[1], authToken).toString(CryptoJS.enc.Utf8);
+        var newUrl = req.originalUrl.split('findCentral/id/')[0] + 'findCentral/' + decrptedText;
+        newUrl = newUrl.replace("/MobileTicket/MyAppointment/findCentral/", "/rest/appointment/appointments/");
 		return require('url').parse(newUrl).path;
 	},
 	proxyReqOptDecorator: (proxyReqOpts, srcReq) => {
@@ -468,6 +515,18 @@ const apiArriveProxy = proxy(host, {
 		proxyReqOpts.headers['Content-Type'] = 'application/json'
 		return proxyReqOpts;
 	},
+
+	proxyReqBodyDecorator: function(bodyContent, srcReq) {
+        var CryptoJS = require("crypto-js");
+        var decrptedText = CryptoJS.AES.decrypt(bodyContent.appointmentId, authToken).toString(CryptoJS.enc.Utf8);
+        var returnText = {
+            ... bodyContent,
+            'appointmentId' : parseInt(decrptedText)
+       }
+       console.log(returnText)
+        return JSON.stringify(returnText);
+    },
+
 	userResHeaderDecorator(headers, userReq, userRes, proxyReq, proxyRes) {
 		if (isEmbedIFRAME === false) {
 			headers['X-Frame-Options'] = "DENY";
@@ -688,10 +747,11 @@ app.use("/geo/branches/*", apiProxy);
 app.use("/MobileTicket/branches/*", apiProxy);
 app.use("/MobileTicket/MyAppointment/find/*", apiFindProxy);
 app.use("/MobileTicket/MyAppointment/findCentral/external/*", apiFindExtProxy);
+app.use("/MobileTicket/MyAppointment/findCentral/id/*", apiFindCentralByEIdProxy);
 app.use("/MobileTicket/MyAppointment/findCentral/*", apiFindCentralProxy);
 app.use("/MobileTicket/MyAppointment/entrypoint/branches/*/entryPoints/deviceTypes/SW_VISITAPP", apiEntryPointProxy);
 app.use("/MobileTicket/MyVisit/entrypoint/branches/*/visits/*", apiCustomParameterProxy);
-app.use("/MobileTicket/MyAppointment/arrive/branches/*/entryPoints/*/visits", apiArriveProxy);
+app.use("/MobileTicket/MyAppointment/arrive/branches/*/entryPoints/*/visits",jsonParser, apiArriveProxy);
 app.use("/MobileTicket/services/:serviceID/branches/:branchID/ticket/*",jsonParser, ticketTokenProxy);
 app.use("/MobileTicket/DelayVisit/branches/:branchID/queues/:queueId/visits", apiDelayProxy);
 app.use("/MobileTicket/DelayVisit/branches/:branchID/visits/:visitId", apiDelayProxy);

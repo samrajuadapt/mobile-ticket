@@ -12,6 +12,7 @@ import { Util } from './../util/util'
 import { TranslateService } from '@ngx-translate/core';
 import { AlertDialogService } from '../shared/alert-dialog/alert-dialog.service';
 import { RetryService } from '../shared/retry.service';
+import { isDevMode } from '@angular/core';
 
 declare var MobileTicketAPI: any;
 declare var ga: Function;
@@ -160,24 +161,47 @@ export class AppointmentComponent implements OnInit {
         aEntity.publicId = this.app.publicId;
         aEntity.branchName = response.branch.name;
         aEntity.qpId = response.qpId;
-        MobileTicketAPI.findCentralAppointment(response.qpId,
-          (response2) => {
-            console.log(response2)
-            aEntity.serviceId = response2.services[0].id;
-            aEntity.serviceName = response2.services[0].name;
-            aEntity.branchId = response2.branchId;
-            aEntity.status = response2.status;
-            aEntity.startTime = response2.startTime;
-            aEntity.endTime = response2.endTime;
-            aEntity.notes = response2.properties.notes;
-            MobileTicketAPI.setAppointment(aEntity);
-            resolve(null);
-          },
-          (xhr, status, errorMessage) => {
-            aEntity.status = 'NOTFOUND';
-            MobileTicketAPI.setAppointment(aEntity);
-            resolve(null);
-          });
+        // for development mode send qpId without encryption
+        if(isDevMode) {
+          MobileTicketAPI.findCentralAppointment(response.qpId,
+            (response2) => {
+              console.log(response2)
+              aEntity.serviceId = response2.services[0].id;
+              aEntity.serviceName = response2.services[0].name;
+              aEntity.branchId = response2.branchId;
+              aEntity.status = response2.status;
+              aEntity.startTime = response2.startTime;
+              aEntity.endTime = response2.endTime;
+              aEntity.notes = response2.properties.notes;
+              MobileTicketAPI.setAppointment(aEntity);
+              resolve(null);
+            },
+            (xhr, status, errorMessage) => {
+              aEntity.status = 'NOTFOUND';
+              MobileTicketAPI.setAppointment(aEntity);
+              resolve(null);
+            });
+        } else {
+          // production mode : encrypted qpId 
+          MobileTicketAPI.findCentralAppointmentByEId(response.qpId,
+            (response2) => {
+              aEntity.serviceId = response2.services[0].id;
+              aEntity.serviceName = response2.services[0].name;
+              aEntity.branchId = response2.branchId;
+              aEntity.status = response2.status;
+              aEntity.startTime = response2.startTime;
+              aEntity.endTime = response2.endTime;
+              aEntity.notes = response2.properties.notes;
+              MobileTicketAPI.setAppointment(aEntity);
+              resolve(null);
+            },
+            (xhr, status, errorMessage) => {
+              aEntity.status = 'NOTFOUND';
+              MobileTicketAPI.setAppointment(aEntity);
+              resolve(null);
+            });
+        }
+
       },
         (xhr, status, errorMessage) => {
           aEntity.status = 'NOTFOUND';
