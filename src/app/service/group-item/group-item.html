@@ -8,19 +8,19 @@
         <div class="flex-child long-and-truncated-with-child-corrected group-name">
           <span class="custom group-btn-text-color">{{ name }}</span>
         </div>
-        <svg *ngIf="!isSelected && !isRtl" version="1.1" xmlns="http://www.w3.org/2000/svg" style="margin-right: -12%;" width="22" height="22" viewBox="0 0 1024 1024">
+        <svg *ngIf="!isSelected && !isRtl" version="1.1" xmlns="http://www.w3.org/2000/svg" [ngClass]="{'button-drop-rtl': isRtl, 'button-drop': !isRtl}" width="22" height="22" viewBox="0 0 1024 1024">
           <title></title>
           <g id="icomoon-ignore">
           </g>
           <path fill="#000" class="custom group-btn-text-color" d="M780.453 514.522l-340.298 340.298c-22.209 22.209-58.231 22.209-80.441 0-22.232-22.221-22.232-58.231 0-80.464l259.823-259.834-259.823-259.846c-22.232-22.198-22.232-58.243 0-80.441 22.209-22.221 58.231-22.221 80.441 0l340.298 340.287z"></path>
           </svg>
-          <svg *ngIf="isSelected" version="1.1" xmlns="http://www.w3.org/2000/svg" style="margin-right: -12%; margin-left: -12%" width="22" height="22" viewBox="0 0 1024 1024">
+          <svg *ngIf="isSelected" version="1.1" xmlns="http://www.w3.org/2000/svg" [ngClass]="{'button-drop-rtl': isRtl, 'button-drop': !isRtl}" width="22" height="22" viewBox="0 0 1024 1024">
             <title></title>
             <g id="icomoon-ignore">
             </g>
             <path fill="#000" class="custom group-btn-text-color" d="M516.244 778.746l-340.298-340.298c-22.209-22.209-22.209-58.231 0-80.441 22.221-22.232 58.231-22.232 80.464 0l259.834 259.823 259.846-259.823c22.198-22.232 58.243-22.232 80.441 0 22.221 22.209 22.221 58.231 0 80.441l-340.287 340.298z"></path>
             </svg>
-            <svg *ngIf="!isSelected && isRtl" version="1.1" xmlns="http://www.w3.org/2000/svg" style="margin-left: -12%;" width="22" height="22" viewBox="0 0 1024 1024">
+            <svg *ngIf="!isSelected && isRtl" version="1.1" xmlns="http://www.w3.org/2000/svg" [ngClass]="{'button-drop-rtl': isRtl, 'button-drop': !isRtl}" width="22" height="22" viewBox="0 0 1024 1024">
               <title></title>
               <g id="icomoon-ignore">
               </g>

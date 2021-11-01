@@ -43,6 +43,7 @@ export class ServicesComponent implements AfterViewInit {
         retryService.retry(() => {
           serviceService.getServices((serviceList: Array<ServiceEntity>, error: boolean) => {
             if (!error) {
+              this.fetchServiceGroup();
               this.serviceListLoaded = true;
               this.onServicesReceived(serviceList, serviceService)
               retryService.abortRetry();
@@ -61,8 +62,12 @@ export class ServicesComponent implements AfterViewInit {
       }
     });
 
+    this.fetchServiceGroup();
+  }
+
+  private fetchServiceGroup(){
     if (this.isServiceGroupingEnabled) {
-      serviceService.getServicesGroups((groups: ServiceGroupEntity[], error: boolean) => {
+      this.serviceService.getServicesGroups((groups: ServiceGroupEntity[], error: boolean) => {
         this.serviceGroupsLoaded = true;
         this.servicesGroups = groups || [];
 
