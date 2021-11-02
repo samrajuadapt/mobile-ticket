@@ -43,7 +43,9 @@ export class ServicesComponent implements AfterViewInit {
         retryService.retry(() => {
           serviceService.getServices((serviceList: Array<ServiceEntity>, error: boolean) => {
             if (!error) {
-              this.fetchServiceGroup();
+              if (!this.serviceGroupsLoaded) {
+                this.fetchServiceGroup();
+              }
               this.serviceListLoaded = true;
               this.onServicesReceived(serviceList, serviceService)
               retryService.abortRetry();

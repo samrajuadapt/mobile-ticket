@@ -42,9 +42,9 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h2> Version 1.15.0 - Internal</h2>
 
-**Date: 2021-07-08**
+**Date: 2021-11-02**
  
-**Build number: 4**
+**Build number: 5**
 
 <h3>Stories</h3>
 
