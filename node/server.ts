@@ -523,7 +523,6 @@ const apiArriveProxy = proxy(host, {
             ... bodyContent,
             'appointmentId' : parseInt(decrptedText)
        }
-       console.log(returnText)
         return JSON.stringify(returnText);
     },
 
