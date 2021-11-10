@@ -42,7 +42,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h2> Version 1.15.0</h2>
 
-**Date: 2021-11-02**
+**Date: 2021-11-10**
  
 **Build number: 5**
 
@@ -64,7 +64,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-648** | **Record all visits used Mobile Ticket application** |
 | **MOB-668** | **windows server 2019 - Mobile Ticket cannot run as a service** |
 | **MOB-661** | **Network error message doesn't appear if "show_queue_position" is disabled.** |
-| **MOB-663** | **User can see queue position in the <title> tag, even if the "show_queue_position" is disabled.** |
+| **MOB-663** | **User can see queue position in the title tag, even if the "show_queue_position" is disabled.** |
 | **MOB-704** | **Direct link to branch without locationservices shows different error.** |
 | **MOB-705** | **Appointment Time - Text color should taken from theme-styles.css.** |
 | **MOB-710** | **Cannot create mobileTicket from direct ticket url when both phn no & customer info are enabled** |
