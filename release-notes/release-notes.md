@@ -44,7 +44,7 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2022-01-24**
  
-**Build number: 1**
+**Build number: 2**
 
 <h3>Stories</h3>
 
@@ -52,6 +52,30 @@ This document describes the new features, bug corrections, known issues and reco
 | --- | --- |
 | **MOB-752** | **L&T Osnabruck - Mobile ticket with QR code with sammelkauf id and possibility to ask customer number.** |
 
+<h3>Upgrade Instructions</h3>
+
+- When upgrading from a previous version, following should be considered.
+
+1. 'additional_data' parameter under 'customer_data' needs to be added to config.json
+```
+ "customer_data": {
+    "value": {
+      "phone_number": {
+        "value": "disable",
+        "description": "Enable or disable customer phone number field in customer data section, 'enable => phone number field is visible but not mandatory', 'disable => phone number field is not visible' , 'mandatory => phone number field is visible and mandatory'"
+      },
+      "customerId": {
+        "value": "disable",
+        "description": "Enable or disable customer id field in customer data section, 'on = enable', 'off = disable'"
+      },
+      "additional_data": {
+        "value": "",
+        "description": "Enable or disable additonal customer data on QR scanning URL, set a value that is using in query parameter"
+      }
+    },
+    "description": "Enable or disable customer id or phone number in customer area. If both are disabled customer data section will be hidden"
+  }
+```
 ----------
 
 <h2> Version 1.15.0</h2>

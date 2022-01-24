@@ -187,10 +187,11 @@ export class AuthGuard implements CanActivate {
         let checksum = route.queryParams['checksum'];
         let appointmentId = route.queryParams['appId'];
         let appointmentExtId = route.queryParams['external'];
-        let custom3 =  route.queryParams['sammelkaufid'];
+        let queryParameter = this.config.getConfig('customer_data').additional_data.value.trim();
 
-        if(custom3) {
-            MobileTicketAPI.setCustom3(custom3);
+        if(queryParameter && queryParameter.length > 0) {
+            let custom3 =  route.queryParams[queryParameter];
+            if(custom3 && custom3.length > 0) {MobileTicketAPI.setCustom3(custom3);}  
         }
 
         if (url.startsWith('/branches/') || url.endsWith('/branches') || url.endsWith('/branches;redirect=true')) {

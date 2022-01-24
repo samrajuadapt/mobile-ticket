@@ -887,7 +887,10 @@ Note:
 
 
 ## Customer data
-Mobile Ticket can be configured to accept customer phone number as a part of accepting customer data when creating a ticket. To enable accepting customer data, `customer_data` attribute in `config.json` needs to be switched on. `phone number` section enable the cutomer phone number feild and `customer id` enable entering id or token specific to customer. so it can be found in counter application by enabling `custom2` feild visibility.
+Mobile Ticket can be configured to accept customer phone number as a part of accepting customer data when creating a ticket. To enable accepting customer data, `customer_data` attribute in `config.json` needs to be switched on.There are three sections under `customer_data` field. 
+  1. `phone number` section enables the cutomer phone number field.
+  2. `customer id` enables entering id or token specific to customer. so it can be found in counter application by enabling `custom2` field visibility. 
+  3. `additional_data` enables to add query parameter data in the QR scanning URL. `additional_data` value should be matched to the query parameter name and it can be visualized in counter application by enabling `custom3` field.
 
 As a part of accepting customer phone number, it is configurable whether privacy policy needs to be applied or not. Privacy policy can be applied by switching on the `privacy_policy` attribute. By default, privacy policy text in translation file will be applied. This text can be customized, and also inline CSS styling can be used. An external privacy policy link can be used instead of using the default privacy policy. In this case the link to the privacy policy statement should be specified in `privacy_policy_link` attribute in `config.json`. If `active_consent` attribute set to enable user need an actively involvement to accept privacy policy by pressing a button.
 
