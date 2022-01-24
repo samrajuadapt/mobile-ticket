@@ -44,13 +44,14 @@ This document describes the new features, bug corrections, known issues and reco
 
 **Date: 2022-01-24**
  
-**Build number: 2**
+**Build number: 3**
 
 <h3>Stories</h3>
 
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-752** | **L&T Osnabruck - Mobile ticket with QR code with sammelkauf id and possibility to ask customer number.** |
+| **MOB-760** | **Show more text in service group name list items** |
 
 <h3>Upgrade Instructions</h3>
 
