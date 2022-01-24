@@ -40,6 +40,20 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
+<h2> Version 1.16.0 </h2>
+
+**Date: 2022-01-24**
+ 
+**Build number: 1**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-752** | **L&T Osnabruck - Mobile ticket with QR code with sammelkauf id and possibility to ask customer number.** |
+
+----------
+
 <h2> Version 1.15.0</h2>
 
 **Date: 2021-11-10**

@@ -2575,6 +2575,7 @@ var MobileTicketAPI = (function () {
   var meetingUrl = undefined;
   var delayInfo = undefined;
   var isUserOpenDelay = false;
+  var custom3 = undefined;
 
   var visitFromQR = false;
   //var VISIT_EVENT_NAME = "visitFromQR";
@@ -2615,7 +2616,7 @@ var MobileTicketAPI = (function () {
   $.ajaxSetup({
     beforeSend: function (xhr) {
       xhr.setRequestHeader("Accept", "application/json");
-      xhr.setRequestHeader("auth-token", "d0516eee-a32d-11e5-bf7f-feff819cdc9f"); //Change the api token with your one      
+      xhr.setRequestHeader("auth-token", "1234"); //Change the api token with your one      
     }
   });
 
@@ -2700,6 +2701,8 @@ var MobileTicketAPI = (function () {
     MobileTicketAPI.meetingUrl = undefined;
     MobileTicketAPI.delayInfo = undefined;
     MobileTicketAPI.serviceAvailablity = undefined;
+    MobileTicketAPI.custom3 = undefined;
+    
   }
 
   function eraseCookie(name) {
@@ -2711,6 +2714,9 @@ var MobileTicketAPI = (function () {
   }
   function removePhoneNumber() {
     MobileTicketAPI.enteredPhoneNum = '';
+  }
+  function removeCustom3() {
+    MobileTicketAPI.custom3 = '';
   }
   function removePhoneNumberObj() {
     MobileTicketAPI.enteredPhoneNumObj = '';
@@ -2762,6 +2768,10 @@ var MobileTicketAPI = (function () {
 
   function getCountryFlag() {
     return MobileTicketAPI.countryFlag;
+  }
+
+  function getCustom3() {
+    return MobileTicketAPI.custom3;
   }
 
   function getSelectedService() {
@@ -3225,8 +3235,9 @@ var MobileTicketAPI = (function () {
         var fingerPrint = getFingerprint();
         var delay = getDelayTime();
         var jsonData = {};
+        var custom3 = getCustom3();
 
-        if (enteredPhoneNum && enteredPhoneNum.length > 0 || enteredCustomerId && enteredCustomerId.length > 0 || fingerPrint) {
+        if (enteredPhoneNum && enteredPhoneNum.length > 0 || enteredCustomerId && enteredCustomerId.length > 0 || fingerPrint || custom3) {
           jsonData.parameters = {};
           
            if (fingerPrint) {
@@ -3241,6 +3252,12 @@ var MobileTicketAPI = (function () {
            if (enteredCustomerId && enteredCustomerId.length > 0) {
             jsonData.parameters.custom2 = enteredCustomerId;
            }
+
+           if (custom3 && custom3.length > 0) {
+            jsonData.parameters.custom3 = custom3;
+           }
+
+          removeCustom3();
           removePhoneNumber('');
           removeCustomerId('');
 
@@ -3680,6 +3697,9 @@ var MobileTicketAPI = (function () {
     setServiceSelection: function (service) {
       MobileTicketAPI.selectedService = service;
     },
+    setCustom3: function (custom3) {
+      MobileTicketAPI.custom3 = custom3;
+    },
     setServiceAvailability: function (services) {
       MobileTicketAPI.serviceAvailablity = services;
     },
@@ -3760,6 +3780,9 @@ var MobileTicketAPI = (function () {
     },
     getSelectedService: function () {
       return getSelectedService();
+    },
+    getCustom3: function () {
+      return getCustom3();
     },
     getServiceAvailablity: function () {
       return MobileTicketAPI.serviceAvailablity;
