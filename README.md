@@ -902,7 +902,7 @@ Mobile Ticket can be configured to serve customers remotely by using application
 
 Serve using Microsoft Teams
 
-To remote serve using Microsoft Teams, "teamsMeetingCreator" utt should be used. The fields `Directory (tenant) ID`, `Application (client) ID`, `Client Secret` and `User Object ID` need to be filled with information coming from the app registration on Azure
+To remote serve using Microsoft Teams, "teamsMeetingCreator" utt should be used. The fields `Directory (tenant) ID`, `Application (client) ID`, `Client Secret` and `User Object ID` need to be filled with information coming from the app registration on Azure. Microsoft has update the certificate for microsoft graph api and this api is used by the teams integration which will fail as it requires the DigiCert Global Root G2 certificate. Please add attached certificate 'Global.cer' to the default truststore of Orchestra when it not available by default. 
 
 Following options are available for creating virtual meetings.
 
