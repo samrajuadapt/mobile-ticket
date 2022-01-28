@@ -34,9 +34,10 @@ Clone the Mobile Ticket Solution
 ```
 git clone https://github.com/qmatic/mobile-ticket.git
 ```
-When the cloning is complete, install the required node modules by running the following command from the project directory
+When the cloning is complete, install the required node modules by running the following commands from the project directory
 ```
 npm install
+cd node && npm install
 ```
 We recommend Visual Studio Code (https://code.visualstudio.com/) as the IDE since it fits well with angular-cli tools. The original project is developed on visual code IDE.
 

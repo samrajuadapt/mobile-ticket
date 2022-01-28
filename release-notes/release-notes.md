@@ -42,9 +42,9 @@ This document describes the new features, bug corrections, known issues and reco
 
 <h2> Version 1.16.0 </h2>
 
-**Date: 2022-01-27**
+**Date: 2022-01-28**
  
-**Build number: 4**
+**Build number: 5**
 
 <h3>Stories</h3>
 
@@ -53,6 +53,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **MOB-752** | **L&T Osnabruck - Mobile ticket with QR code with sammelkauf id and possibility to ask customer number.** |
 | **MOB-760** | **Show more text in service group name list items** |
 | **MOB-762** | **Include digicertglobalroot2 certificate in mobile ticket package** |
+| **MOB-765** | **Update 'README' with 'npm -i instructions'** |
 
 <h3>Upgrade Instructions</h3>
 
