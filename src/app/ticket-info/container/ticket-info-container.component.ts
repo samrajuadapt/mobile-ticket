@@ -45,7 +45,7 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   public title2: string;
   public title3: string;
   public isMeetingAvailable: boolean;
-  private eventSub: Subscription;
+  // private eventSub: Subscription;
   public redirectUrlLoading: boolean;
   public showQueue: boolean;
   public showAppTime: boolean;
@@ -72,15 +72,16 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
     this.isMeetingAvailable = false;
     this.redirectUrlLoading = false;
 
+    this.router.onSameUrlNavigation ='reload';
     this.router.routeReuseStrategy.shouldReuseRoute = function(){
       return false;
    }
-   this.eventSub = this.router.events.subscribe((evt) => {
-    if (evt instanceof NavigationEnd) {
-       // trick the Router into believing it's last link wasn't previously loaded
-       this.router.navigated = false;
-    }
-});
+//    this.eventSub = this.router.events.subscribe((evt) => {
+//     if (evt instanceof NavigationEnd) {
+//        // trick the Router into believing it's last link wasn't previously loaded
+//        this.router.navigated = false;
+//     }
+// });
 
     this.getSelectedBranch();
 
@@ -167,9 +168,9 @@ export class TicketInfoContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.eventSub) {
-      this.eventSub.unsubscribe();
-    }
+    // if (this.eventSub) {
+    //   this.eventSub.unsubscribe();
+    // }
   }
 
 

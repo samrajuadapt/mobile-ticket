@@ -40,6 +40,20 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
+<h2> Version 1.17.0 </h2>
+
+**Date: 2022-02-23**
+ 
+**Build number: 1**
+
+<h3>Stories</h3>
+
+| **Id** | **Release notes** |
+| --- | --- |
+| **MOB-306** | **Revisit the Issue fixed in MOB-271 after updating the angular version** |
+
+----------
+
 <h2> Version 1.16.0 </h2>
 
 **Date: 2022-01-28**
