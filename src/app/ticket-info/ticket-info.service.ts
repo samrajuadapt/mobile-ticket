@@ -9,6 +9,9 @@ let isVisitCacheUpdate = true;
 let retryIterrations = 1;
 let returnPayload: any;
 let lastResponse: any;
+let queueRetryTimeout = 2;
+let notFoundMessage = 'New visits are not available until visitsOnBranchCache is refreshed';
+let communcationFailureMessage = 'Unable to retrieve information from Orchestra.';
 
 @Injectable()
 export class TicketInfoService {
@@ -41,7 +44,7 @@ export class TicketInfoService {
             returnPayload = xhr ? xhr.responseJSON : undefined ;
             lastResponse = [xhr, status, msg];
             if (returnPayload !== undefined &&
-              returnPayload.message.includes('New visits are not available until visitsOnBranchCache is refreshed') === true) {
+              returnPayload.message.includes(notFoundMessage) === true) {
               isVisitCacheUpdate = false;
               this.retryRequest(success, err);
             } else {
@@ -56,6 +59,34 @@ export class TicketInfoService {
     }
   }
 
+  public retryPollVisitFailure(success, err): any {
+    try {
+      queueRetryTimeout = parseInt(this.config.getConfig('queue_retry_timeout'))
+    } catch (error) {
+      console.log(error.message + ' error reading queue_retry_timeout');
+    }
+    let convertToQueueEntityCallback = this.convertToQueueEntity
+      setTimeout(() => {
+        MobileTicketAPI.getVisitStatus(
+          (queueObj: any) => {
+            isVisitCacheUpdate = true;
+            success(convertToQueueEntityCallback(queueObj));
+          },
+          (xhr, status, msg) => {
+            returnPayload = xhr ? xhr.responseJSON : undefined ;
+            lastResponse = [xhr, status, msg];
+            if (returnPayload !== undefined &&
+              returnPayload.message.includes(communcationFailureMessage) === true) {
+              isVisitCacheUpdate = false;
+              this.retryPollVisitFailure(success, err);
+            } else {
+              isVisitCacheUpdate = true;
+              err(lastResponse[0], lastResponse[1], lastResponse[2])
+            }
+          });
+      }, queueRetryTimeout * 1000);
+  }
+
    pollVisitStatus(success, err): any {
     retryIterrations = parseInt(this.config.getConfig('queue_poll_retry'));
     let convertToQueueEntityCallback = this.convertToQueueEntity
@@ -65,13 +96,18 @@ export class TicketInfoService {
           success(convertToQueueEntityCallback(queueObj), queueObj.ticketId, queueObj.queueId, queueObj.appointmentId);
         },
         (xhr, status, msg) => {
-          if (xhr !== null && xhr.status === 404) {
+          if (xhr !== null && (xhr.status === 404 || xhr.status === 503)) {
             returnPayload = xhr.responseJSON;
             lastResponse = [xhr, status, msg];
             if (returnPayload !== undefined &&
-              returnPayload.message.includes('New visits are not available until visitsOnBranchCache is refreshed') === true) {
+              (returnPayload.message.includes(notFoundMessage) === true 
+               || returnPayload.message.includes(communcationFailureMessage) === true)) {
               isVisitCacheUpdate = false;
-              this.retryRequest(success, err);
+              if (returnPayload.message.includes(notFoundMessage) === true) {
+                this.retryRequest(success, err);
+              } else {
+                this.retryPollVisitFailure(success, err);
+              }
             }
             else {
               isVisitCacheUpdate = true;

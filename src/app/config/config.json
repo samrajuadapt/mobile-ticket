@@ -211,8 +211,12 @@
     "description": "Define the preferred country codes for dropdown in country code inputs. list of comma separated country codes is expected. Should be 'ISO alpha-2 format'."
   },
   "queue_poll_retry": {
-    "value": "1",
+    "value": "2",
     "description": "Define how many times should retry the queue poll request."
+  },
+  "queue_retry_timeout": {
+    "value": "4",
+    "description": "Define timeout for queue poll request retry if communication to Orchestra fails"
   },
   "block_other_browsers": {
     "value": "disable",
