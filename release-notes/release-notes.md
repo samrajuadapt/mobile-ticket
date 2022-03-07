@@ -40,9 +40,9 @@ This document describes the new features, bug corrections, known issues and reco
 ----------
 -->
 
-<h2> Version 1.17.0 </h2>
+<h2> Version 1.16.1 </h2>
 
-**Date: 2022-02-23**
+**Date: 2022-03-07**
  
 **Build number: 1**
 
@@ -51,6 +51,7 @@ This document describes the new features, bug corrections, known issues and reco
 | **Id** | **Release notes** |
 | --- | --- |
 | **MOB-306** | **Revisit the Issue fixed in MOB-271 after updating the angular version** |
+| **MOB-780** | **Reimplement the handling of 503 for the function pollVisitStatus** |
 
 ----------
 
